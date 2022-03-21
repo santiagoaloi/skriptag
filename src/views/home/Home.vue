@@ -1,135 +1,139 @@
 <template>
-  <v-container
-    id="home"
-    class="fill-height text-center"
-    tag="section"
-  >
-    <v-row justify="center">
-      <v-col
-        class="mb-4"
-        cols="auto"
+  <div>
+    <swiper
+      grab-cursor
+      long-swipes
+      :long-swipes-ms="4000"
+      style="height:100vh"
+      :direction="'vertical'"
+      :slides-per-view="1"
+      mousewheel
+      :pagination="{
+        clickable: true,
+
+      }"
+    >
+      <swiper-slide
+        v-for="n in 2"
+        :key="n"
       >
-        <span class="headline font-weight-light">Vuetify</span>
-
-        <h1 class="display-4 font-weight-black mb-6">
-          Vuetify Preset
-        </h1>
-
         <v-img
-          class="mx-auto mb-10"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-light.png"
-          width="196"
+          gradient="to bottom , rgba(20,20,20, .4) 40%,  rgba(0,0,0,.8) 160%"
+          width="40vw"
+          height="100vh"
+          :src="`https://picsum.photos/1280/800?${Date.now().toString().slice(0, 1)}`"
         />
 
-        <h2 class="body-2 font-weight-black">
-          Important Links
-        </h2>
+        <!-- :src="`https://picsum.photos/1280/800?${Date.now().toString().slice(0, 2)}`" -->
 
-        <v-responsive
-          class="mx-auto my-4"
-          max-width="60"
+   
+        <v-sheet
+          class="pa-4"
+          width="50vw"
+          color="transparent"
+          style="color:#ccc"
         >
-          <v-divider />
-        </v-responsive>
+          <div class="px-15 mx-5">
+            <h1>Skriptag<span class="teal--text ml-1">> </span> is your mentor.</h1>
+            <p>
+              Collaborate, manage projects, and reach new productivity peaks. 
+              From high rises to the home office, the way your team works is unique—accomplish 
+              it all with Trello.
+            </p>
 
-        <v-responsive
-          class="mx-auto"
-          max-width="400"
-        >
-          <v-row
-            class="mx-auto"
-            dense
-          >
-            <v-col
-              v-for="[link, text, icon] in links"
-              :key="link"
-              cols="12"
-              sm="6"
-            >
+
+            <div class="d-flex align-center justify-center">
+              <v-text-field
+                dark
+                solo
+                placeholder="Email"
+                class="mr-9 ml-n1"
+                hide-details
+                dense
+              />
+
               <v-btn
-                :href="link"
-                block
-                depressed
-                target="_blank"
+                height="35"
+                color="teal accent-3"
+                style="color:#123456"
               >
-                <v-icon
-                  left
-                  v-text="icon"
-                />
-
-                {{ text }}
+                SignUp
               </v-btn>
-            </v-col>
-          </v-row>
-        </v-responsive>
-      </v-col>
+            </div>
+          </div>
+        </v-sheet>
 
-      <v-col cols="12">
-        <h2 class="body-2 font-weight-black">
-          Preset Features
-        </h2>
+          <!-- <v-img
+          height="
+          100%"
+          gradient="to bottom , rgba(50,50,50, .9) 40%,  rgba(0,0,0,.8) 160%"
 
-        <v-responsive
-          class="mx-auto my-4"
-          max-width="60"
-        >
-          <v-divider />
-        </v-responsive>
-
-        <v-responsive
-          class="mx-auto"
-          max-width="600"
-        >
-          <v-row
-            class="mx-auto my-4"
-            justify="center"
-          >
-            <v-col
-              v-for="[text, icon, color] in features"
-              :key="text"
-              class="text-center d-inline-flex justify-center flex-wrap"
-              cols="6"
-              sm="4"
-              md="3"
-            >
-              <v-icon
-                :color="color"
-                class="mb-1"
-                size="56"
-                v-text="icon"
-              />
-
-              <div
-                class="col col-12 overline grey--text text--darken-4"
-                v-text="text"
-              />
-            </v-col>
-          </v-row>
-        </v-responsive>
-      </v-col>
-    </v-row>
-  </v-container>
+          :src="`https://picsum.photos/1280/800?${Date.now().toString().slice(0, 2)}`"
+        /> -->
+        </v-card>
+      </swiper-slide>
+    </swiper>
+  </div>
 </template>
-
 <script>
-  export default {
-    name: 'HomeView',
+  import { Mousewheel, Pagination } from "swiper";
+  import { SwiperCore, Swiper, SwiperSlide } from 'swiper-vue2'
 
-    data: () => ({
-      features: [
-        ['Routing', 'mdi-road-variant', 'blue-grey'],
-        ['Vuetify ESLint', 'mdi-auto-fix', 'deep-purple accent-4'],
-        ['SASS', 'mdi-sass', 'pink'],
-        ['Base Components', 'mdi-cube-scan', 'indigo'],
-        ['View Layouts', 'mdi-view-grid-outline', 'orange'],
-        ['Webfont Loader', 'mdi-format-size', 'green accent-4'],
-      ],
-      links: [
-        ['//github.com/vuetifyjs/vuetify', 'Github', 'mdi-github'],
-        ['//vuetifyjs.com', 'Documentation', 'mdi-file-document'],
-        ['//community.vuetifyjs.com', 'Community', 'mdi-account-multiple'],
-        ['//github.com/users/johnleider/sponsors', 'Support Vuetify', 'mdi-vuetify'],
-      ],
-    }),
+  // Import Swiper styles
+  import 'swiper/swiper-bundle.css'
+
+  SwiperCore.use([Mousewheel, Pagination])
+
+  export default {
+    components: {
+      Swiper,
+      SwiperSlide,
+    },
+    methods: {
+      getImageUrl (imageId) {
+        return `https://picsum.photos/600/400/?image=${imageId}`
+      },
+      onSwiper (swiper) {
+        console.log(swiper)
+      },
+      onSlideChange () {
+        console.log('slide change')
+      },
+    },
   }
 </script>
+<style >
+
+
+.swiper-slide {
+  /* text-align: center; */
+  font-size: 18px;
+  background: #23272d;
+
+  /* Center slide text vertically */
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+
+.swiper-pagination-bullet-active {
+     background-color: #2ae2c3 !important;
+     font-size:20px
+}
+
+.swiper-pagination-bullet {
+    width: 20px;
+    height: 20px;
+
+}
+
+</style>

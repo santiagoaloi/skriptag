@@ -1,7 +1,9 @@
 <template>
   <v-main>
     <v-fade-transition mode="out-in">
-      <router-view />
+      <router-view
+        class="ml-12"
+      />
     </v-fade-transition>
   </v-main>
 </template>
