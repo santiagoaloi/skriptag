@@ -5,11 +5,11 @@
  */
 
 // Imports
-import pathify from 'vuex-pathify'
+import pathify from 'vuex-pathify';
 
 // Custom mapping style
 // https://davestewart.github.io/vuex-pathify/#/setup/mapping
-pathify.options.mapping = 'simple'
-pathify.options.strict = true
+pathify.options.mapping = 'simple';
+pathify.options.strict = true;
 
-export default pathify
+export default pathify;

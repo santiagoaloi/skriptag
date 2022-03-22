@@ -4,8 +4,8 @@
  * webfontloader documentation: https://github.com/typekit/webfontloader
  */
 
- // Imports
-import WebFontLoader from 'webfontloader'
+// Imports
+import WebFontLoader from 'webfontloader';
 
 WebFontLoader.load({
   google: {
@@ -15,4 +15,4 @@ WebFontLoader.load({
     urls: ['https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css'],
     timeout: 2000,
   },
-})
+});

@@ -1,60 +1,35 @@
 module.exports = {
-  'extends': [
-    'plugin:vue/recommended',
-    'eslint:recommended',
-    'plugin:vue/essential'
-  ],
-  rules: {
-    'comma-dangle': [
-      'error',
-      'always-multiline'
-    ],
-    'max-len': 'off',
-    indent: 'off',
-    'template-curly-spacing': 'off',
-    'vue/component-name-in-template-casing': [
-      'error',
-      'kebab-case'
-    ],
-    'vue/script-indent': [
-      'error',
-      2,
-      {
-        baseIndent: 1,
-        switchCase: 1,
-        ignores: []
-      }
-    ],
-    'vue/max-attributes-per-line': [
-      'error',
-      {
-        singleline: 1,
-        multiline: {
-          max: 1,
-          allowFirstLine: false
-        }
-      }
-    ],
-    'vue/html-closing-bracket-newline': [
-      'error',
-      {
-        singleline: 'never',
-        multiline: 'always'
-      }
-    ],
-    'vue/html-closing-bracket-spacing': 'error',
-    'vue/no-unused-components': 'warn',
-    'vue/no-unused-vars': 'warn',
-    'vue/no-v-html': 'off',
-    'vue/require-default-prop': 'off',
-    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off'
-  },
   root: true,
   env: {
-    node: true
+    node: true,
+    browser: true,
+    commonjs: true,
+    es6: true,
+  },
+  extends: ['plugin:vue/recommended', 'airbnb', 'prettier'],
+
+  rules: {
+    'prettier/prettier': ['error'],
+    'consistent-return': 'off',
+    'no-nested-ternary': 'off',
+    'no-shadow': 'off',
+    'no-param-reassign': 'off',
+    'import/no-unresolved': 'off',
+    'import/extensions': 'off',
+    'no-underscore-dangle': 'off',
+    'no-restricted-syntax': 'off',
+    'import/prefer-default-export': 'off',
+    'import/no-extraneous-dependencies': 'off',
+  },
+
+  globals: {
+    Atomics: 'readonly',
+    SharedArrayBuffer: 'readonly',
   },
   parserOptions: {
-    parser: 'babel-eslint'
-  }
-}
+    ecmaVersion: 2020,
+    parser: 'babel-eslint',
+    sourceType: 'module',
+  },
+  plugins: ['vue', 'prettier'],
+};
