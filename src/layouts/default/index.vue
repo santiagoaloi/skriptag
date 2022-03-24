@@ -3,6 +3,7 @@
     <default-app-bar />
     <default-drawer />
     <default-view />
+    <base-snackbar />
   </v-app>
 </template>
 
@@ -15,5 +16,5 @@
       DefaultDrawer: () => import('./Drawer'),
       DefaultView: () => import('./View'),
     },
-  }
+  };
 </script>

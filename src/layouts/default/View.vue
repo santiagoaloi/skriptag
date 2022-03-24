@@ -1,13 +1,11 @@
 <template>
   <v-main>
     <v-fade-transition mode="out-in">
-      <router-view
-        class="ml-12"
-      />
+      <router-view style="margin-left: 50px" />
     </v-fade-transition>
   </v-main>
 </template>
 
 <script>
-  export default { name: 'DefaultView' }
+  export default { name: 'DefaultView' };
 </script>

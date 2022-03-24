@@ -30,8 +30,7 @@
       <vs-navbar-item id="License"> Variety </vs-navbar-item>
 
       <template #right>
-        <div class="center">
-          <vs-select v-model="dropdown" placeholder="Select" @click.stop>
+        <!-- <vs-select v-model="dropdown" placeholder="Select" @click.stop>
             <vs-option label="Vuesax" value="1"> Vuesax </vs-option>
             <vs-option label="Vue" value="2"> Vue </vs-option>
             <vs-option label="Javascript" value="3"> Javascript </vs-option>
@@ -39,11 +38,9 @@
             <vs-option label="Typescript" value="5"> Typescript </vs-option>
             <vs-option label="Webpack" value="6"> Webpack </vs-option>
             <vs-option label="Nodejs" value="7"> Nodejs </vs-option>
-          </vs-select>
-        </div>
+          </vs-select> -->
 
-        <vs-button success relief> Login </vs-button>
-        <vs-button success relief> Get Started </vs-button>
+        <v-btn :ripple="false" color="teal white--text" small @click="logout"> {{ displayText }}</v-btn>
       </template>
     </vs-navbar>
   </div>
@@ -51,7 +48,7 @@
 
 <script>
   // Utilities
-  import { sync } from 'vuex-pathify';
+  import { sync, get, call } from 'vuex-pathify';
 
   export default {
     name: 'DefaultAppBar',
@@ -60,7 +57,18 @@
         dropdown: [],
       };
     },
-    computed: { drawer: sync('app/drawer') },
+
+    computed: {
+      drawer: sync('app/drawer'),
+      ...get('authentication', ['isLoggedIn', 'user']),
+      displayText() {
+        return this.user.email ? `Logout ${this.user.email}` : 'Login';
+      },
+    },
+
+    methods: {
+      ...call('authentication/*'),
+    },
   };
 </script>
 <style scoped>

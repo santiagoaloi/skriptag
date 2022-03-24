@@ -7,3 +7,4 @@
 // Imports
 import './app';
 import './webfontloader';
+import './firebase';

@@ -1,16 +1,22 @@
 // Pathify
-import { make } from 'vuex-pathify'
+import { make } from 'vuex-pathify';
 
 // Data
 const state = {
   drawer: null,
-}
+};
 
-const mutations = make.mutations(state)
+const mutations = make.mutations(state);
+const actions = {
+  ...make.actions(state),
 
-const actions = make.actions(state)
+  // Reusable timeout function, resolves when time's up.
+  sleep(_, ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  },
+};
 
-const getters = {}
+const getters = {};
 
 export default {
   namespaced: true,
@@ -18,4 +24,4 @@ export default {
   mutations,
   actions,
   getters,
-}
+};

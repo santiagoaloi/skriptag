@@ -1,12 +1,16 @@
 import Vue from 'vue';
 import Vuesax from 'vuesax';
+import AOS from 'aos';
 import App from './App.vue';
 import router from './router';
-import store from './store';
+import { store } from '@/store';
 import vuetify from './plugins/vuetify';
 import './plugins';
 
 import 'vuesax/dist/vuesax.css';
+
+// Styles amd Animations
+import 'aos/dist/aos.css';
 
 Vue.config.productionTip = false;
 // Vuesax styles
@@ -23,8 +27,11 @@ Vue.use(Vuesax, {
 Vue.config.productionTip = false;
 
 new Vue({
-  router,
+  created() {
+    AOS.init();
+  },
   store,
   vuetify,
+  router,
   render: (h) => h(App),
 }).$mount('#app');

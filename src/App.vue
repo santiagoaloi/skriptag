@@ -5,16 +5,21 @@
 </template>
 
 <script>
+  import { call } from 'vuex-pathify';
+
   export default {
     name: 'BaseApp',
-    computed: {
-      vuesax() {
-        return this.$vs;
-      },
-    },
+
     mounted() {
-      // Set Vuesax dark theme
       this.$vs.setTheme('dark');
+      // this.fetchUser();
+    },
+
+    beforeMount() {
+      this.fetchUser();
+    },
+    methods: {
+      ...call('authentication', ['fetchUser']),
     },
   };
 </script>

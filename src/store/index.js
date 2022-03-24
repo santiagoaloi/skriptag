@@ -1,30 +1,31 @@
-/**
- * Vuetify Vue CLI Preset
- *
- * store/index.js
- *
- * vuex documentation: https://vuex.vuejs.org/
- */
-
 // Vue
-import Vue from 'vue'
-import Vuex from 'vuex'
+import Vue from 'vue';
+import Vuex from 'vuex';
 
-// Utilities
-// https://davestewart.github.io/vuex-pathify/#/
-import pathify from '@/plugins/vuex-pathify'
+// libraries
+import VuexPersist from 'vuex-persist';
+import localforage from 'localforage';
+import pathify from '@/plugins/vuex-pathify';
 
-// Modules
-// https://vuex.vuejs.org/guide/modules.html
-import * as modules from './modules'
+// All Vuex Modules definned in ./modules/index.js
+import * as modules from './modules';
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
-export default new Vuex.Store({
+const vuexLocal = new VuexPersist({
+  key: 'vuex-store',
+  storage: localforage,
+  asyncStorage: true,
+
+  // Specifies which modules or module variables should be persisted.
+  reducer: (state) => ({
+    app: {
+      ...state.app,
+    },
+  }),
+});
+
+export const store = new Vuex.Store({
   modules,
-  plugins: [pathify.plugin],
-})
-
-// A reusable const for making root commits and dispatches
-// https://vuex.vuejs.org/guide/modules.html#accessing-global-assets-in-namespaced-modules
-export const ROOT_DISPATCH = Object.freeze({ root: true })
+  plugins: [pathify.plugin, vuexLocal.plugin],
+});
