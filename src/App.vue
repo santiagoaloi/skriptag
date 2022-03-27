@@ -12,10 +12,10 @@
 
     mounted() {
       this.$vs.setTheme('dark');
-      // this.fetchUser();
     },
 
     beforeMount() {
+      // If there's a firebase uthenticated user, it will retrieve the user object.
       this.fetchUser();
     },
     methods: {

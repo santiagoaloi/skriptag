@@ -2,7 +2,7 @@
 import { make } from 'vuex-pathify';
 
 const state = {
-  authLoader: false,
+  homeActiveSlide: 0,
 };
 
 const mutations = make.mutations(state);

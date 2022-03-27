@@ -40,7 +40,14 @@
             <vs-option label="Nodejs" value="7"> Nodejs </vs-option>
           </vs-select> -->
 
-        <v-btn :ripple="false" color="teal white--text" small @click="logout"> {{ displayText }}</v-btn>
+        <v-btn :ripple="false" class="mr-3" color="grey darken-3 white--text" small @click="logout">
+          <v-icon small> mdi-plus</v-icon>
+          Signup
+        </v-btn>
+        <v-btn :ripple="false" color="teal white--text" small @click="logout">
+          <v-icon small> mdi-account</v-icon>
+          {{ displayText }}
+        </v-btn>
       </template>
     </vs-navbar>
   </div>

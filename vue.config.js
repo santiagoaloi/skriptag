@@ -3,5 +3,5 @@ module.exports = {
     disableHostCheck: true,
   },
   lintOnSave: false,
-  transpileDependencies: ["vuetify"],
+  transpileDependencies: ['vuetify'],
 };

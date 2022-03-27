@@ -40,25 +40,38 @@
     data() {
       return {
         viewSlides: ['loginSlide', 'registerSlide'],
+        test: '',
       };
     },
 
     computed: {
-      ...sync('authentication', ['loginForm']),
+      ...sync('swipers', ['homeActiveSlide']),
 
       swiper() {
+        if (!this.$refs.sw.swiperRef) return;
         return this.$refs.sw.swiperRef;
+      },
+
+      activeSlide: {
+        // getter
+        get() {
+          return this.swiper.activeIndex;
+        },
+        // setter
+        set() {
+          this.test = this.swiper.activeIndex;
+        },
       },
     },
 
     mounted() {
-      setTimeout(() => {
-        this.increase();
-      }, 1200);
+      // setTimeout(() => {
+      //   this.increase();
+      // }, 1200);
     },
 
     methods: {
-      ...call('authentication/*'),
+      ...call('app/*'),
 
       increase() {
         this.swiper.slideTo(1, 300, false);

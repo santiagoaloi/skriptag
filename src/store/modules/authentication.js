@@ -29,40 +29,45 @@ const actions = {
   },
 
   login({ dispatch, state }) {
+    store.set('loaders/authLoader', true);
+
     const { email, password } = state.loginForm;
 
     if (!state.loginForm.email || !state.loginForm.password) {
       dispatch('snackbar/snackbarError', 'You have to provide both an email and password.', { root: true });
+      store.set('loaders/authLoader', false);
     } else {
       signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
           store.set('authentication/user', userCredential.user);
+          store.set('loaders/authLoader', false);
         })
         .catch(({ ...error }) => {
-          switch (error.code) {
-            case 'auth/invalid-email':
-              dispatch('snackbar/snackbarError', 'Your email is not valid, please check that again.', { root: true });
-              break;
-
-            case 'auth/wrong-password':
-              dispatch('snackbar/snackbarError', 'Invalid credentials , please try again.', { root: true });
-              break;
-
-            case 'auth/user-not-found':
-              dispatch('snackbar/snackbarError', 'The account does not exist in our records.', { root: true });
-              break;
-
-            default:
-              dispatch('snackbar/snackbarError', 'Something went wrong...', { root: true });
-          }
+          dispatch('loginMessagesSnackbar', error.code);
         });
+    }
+  },
+
+  loginMessagesSnackbar({ dispatch }, message) {
+    if (message.includes('auth/invalid-email')) {
+      dispatch('snackbar/snackbarError', 'This email is not valid, please check that again.', { root: true });
+      store.set('loaders/authLoader', false);
+    } else if (message.includes('auth/wrong-password')) {
+      dispatch('snackbar/snackbarError', 'You password is incorrect , please try again.', { root: true });
+      store.set('loaders/authLoader', false);
+    } else if (message.includes('auth/user-not-found')) {
+      dispatch('snackbar/snackbarError', 'This account does not exist in our records.', { root: true });
+      store.set('loaders/authLoader', false);
+    } else if (message.includes('auth/too-many-requests')) {
+      dispatch('snackbar/snackbarError', 'Too many invalid attemps, please try again later..', { root: true });
+      store.set('loaders/authLoader', false);
     }
   },
 };
 
 const getters = {
   //* Checks if the user is authenticated.
-  isLoggedIn: (onAuthStateChanged, (Obj) => !isEmpty(Obj.user)),
+  isLoggedIn: (onAuthStateChanged, (UserObject) => !isEmpty(UserObject.user)),
 };
 
 export default {
