@@ -21,17 +21,14 @@
         style="color: #ccc"
       >
         <div class="px-15 mx-5">
-          <div>
-            <h1>Skriptag<span class="ml-1 primary-font-color">> </span></h1>
-          </div>
+          <skriptag-title data-aos="zoom-out" data-aos-delay="300" data-aos-once="true" />
           <p>
-            Learn, download free application templates, access JS/VueJS training material, participate in discussions forums, earn
-            points, badges and get giveaways much more!.
+            Learn coding , download free and premium application templates, access JS/VueJS training material, participate in
+            Skriptag's discussions forums. Buy consultancty or premium support for any product purchased.
           </p>
 
           <div class="d-flex">
             <h3>Login</h3>
-            <!-- <span class="d-flex align-center ml-1" style="font-size: 16px">👨‍💻</span> -->
           </div>
 
           <v-btn :ripple="false" x-small color="white" class="ml-n2 mb-n2" plain>Recover my password</v-btn>

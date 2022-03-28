@@ -4,7 +4,7 @@
       <template #left>
         <div class="ml-13 mr-3">
           <v-container>
-            <h3 style="color: #ccc">Skriptag <span class="primary-font-color"> > </span></h3>
+            <skriptag-title small />
           </v-container>
         </div>
       </template>
