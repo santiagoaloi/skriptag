@@ -21,12 +21,12 @@
         style="color: #ccc"
       >
         <div class="px-15 mx-5">
-          <div v-if="active">
-            <h1>Skriptag<span class="ml-1 primary-font-color">> </span> {{ active }}</h1>
+          <div>
+            <h1>Skriptag<span class="ml-1 primary-font-color">> </span></h1>
           </div>
           <p>
-            Collaborate, manage projects, and reach new productivity peaks. From high rises to the home office, the way your team
-            works is unique—accomplish it all with Trello.
+            Learn, download free application templates, access JS/VueJS training material, participate in discussions forums, earn
+            points, badges and get giveaways much more!.
           </p>
 
           <div class="d-flex">
@@ -78,11 +78,6 @@
     name: 'LoginSlide',
     props: {
       index: {
-        type: Number,
-        default: 0,
-      },
-
-      active: {
         type: Number,
         default: 0,
       },

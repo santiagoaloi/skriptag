@@ -24,11 +24,6 @@
   };
 </script>
 <style>
-  html {
-    background: #24272c;
-    overflow: hidden !important;
-  }
-
   .v-application--wrap {
     background: #24272c !important;
   }
@@ -39,15 +34,6 @@
 
   .v-main {
     background: #24272c !important;
-  }
-
-  .vs-select__option {
-    font-family: revert;
-    font-size: 15px;
-  }
-
-  .primary-font-color {
-    color: rgb(var(--vs-primary));
   }
 
   /* Removes the possibility of selecting text  */
@@ -65,5 +51,19 @@
     -khtml-user-drag: none;
     -moz-user-drag: none;
     -o-user-drag: none;
+  }
+
+  .vs-select__option {
+    font-family: revert;
+    font-size: 15px;
+  }
+
+  .primary-font-color {
+    color: rgb(var(--vs-primary));
+  }
+
+  html {
+    background: #24272c !important;
+    overflow: hidden !important;
   }
 </style>

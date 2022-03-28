@@ -3,7 +3,7 @@ import { make } from 'vuex-pathify';
 import { signInWithEmailAndPassword, signOut } from '@firebase/auth';
 import { isEmpty } from 'lodash';
 import { store } from '@/store';
-import { auth, onAuthStateChanged } from '@/plugins/firebase';
+import { auth, onAuthStateChanged } from '@/firebase/firebase';
 
 const state = {
   user: {},
