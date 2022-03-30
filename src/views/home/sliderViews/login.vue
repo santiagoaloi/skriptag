@@ -1,89 +1,46 @@
 <template>
-  <div class="d-flex align-center">
-    <v-img
-      gradient="to bottom , rgba(20,20,20, .4) 40%,  rgba(0,0,0,.8) 160%"
-      width="40vw"
-      height="100vh"
-      :src="`https://picsum.photos/1280/800?${Date.now().toString().slice(0, 1) + index}`"
-    >
-      <template #placeholder>
-        <v-row class="fill-height ma-0" align="center" justify="center">
-          <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+  <base-split-2 id="login" right>
+    <div>
+      <h1>Login</h1>
+      <p>Time to get stuff done!</p>
+      <v-btn :ripple="false" x-small color="white" class="ml-n2 mb-n2" plain>Recover my password</v-btn>
+      <form @submit.prevent="auth()">
+        <v-row no-gutters>
+          <v-col cols="10">
+            <div class="py-2 pr-2">
+              <vs-input v-model="loginForm.email" block placeholder="Username">
+                <template #icon>
+                  <v-icon dark>mdi-account</v-icon>
+                </template>
+              </vs-input>
+            </div>
+          </v-col>
+          <v-col cols="10">
+            <div class="py-2 pr-2">
+              <vs-input v-model="loginForm.password" block type="password" placeholder="Password">
+                <template #icon>
+                  <v-icon dark>mdi-lock</v-icon>
+                </template>
+              </vs-input>
+            </div>
+          </v-col>
         </v-row>
-      </template>
-    </v-img>
-    <v-fade-transition>
-      <v-sheet
-        v-if="showSlide"
-        class="pa-4 swiper-no-swiping no-select no-drag"
-        width="50vw"
-        color="transparent"
-        style="color: #ccc"
-      >
-        <div class="px-15 mx-5">
-          <skriptag-title data-aos="zoom-out" data-aos-delay="300" data-aos-once="true" />
-          <p>
-            Learn coding , download free and premium application templates, access JS/VueJS training material, participate in
-            Skriptag's discussions forums. Buy consultancty or premium support for any product purchased.
-          </p>
 
-          <div class="d-flex">
-            <h3>Login</h3>
-          </div>
-
-          <v-btn :ripple="false" x-small color="white" class="ml-n2 mb-n2" plain>Recover my password</v-btn>
-          <form @submit.prevent="login()">
-            <div class="d-flex flex-wrap">
-              <div class="py-2 pr-2">
-                <vs-input v-model="loginForm.email" block placeholder="Username">
-                  <template #icon>
-                    <v-icon dark>mdi-account</v-icon>
-                  </template>
-                </vs-input>
-              </div>
-              <div class="py-2 pr-2">
-                <vs-input v-model="loginForm.password" block type="password" placeholder="Password">
-                  <template #icon>
-                    <v-icon dark>mdi-lock</v-icon>
-                  </template>
-                </vs-input>
-              </div>
-            </div>
-            <div class="d-flex flex-column flex-wrap justify-start">
-              <v-btn
-                :loading="loading"
-                type="submit"
-                :ripple="false"
-                color="teal white--text"
-                width="100"
-                class="mt-2 ml-1"
-                small
-              >
-                Login</v-btn
-              >
-            </div>
-          </form>
-        </div>
-      </v-sheet>
-    </v-fade-transition>
-  </div>
+        <v-card-actions class="px-0">
+          <v-btn large :loading="loading" type="submit" :ripple="false" color="teal white--text" width="100" class="mr-2">
+            Login</v-btn
+          >
+          <v-btn large @click="$vuetify.goTo('#register')">Signup</v-btn>
+        </v-card-actions>
+      </form>
+    </div>
+  </base-split-2>
 </template>
 <script>
   import { call, sync } from 'vuex-pathify';
 
   export default {
     name: 'LoginSlide',
-    props: {
-      index: {
-        type: Number,
-        default: 0,
-      },
-    },
-    data() {
-      return {
-        showSlide: false,
-      };
-    },
 
     computed: {
       //   ...sync('authentication', ['loginForm']),
@@ -91,13 +48,19 @@
       loginForm: sync('authentication/loginForm'),
     },
 
-    created() {
-      this.delayRender(400);
-    },
+    // created() {
+    //   this.delayRender(400);
+    // },
 
     methods: {
       ...call('authentication/*'),
       ...call('app', ['sleep']),
+
+      auth() {
+        this.login().then(() => {
+          this.$emit('logged-in', 'loginSlide');
+        });
+      },
 
       async delayRender(ms) {
         await this.sleep(ms);

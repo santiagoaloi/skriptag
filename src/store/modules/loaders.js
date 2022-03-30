@@ -3,6 +3,7 @@ import { make } from 'vuex-pathify';
 
 const state = {
   authLoader: false,
+  signupLoader: false,
 };
 
 const mutations = make.mutations(state);

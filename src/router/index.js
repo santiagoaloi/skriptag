@@ -1,25 +1,17 @@
-/**
- * Vuetify Vue CLI Preset
- *
- * router/index.js
- *
- * vue-router documentation: https://router.vuejs.org/
- */
+import Vue from 'vue';
+import Router from 'vue-router';
+import { store } from '@/store';
 
-// Imports
-import Vue from 'vue'
-import Router from 'vue-router'
+Vue.use(Router);
 
-Vue.use(Router)
-
-export default new Router({
+const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   scrollBehavior: (to, _, savedPosition) => {
-    if (to.hash) return { selector: to.hash }
-    if (savedPosition) return savedPosition
+    if (to.hash) return { selector: to.hash };
+    if (savedPosition) return savedPosition;
 
-    return { x: 0, y: 0 }
+    return { x: 0, y: 0 };
   },
   routes: [
     {
@@ -34,7 +26,25 @@ export default new Router({
           name: 'Default',
           component: () => import('@/views/home'),
         },
+        {
+          path: '/Profile',
+          name: 'Profile',
+          meta: {
+            requiresAuth: true,
+          },
+          component: () => import('@/views/profile'),
+        },
       ],
     },
   ],
-})
+});
+
+router.beforeEach((to, from, next) => {
+  const isLoggedIn = store.get('authentication/isLoggedIn');
+  if (to.matched.some((record) => record.meta.requiresAuth) && !isLoggedIn) {
+    next('/');
+  }
+  next();
+});
+
+export default router;

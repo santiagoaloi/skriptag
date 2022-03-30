@@ -1,51 +1,44 @@
 <template>
-  <swiper
-    ref="sw"
-    grab-cursor
-    style="height: 100vh"
-    :direction="'vertical'"
-    :slides-per-view="1"
-    mousewheel
-    :pagination="{
-      clickable: true,
-    }"
-    :short-swipes="false"
-    :speed="500"
-  >
-    <swiper-slide v-for="(slide, index) in viewSlides" :key="index" class="d-flex justify-start">
-      <component :is="slide" :index="index" />
-    </swiper-slide>
-  </swiper>
+  <div>
+    <intro-slide />
+    <template v-if="!isLoggedIn">
+      <login-slide id="login" />
+      <signup-slide id="register" />
+    </template>
+  </div>
 </template>
 <script>
-  import { call, sync } from 'vuex-pathify';
-  import { Mousewheel, Pagination, Controller } from 'swiper';
-  import { SwiperCore, Swiper, SwiperSlide } from 'swiper-vue2';
-  import 'swiper/swiper-bundle.css';
-
-  // Using Swiper API v6
-  // https://swiper6.vercel.app/swiper-api#methods-and-properties
-  SwiperCore.use([Mousewheel, Pagination, Controller]);
+  import { call, get } from 'vuex-pathify';
 
   export default {
     name: 'Homepage',
 
     components: {
-      Swiper,
-      SwiperSlide,
-      loginSlide: () => import(/* webpackChunkName: 'login-slide' */ './sliderViews/login'),
-      registerSlide: () => import(/* webpackChunkName: 'register-slide' */ './sliderViews/register'),
+      introSlide: () => import(/* webpackChunkName: 'register-slide' */ './sliderViews/Intro'),
+      loginSlide: () => import(/* webpackChunkName: 'login-slide' */ './sliderViews/Login'),
+      signupSlide: () => import(/* webpackChunkName: 'register-slide' */ './sliderViews/Signup'),
+      // profileSlide: () => import(/* webpackChunkName: 'register-slide' */ './sliderViews/Profile'),
     },
 
     data() {
       return {
-        viewSlides: ['loginSlide', 'registerSlide'],
-        test: '',
+        swiperOptions: {
+          cssMode: false,
+          direction: 'vertical',
+          mousewheel: {
+            thresholdTime: 40,
+            thresholdDelta: 40,
+            forceToAxis: true,
+          },
+          pagination: {
+            clickable: true,
+          },
+        },
       };
     },
 
     computed: {
-      ...sync('swipers', ['homeActiveSlide']),
+      ...get('authentication', ['isLoggedIn']),
 
       swiper() {
         if (!this.$refs.sw.swiperRef) return;
@@ -64,17 +57,22 @@
       },
     },
 
-    mounted() {
-      // setTimeout(() => {
-      //   this.increase();
-      // }, 1200);
-    },
-
     methods: {
       ...call('app/*'),
 
-      increase() {
-        this.swiper.slideTo(1, 300, false);
+      removeSlide(slide) {
+        this.swiper.removeSlide([0, 1, 2]);
+      },
+
+      loadProfileSlide() {
+        // Adds the user profile component slide to the array.
+        this.viewSlides.push('profileSlide');
+
+        // Waits a bit for the media to load.
+        setTimeout(() => {
+          this.swiper.update();
+          this.swiper.slideTo(3, 350, false);
+        }, 500);
       },
     },
   };
@@ -101,7 +99,9 @@
   }
 
   .swiper-pagination-bullet-active {
-    background-color: rgb(var(--vs-primary)) !important;
+    /* background-color: rgb(var(--vs-primary)) !important; */
+    background-color: #61d4bc !important;
+
     font-size: 20px;
   }
 

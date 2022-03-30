@@ -52,12 +52,12 @@
       <template #footer>
         <v-scale-transition>
           <vs-row v-if="isLoggedIn" justify="space-between">
-            <vs-avatar class="pa-1" badge-color="#91fcdc" badge-position="top-right">
+            <vs-avatar class="pa-1 cursor-pointer" badge-color="#91fcdc" badge-position="top-right">
               <v-icon dark> mdi-bell-outline </v-icon>
               <template #badge> 28 </template>
             </vs-avatar>
 
-            <vs-avatar class="pa-1">
+            <vs-avatar class="pa-1 cursor-pointer">
               <img src="https://i.pravatar.cc/300" alt="" />
             </vs-avatar>
           </vs-row>

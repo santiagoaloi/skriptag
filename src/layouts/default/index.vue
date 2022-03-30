@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app class="no-select no-drag">
     <default-app-bar />
     <default-drawer />
     <default-view />

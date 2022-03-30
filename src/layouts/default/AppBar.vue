@@ -1,33 +1,36 @@
 <template>
-  <div class="center examplex">
-    <vs-navbar shadow square>
+  <div>
+    <vs-navbar style="position: relative" fixed shadow square>
       <template #left>
-        <div class="ml-13 mr-3">
+        <div class="ml-9 mr-3">
           <v-container>
-            <skriptag-title small />
+            <skriptag-title small @click="$router.push('/')" />
           </v-container>
         </div>
       </template>
-      <vs-navbar-group>
-        Why you
-        <template #items>
-          <vs-navbar-item id="guide"> Guide </vs-navbar-item>
-          <vs-navbar-item id="docs"> Documents </vs-navbar-item>
-          <vs-navbar-item id="components"> Components </vs-navbar-item>
-        </template>
-      </vs-navbar-group>
 
-      <vs-navbar-group>
-        Flush your stress
-        <template #items>
-          <vs-navbar-item id="Github"> Github </vs-navbar-item>
-          <vs-navbar-item id="Discord"> Discord </vs-navbar-item>
-          <vs-navbar-item id="Twitter"> Twitter </vs-navbar-item>
-          <vs-navbar-item id="Medium"> Medium </vs-navbar-item>
-        </template>
-      </vs-navbar-group>
+      <template v-if="!$vuetify.breakpoint.xs">
+        <vs-navbar-group>
+          Why you
+          <template #items>
+            <vs-navbar-item id="guide"> Guide </vs-navbar-item>
+            <vs-navbar-item id="docs"> Documents </vs-navbar-item>
+            <vs-navbar-item id="components"> Components </vs-navbar-item>
+          </template>
+        </vs-navbar-group>
 
-      <vs-navbar-item id="License"> Variety </vs-navbar-item>
+        <vs-navbar-group>
+          Flush your stress
+          <template #items>
+            <vs-navbar-item id="Github"> Github </vs-navbar-item>
+            <vs-navbar-item id="Discord"> Discord </vs-navbar-item>
+            <vs-navbar-item id="Twitter"> Twitter </vs-navbar-item>
+            <vs-navbar-item id="Medium"> Medium </vs-navbar-item>
+          </template>
+        </vs-navbar-group>
+
+        <vs-navbar-item id="License"> Variety </vs-navbar-item>
+      </template>
 
       <template #right>
         <!-- <vs-select v-model="dropdown" placeholder="Select" @click.stop>
@@ -40,14 +43,12 @@
             <vs-option label="Nodejs" value="7"> Nodejs </vs-option>
           </vs-select> -->
 
-        <v-btn :ripple="false" class="mr-3" color="grey darken-3 white--text" small @click="logout">
-          <v-icon small> mdi-plus</v-icon>
-          Signup
-        </v-btn>
-        <v-btn :ripple="false" color="teal white--text" small @click="logout">
-          <v-icon small> mdi-account</v-icon>
-          {{ displayText }}
-        </v-btn>
+        <v-scale-transition>
+          <v-btn v-if="user.email" :ripple="false" color="teal white--text" small @click="logout">
+            <v-icon small> mdi-account</v-icon>
+            {{ `Logout ${user.email}` }}
+          </v-btn>
+        </v-scale-transition>
       </template>
     </vs-navbar>
   </div>
@@ -68,9 +69,6 @@
     computed: {
       drawer: sync('app/drawer'),
       ...get('authentication', ['isLoggedIn', 'user']),
-      displayText() {
-        return this.user.email ? `Logout ${this.user.email}` : 'Login';
-      },
     },
 
     methods: {

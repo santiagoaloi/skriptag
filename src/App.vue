@@ -64,6 +64,6 @@
 
   html {
     background: #24272c !important;
-    overflow: hidden !important;
+    /* overflow: hidden !important; */
   }
 </style>
