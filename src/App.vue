@@ -1,5 +1,5 @@
 <template>
-  <v-fade-transition mode="out-in">
+  <v-fade-transition hide-on-leave mode="out-in">
     <router-view />
   </v-fade-transition>
 </template>

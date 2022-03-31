@@ -1,5 +1,5 @@
 <template>
-  <v-img
+  <!-- <v-img
     :gradient="src ? 'to top , rgba(5,5,5,.9), rgba(0,0,0, .7)' : ''"
     :src="src"
     flat
@@ -31,7 +31,27 @@
         <h6 class="mt-n2">{{ lastLogin }}</h6>
       </div>
     </div>
-  </v-img>
+  </v-img> -->
+
+  <template>
+    <div class="center examplex">
+      <vs-navbar target-scroll="#padding-scroll-content" padding-scroll center-collapsed>
+        <vs-navbar-item id="guide" :active="active == 'guide'"> Guide </vs-navbar-item>
+        <vs-navbar-item id="docs" :active="active == 'docs'"> Documents </vs-navbar-item>
+        <vs-navbar-item id="components" :active="active == 'components'"> Components </vs-navbar-item>
+        <vs-navbar-item id="license" :active="active == 'license'"> license </vs-navbar-item>
+        <template #right>
+          <vs-button flat>Login</vs-button>
+          <vs-button>Get Started</vs-button>
+        </template>
+      </vs-navbar>
+      <div id="padding-scroll-content" class="square">
+        <div class="child">child 1</div>
+        <div class="child">child 2</div>
+        <div class="child">child 3</div>
+      </div>
+    </div>
+  </template>
 </template>
 <script>
   import { get } from 'vuex-pathify';

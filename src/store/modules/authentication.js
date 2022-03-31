@@ -42,7 +42,7 @@ const actions = {
         .then((userCredential) => {
           store.set('authentication/user', userCredential.user);
           store.set('loaders/authLoader', false);
-          router.push('/profile');
+          router.push('profile');
         })
         .catch(({ ...error }) => {
           dispatch('loginMessagesSnackbar', error.code);

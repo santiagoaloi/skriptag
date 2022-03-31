@@ -5,7 +5,7 @@
       <span
         data-aos="fade"
         data-aos-delay="600"
-        data-aos-once="true"
+        data-aos-once="false"
         :class="small ? 'ml-n8' : 'ml-n11'"
         class="primary-font-color"
         data-aos-duration="600"

@@ -1,7 +1,7 @@
 <template>
   <div>
     <intro-slide />
-    <template v-if="!isLoggedIn">
+    <template v-if="!authenticated">
       <login-slide id="login" />
       <signup-slide id="register" />
     </template>
@@ -22,58 +22,22 @@
 
     data() {
       return {
-        swiperOptions: {
-          cssMode: false,
-          direction: 'vertical',
-          mousewheel: {
-            thresholdTime: 40,
-            thresholdDelta: 40,
-            forceToAxis: true,
-          },
-          pagination: {
-            clickable: true,
-          },
-        },
+        authenticated: false,
       };
     },
 
     computed: {
       ...get('authentication', ['isLoggedIn']),
+    },
 
-      swiper() {
-        if (!this.$refs.sw.swiperRef) return;
-        return this.$refs.sw.swiperRef;
-      },
-
-      activeSlide: {
-        // getter
-        get() {
-          return this.swiper.activeIndex;
-        },
-        // setter
-        set() {
-          this.test = this.swiper.activeIndex;
-        },
-      },
+    mounted() {
+      // This is done this way to avoid leaving route transition flicker
+      // Due to the dissapearance of the login and signup components.
+      this.authenticated = this.isLoggedIn;
     },
 
     methods: {
       ...call('app/*'),
-
-      removeSlide(slide) {
-        this.swiper.removeSlide([0, 1, 2]);
-      },
-
-      loadProfileSlide() {
-        // Adds the user profile component slide to the array.
-        this.viewSlides.push('profileSlide');
-
-        // Waits a bit for the media to load.
-        setTimeout(() => {
-          this.swiper.update();
-          this.swiper.slideTo(3, 350, false);
-        }, 500);
-      },
     },
   };
 </script>

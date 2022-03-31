@@ -7,11 +7,10 @@ import { store } from '@/store';
 import vuetify from './plugins/vuetify';
 import './plugins';
 import 'vuesax/dist/vuesax.css';
+import { auth } from '@/firebase/firebase';
 
 // Styles amd Animations
 import 'aos/dist/aos.css';
-
-// require('dotenv').config();
 
 Vue.config.productionTip = false;
 // Vuesax styles
@@ -27,12 +26,14 @@ Vue.use(Vuesax, {
 
 Vue.config.productionTip = false;
 
-new Vue({
-  created() {
-    AOS.init();
-  },
-  store,
-  vuetify,
-  router,
-  render: (h) => h(App),
-}).$mount('#app');
+auth.onAuthStateChanged(() => {
+  new Vue({
+    created() {
+      AOS.init();
+    },
+    vuetify,
+    store,
+    router,
+    render: (h) => h(App),
+  }).$mount('#app');
+});
