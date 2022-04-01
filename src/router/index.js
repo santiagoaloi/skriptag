@@ -10,25 +10,25 @@ const routes = [
       {
         path: '',
         name: 'Default',
-        component: () => import('@/views/home'),
+        component: () => import(/* webpackChunkName: 'Homepage' */ '@/views/home'),
       },
       {
         path: '/Deny',
         name: 'deny',
-        component: () => import('@/views/deny'),
+        component: () => import(/* webpackChunkName: 'Unauthorized' */ '@/views/deny'),
       },
 
       {
         path: '/Login',
         name: 'login',
 
-        component: () => import('@/views/login'),
+        component: () => import(/* webpackChunkName: 'Login page' */ '@/views/login'),
       },
       {
         path: '/Signup',
         name: 'signup',
 
-        component: () => import('@/views/signup'),
+        component: () => import(/* webpackChunkName: 'Signup page' */ '@/views/signup'),
       },
 
       {
@@ -37,12 +37,12 @@ const routes = [
         meta: {
           requiresAuth: true,
         },
-        component: () => import('@/views/profile'),
+        component: () => import(/* webpackChunkName: 'Profile page' */ '@/views/profile'),
       },
       {
         path: '/:catchAll(.*)*',
         name: 'Notfound',
-        component: () => import('@/views/four'),
+        component: () => import(/* webpackChunkName: '404 page' */ '@/views/four'),
       },
     ],
   },

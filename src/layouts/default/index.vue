@@ -12,9 +12,9 @@
     name: 'DefaultLayout',
 
     components: {
-      DefaultAppBar: () => import('./AppBar'),
-      DefaultDrawer: () => import('./Drawer'),
-      DefaultView: () => import('./View'),
+      DefaultAppBar: () => import(/* webpackChunkName: 'Appbar' */ './AppBar'),
+      DefaultDrawer: () => import(/* webpackChunkName: 'Drawer' */ './Drawer'),
+      DefaultView: () => import(/* webpackChunkName: 'router-view' */ './View'),
     },
   };
 </script>

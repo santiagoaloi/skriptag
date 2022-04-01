@@ -10,7 +10,7 @@
     name: 'Homepage',
 
     components: {
-      introSlide: () => import(/* webpackChunkName: 'register-slide' */ './sliderViews/Intro'),
+      introSlide: () => import(/* webpackChunkName: 'Intro-Slide' */ './sliderViews/Intro'),
     },
 
     computed: {
