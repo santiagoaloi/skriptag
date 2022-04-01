@@ -12,8 +12,8 @@
     name: 'DefaultLayout',
 
     components: {
-      DefaultAppBar: () => import(/* webpackChunkName: 'Appbar' */ './AppBar'),
-      DefaultDrawer: () => import(/* webpackChunkName: 'Drawer' */ './Drawer'),
+      DefaultAppBar: () => import(/* webpackChunkName: 'appbar' */ './AppBar'),
+      DefaultDrawer: () => import(/* webpackChunkName: 'drawer' */ './Drawer'),
       DefaultView: () => import(/* webpackChunkName: 'router-view' */ './View'),
     },
   };
