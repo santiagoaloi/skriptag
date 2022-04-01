@@ -5,8 +5,8 @@
       Learn coding , download free and premium application templates, access JS/VueJS training material, participate in Skriptag's
       discussions forums. Buy consultancy or premium support for any product purchased.
       <v-card-actions v-if="!isLoggedIn" class="px-0">
-        <v-btn large @click="$vuetify.goTo('#login', options)">Login</v-btn>
-        <v-btn large @click="$vuetify.goTo('#register', options)">Signup</v-btn>
+        <v-btn large @click="$router.push('login')">Login</v-btn>
+        <v-btn large @click="$router.push('signup')">Signup</v-btn>
       </v-card-actions>
     </p>
   </base-split-2>

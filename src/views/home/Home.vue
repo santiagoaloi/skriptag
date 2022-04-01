@@ -1,10 +1,6 @@
 <template>
   <div>
     <intro-slide />
-    <template v-if="!authenticated">
-      <login-slide id="login" />
-      <signup-slide id="register" />
-    </template>
   </div>
 </template>
 <script>
@@ -15,25 +11,10 @@
 
     components: {
       introSlide: () => import(/* webpackChunkName: 'register-slide' */ './sliderViews/Intro'),
-      loginSlide: () => import(/* webpackChunkName: 'login-slide' */ './sliderViews/Login'),
-      signupSlide: () => import(/* webpackChunkName: 'register-slide' */ './sliderViews/Signup'),
-      // profileSlide: () => import(/* webpackChunkName: 'register-slide' */ './sliderViews/Profile'),
-    },
-
-    data() {
-      return {
-        authenticated: false,
-      };
     },
 
     computed: {
       ...get('authentication', ['isLoggedIn']),
-    },
-
-    mounted() {
-      // This is done this way to avoid leaving route transition flicker
-      // Due to the dissapearance of the login and signup components.
-      this.authenticated = this.isLoggedIn;
     },
 
     methods: {

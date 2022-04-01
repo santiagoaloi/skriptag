@@ -7,7 +7,6 @@ import { store } from '@/store';
 import vuetify from './plugins/vuetify';
 import './plugins';
 import 'vuesax/dist/vuesax.css';
-import { auth } from '@/firebase/firebase';
 
 // Styles amd Animations
 import 'aos/dist/aos.css';
@@ -26,14 +25,12 @@ Vue.use(Vuesax, {
 
 Vue.config.productionTip = false;
 
-auth.onAuthStateChanged(() => {
-  new Vue({
-    created() {
-      AOS.init();
-    },
-    vuetify,
-    store,
-    router,
-    render: (h) => h(App),
-  }).$mount('#app');
-});
+new Vue({
+  created() {
+    AOS.init();
+  },
+  vuetify,
+  store,
+  router,
+  render: (h) => h(App),
+}).$mount('#app');

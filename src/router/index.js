@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import { isEmpty } from 'lodash';
-import { auth } from '@/firebase/firebase';
+import { getUserState } from '@/firebase/firebase';
 
 const routes = [
   {
@@ -15,9 +14,23 @@ const routes = [
       },
       {
         path: '/Deny',
-        name: 'Deny',
+        name: 'deny',
         component: () => import('@/views/deny'),
       },
+
+      {
+        path: '/Login',
+        name: 'login',
+
+        component: () => import('@/views/login'),
+      },
+      {
+        path: '/Signup',
+        name: 'signup',
+
+        component: () => import('@/views/signup'),
+      },
+
       {
         path: '/Profile',
         name: 'profile',
@@ -25,6 +38,11 @@ const routes = [
           requiresAuth: true,
         },
         component: () => import('@/views/profile'),
+      },
+      {
+        path: '/:catchAll(.*)*',
+        name: 'Notfound',
+        component: () => import('@/views/four'),
       },
     ],
   },
@@ -37,18 +55,19 @@ const router = new Router({
   base: process.env.BASE_URL,
   linkActiveClass: 'active',
   routes,
-  scrollBehavior: (to, _, savedPosition) => {
-    if (to.hash) return { selector: to.hash };
-    if (savedPosition) return savedPosition;
-    return { x: 0, y: 0 };
-  },
 });
 
-router.beforeEach((to, from, next) => {
-  if (to.matched.some((record) => record.meta.requiresAuth && isEmpty(auth.currentUser))) {
+router.beforeEach(async (to, from, next) => {
+  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
+  const isAuth = await getUserState();
+
+  // If the route requires the user to be authenticated and it is not,
+  // Show the unauthorized view.
+  if (requiresAuth && !isAuth) {
     next('/deny');
     return;
   }
+  // Unprotected routes are all routable.
   next();
 });
 

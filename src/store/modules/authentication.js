@@ -3,7 +3,7 @@ import { make } from 'vuex-pathify';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from '@firebase/auth';
 import { isEmpty } from 'lodash';
 import { store } from '@/store';
-import { auth, onAuthStateChanged } from '@/firebase/firebase';
+import { auth } from '@/firebase/firebase';
 import router from '@/router';
 
 const state = {
@@ -20,7 +20,7 @@ const actions = {
     if (getters.isLoggedIn) {
       await signOut(auth);
       store.set('authentication/user', {});
-      dispatch('snackbar/snackbarSuccess', 'Hope to see you soon again 💚', { root: true });
+      dispatch('snackbar/snackbarSuccess', 'Hope to see you again soon  💚', { root: true });
       router.push('/');
     }
   },
@@ -72,7 +72,7 @@ const actions = {
   },
 
   signupMessagesSnackbar({ dispatch }, message) {
-    console.log(message);
+    // console.log(message);
     if (message.includes('auth/weak-password')) {
       dispatch('snackbar/snackbarError', 'Password should be at least 6 characters.', { root: true });
     } else if (message.includes('auth/email-already-in-use')) {
@@ -99,7 +99,7 @@ const actions = {
 
 const getters = {
   //* Checks if the user is authenticated.
-  isLoggedIn: (onAuthStateChanged, (UserObject) => !isEmpty(UserObject.user)),
+  isLoggedIn: (auth.onAuthStateChanged, (auth) => !isEmpty(auth.user)),
 
   //* returns current user last login time.
   lastLogin: (state, getters) => (getters.isLoggedIn ? state.user.metadata.lastSignInTime : null),

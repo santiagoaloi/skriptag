@@ -11,7 +11,7 @@
     <v-sheet style="color: #ccc" class="d-flex justify-center align-center flex-column transparent mx-auto" width="50vw">
       <v-img src="@/assets/static/auth.svg" width="250"> </v-img>
       <h3>WRONG TURN?</h3>
-      <h5>You look lost, stranger. This page requires super-powers.</h5>
+      <h5>You look lost, stranger. There's absolutely nothing here!</h5>
       <v-btn class="mt-4"> Go back</v-btn>
     </v-sheet>
   </v-img>
