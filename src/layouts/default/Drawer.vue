@@ -1,13 +1,15 @@
 <template>
   <v-fade-transition>
     <vs-sidebar v-show="showSidebar" v-model="route" reduce open square>
-      <vs-sidebar-item id="/" class="mt-14">
+      <vs-sidebar-item id="/" to="/" class="mt-14">
         <template #icon>
-          <v-icon dark> mdi-home-outline </v-icon>
+          <div>
+            <v-icon dark> mdi-home-outline </v-icon>
+          </div>
         </template>
         Home
       </vs-sidebar-item>
-      <vs-sidebar-item id="market">
+      <!-- <vs-sidebar-item id="market">
         <template #icon>
           <v-icon dark> mdi-cart-outline </v-icon>
         </template>
@@ -47,7 +49,7 @@
           </template>
           Facebook
         </vs-sidebar-item>
-      </vs-sidebar-group>
+      </vs-sidebar-group> -->
 
       <template #footer>
         <v-scale-transition>

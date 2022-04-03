@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-fade-transition>
+    <v-slide-y-transition>
       <div v-show="imgBannerLoaded">
         <v-img
           :gradient="'to top , rgba(5,5,5,.9), rgba(0,0,0, .7)'"
@@ -41,154 +41,22 @@
             </v-row>
           </template>
         </v-img>
-        <base-no-split>
-          <template #left>
-            <v-row>
-              <v-col cols="4">
-                <vs-card class="my-card">
-                  <template #title>
-                    <h3>Pot with a plant</h3>
-                  </template>
-                  <template #img>
-                    <img :src="`https://picsum.photos/1280/800?${Date.now().toString().slice(0, 1)}`" alt="" />
-                  </template>
-                  <template #text>
-                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit.</p>
-                  </template>
-                  <template #interactions>
-                    <vs-button danger icon>
-                      <i class="bx bx-heart"></i>
-                    </vs-button>
-                    <vs-button class="btn-chat" shadow primary>
-                      <i class="bx bx-chat"></i>
-                      <span class="span"> 54 </span>
-                    </vs-button>
-                  </template>
-                </vs-card>
-              </v-col>
-              <v-col cols="3">
-                <vs-card class="my-card">
-                  <template #title>
-                    <h3>Pot with a plant</h3>
-                  </template>
-                  <template #img>
-                    <img :src="`https://picsum.photos/1280/800?${Date.now().toString().slice(0, 1)}`" alt="" />
-                  </template>
-                  <template #text>
-                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit.</p>
-                  </template>
-                  <template #interactions>
-                    <vs-button danger icon>
-                      <i class="bx bx-heart"></i>
-                    </vs-button>
-                    <vs-button class="btn-chat" shadow primary>
-                      <i class="bx bx-chat"></i>
-                      <span class="span"> 54 </span>
-                    </vs-button>
-                  </template>
-                </vs-card>
-              </v-col>
-              <v-col cols="5" align-self="stretch">
-                <vs-card class="my-card">
-                  <template #title>
-                    <h3>Pot with a plant</h3>
-                  </template>
-                  <template #img>
-                    <img :src="`https://picsum.photos/1280/800?${Date.now().toString().slice(0, 1)}`" alt="" />
-                  </template>
-                  <template #text>
-                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit.</p>
-                  </template>
-                  <template #interactions>
-                    <vs-button danger icon>
-                      <i class="bx bx-heart"></i>
-                    </vs-button>
-                    <vs-button class="btn-chat" shadow primary>
-                      <i class="bx bx-chat"></i>
-                      <span class="span"> 54 </span>
-                    </vs-button>
-                  </template>
-                </vs-card>
-              </v-col>
-
-              <v-col cols="6" align-self="stretch">
-                <vs-card class="my-card">
-                  <template #title>
-                    <h3>Pot with a plant</h3>
-                  </template>
-                  <template #img>
-                    <img :src="`https://picsum.photos/1280/800?${Date.now().toString().slice(0, 1)}`" alt="" />
-                  </template>
-                  <template #text>
-                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit.</p>
-                  </template>
-                  <template #interactions>
-                    <vs-button danger icon>
-                      <i class="bx bx-heart"></i>
-                    </vs-button>
-                    <vs-button class="btn-chat" shadow primary>
-                      <i class="bx bx-chat"></i>
-                      <span class="span"> 54 </span>
-                    </vs-button>
-                  </template>
-                </vs-card>
-              </v-col>
-              <v-col cols="3" align-self="stretch">
-                <vs-card class="my-card">
-                  <template #title>
-                    <h3>Pot with a plant</h3>
-                  </template>
-                  <template #img>
-                    <img :src="`https://picsum.photos/1280/800?${Date.now().toString().slice(0, 1)}`" alt="" />
-                  </template>
-                  <template #text>
-                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit.</p>
-                  </template>
-                  <template #interactions>
-                    <vs-button danger icon>
-                      <i class="bx bx-heart"></i>
-                    </vs-button>
-                    <vs-button class="btn-chat" shadow primary>
-                      <i class="bx bx-chat"></i>
-                      <span class="span"> 54 </span>
-                    </vs-button>
-                  </template>
-                </vs-card>
-              </v-col>
-              <v-col cols="3" align-self="stretch">
-                <vs-card class="my-card">
-                  <template #title>
-                    <h3>Pot with a plant</h3>
-                  </template>
-                  <template #img>
-                    <img :src="`https://picsum.photos/1280/800?${Date.now().toString().slice(0, 1)}`" alt="" />
-                  </template>
-                  <template #text>
-                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit.</p>
-                  </template>
-                  <template #interactions>
-                    <vs-button danger icon>
-                      <i class="bx bx-heart"></i>
-                    </vs-button>
-                    <vs-button class="btn-chat" shadow primary>
-                      <i class="bx bx-chat"></i>
-                      <span class="span"> 54 </span>
-                    </vs-button>
-                  </template>
-                </vs-card>
-              </v-col>
-            </v-row>
-          </template>
-        </base-no-split>
       </div>
-    </v-fade-transition>
+    </v-slide-y-transition>
+    <v-scale-transition>
+      <profile-items v-if="showProfileItems && imgBannerLoaded" />
+    </v-scale-transition>
   </div>
 </template>
 <script>
-  import { get } from 'vuex-pathify';
+  import { get, call } from 'vuex-pathify';
+  import profileItems from './ProfileItems';
 
   export default {
     name: 'ProfileSlide',
+    components: {
+      profileItems,
+    },
 
     props: {
       index: {
@@ -196,11 +64,12 @@
         default: 0,
       },
     },
-
     data() {
       return {
         src: '',
         imgBannerLoaded: false,
+        showProfileItems: false,
+        loadingProfile: this.$vs.loading(),
       };
     },
 
@@ -210,17 +79,22 @@
 
     mounted() {
       this.getSrc();
-
-      setTimeout(() => {
-        this.$emit('remove-slide', 'loginSlide');
-      }, 1000);
+      this.delayRender(800);
     },
 
     methods: {
+      ...call('app', ['sleep']),
+
       getSrc() {
         setTimeout(() => {
           this.src = `https://picsum.photos/1280/800?${Date.now().toString().slice(0, 1)}`;
         }, 300);
+      },
+
+      async delayRender(ms) {
+        await this.sleep(ms);
+        this.showProfileItems = true;
+        this.loadingProfile.close();
       },
     },
   };
@@ -236,5 +110,14 @@
 
   .vs-card-content {
     height: 100% !important;
+  }
+
+  .vs-loading {
+    --vs-color: var(--vs-primary);
+    --vs-background: 255, 255, 255;
+    --vs-opacity: 0.3;
+
+    padding: 0px;
+    border-radius: unset;
   }
 </style>

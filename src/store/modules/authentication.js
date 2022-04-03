@@ -74,7 +74,7 @@ const actions = {
   signupMessagesSnackbar({ dispatch }, message) {
     // console.log(message);
     if (message.includes('auth/weak-password')) {
-      dispatch('snackbar/snackbarError', 'Password should be at least 6 characters.', { root: true });
+      dispatch('snackbar/snackbarError', 'Password should be at least 6 characters long.', { root: true });
     } else if (message.includes('auth/email-already-in-use')) {
       dispatch('snackbar/snackbarError', 'Aother account is already using this email.', { root: true });
     } else if (message.includes('auth/invalid-email')) {

@@ -41,7 +41,7 @@ const routes = [
       },
       {
         path: '/:catchAll(.*)*',
-        name: 'Notfound',
+        name: '404',
         component: () => import(/* webpackChunkName: '404-page' */ '@/views/four'),
       },
     ],
@@ -57,14 +57,24 @@ const router = new Router({
   routes,
 });
 
+// Router guards.
+
 router.beforeEach(async (to, from, next) => {
-  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
   const isAuth = await getUserState();
+  const isLoginPageAndAuthenticated = to.matched.some((record) => record.name === 'login' && isAuth);
+  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
 
   // If the route requires the user to be authenticated and it is not,
   // Show the unauthorized view.
   if (requiresAuth && !isAuth) {
     next('/deny');
+    return;
+  }
+
+  // If the user navigates to the login page and it's already authenticated
+  // route to the profile page.
+  if (isLoginPageAndAuthenticated) {
+    next('/profile');
     return;
   }
   // Unprotected routes are all routable.
