@@ -59,7 +59,7 @@
               <template #badge> 28 </template>
             </vs-avatar>
 
-            <vs-avatar class="pa-1 cursor-pointer">
+            <vs-avatar class="pa-1 cursor-pointer" @click="$router.push('/profile')">
               <img src="https://i.pravatar.cc/300" alt="" />
             </vs-avatar>
           </vs-row>
