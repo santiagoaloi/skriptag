@@ -18,7 +18,7 @@
                 style="background: #25272c"
                 min-height="100%"
                 min-width="100%"
-                gradient="to bottom , rgba(20,20,20, .4) 40%,  rgba(0,0,0,.8) 160%"
+                gradient="to bottom , rgba(20,20,20, .5) 40%,  rgba(0,0,0,.5) 160%"
                 :src="`https://picsum.photos/1280/800?${Date.now().toString().slice(0, 1) + 12}`"
                 flat
               >
@@ -32,7 +32,7 @@
             <div class="ml-13">
               <p class="mb-n2">Profile</p>
               <h1 style="font-size: 350%" class="mb-2">{{ user.email }}</h1>
-              <h6 class="mt-n2">{{ lastLogin }}</h6>
+              <h6 class="mt-n2">Previous login: {{ lastLogin }}</h6>
             </div>
           </div>
           <template #placeholder>

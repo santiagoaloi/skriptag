@@ -2,8 +2,9 @@
 import { make } from 'vuex-pathify';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from '@firebase/auth';
 import { isEmpty } from 'lodash';
+import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { store } from '@/store';
-import { auth } from '@/firebase/firebase';
+import { auth, myFS } from '@/firebase/firebase';
 import router from '@/router';
 
 const state = {
@@ -11,6 +12,8 @@ const state = {
   loginForm: {},
   signupForm: {},
 };
+
+const PROFILE_COLLECTION = 'users'; // name of the FS collection of user profile docs
 
 const mutations = make.mutations(state);
 const actions = {
@@ -34,40 +37,60 @@ const actions = {
   async login({ dispatch, state }) {
     store.set('loaders/authLoader', true);
     const { email, password } = state.loginForm;
+
     if (!state.loginForm.email || !state.loginForm.password) {
       dispatch('snackbar/snackbarError', 'You have to provide both an email and password.', { root: true });
       store.set('loaders/authLoader', false);
     } else {
-      signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          store.set('authentication/user', userCredential.user);
-          store.set('loaders/authLoader', false);
-          router.push('profile');
-        })
-        .catch(({ ...error }) => {
-          dispatch('loginMessagesSnackbar', error.code);
-          store.set('loaders/authLoader', false);
-        });
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        store.set('authentication/user', userCredential.user);
+        store.set('loaders/authLoader', false);
+        router.push('profile');
+      } catch ({ ...error }) {
+        dispatch('loginMessagesSnackbar', error.code);
+        store.set('loaders/authLoader', false);
+      }
     }
   },
 
   async signup({ dispatch, state }) {
     store.set('loaders/signupLoader', true);
     const { email, password } = state.signupForm;
+
+    // Process only if both email and password are provided.
     if (!state.signupForm.email || !state.signupForm.password) {
       dispatch('snackbar/snackbarError', 'You have to provide both an email and password.', { root: true });
       store.set('loaders/signupLoader', false);
     } else {
-      createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          // store.set('authentication/user', userCredential.user);
-          store.set('loaders/signupLoader', false);
-          router.push('/profile');
-        })
-        .catch(({ ...error }) => {
-          store.set('loaders/signupLoader', false);
-          dispatch('signupMessagesSnackbar', error.code);
-        });
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+
+        // Set user in Vuex and navigate to the new user profile.
+        store.set('authentication/user', userCredential.user);
+        store.set('loaders/authLoader', false);
+        router.push('profile');
+
+        const { user } = userCredential;
+
+        // Add a document in a  firestore collection.
+        // doc (Firestore instance, collection name, collection id).
+        const userDocRef = doc(myFS, PROFILE_COLLECTION, user.uid);
+
+        // Payload
+        const userDocData = {
+          uid: user.uid,
+          email,
+          name: '',
+          dateCreated: serverTimestamp(),
+        };
+
+        // SetDoc (Firestore, Payload)
+        setDoc(userDocRef, userDocData);
+      } catch ({ ...error }) {
+        dispatch('loginMessagesSnackbar', error.code);
+        store.set('loaders/authLoader', false);
+      }
     }
   },
 
@@ -79,7 +102,7 @@ const actions = {
       dispatch('snackbar/snackbarError', 'Aother account is already using this email.', { root: true });
     } else if (message.includes('auth/invalid-email')) {
       dispatch('snackbar/snackbarError', 'Too many invalid attemps, please try again later..', { root: true });
-    } else if (message.includes('auth/user-not-found')) {
+    } else {
       dispatch('snackbar/snackbarError', 'Something did not go right.', { root: true });
     }
   },
@@ -91,8 +114,10 @@ const actions = {
       dispatch('snackbar/snackbarError', 'You password is incorrect , please try again.', { root: true });
     } else if (message.includes('auth/user-not-found')) {
       dispatch('snackbar/snackbarError', 'This account does not exist in our records.', { root: true });
-    } else if (message.includes('auth/too-many-requests')) {
+    } else if (message.includes('auth/too-many-a')) {
       dispatch('snackbar/snackbarError', 'Too many invalid attemps, please try again later..', { root: true });
+    } else {
+      dispatch('snackbar/snackbarError', 'Something did not go right.', { root: true });
     }
   },
 };

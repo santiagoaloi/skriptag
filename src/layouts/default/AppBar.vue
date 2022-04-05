@@ -1,6 +1,6 @@
 <template>
   <div>
-    <vs-navbar style="position: relative" fixed shadow square>
+    <vs-navbar v-model="active" style="position: relative" fixed shadow square>
       <template #left>
         <div class="ml-9 mr-3">
           <v-container>
@@ -29,7 +29,7 @@
           </template>
         </vs-navbar-group>
 
-        <vs-navbar-item id="License"> Variety </vs-navbar-item>
+        <vs-navbar-item id="blog" :active="active == 'blog'"> Blog </vs-navbar-item>
       </template>
 
       <template #right>
@@ -63,6 +63,7 @@
     data() {
       return {
         dropdown: [],
+        active: '',
       };
     },
 
