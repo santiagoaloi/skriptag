@@ -2,7 +2,7 @@
 import { make } from 'vuex-pathify';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from '@firebase/auth';
 import { isEmpty } from 'lodash';
-import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, setDoc, serverTimestamp, onSnapshot } from 'firebase/firestore';
 import { store } from '@/store';
 import { auth, myFS } from '@/firebase/firebase';
 import router from '@/router';
@@ -11,6 +11,7 @@ const state = {
   user: {},
   loginForm: {},
   signupForm: {},
+  profile: {},
 };
 
 const PROFILE_COLLECTION = 'users'; // name of the FS collection of user profile docs
@@ -125,6 +126,15 @@ const actions = {
 const getters = {
   //* Checks if the user is authenticated.
   isLoggedIn: (auth.onAuthStateChanged, (auth) => !isEmpty(auth.user)),
+
+  //* Retrieves the user profile from firestore
+  profile: (state) => {
+    const docRef = doc(myFS, PROFILE_COLLECTION, state.user.uid);
+    return onSnapshot(docRef, (docSnap) => {
+      const profileData = docSnap.data();
+      store.set('authentication/profile', profileData);
+    });
+  },
 
   //* returns current user last login time.
   lastLogin: (state, getters) => (getters.isLoggedIn ? state.user.metadata.lastSignInTime : null),

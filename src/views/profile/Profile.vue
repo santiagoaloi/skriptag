@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-slide-y-transition>
-      <div v-show="imgBannerLoaded">
+      <div v-show="imgBannerLoaded && profile.name">
         <v-img
           :gradient="'to top , rgba(5,5,5,.9), rgba(0,0,0, .7)'"
           :src="src"
@@ -31,7 +31,7 @@
             </v-avatar>
             <div class="ml-13">
               <p class="mb-n2">Profile</p>
-              <h1 style="font-size: 350%" class="mb-2">{{ user.email }}</h1>
+              <h1 style="font-size: 350%" class="mb-2">{{ profile.name }}</h1>
               <h6 class="mt-n2">Previous login: {{ lastLogin }}</h6>
             </div>
           </div>
@@ -49,7 +49,7 @@
   </div>
 </template>
 <script>
-  import { get, call } from 'vuex-pathify';
+  import { get, call, sync } from 'vuex-pathify';
   import profileItems from './ProfileItems';
 
   export default {
@@ -75,6 +75,7 @@
 
     computed: {
       ...get('authentication', ['lastLogin', 'user']),
+      ...sync('authentication', ['profile']),
     },
 
     mounted() {
