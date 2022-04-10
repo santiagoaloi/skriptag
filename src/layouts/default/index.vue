@@ -1,7 +1,7 @@
 <template>
   <v-app class="no-select no-drag">
-    <default-app-bar />
     <default-drawer />
+    <default-app-bar />
     <default-view />
     <base-snackbar />
   </v-app>
@@ -12,8 +12,8 @@
     name: 'DefaultLayout',
 
     components: {
-      DefaultAppBar: () => import(/* webpackChunkName: 'appbar' */ './AppBar'),
       DefaultDrawer: () => import(/* webpackChunkName: 'drawer' */ './Drawer'),
+      DefaultAppBar: () => import(/* webpackChunkName: 'appbar' */ './AppBar'),
       DefaultView: () => import(/* webpackChunkName: 'router-view' */ './View'),
     },
   };

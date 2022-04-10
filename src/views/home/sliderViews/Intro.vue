@@ -1,14 +1,23 @@
 <template>
-  <base-split-2>
-    <p>
-      <skriptag-title />
+  <base-split-2 v-bind="$attrs">
+    <skriptag-title />
+
+    <article>
+      <h1 class="font-weight-light">
+        Level up your <b>developer</b> skills and boost your <b>carreer</b> - Find learning content, <b> mentoring</b> assistance
+        or interact with other developers!
+      </h1>
+    </article>
+
+    <p class="pt-5">
       Learn coding , download free and premium application templates, access JS/VueJS training material, participate in Skriptag's
-      discussions forums. Buy consultancy or premium support for any product purchased.
-      <v-card-actions v-if="!isLoggedIn" class="px-0">
-        <v-btn large @click="$router.push('login')">Login</v-btn>
-        <v-btn large @click="$router.push('signup')">Signup</v-btn>
-      </v-card-actions>
     </p>
+
+    <v-card-actions v-if="!isLoggedIn" class="px-0">
+      <template v-for="button in ['login', 'signup']">
+        <BaseButton :key="button" @click="$router.push(`${button}`)"> {{ button }}</BaseButton>
+      </template>
+    </v-card-actions>
   </base-split-2>
 </template>
 <script>
@@ -34,7 +43,6 @@
     },
 
     computed: {
-      //   ...sync('authentication', ['loginForm']),
       loading: sync('loaders/authLoader'),
       loginForm: sync('authentication/loginForm'),
       ...get('authentication', ['isLoggedIn', 'user']),
@@ -52,3 +60,11 @@
     },
   };
 </script>
+<style>
+  /* Gradient color font styling */
+  article {
+    background: linear-gradient(to right, rgb(255, 255, 255), rgb(134, 195, 195));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+</style>

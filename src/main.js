@@ -25,6 +25,44 @@ Vue.use(Vuesax, {
 
 Vue.config.productionTip = false;
 
+// Remember to disable when not needed.
+// This shows Vue dev tools in production.
+Vue.config.devtools = true;
+
+Vue.directive('animation', {
+  bind(el, binding) {
+    const validAnimations = ['shrink'];
+
+    const { longPress } = binding.value || {};
+
+    if (validAnimations.includes(binding.arg)) {
+      el.onmousedown = () => {
+        // if (binding.value === 'shrink') {
+        el.style.transform = 'scale(0.9)';
+        el.style.transition = '0.3s';
+
+        if (!longPress) {
+          setTimeout(() => {
+            el.style.transform = 'scale(1)';
+          }, 300);
+        }
+      };
+      if (longPress) {
+        el.onmouseout = () => {
+          // if (binding.value === 'shrink') {
+          el.style.transform = 'scale(1)';
+          el.style.transition = '0.6s';
+        };
+        el.onmouseup = () => {
+          // if (binding.value === 'shrink') {
+          el.style.transform = 'scale(1)';
+          el.style.transition = '0.6s';
+        };
+      }
+    }
+  },
+});
+
 new Vue({
   created() {
     AOS.init();

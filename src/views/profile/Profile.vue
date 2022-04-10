@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-slide-y-transition>
-      <div v-show="imgBannerLoaded && profile.name">
+      <div v-show="imgBannerLoaded">
         <v-img
           :gradient="'to top , rgba(5,5,5,.9), rgba(0,0,0, .7)'"
           :src="src"
@@ -53,7 +53,7 @@
   import profileItems from './ProfileItems';
 
   export default {
-    name: 'ProfileSlide',
+    name: 'ProfileView',
     components: {
       profileItems,
     },

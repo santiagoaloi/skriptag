@@ -1,12 +1,7 @@
 <template>
-  <v-row no-gutters>
-    <v-col :order="right && !$vuetify.breakpoint.xs ? '12' : '-1'" cols="12" sm="6">
-      <v-img
-        gradient="to bottom , rgba(20,20,20, .4) 40%,  rgba(0,0,0,.8) 160%"
-        width="100%"
-        :style="$vuetify.breakpoint.xs ? 'height:35vh' : 'height: calc(100vh - 60px);'"
-        :src="`https://picsum.photos/1280/800?${Date.now().toString().slice(0, 1)}`"
-      >
+  <v-row style="color: #ccc" class="pattern-bg" :class="rowClass()" no-gutters>
+    <v-col :order="colOrder()" sm="7" cols="12">
+      <v-img :class="imageClass()" v-bind="imageOptions()" @load="imageLoaded = true">
         <template #placeholder>
           <v-row class="fill-height ma-0" align="center" justify="center">
             <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
@@ -14,27 +9,19 @@
         </template>
       </v-img>
     </v-col>
-    <v-col cols="12" style="color: #ccc" sm="6">
-      <v-container style="color: #ccc" class="fill-height">
-        <v-fade-transition>
-          <v-sheet
-            style="color: #ccc"
-            min-height="50vh"
-            class="d-flex flex-colum align-center transparent"
-            :class="$vuetify.breakpoint.xs ? 'px-5' : 'px-16'"
-          >
+    <v-col sm="5" cols="12">
+      <v-container class="fill-height">
+        <v-container>
+          <v-responsive class="mx-auto" width="80%">
             <slot></slot>
-          </v-sheet>
-        </v-fade-transition>
+          </v-responsive>
+        </v-container>
       </v-container>
     </v-col>
   </v-row>
 </template>
 
 <script>
-  // Utilities
-  import { sync } from 'vuex-pathify';
-
   export default {
     name: 'BaseSplit2',
     props: {
@@ -43,8 +30,84 @@
         default: false,
       },
     },
-    computed: {
-      snackbar: sync('snackbar'),
+    data() {
+      return {
+        imageLoaded: false,
+      };
+    },
+    methods: {
+      imageClass() {
+        const { right } = this;
+        const { xs } = this.$vuetify.breakpoint;
+
+        if (xs) {
+          return;
+        }
+
+        if (right && !xs) {
+          return 'diagonal-divider-right';
+        }
+
+        if (!right && !xs) {
+          return 'diagonal-divider-left';
+        }
+      },
+
+      rowClass() {
+        const { smAndDown } = this.$vuetify.breakpoint;
+        if (!smAndDown) {
+          return 'fill-height';
+        }
+      },
+
+      colOrder() {
+        const { right } = this;
+        const { xs } = this.$vuetify.breakpoint;
+        return right && !xs ? '12' : '-1';
+      },
+
+      gradientOptions() {
+        const { imageLoaded } = this;
+        if (!imageLoaded) return;
+
+        const direction = 'to bottom';
+        const fromColor = 'rgba(20,20,20, .4) 40%';
+        const toColor = ' rgba(0,0,0,.8) 160%';
+
+        return `${direction}, ${fromColor}, ${toColor}`;
+      },
+      imageOptions() {
+        const { right, gradientOptions } = this;
+        const { xs } = this.$vuetify.breakpoint;
+
+        return {
+          gradient: gradientOptions(),
+          width: '100%',
+          style: { height: xs ? 'calc(50vh - 60px)' : '100%' },
+          src: `https://picsum.photos/1280/800?${Date.now().toString().slice(0, 1)}`,
+          transition: `${right ? 'slide-x-reverse-transition' : 'slide-x-transition'}`,
+        };
+      },
     },
   };
 </script>
+
+<style scoped>
+  .pattern-bg {
+    background-color: #25272c;
+    opacity: 1;
+    background-image: linear-gradient(135deg, #24262a 25%, transparent 25%), linear-gradient(225deg, #24262a 25%, transparent 25%),
+      linear-gradient(45deg, #24262a 25%, transparent 25%), linear-gradient(315deg, #24262a 25%, #25272c 25%);
+    background-position: 65px 0, 65px 0, 0 0, 0 0;
+    background-size: 130px 130px;
+    background-repeat: repeat;
+  }
+
+  .diagonal-divider-left {
+    clip-path: polygon(0 0, 100% 0, 86% 100%, 0% 100%);
+  }
+
+  .diagonal-divider-right {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 14% 100%);
+  }
+</style>

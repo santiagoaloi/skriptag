@@ -3,6 +3,7 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
+// The .env file contains the api keys used below.
 const firebaseConfig = {
   apiKey: process.env.VUE_APP_SKRIPTAG_FIREBASE_API_KEY,
   authDomain: process.env.VUE_APP_SKRIPTAG_FIREBASE_AUTH_DOMAIN,

@@ -1,5 +1,5 @@
 <template>
-  <v-fade-transition>
+  <v-navigation-drawer app absolute width="50" color="transparent">
     <vs-sidebar v-show="showSidebar" v-model="route" reduce open square>
       <vs-sidebar-item id="/" to="/" class="mt-14">
         <template #icon>
@@ -66,7 +66,7 @@
         </v-scale-transition>
       </template>
     </vs-sidebar>
-  </v-fade-transition>
+  </v-navigation-drawer>
 </template>
 
 <script>

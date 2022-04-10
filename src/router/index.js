@@ -53,26 +53,26 @@ Vue.use(Router);
 const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
-  linkActiveClass: 'active',
   routes,
 });
 
-// Router guards.
-
+// Router guards to deny access to protected routes.
 router.beforeEach(async (to, from, next) => {
+  // Let firebase init before route guards can be applied.
   const isAuth = await getUserState();
+
   const isLoginPageAndAuthenticated = to.matched.some((record) => record.name === 'login' && isAuth);
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
 
   // If the route requires the user to be authenticated and it is not,
-  // Show the unauthorized view.
+  // show the unauthorized view.
   if (requiresAuth && !isAuth) {
     next('/deny');
     return;
   }
 
   // If the user navigates to the login page and it's already authenticated
-  // route to the profile page.
+  // route to the profile page instead.
   if (isLoginPageAndAuthenticated) {
     next('/profile');
     return;

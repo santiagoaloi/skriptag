@@ -1,5 +1,5 @@
 <template>
-  <v-responsive style="color: #ccc" width="130">
+  <v-responsive v-animation:shrink="{ longPress: true }" style="color: #ccc" width="130">
     <component :is="size" class="cursor-pointer" data-aos="zoom-in" data-aos-delay="300" data-aos-once="true" v-on="$listeners"
       >Skriptag
       <span

@@ -5,8 +5,8 @@
     :color="snackbar.data.color"
     transition="slide-y-reverse-transition"
     multi-line
-    right
-    position-y
+    center
+    class="px-5"
   >
     <div class="d-flex">
       <v-icon class="mr-4"> {{ snackbar.data.icon }}</v-icon>

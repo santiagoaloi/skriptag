@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <v-app-bar flat height="60" color="transparent" app>
     <vs-navbar v-model="active" style="position: relative" fixed shadow square>
       <template #left>
-        <div class="ml-9 mr-3">
+        <div>
           <v-container>
             <skriptag-title small @click="$router.push('/')" />
           </v-container>
@@ -44,14 +44,14 @@
           </vs-select> -->
 
         <v-scale-transition>
-          <v-btn v-if="isLoggedIn" :ripple="false" color="teal white--text" small @click="logout">
+          <v-btn v-if="isLoggedIn" style="position: fixed" :ripple="false" color="teal white--text" small @click="logout">
             <v-icon small> mdi-account</v-icon>
             {{ `Logout ${user.email}` }}
           </v-btn>
         </v-scale-transition>
       </template>
     </vs-navbar>
-  </div>
+  </v-app-bar>
 </template>
 
 <script>

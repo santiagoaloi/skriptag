@@ -1,10 +1,10 @@
 // Utilities
 import { make } from 'vuex-pathify';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from '@firebase/auth';
 import { isEmpty } from 'lodash';
 import { doc, setDoc, serverTimestamp, onSnapshot } from 'firebase/firestore';
-import { store } from '@/store';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from '@firebase/auth';
 import { auth, myFS } from '@/firebase/firebase';
+import { store } from '@/store';
 import router from '@/router';
 
 const state = {
@@ -20,6 +20,7 @@ const mutations = make.mutations(state);
 const actions = {
   ...make.actions(state),
 
+  // Logout and clear user data object in Vuex.
   async logout({ dispatch, getters }) {
     if (getters.isLoggedIn) {
       await signOut(auth);
@@ -29,6 +30,7 @@ const actions = {
     }
   },
 
+  // If a user is already authenticated, set the user object in Vuex.
   async fetchUser() {
     auth.onAuthStateChanged(async (user) => {
       store.set('authentication/user', !user ? {} : user);
@@ -39,6 +41,7 @@ const actions = {
     store.set('loaders/authLoader', true);
     const { email, password } = state.loginForm;
 
+    // Attempt to login only if both email and password fields have values.
     if (!state.loginForm.email || !state.loginForm.password) {
       dispatch('snackbar/snackbarError', 'You have to provide both an email and password.', { root: true });
       store.set('loaders/authLoader', false);
@@ -59,7 +62,7 @@ const actions = {
     store.set('loaders/signupLoader', true);
     const { email, password } = state.signupForm;
 
-    // Process only if both email and password are provided.
+    // Attempt to signup only if both email and password fields have values.
     if (!state.signupForm.email || !state.signupForm.password) {
       dispatch('snackbar/snackbarError', 'You have to provide both an email and password.', { root: true });
       store.set('loaders/signupLoader', false);
@@ -74,11 +77,11 @@ const actions = {
 
         const { user } = userCredential;
 
-        // Add a document in a  firestore collection.
+        // Adds a document in a  firestore collection.
         // doc (Firestore instance, collection name, collection id).
         const userDocRef = doc(myFS, PROFILE_COLLECTION, user.uid);
 
-        // Payload
+        // User profile fields to be created in db.
         const userDocData = {
           uid: user.uid,
           email,
@@ -87,6 +90,7 @@ const actions = {
         };
 
         // SetDoc (Firestore, Payload)
+        // creates the user profile in the db collection.
         setDoc(userDocRef, userDocData);
       } catch ({ ...error }) {
         dispatch('loginMessagesSnackbar', error.code);
@@ -95,6 +99,7 @@ const actions = {
     }
   },
 
+  // Snackbar error messages.
   signupMessagesSnackbar({ dispatch }, message) {
     // console.log(message);
     if (message.includes('auth/weak-password')) {
@@ -108,6 +113,7 @@ const actions = {
     }
   },
 
+  // Snackbar error messages.
   loginMessagesSnackbar({ dispatch }, message) {
     if (message.includes('auth/invalid-email')) {
       dispatch('snackbar/snackbarError', 'This email is not valid, please check that again.', { root: true });
@@ -124,19 +130,37 @@ const actions = {
 };
 
 const getters = {
-  //* Checks if the user is authenticated.
+  // Checks if the user is authenticated.
   isLoggedIn: (auth.onAuthStateChanged, (auth) => !isEmpty(auth.user)),
 
-  //* Retrieves the user profile from firestore
+  // Retrieves the user profile from firestore.
+  //! NOT WORKING IN PROD, NEEDS REFACTOR.
   profile: (state) => {
-    const docRef = doc(myFS, PROFILE_COLLECTION, state.user.uid);
-    return onSnapshot(docRef, (docSnap) => {
-      const profileData = docSnap.data();
-      store.set('authentication/profile', profileData);
-    });
+    try {
+      const docRef = doc(myFS, PROFILE_COLLECTION, state.user.uid);
+      onSnapshot(docRef, (docSnap) => {
+        const profileData = docSnap.data();
+        console.log('Got user profile:', profileData);
+        store.set('authentication/profile', profileData);
+
+        if (!profileData) {
+          console.log(`No profile doc found in Firestore at: ${docRef.path}`);
+        }
+        return profileData;
+      });
+    } catch (ex) {
+      console.error(`useEffect() failed with: ${ex.message}`);
+      console.log(`No profile doc found in Firestore at: ${docRef.path}`);
+    }
+
+    // const docRef = doc(myFS, PROFILE_COLLECTION, state.user.uid);
+    // return onSnapshot(docRef, (docSnap) => {
+    //   const profileData = docSnap.data();
+    //   store.set('authentication/profile', profileData);
+    // });
   },
 
-  //* returns current user last login time.
+  // returns current user last login date/time.
   lastLogin: (state, getters) => (getters.isLoggedIn ? state.user.metadata.lastSignInTime : null),
 };
 
