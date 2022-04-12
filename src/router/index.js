@@ -1,6 +1,9 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import { getUserState } from '@/firebase/firebase';
+import { doc, onSnapshot } from 'firebase/firestore';
+import { getUserState, myFS } from '@/firebase/firebase';
+
+import { store } from '@/store';
 
 const routes = [
   {
@@ -10,12 +13,12 @@ const routes = [
       {
         path: '',
         name: 'Default',
-        component: () => import(/* webpackChunkName: 'homepage' */ '@/views/home'),
+        component: () => import(/* webpackChunkName: 'home-page' */ '@/views/home'),
       },
       {
         path: '/Deny',
         name: 'deny',
-        component: () => import(/* webpackChunkName: 'unauthorized' */ '@/views/deny'),
+        component: () => import(/* webpackChunkName: 'unauthorized-page' */ '@/views/deny'),
       },
 
       {
@@ -58,20 +61,33 @@ const router = new Router({
 
 // Router guards to deny access to protected routes.
 router.beforeEach(async (to, from, next) => {
-  // Let firebase init before route guards can be applied.
+  // wait for firebase init before route guards can be applied.
+  // if a user is authenticated , the user object will be returned in isAuth.
   const isAuth = await getUserState();
+
+  // user unique ID.
+  const uuid = isAuth?.uid;
+
+  if (isAuth) {
+    const PROFILE_COLLECTION = 'users'; // name of the FS collection of user profile docs
+    const docRef = doc(myFS, PROFILE_COLLECTION, uuid);
+    onSnapshot(docRef, (docSnap) => {
+      const profileData = docSnap.data();
+      store.set('authentication/profile', profileData);
+    });
+  }
 
   const isLoginPageAndAuthenticated = to.matched.some((record) => record.name === 'login' && isAuth);
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
 
   // If the route requires the user to be authenticated and it is not,
-  // show the unauthorized view.
+  // route to the unauthorized view.
   if (requiresAuth && !isAuth) {
     next('/deny');
     return;
   }
 
-  // If the user navigates to the login page and it's already authenticated
+  // If the user navigates to the login page and it's already authenticated,
   // route to the profile page instead.
   if (isLoginPageAndAuthenticated) {
     next('/profile');

@@ -26,20 +26,21 @@ Vue.use(Vuesax, {
 Vue.config.productionTip = false;
 
 // Remember to disable when not needed.
-// This shows Vue dev tools in production.
+// This shows Vue dev tools in production
 Vue.config.devtools = true;
 
 Vue.directive('animation', {
   bind(el, binding) {
     const validAnimations = ['shrink'];
-
     const { longPress } = binding.value || {};
 
     if (validAnimations.includes(binding.arg)) {
+      const timeout = '0.3s';
+
       el.onmousedown = () => {
         // if (binding.value === 'shrink') {
         el.style.transform = 'scale(0.9)';
-        el.style.transition = '0.3s';
+        el.style.transition = timeout;
 
         if (!longPress) {
           setTimeout(() => {
@@ -47,16 +48,17 @@ Vue.directive('animation', {
           }, 300);
         }
       };
+
       if (longPress) {
+        const timeout = '0.6s';
+
         el.onmouseout = () => {
-          // if (binding.value === 'shrink') {
           el.style.transform = 'scale(1)';
-          el.style.transition = '0.6s';
+          el.style.transition = timeout;
         };
         el.onmouseup = () => {
-          // if (binding.value === 'shrink') {
           el.style.transform = 'scale(1)';
-          el.style.transition = '0.6s';
+          el.style.transition = timeout;
         };
       }
     }
