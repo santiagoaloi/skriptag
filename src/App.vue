@@ -5,28 +5,17 @@
 </template>
 
 <script>
-  import { call } from 'vuex-pathify';
-
   export default {
     name: 'BaseApp',
 
-    computed: {
-      vuetify() {
-        return process.env.NODE_ENV === 'development' ? this.$vuetify : null;
-      },
-    },
+    // computed: {
+    //   vuetify() {
+    //     return process.env.NODE_ENV === 'development' ? this.$vuetify : null;
+    //   },
+    // },
 
     mounted() {
       this.$vs.setTheme('dark');
-    },
-
-    beforeMount() {
-      // If there's a firebase uthenticated user, it will retrieve the user object.
-      this.fetchUser();
-    },
-
-    methods: {
-      ...call('authentication', ['fetchUser']),
     },
   };
 </script>

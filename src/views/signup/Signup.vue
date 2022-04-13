@@ -7,7 +7,14 @@
     <form class="d-flex flex-column" @submit.prevent="signup(signupForm)">
       <v-row justify="center" no-gutters>
         <v-col cols="10">
-          <v-btn :ripple="false" x-small color="white" class="ml-n2 mb-n2" plain @click="$router.push('login')"
+          <v-btn
+            v-animation:shrink="{ longPress: true }"
+            :ripple="false"
+            x-small
+            color="white"
+            class="ml-n2 mb-n2"
+            plain
+            @click="$router.push('login')"
             >Already have an account? Login</v-btn
           >
           <div class="py-2 pr-2">

@@ -1,6 +1,6 @@
 <template>
   <base-split-2 v-bind="$attrs">
-    <skriptag-title />
+    <skriptag-title large class="mb-4" />
 
     <article>
       <h1 class="font-weight-light">

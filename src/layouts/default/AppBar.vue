@@ -4,7 +4,7 @@
       <template #left>
         <div>
           <v-container>
-            <skriptag-title small @click="$router.push('/')" />
+            <skriptag-title link small @click="$router.push('/')" />
           </v-container>
         </div>
       </template>

@@ -69,7 +69,11 @@ router.beforeEach(async (to, from, next) => {
   const uuid = isAuth?.uid;
 
   if (isAuth) {
-    const PROFILE_COLLECTION = 'users'; // name of the FS collection of user profile docs
+    // Set user object to Vuex.
+    store.set('authentication/user', !isAuth ? {} : isAuth);
+
+    // Set user profile to Vuex.
+    const PROFILE_COLLECTION = 'users';
     const docRef = doc(myFS, PROFILE_COLLECTION, uuid);
     onSnapshot(docRef, (docSnap) => {
       const profileData = docSnap.data();

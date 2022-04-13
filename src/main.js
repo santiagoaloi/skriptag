@@ -32,9 +32,9 @@ Vue.config.devtools = true;
 Vue.directive('animation', {
   bind(el, binding) {
     const validAnimations = ['shrink'];
-    const { longPress } = binding.value || {};
+    const { link, longPress } = binding.value || {};
 
-    if (validAnimations.includes(binding.arg)) {
+    if (validAnimations.includes(binding.arg) && link) {
       const timeout = '0.3s';
 
       el.onmousedown = () => {

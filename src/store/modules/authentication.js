@@ -83,7 +83,7 @@ const actions = {
         // doc (Firestore instance, collection name, collection id).
         const userDocRef = doc(myFS, PROFILE_COLLECTION, user.uid);
 
-        // User profile fields to be created in db.
+        // User profile fields to be created in db (payload)
         const userDocData = {
           uid: user.uid,
           email,

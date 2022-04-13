@@ -1,12 +1,20 @@
 <template>
-  <v-responsive v-animation:shrink="{ longPress: true }" style="color: #ccc" width="130">
-    <component :is="size" class="cursor-pointer" data-aos="zoom-in" data-aos-delay="300" data-aos-once="true" v-on="$listeners"
+  <v-responsive style="color: #ccc" min-width="100">
+    <component
+      :is="size"
+      v-animation:shrink="{ link: link, longPress: true }"
+      :class="{ large: large }"
+      class="cursor-pointer"
+      data-aos="fade"
+      data-aos-delay="300"
+      data-aos-once="true"
+      v-on="$listeners"
       >Skriptag
       <span
         data-aos="fade"
         data-aos-delay="600"
         data-aos-once="false"
-        :class="small ? 'ml-n8' : 'ml-n11'"
+        :class="small ? 'ml-n8' : large ? 'ml-n16' : 'ml-n11'"
         class="primary-font-color"
         data-aos-duration="600"
         >ˆ
@@ -25,6 +33,14 @@
         type: Boolean,
         default: false,
       },
+      large: {
+        type: Boolean,
+        default: false,
+      },
+      link: {
+        type: Boolean,
+        default: false,
+      },
     },
 
     computed: {
@@ -34,3 +50,9 @@
     },
   };
 </script>
+
+<style scoped>
+  .large {
+    font-size: 300% !important;
+  }
+</style>
