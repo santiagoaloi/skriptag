@@ -1,147 +1,57 @@
 <template>
-  <base-no-split>
-    <template #left>
-      <v-row>
-        <v-col cols="4">
-          <vs-card class="my-card">
-            <template #title>
-              <h3>Pot with a plant</h3>
-            </template>
-            <template #img>
-              <img :src="`https://picsum.photos/1280/800?${Date.now().toString().slice(0, 1)}`" alt="" />
-            </template>
-            <template #text>
-              <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit.</p>
-            </template>
-            <template #interactions>
-              <vs-button danger icon>
-                <i class="bx bx-heart"></i>
-              </vs-button>
-              <vs-button class="btn-chat" shadow primary>
-                <i class="bx bx-chat"></i>
-                <span class="span"> 54 </span>
-              </vs-button>
-            </template>
-          </vs-card>
-        </v-col>
-        <v-col cols="3">
-          <vs-card class="my-card">
-            <template #title>
-              <h3>Pot with a plant</h3>
-            </template>
-            <template #img>
-              <img :src="`https://picsum.photos/1280/800?${Date.now().toString().slice(0, 1)}`" alt="" />
-            </template>
-            <template #text>
-              <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit.</p>
-            </template>
-            <template #interactions>
-              <vs-button danger icon>
-                <i class="bx bx-heart"></i>
-              </vs-button>
-              <vs-button class="btn-chat" shadow primary>
-                <i class="bx bx-chat"></i>
-                <span class="span"> 54 </span>
-              </vs-button>
-            </template>
-          </vs-card>
-        </v-col>
-        <v-col cols="5" align-self="stretch">
-          <vs-card class="my-card">
-            <template #title>
-              <h3>Pot with a plant</h3>
-            </template>
-            <template #img>
-              <img :src="`https://picsum.photos/1280/800?${Date.now().toString().slice(0, 1)}`" alt="" />
-            </template>
-            <template #text>
-              <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit.</p>
-            </template>
-            <template #interactions>
-              <vs-button danger icon>
-                <i class="bx bx-heart"></i>
-              </vs-button>
-              <vs-button class="btn-chat" shadow primary>
-                <i class="bx bx-chat"></i>
-                <span class="span"> 54 </span>
-              </vs-button>
-            </template>
-          </vs-card>
-        </v-col>
-
-        <v-col cols="6" align-self="stretch">
-          <vs-card class="my-card">
-            <template #title>
-              <h3>Pot with a plant</h3>
-            </template>
-            <template #img>
-              <img :src="`https://picsum.photos/1280/800?${Date.now().toString().slice(0, 1)}`" alt="" />
-            </template>
-            <template #text>
-              <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit.</p>
-            </template>
-            <template #interactions>
-              <vs-button danger icon>
-                <i class="bx bx-heart"></i>
-              </vs-button>
-              <vs-button class="btn-chat" shadow primary>
-                <i class="bx bx-chat"></i>
-                <span class="span"> 54 </span>
-              </vs-button>
-            </template>
-          </vs-card>
-        </v-col>
-        <v-col cols="3" align-self="stretch">
-          <vs-card class="my-card">
-            <template #title>
-              <h3>Pot with a plant</h3>
-            </template>
-            <template #img>
-              <img :src="`https://picsum.photos/1280/800?${Date.now().toString().slice(0, 1)}`" alt="" />
-            </template>
-            <template #text>
-              <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit.</p>
-            </template>
-            <template #interactions>
-              <vs-button danger icon>
-                <i class="bx bx-heart"></i>
-              </vs-button>
-              <vs-button class="btn-chat" shadow primary>
-                <i class="bx bx-chat"></i>
-                <span class="span"> 54 </span>
-              </vs-button>
-            </template>
-          </vs-card>
-        </v-col>
-        <v-col cols="3" align-self="stretch">
-          <vs-card class="my-card">
-            <template #title>
-              <h3>Pot with a plant</h3>
-            </template>
-            <template #img>
-              <img :src="`https://picsum.photos/1280/800?${Date.now().toString().slice(0, 1)}`" alt="" />
-            </template>
-            <template #text>
-              <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit.</p>
-            </template>
-            <template #interactions>
-              <vs-button danger icon>
-                <i class="bx bx-heart"></i>
-              </vs-button>
-              <vs-button class="btn-chat" shadow primary>
-                <i class="bx bx-chat"></i>
-                <span class="span"> 54 </span>
-              </vs-button>
-            </template>
-          </vs-card>
-        </v-col>
-      </v-row>
-    </template>
-  </base-no-split>
+  <div>
+    <base-no-split v-if="!switchToCardSettings">
+      <router-view></router-view>
+      <template #left>
+        <v-row>
+          <v-col cols="4">
+            <vs-card class="my-card" @click="switchCard('ProfileEdit')">
+              <template #title>
+                <h3>Profile Details</h3>
+              </template>
+              <template #img>
+                <img :src="`https://picsum.photos/1280/800?${Date.now().toString().slice(0, 1)}`" alt="" />
+              </template>
+              <template #text>
+                <p>Edit your profile information and settings.</p>
+              </template>
+            </vs-card>
+          </v-col>
+        </v-row>
+      </template>
+    </base-no-split>
+    <v-card-text v-if="switchToCardSettings" class="px-8">
+      <component :is="activeCard" @cancel="cancel()" />
+    </v-card-text>
+  </div>
 </template>
+
 <script>
+  import ProfileEdit from './profile-edit';
+
   export default {
     name: 'ProfileItems',
+    components: {
+      ProfileEdit,
+    },
+    data() {
+      return {
+        switchToCardSettings: false,
+        activeCard: null,
+      };
+    },
+
+    methods: {
+      switchCard(card) {
+        this.switchToCardSettings = true;
+        this.activeCard = card;
+      },
+
+      cancel() {
+        this.switchToCardSettings = false;
+        this.activeCard = null;
+      },
+    },
   };
 </script>
 <style>

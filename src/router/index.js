@@ -1,53 +1,14 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import { doc, onSnapshot } from 'firebase/firestore';
-import { getUserState, myFS } from '@/firebase/firebase';
-
-import { store } from '@/store';
+import { getUserState } from '@/firebase/firebase';
+import { setUserAndProfile } from '@/utils/user-profile.js';
+import allRoutes from './routes';
 
 const routes = [
   {
     path: '/',
     component: () => import('@/layouts/default'),
-    children: [
-      {
-        path: '',
-        name: 'Default',
-        component: () => import(/* webpackChunkName: 'home-page' */ '@/views/home'),
-      },
-      {
-        path: '/Deny',
-        name: 'deny',
-        component: () => import(/* webpackChunkName: 'unauthorized-page' */ '@/views/deny'),
-      },
-
-      {
-        path: '/Login',
-        name: 'login',
-
-        component: () => import(/* webpackChunkName: 'login-page' */ '@/views/login'),
-      },
-      {
-        path: '/Signup',
-        name: 'signup',
-
-        component: () => import(/* webpackChunkName: 'signup-page' */ '@/views/signup'),
-      },
-
-      {
-        path: '/Profile',
-        name: 'profile',
-        meta: {
-          requiresAuth: true,
-        },
-        component: () => import(/* webpackChunkName: 'profile-page' */ '@/views/profile'),
-      },
-      {
-        path: '/:catchAll(.*)*',
-        name: '404',
-        component: () => import(/* webpackChunkName: '404-page' */ '@/views/four'),
-      },
-    ],
+    children: [...allRoutes],
   },
 ];
 
@@ -65,20 +26,9 @@ router.beforeEach(async (to, from, next) => {
   // if a user is authenticated , the user object will be returned in isAuth.
   const isAuth = await getUserState();
 
-  // user unique ID.
-  const uuid = isAuth?.uid;
-
+  // Sets the user and user-profile to Vuex.
   if (isAuth) {
-    // Set user object to Vuex.
-    store.set('authentication/user', !isAuth ? {} : isAuth);
-
-    // Set user profile to Vuex.
-    const PROFILE_COLLECTION = 'users';
-    const docRef = doc(myFS, PROFILE_COLLECTION, uuid);
-    onSnapshot(docRef, (docSnap) => {
-      const profileData = docSnap.data();
-      store.set('authentication/profile', profileData);
-    });
+    await setUserAndProfile({ isAuth });
   }
 
   const isLoginPageAndAuthenticated = to.matched.some((record) => record.name === 'login' && isAuth);

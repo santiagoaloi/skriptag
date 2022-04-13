@@ -16,7 +16,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const myFS = getFirestore(app);
+const db = getFirestore(app);
 const auth = getAuth(app);
 export const getUserState = () => new Promise((resolve, reject) => onAuthStateChanged(getAuth(), resolve, reject));
-export { auth, myFS };
+export { auth, db };

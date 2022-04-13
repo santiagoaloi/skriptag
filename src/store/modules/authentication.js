@@ -1,9 +1,9 @@
 // Utilities
 import { make } from 'vuex-pathify';
 import { isEmpty } from 'lodash';
-import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from '@firebase/auth';
-import { auth, myFS } from '@/firebase/firebase';
+import { auth, db } from '@/firebase/firebase';
 import { store } from '@/store';
 import router from '@/router';
 
@@ -20,11 +20,20 @@ const mutations = make.mutations(state);
 const actions = {
   ...make.actions(state),
 
+  async updateProfileSettings({ getters }) {
+    const userProfile = doc(db, 'users', getters.userId);
+    await updateDoc(userProfile, {
+      ...getters.profile,
+    });
+  },
+
   // Logout and clear user data object in Vuex.
   async logout({ dispatch, getters }) {
     if (getters.isLoggedIn) {
       await signOut(auth);
       store.set('authentication/user', {});
+      store.set('authentication/profile', {});
+
       dispatch('snackbar/snackbarSuccess', 'Hope to see you again soon  💚', { root: true });
       router.push('/');
     }
@@ -81,13 +90,14 @@ const actions = {
 
         // Adds a document in a  firestore collection.
         // doc (Firestore instance, collection name, collection id).
-        const userDocRef = doc(myFS, PROFILE_COLLECTION, user.uid);
+        const userDocRef = doc(db, PROFILE_COLLECTION, user.uid);
 
         // User profile fields to be created in db (payload)
         const userDocData = {
           uid: user.uid,
           email,
-          name: '',
+          name: 'Harry',
+          lastName: 'Potter',
           dateCreated: serverTimestamp(),
         };
 
@@ -152,6 +162,27 @@ const actions = {
 const getters = {
   // Checks if the user is authenticated.
   isLoggedIn: (auth.onAuthStateChanged, (auth) => !isEmpty(auth.user)),
+
+  // profile: (state, getters) => {
+  //   if (getters.isLoggedIn) {
+  //     const userProfile = { ...state.profile };
+  //     delete userProfile.uid;
+  //     delete userProfile.dateCreated;
+  //     return userProfile;
+  //   }
+  // },
+
+  profile: (state, getters) => {
+    if (getters.isLoggedIn) {
+      // Remove uid, dateCreated and email.
+      const { uid, dateCreated, email, ...remainingKeys } = state.profile;
+      return remainingKeys;
+    }
+  },
+
+  userId: (state, getters) => {
+    if (getters.isLoggedIn) return state.user.uid;
+  },
 
   // returns current user last login date/time.
   lastLogin: (state, getters) => (getters.isLoggedIn ? state.user.metadata.lastSignInTime : null),
