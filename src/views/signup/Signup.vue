@@ -28,7 +28,7 @@
           </v-col>
           <v-col cols="10">
             <div class="py-2 pr-2">
-              <vs-input v-model="signupForm.password" block type="password" placeholder="Password">
+              <vs-input v-model="signupForm.password" block type="password" placeholder="New password">
                 <template #icon>
                   <v-icon dark>mdi-lock</v-icon>
                 </template>

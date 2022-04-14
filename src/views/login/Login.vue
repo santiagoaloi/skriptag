@@ -10,7 +10,7 @@
           <v-col cols="10">
             <v-btn :ripple="false" x-small color="white" class="ml-n2 mb-n2" plain>Recover my password</v-btn>
             <div class="py-2 pr-2">
-              <vs-input v-model="loginForm.email" block placeholder="Username">
+              <vs-input v-model="loginForm.email" block placeholder="Email">
                 <template #icon>
                   <v-icon dark>mdi-account</v-icon>
                 </template>

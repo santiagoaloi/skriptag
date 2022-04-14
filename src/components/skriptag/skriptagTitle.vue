@@ -1,5 +1,5 @@
 <template>
-  <v-responsive style="color: #ccc" min-width="100">
+  <v-responsive style="color: #ccc" min-width="100" v-on="$listeners">
     <component
       :is="size"
       v-animation:shrink="{ link: link, longPress: true }"
@@ -8,7 +8,6 @@
       data-aos="fade"
       data-aos-delay="300"
       data-aos-once="true"
-      v-on="$listeners"
       >Skriptag
       <span
         data-aos="fade"

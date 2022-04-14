@@ -50,10 +50,21 @@
           </v-btn>
         </v-scale-transition>
 
-        <template v-for="button in ['login', 'signup']" v-if="!isLoggedIn">
-          <BaseButton :key="button" dark color="grey darken-3" class="ml-3" @click="$router.push(`${button}`)">
-            {{ button }}</BaseButton
+        <template v-if="!isLoggedIn">
+          <BaseButton
+            v-for="button in [
+              { name: 'login', icon: 'account-outline' },
+              { name: 'signup', icon: 'account-plus-outline' },
+            ]"
+            :key="button.name"
+            dark
+            color="grey darken-3"
+            class="ml-3"
+            @click="$router.push(`${button.name}`)"
           >
+            <v-icon left> mdi-{{ button.icon }}</v-icon
+            >{{ button.name }}
+          </BaseButton>
         </template>
       </template>
     </vs-navbar>
