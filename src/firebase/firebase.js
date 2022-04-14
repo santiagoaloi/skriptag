@@ -2,6 +2,7 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getStorage, ref } from 'firebase/storage';
 
 // The .env file contains the api keys used below.
 const firebaseConfig = {
@@ -17,6 +18,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const storage = getStorage();
 const auth = getAuth(app);
 export const getUserState = () => new Promise((resolve, reject) => onAuthStateChanged(getAuth(), resolve, reject));
-export { auth, db };
+export { auth, db, storage };

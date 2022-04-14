@@ -60,7 +60,16 @@
             </vs-avatar>
 
             <vs-avatar class="pa-1 cursor-pointer" @click="$router.push('/profile')">
-              <img src="https://i.pravatar.cc/300" alt="" />
+              <baseAvatarImg v-if="!profile.avatar" :height="25" />
+              <v-avatar v-else min-height="25" min-width="25">
+                <v-img :src="profile.avatar" flat>
+                  <template #placeholder>
+                    <v-row class="fill-height ma-0" align="center" justify="center">
+                      <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+                    </v-row>
+                  </template>
+                </v-img>
+              </v-avatar>
             </vs-avatar>
           </vs-row>
         </v-scale-transition>
@@ -70,7 +79,7 @@
 </template>
 
 <script>
-  import { call, get } from 'vuex-pathify';
+  import { call, get, sync } from 'vuex-pathify';
 
   export default {
     name: 'DefaultDrawer',
@@ -83,6 +92,7 @@
 
     computed: {
       ...get('authentication', ['isLoggedIn']),
+      ...sync('authentication', ['profile']),
     },
 
     mounted() {

@@ -17,11 +17,10 @@
           </v-col>
           <v-col cols="12">
             <v-btn :ripple="false" x-small color="white" class="ml-n2 mb-n2" plain>Last name</v-btn>
-
             <div class="py-2 pr-2">
               <vs-input v-model="profile.lastName" block placeholder="Last name">
                 <template #icon>
-                  <v-icon dark>mdi-lock</v-icon>
+                  <v-icon dark>mdi-account</v-icon>
                 </template>
               </vs-input>
             </div>
@@ -36,13 +35,13 @@
   </div>
 </template>
 <script>
-  import { get, call } from 'vuex-pathify';
+  import { sync, call } from 'vuex-pathify';
 
   export default {
     name: 'ProfileEdit',
 
     computed: {
-      ...get('authentication', ['profile']),
+      ...sync('authentication', ['profile']),
     },
 
     methods: {

@@ -1,7 +1,6 @@
 <template>
   <div>
     <base-no-split v-if="!switchToCardSettings">
-      <router-view></router-view>
       <template #left>
         <v-row>
           <v-col cols="4">
@@ -20,9 +19,11 @@
         </v-row>
       </template>
     </base-no-split>
-    <v-card-text v-if="switchToCardSettings" class="px-8">
-      <component :is="activeCard" @cancel="cancel()" />
-    </v-card-text>
+    <v-fade-transition>
+      <v-card-text v-if="switchToCardSettings" class="px-8">
+        <component :is="activeCard" @cancel="cancel()" />
+      </v-card-text>
+    </v-fade-transition>
   </div>
 </template>
 

@@ -74,13 +74,26 @@
     scrollbar-width: none; /* Firefox */
   }
 
-  .ps .ps__rail-x:hover,
-  .ps .ps__rail-y:hover,
-  .ps .ps__rail-x:focus,
-  .ps .ps__rail-y:focus,
-  .ps .ps__rail-x.ps--clicking,
-  .ps .ps__rail-y.ps--clicking {
-    background-color: #24272c;
-    opacity: 0.9;
+  /* Apply  scrollbar styles */
+  ::-webkit-scrollbar {
+    width: 16px !important;
+    height: 6px !important;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: #383f43;
+  }
+  ::-webkit-scrollbar-track {
+    background: rgb(17, 27, 33);
+  }
+
+  ::-moz-selection {
+    /* Code for Firefox */
+    color: rgb(201, 255, 252);
+    background: rgb(105, 201, 201);
+  }
+
+  ::selection {
+    color: rgb(201, 255, 252);
+    background: rgb(105, 201, 201);
   }
 </style>

@@ -20,10 +20,10 @@ const mutations = make.mutations(state);
 const actions = {
   ...make.actions(state),
 
-  async updateProfileSettings({ getters }) {
+  async updateProfileSettings({ getters, state }) {
     const userProfile = doc(db, 'users', getters.userId);
     await updateDoc(userProfile, {
-      ...getters.profile,
+      ...state.profile,
     });
   },
 
@@ -163,29 +163,12 @@ const getters = {
   // Checks if the user is authenticated.
   isLoggedIn: (auth.onAuthStateChanged, (auth) => !isEmpty(auth.user)),
 
-  // profile: (state, getters) => {
-  //   if (getters.isLoggedIn) {
-  //     const userProfile = { ...state.profile };
-  //     delete userProfile.uid;
-  //     delete userProfile.dateCreated;
-  //     return userProfile;
-  //   }
-  // },
-
-  profile: (state, getters) => {
-    if (getters.isLoggedIn) {
-      // Remove uid, dateCreated and email.
-      const { uid, dateCreated, email, ...remainingKeys } = state.profile;
-      return remainingKeys;
-    }
-  },
-
   userId: (state, getters) => {
     if (getters.isLoggedIn) return state.user.uid;
   },
 
   // returns current user last login date/time.
-  lastLogin: (state, getters) => (getters.isLoggedIn ? state.user.metadata.lastSignInTime : null),
+  lastLogin: (state, getters) => (getters.isLoggedIn ? state.user.metadata.lastSignInTime : undefined),
 };
 
 export default {

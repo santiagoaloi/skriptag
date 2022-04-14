@@ -7,4 +7,3 @@
 // Imports
 import './app';
 import './webfontloader';
-import './perfect-scrollbar';
