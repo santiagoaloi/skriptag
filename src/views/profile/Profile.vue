@@ -3,29 +3,46 @@
     <v-slide-y-transition>
       <div v-show="imgBannerLoaded">
         <v-img
-          :gradient="'to top , rgba(5,5,5,.9), rgba(0,0,0, .7)'"
           :src="src"
           flat
           height="240"
           class="d-flex align-center"
           :transition="false"
           style="color: #ccc"
+          gradient="to top right, rgba(0,0,0,.73), rgba(50,50,50,.7)"
           @load="imgBannerLoaded = true"
         >
+          <v-btn
+            small
+            style="position: absolute; right: 0; margin-right: 20px"
+            color="grey darken-3"
+            dark
+            @click="triggerCoverInput()"
+            >Change cover image</v-btn
+          >
+
+          <!-- image upload inputs" -->
+          <input ref="coverInput" style="display: none" type="file" @change="uploadCoverPhoto()" />
+          <input ref="avatarInput" style="display: none" type="file" @change="uploadProfilePhoto()" />
+
           <div class="ml-13 d-flex align-center">
-            <label class="custom-file-upload">
-              <input ref="file" type="file" @change="uploadProfilePhoto()" />
-              <baseAvatarImg v-if="!profile.avatar" :height="180" />
-              <v-avatar v-else min-height="180" min-width="180">
-                <v-img min-height="100%" min-width="100%" :src="profile.avatar" flat>
-                  <template #placeholder>
-                    <v-row class="fill-height ma-0" align="center" justify="center">
-                      <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
-                    </v-row>
-                  </template>
-                </v-img>
-              </v-avatar>
-            </label>
+            <baseAvatarImg v-if="!profile.avatar" :height="180" />
+            <v-avatar v-else min-height="180" min-width="180">
+              <v-img
+                class="hoverAvatar"
+                min-height="100%"
+                min-width="100%"
+                :src="profile.avatar"
+                flat
+                @click="triggerAvatarInput()"
+              >
+                <template #placeholder>
+                  <v-row class="fill-height ma-0" align="center" justify="center">
+                    <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+                  </v-row>
+                </template>
+              </v-img>
+            </v-avatar>
 
             <div class="ml-13">
               <p class="mb-n2">Profile</p>
@@ -39,6 +56,7 @@
             </v-row>
           </template>
         </v-img>
+        <v-progress-linear v-if="progress > 0" v-model="progress" color="teal" style="position: absolute"></v-progress-linear>
       </div>
     </v-slide-y-transition>
     <v-scale-transition>
@@ -89,43 +107,58 @@
       ...call('app', ['sleep']),
       ...call('authentication', ['updateProfileSettings']),
 
+      triggerAvatarInput() {
+        this.$refs.avatarInput.click();
+      },
+
+      triggerCoverInput() {
+        this.$refs.coverInput.click();
+      },
+
       uploadProfilePhoto() {
-        const file = this.$refs.file.files[0];
-        console.log(file.name);
+        const file = this.$refs.avatarInput.files[0];
         const photoRef = ref(storage, `users/${this.userId}/${file.name}`);
         const uploadTask = uploadBytesResumable(photoRef, file);
         uploadTask.on(
           'state_changed',
           (snapshot) => {
             this.progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            console.log(`Upload is ${this.progress}% done`);
-            switch (snapshot.state) {
-              case 'paused':
-                console.log('Upload is paused');
-                break;
-              case 'running':
-                console.log('Upload is running');
-                break;
-              default:
-                console.log(`Status Unknown`);
-            }
           },
           (error) => {
-            switch (error.code) {
-              case 'storage/unauthorized':
-                break;
-              case 'storage/canceled':
-                break;
-              case 'storage/unknown':
-                break;
-              default:
-                console.log(`Status Unknown`);
-            }
+            console.log(error.code);
           },
           () => {
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
               this.profile.avatar = downloadURL;
               this.updateProfileSettings();
+              setTimeout(() => {
+                this.progress = 0;
+              }, 500);
+            });
+          },
+        );
+      },
+
+      uploadCoverPhoto() {
+        const file = this.$refs.coverInput.files[0];
+        const photoRef = ref(storage, `users/${this.userId}/${file.name}`);
+        const uploadTask = uploadBytesResumable(photoRef, file);
+        uploadTask.on(
+          'state_changed',
+          (snapshot) => {
+            this.progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          },
+          (error) => {
+            console.log(error.code);
+          },
+          () => {
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+              this.profile.coverAvatar = downloadURL;
+              this.updateProfileSettings();
+              this.getSrc();
+              setTimeout(() => {
+                this.progress = 0;
+              }, 500);
             });
           },
         );
@@ -133,8 +166,8 @@
 
       getSrc() {
         setTimeout(() => {
-          this.src = `https://picsum.photos/1280/800?${Date.now().toString().slice(0, 1)}`;
-        }, 300);
+          this.src = this.profile.coverAvatar || `https://media.skriptag.com/img/banner.png`;
+        }, 400);
       },
       async delayRender(ms) {
         await this.sleep(ms);
@@ -170,21 +203,14 @@
     display: none;
   }
 
-  .custom-file-upload {
-    display: inline-block;
+  .hoverAvatar {
     cursor: pointer;
-    border-radius: 100px;
-    height: 180px;
-    width: 180px;
-    transition: opacity 0.25s ease-in-out;
-    -moz-transition: opacity 0.25s ease-in-out;
-    -webkit-transition: opacity 0.25s ease-in-out;
+    transition: 0.3s;
   }
 
-  .custom-file-upload:hover {
-    opacity: 0.6;
-    transition: opacity 0.25s ease-in-out;
-    -moz-transition: opacity 0.25s ease-in-out;
-    -webkit-transition: opacity 0.25s ease-in-out;
+  .hoverAvatar:hover {
+    cursor: pointer;
+    transform: scale(0.98);
+    transition: 0.4s;
   }
 </style>

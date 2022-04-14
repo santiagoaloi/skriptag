@@ -98,6 +98,8 @@ const actions = {
           email,
           name: 'Harry',
           lastName: 'Potter',
+          avatar: '',
+          coverAvatar: '',
           dateCreated: serverTimestamp(),
         };
 

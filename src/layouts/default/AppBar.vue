@@ -44,7 +44,7 @@
           </vs-select> -->
 
         <v-scale-transition>
-          <v-btn v-if="isLoggedIn" style="position: fixed" :ripple="false" color="teal white--text" small @click="logout">
+          <v-btn v-if="isLoggedIn" style="position: fixed" :ripple="false" color="black white--text" @click="logout">
             <v-icon small> mdi-account</v-icon>
             {{ `Logout ${user.email}` }}
           </v-btn>
