@@ -49,6 +49,12 @@
             {{ `Logout ${user.email}` }}
           </v-btn>
         </v-scale-transition>
+
+        <template v-for="button in ['login', 'signup']" v-if="!isLoggedIn">
+          <BaseButton :key="button" dark color="grey darken-3" class="ml-3" @click="$router.push(`${button}`)">
+            {{ button }}</BaseButton
+          >
+        </template>
       </template>
     </vs-navbar>
   </v-app-bar>
@@ -74,6 +80,12 @@
 
     methods: {
       ...call('authentication/*'),
+
+      auth() {
+        this.login().then(() => {
+          this.$emit('logged-in', 'loginSlide');
+        });
+      },
     },
   };
 </script>

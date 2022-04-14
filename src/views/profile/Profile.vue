@@ -26,7 +26,7 @@
           <input ref="avatarInput" style="display: none" type="file" @change="uploadProfilePhoto()" />
 
           <div class="ml-13 d-flex align-center">
-            <baseAvatarImg v-if="!profile.avatar" :height="180" />
+            <baseAvatarImg v-if="!profile.avatar" class="hoverAvatar" :height="180" @click="triggerAvatarInput()" />
             <v-avatar v-else min-height="180" min-width="180">
               <v-img
                 class="hoverAvatar"

@@ -21,7 +21,7 @@
     </base-no-split>
     <v-fade-transition>
       <v-card-text v-if="switchToCardSettings" class="px-8">
-        <component :is="activeCard" @cancel="cancel()" />
+        <component :is="activeCard" @close="close()" />
       </v-card-text>
     </v-fade-transition>
   </div>
@@ -48,7 +48,7 @@
         this.activeCard = card;
       },
 
-      cancel() {
+      close() {
         this.switchToCardSettings = false;
         this.activeCard = null;
       },

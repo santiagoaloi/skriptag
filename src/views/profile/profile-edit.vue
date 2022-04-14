@@ -48,11 +48,12 @@
       ...call('authentication', ['updateProfileSettings']),
 
       cancel() {
-        this.$emit('cancel');
+        this.$emit('close');
       },
 
       saveProfile() {
         this.updateProfileSettings();
+        this.$emit('close');
       },
     },
   };

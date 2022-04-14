@@ -96,8 +96,8 @@ const actions = {
         const userDocData = {
           uid: user.uid,
           email,
-          name: 'Harry',
-          lastName: 'Potter',
+          name: state.signupForm.name,
+          lastName: state.signupForm.lastName,
           avatar: '',
           coverAvatar: '',
           dateCreated: serverTimestamp(),

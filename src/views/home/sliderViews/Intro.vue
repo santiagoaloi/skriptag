@@ -12,16 +12,10 @@
     <p class="pt-5">
       Learn coding , download free and premium application templates, access JS/VueJS training material, participate in Skriptag's
     </p>
-
-    <v-card-actions v-if="!isLoggedIn" class="px-0">
-      <template v-for="button in ['login', 'signup']">
-        <BaseButton :key="button" @click="$router.push(`${button}`)"> {{ button }}</BaseButton>
-      </template>
-    </v-card-actions>
   </base-split-2>
 </template>
 <script>
-  import { call, sync, get } from 'vuex-pathify';
+  import { call } from 'vuex-pathify';
   import baseSplit2 from '@/components/base/baseSplit-2.vue';
 
   export default {
@@ -42,21 +36,8 @@
       };
     },
 
-    computed: {
-      loading: sync('loaders/authLoader'),
-      loginForm: sync('authentication/loginForm'),
-      ...get('authentication', ['isLoggedIn', 'user']),
-    },
-
     methods: {
-      ...call('authentication/*'),
       ...call('app', ['sleep']),
-
-      auth() {
-        this.login().then(() => {
-          this.$emit('logged-in', 'loginSlide');
-        });
-      },
     },
   };
 </script>

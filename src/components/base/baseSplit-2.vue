@@ -1,6 +1,6 @@
 <template>
   <v-row style="color: #ccc" class="pattern-bg" :class="rowClass()" no-gutters>
-    <v-col :order="colOrder()" sm="7" cols="12">
+    <v-col :order="colOrder()" :sm="remaininCols" cols="12">
       <v-img :class="imageClass()" v-bind="imageOptions()" @load="imageLoaded = true">
         <template #placeholder>
           <v-row class="fill-height ma-0" align="center" justify="center">
@@ -9,7 +9,7 @@
         </template>
       </v-img>
     </v-col>
-    <v-col sm="5" cols="12">
+    <v-col :sm="col" cols="12">
       <v-container class="fill-height">
         <v-container>
           <v-responsive class="mx-auto" width="80%">
@@ -29,11 +29,22 @@
         type: Boolean,
         default: false,
       },
+      col: {
+        type: [Number, String],
+        default: 5,
+      },
     },
+
     data() {
       return {
         imageLoaded: false,
       };
+    },
+
+    computed: {
+      remaininCols() {
+        return 12 - this.col;
+      },
     },
     methods: {
       imageClass() {
