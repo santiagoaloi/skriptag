@@ -26,10 +26,7 @@
               </vs-input>
             </div>
             <v-card-actions class="px-0">
-              <v-btn large :loading="loading" type="submit" :ripple="false" color="teal white--text" width="100" class="mr-2">
-                Login</v-btn
-              >
-              <v-btn dark color="grey darken-3" large @click="$router.push('signup')">Signup</v-btn>
+              <Base-button type="submit" :loading="loading" dark color="grey darken-3" large> Login</Base-button>
             </v-card-actions>
           </v-col>
         </v-row>
@@ -39,9 +36,11 @@
 </template>
 <script>
   import { call, sync, get } from 'vuex-pathify';
+  import baseButton from '@/components/base/baseButton.vue';
 
   export default {
     name: 'LoginPage',
+    components: { baseButton },
 
     computed: {
       ...get('authentication', ['isLoggedIn']),

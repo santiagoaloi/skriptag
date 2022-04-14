@@ -1,6 +1,6 @@
 // Utilities
 import { make } from 'vuex-pathify';
-import { isEmpty } from 'lodash';
+import { isEmpty, capitalize, startCase } from 'lodash';
 import { doc, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from '@firebase/auth';
 import { auth, db } from '@/firebase/firebase';
@@ -167,6 +167,19 @@ const getters = {
 
   userId: (state, getters) => {
     if (getters.isLoggedIn) return state.user.uid;
+  },
+
+  // Capitalize the first letter of every word.
+  fullName: (state) => {
+    const name = startCase(capitalize(state.profile.name));
+    const lastName = startCase(capitalize(state.profile.lastName));
+    return `${name} ${lastName}`;
+  },
+
+  firstAndShortLast: (state) => {
+    const name = startCase(capitalize(state.profile.name));
+    const lastName = startCase(capitalize(state.profile.lastName));
+    return name && lastName ? `${name} ${lastName[0]}.` : `${name}`;
   },
 
   // returns current user last login date/time.

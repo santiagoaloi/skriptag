@@ -6,9 +6,9 @@
     transition="slide-y-reverse-transition"
     multi-line
     center
-    class="px-5"
+    class="px-5 mb-2"
   >
-    <div class="d-flex">
+    <div class="d-flex align-center">
       <v-icon class="mr-4"> {{ snackbar.data.icon }}</v-icon>
       <div v-html="snackbar.data.text" />
     </div>

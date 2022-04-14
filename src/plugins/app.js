@@ -1,6 +1,5 @@
 /**
  * plugins/app.js
- *
  * Automatically loads and bootstraps files
  * in the `./src/components/` folder.
  */

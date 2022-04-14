@@ -13,19 +13,20 @@
           @load="imgBannerLoaded = true"
         >
           <v-btn
-            small
             style="position: absolute; right: 0; margin-right: 20px"
-            color="grey darken-3"
+            color="rgba(10,10,10 , .3)"
             dark
             @click="triggerCoverInput()"
-            >Change cover image</v-btn
           >
+            {{ $vuetify.breakpoint.smAndUp ? 'Change cover image' : '' }}
+            <v-icon v-if="$vuetify.breakpoint.smAndDown"> mdi-camera</v-icon>
+          </v-btn>
 
           <!-- image upload inputs" -->
           <input ref="coverInput" style="display: none" type="file" @change="uploadCoverPhoto()" />
           <input ref="avatarInput" style="display: none" type="file" @change="uploadProfilePhoto()" />
 
-          <div class="ml-13 d-flex align-center">
+          <div :class="$vuetify.breakpoint.smAndUp ? 'ml-13' : 'justify-center'" class="d-flex align-center justify-start">
             <baseAvatarImg v-if="!profile.avatar" class="hoverAvatar" :height="180" @click="triggerAvatarInput()" />
             <v-avatar v-else min-height="180" min-width="180">
               <v-img
@@ -44,10 +45,19 @@
               </v-img>
             </v-avatar>
 
-            <div class="ml-13">
-              <p class="mb-n2">Profile</p>
-              <h1 style="font-size: 350%" class="mb-2">{{ profile.name }} {{ profile.lastName }}</h1>
-              <h6 class="mt-n2">Previous login: {{ lastLogin }}</h6>
+            <div v-if="$vuetify.breakpoint.smAndUp" class="ml-13">
+              <v-row no-gutters>
+                <v-col cols="12">
+                  <p class="mb-n2">Profile</p>
+                </v-col>
+                <v-col cols="12">
+                  <base-typing-indicator v-if="!profile.name" class="my-5" />
+                  <h1 v-else style="font-size: 350%" class="mb-2">{{ fullName }}</h1>
+                </v-col>
+                <v-col cols="12">
+                  <h6 class="mt-n2">Previous login: {{ lastLogin }}</h6>
+                </v-col>
+              </v-row>
             </div>
           </div>
           <template #placeholder>
@@ -94,7 +104,7 @@
     },
 
     computed: {
-      ...get('authentication', ['lastLogin', 'userId']),
+      ...get('authentication', ['lastLogin', 'userId', 'fullName']),
       ...sync('authentication', ['profile']),
     },
 

@@ -1,37 +1,44 @@
 <template>
   <div class="white--text">
     <h1 class="mb-6">Profile Setttings</h1>
-
-    <v-row>
-      <v-col sm="4">
-        <v-row no-gutters>
-          <v-col cols="12">
-            <v-btn :ripple="false" x-small color="white" class="ml-n2 mb-n2" plain>Name</v-btn>
-            <div class="py-2 pr-2">
-              <vs-input v-model="profile.name" block placeholder="First name">
-                <template #icon>
-                  <v-icon dark>mdi-account</v-icon>
-                </template>
-              </vs-input>
-            </div>
-          </v-col>
-          <v-col cols="12">
-            <v-btn :ripple="false" x-small color="white" class="ml-n2 mb-n2" plain>Last name</v-btn>
-            <div class="py-2 pr-2">
-              <vs-input v-model="profile.lastName" block placeholder="Last name">
-                <template #icon>
-                  <v-icon dark>mdi-account</v-icon>
-                </template>
-              </vs-input>
-            </div>
-          </v-col>
-        </v-row>
-      </v-col>
-      <v-col cols="12">
-        <v-btn class="mr-2" dark small color="grey" @click="cancel()">Cancel</v-btn>
-        <v-btn dark small color="teal" @click="saveProfile()">Update profile</v-btn>
-      </v-col>
-    </v-row>
+    <ValidationObserver ref="profileEdit" slim>
+      <v-row>
+        <v-col sm="6" md="4">
+          <v-row no-gutters>
+            <v-col cols="12">
+              <v-btn tabindex="-1" :ripple="false" x-small color="white" class="ml-n2 mb-n2" plain>Name</v-btn>
+              <div class="py-2 pr-2">
+                <Validation-provider v-slot="{ invalid, errors }" name="name" :rules="{ required: true, alpha: true }">
+                  <vs-input v-model="profile.name" :danger="invalid" maxlength="20" block placeholder="First name">
+                    <template #icon>
+                      <v-icon dark>mdi-account</v-icon>
+                    </template>
+                    <template #message-danger> {{ errors[0] }} </template>
+                  </vs-input>
+                </Validation-provider>
+              </div>
+            </v-col>
+            <v-col cols="12">
+              <v-btn tabindex="-1" :ripple="false" x-small color="white" class="ml-n2 mb-n2" plain>Last name</v-btn>
+              <div class="py-2 pr-2">
+                <Validation-provider v-slot="{ invalid, errors }" name="last name" :rules="{ required: true, alpha: true }">
+                  <vs-input v-model="profile.lastName" :danger="invalid" maxlength="20" block placeholder="Last name">
+                    <template #icon>
+                      <v-icon dark>mdi-account</v-icon>
+                    </template>
+                    <template #message-danger> {{ errors[0] }} </template>
+                  </vs-input>
+                </Validation-provider>
+              </div>
+            </v-col>
+          </v-row>
+        </v-col>
+        <v-col cols="12">
+          <v-btn class="mr-2" dark small color="grey" @click="cancel()">Cancel</v-btn>
+          <v-btn dark small color="teal" @click="saveProfile()">Update profile</v-btn>
+        </v-col>
+      </v-row>
+    </ValidationObserver>
   </div>
 </template>
 <script>
@@ -46,14 +53,25 @@
 
     methods: {
       ...call('authentication', ['updateProfileSettings']),
+      ...call('snackbar/*'),
 
       cancel() {
         this.$emit('close');
       },
 
-      saveProfile() {
-        this.updateProfileSettings();
-        this.$emit('close');
+      async saveProfile() {
+        try {
+          const validated = await this.$refs.profileEdit.validate();
+          if (validated) {
+            this.updateProfileSettings();
+            this.snackbarSuccess('Profile saved');
+            this.$emit('close');
+          } else {
+            this.snackbarError('Please correct the fields in red');
+          }
+        } catch (error) {
+          // this.snackbarError('Please correct the fields in red');
+        }
       },
     },
   };

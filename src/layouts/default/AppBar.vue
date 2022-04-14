@@ -45,8 +45,7 @@
 
         <v-scale-transition>
           <v-btn v-if="isLoggedIn" style="position: fixed" :ripple="false" color="black white--text" @click="logout">
-            <v-icon small> mdi-account</v-icon>
-            {{ `Logout ${user.email}` }}
+            {{ `Logout ${firstAndShortLast}` }}
           </v-btn>
         </v-scale-transition>
 
@@ -86,7 +85,7 @@
 
     computed: {
       drawer: sync('app/drawer'),
-      ...get('authentication', ['isLoggedIn', 'user']),
+      ...get('authentication', ['isLoggedIn', 'profile', 'firstAndShortLast']),
     },
 
     methods: {

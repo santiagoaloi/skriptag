@@ -89,11 +89,11 @@
   ::-moz-selection {
     /* Code for Firefox */
     color: rgb(201, 255, 252);
-    background: rgb(105, 201, 201);
+    background: #52a49a;
   }
 
   ::selection {
     color: rgb(201, 255, 252);
-    background: rgb(105, 201, 201);
+    background: #086c62;
   }
 </style>

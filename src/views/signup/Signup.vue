@@ -57,7 +57,8 @@
           <v-col cols="10">
             <v-card-actions>
               <v-spacer />
-              <v-btn color="teal white--text" :loading="loading" large type="submit" :ripple="false" width="100"> Signup</v-btn>
+
+              <Base-button type="submit" :loading="loading" dark color="grey darken-3" large> Signup</Base-button>
             </v-card-actions>
           </v-col>
         </v-row>

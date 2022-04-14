@@ -1,6 +1,6 @@
 <template>
   <v-row style="color: #ccc" class="pattern-bg" :class="rowClass()" no-gutters>
-    <v-col :order="colOrder()" :sm="remaininCols" cols="12">
+    <v-col :order="colOrder()" :sm="remainingCols" cols="12">
       <v-img :class="imageClass()" v-bind="imageOptions()" @load="imageLoaded = true">
         <template #placeholder>
           <v-row class="fill-height ma-0" align="center" justify="center">
@@ -42,7 +42,7 @@
     },
 
     computed: {
-      remaininCols() {
+      remainingCols() {
         return 12 - this.col;
       },
     },
@@ -94,7 +94,7 @@
         return {
           gradient: gradientOptions(),
           width: '100%',
-          style: { height: xs ? 'calc(50vh - 60px)' : '100%' },
+          style: { height: xs ? '90%' : '100%' },
           src: `https://picsum.photos/1280/800?${Date.now().toString().slice(0, 1)}`,
           transition: `${right ? 'slide-x-reverse-transition' : 'slide-x-transition'}`,
         };
