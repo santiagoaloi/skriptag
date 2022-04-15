@@ -12,8 +12,6 @@ const state = {
   profile: {},
 };
 
-const PROFILE_COLLECTION = 'users'; // name of the FS collection of user profile docs
-
 const mutations = make.mutations(state);
 const actions = {
   ...make.actions(state),
@@ -54,7 +52,7 @@ const actions = {
       store.set('loaders/authLoader', false);
       router.push('profile');
     } catch ({ ...error }) {
-      dispatch('loginMessagesSnackbar', error.code);
+      dispatch('errors/loginMessagesSnackbar', error.code, { root: true });
       store.set('loaders/authLoader', false);
     }
   },
@@ -75,7 +73,7 @@ const actions = {
 
       // Adds a document in a  firestore collection.
       // doc (Firestore instance, collection name, collection id).
-      const userDocRef = doc(db, PROFILE_COLLECTION, user.uid);
+      const userDocRef = doc(db, 'users', user.uid);
 
       // User profile fields to be created in db (payload)
       const userDocData = {
@@ -92,55 +90,8 @@ const actions = {
       // creates the user profile in the db collection.
       setDoc(userDocRef, userDocData);
     } catch ({ ...error }) {
-      dispatch('signupMessagesSnackbar', error.code);
+      dispatch('errors/signupMessagesSnackbar', error.code, { root: true });
       store.set('loaders/signupLoader', false);
-    }
-  },
-
-  // Snackbar error messages.
-  signupMessagesSnackbar({ dispatch }, message) {
-    if (process.env.NODE_ENV === 'development') {
-      console.log(message);
-    }
-
-    if (message.includes('auth/weak-password')) {
-      dispatch('snackbar/snackbarError', 'Password should be at least 6 characters long.', { root: true });
-      return;
-    }
-
-    if (message.includes('auth/email-already-in-use')) {
-      dispatch('snackbar/snackbarError', 'Aother account is already using this email.', { root: true });
-      return;
-    }
-
-    if (message.includes('auth/invalid-email')) {
-      dispatch('snackbar/snackbarError', 'Too many invalid attemps, please try again later.', { root: true });
-      return;
-    }
-
-    if (message.includes('auth/email-already-in-use')) {
-      dispatch('snackbar/snackbarError', 'This email is already in use,', { root: true });
-    }
-
-    dispatch('snackbar/snackbarError', 'Something did not go right.', { root: true });
-  },
-
-  // Snackbar error messages.
-  loginMessagesSnackbar({ dispatch }, message) {
-    if (process.env.NODE_ENV === 'development') {
-      console.log(message);
-    }
-
-    if (message.includes('auth/invalid-email')) {
-      dispatch('snackbar/snackbarError', 'This email is not valid, please check that again.', { root: true });
-    } else if (message.includes('auth/wrong-password')) {
-      dispatch('snackbar/snackbarError', 'You password is incorrect , please try again.', { root: true });
-    } else if (message.includes('auth/user-not-found')) {
-      dispatch('snackbar/snackbarError', 'This account does not exist in our records.', { root: true });
-    } else if (message.includes('auth/too-many-attempts')) {
-      dispatch('snackbar/snackbarError', 'Too many invalid attemps, please try again later..', { root: true });
-    } else {
-      dispatch('snackbar/snackbarError', 'Something did not go right.', { root: true });
     }
   },
 };
