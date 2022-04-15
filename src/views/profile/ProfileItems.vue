@@ -28,7 +28,7 @@
 </template>
 
 <script>
-  import ProfileEdit from './profile-edit';
+  import ProfileEdit from './Profile-edit';
 
   export default {
     name: 'ProfileItems',
