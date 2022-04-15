@@ -49,23 +49,16 @@ const actions = {
   async login({ dispatch, state }) {
     store.set('loaders/authLoader', true);
     const { email, password } = state.loginForm;
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
 
-    // Attempt to login only if both email and password fields have values.
-    if (!state.loginForm.email || !state.loginForm.password) {
-      dispatch('snackbar/snackbarError', 'You have to provide both an email and password.', { root: true });
+      store.set('authentication/user', userCredential.user);
       store.set('loaders/authLoader', false);
-    } else {
-      try {
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-
-        store.set('authentication/user', userCredential.user);
-        store.set('loaders/authLoader', false);
-
-        router.push('profile');
-      } catch ({ ...error }) {
-        dispatch('loginMessagesSnackbar', error.code);
-        store.set('loaders/authLoader', false);
-      }
+      state.loginForm = {};
+      router.push('profile');
+    } catch ({ ...error }) {
+      dispatch('loginMessagesSnackbar', error.code);
+      store.set('loaders/authLoader', false);
     }
   },
 
