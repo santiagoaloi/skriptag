@@ -23,8 +23,8 @@
           </v-btn>
 
           <!-- image upload inputs" -->
-          <input ref="coverInput" style="display: none" type="file" @change="uploadCoverPhoto()" />
-          <input ref="avatarInput" style="display: none" type="file" @change="uploadProfilePhoto()" />
+          <input ref="coverInput" accept="image/*" style="display: none" type="file" @change="uploadCoverPhoto()" />
+          <input ref="avatarInput" accept="image/*" style="display: none" type="file" @change="uploadProfilePhoto()" />
 
           <div :class="$vuetify.breakpoint.smAndUp ? 'ml-13' : 'justify-center'" class="d-flex align-center justify-start">
             <baseAvatarImg v-if="!profile.avatar" class="hoverAvatar" :height="180" @click="triggerAvatarInput()" />
@@ -116,6 +116,7 @@
     methods: {
       ...call('app', ['sleep']),
       ...call('authentication', ['updateProfileSettings']),
+      ...call('snackbar/*'),
 
       triggerAvatarInput() {
         this.$refs.avatarInput.click();
@@ -127,6 +128,11 @@
 
       uploadProfilePhoto() {
         const file = this.$refs.avatarInput.files[0];
+        const fileSize = this.$refs.avatarInput.files[0].size;
+        if (fileSize > 2048000) {
+          this.snackbarError('The avatar image size cannot be bigger than 2MB');
+          return;
+        }
         const photoRef = ref(storage, `users/${this.userId}/${file.name}`);
         const uploadTask = uploadBytesResumable(photoRef, file);
         uploadTask.on(
@@ -151,6 +157,12 @@
 
       uploadCoverPhoto() {
         const file = this.$refs.coverInput.files[0];
+        const fileSize = this.$refs.coverInput.files[0].size;
+        if (fileSize > 2048000) {
+          this.snackbarError('The cover image size cannot be bigger than 2MB');
+          return;
+        }
+
         const photoRef = ref(storage, `users/${this.userId}/${file.name}`);
         const uploadTask = uploadBytesResumable(photoRef, file);
         uploadTask.on(

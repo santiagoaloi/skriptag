@@ -61,7 +61,8 @@
                     <template #icon>
                       <v-icon dark>mdi-account</v-icon>
                     </template>
-                    <template #message-danger> {{ errors[0] }} </template>
+                    <div>{{ errors[0] }}</div>
+                    <template #message-danger> </template>
                   </vs-input>
                 </Validation-provider>
               </div>
