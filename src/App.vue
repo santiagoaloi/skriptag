@@ -7,13 +7,6 @@
 <script>
   export default {
     name: 'BaseApp',
-
-    // computed: {
-    //   vuetify() {
-    //     return process.env.NODE_ENV === 'development' ? this.$vuetify : null;
-    //   },
-    // },
-
     mounted() {
       this.$vs.setTheme('dark');
     },
@@ -89,11 +82,11 @@
   ::-moz-selection {
     /* Code for Firefox */
     color: rgb(201, 255, 252);
-    background: #52a49a;
+    background: #16867a;
   }
 
   ::selection {
     color: rgb(201, 255, 252);
-    background: #086c62;
+    background: #16867a;
   }
 </style>

@@ -66,43 +66,37 @@ const actions = {
     store.set('loaders/signupLoader', true);
     const { email, password } = state.signupForm;
 
-    // Attempt to signup only if both email and password fields have values.
-    if (!state.signupForm.email || !state.signupForm.password) {
-      dispatch('snackbar/snackbarError', 'You have to provide both an email and password.', { root: true });
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+
+      // Set user in Vuex and navigate to the new user profile.
+      store.set('authentication/user', userCredential.user);
       store.set('loaders/signupLoader', false);
-    } else {
-      try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      router.push('profile');
 
-        // Set user in Vuex and navigate to the new user profile.
-        store.set('authentication/user', userCredential.user);
-        store.set('loaders/signupLoader', false);
-        router.push('profile');
+      const { user } = userCredential;
 
-        const { user } = userCredential;
+      // Adds a document in a  firestore collection.
+      // doc (Firestore instance, collection name, collection id).
+      const userDocRef = doc(db, PROFILE_COLLECTION, user.uid);
 
-        // Adds a document in a  firestore collection.
-        // doc (Firestore instance, collection name, collection id).
-        const userDocRef = doc(db, PROFILE_COLLECTION, user.uid);
+      // User profile fields to be created in db (payload)
+      const userDocData = {
+        uid: user.uid,
+        email,
+        name: state.signupForm.name,
+        lastName: state.signupForm.lastName,
+        avatar: '',
+        coverAvatar: '',
+        dateCreated: serverTimestamp(),
+      };
 
-        // User profile fields to be created in db (payload)
-        const userDocData = {
-          uid: user.uid,
-          email,
-          name: state.signupForm.name,
-          lastName: state.signupForm.lastName,
-          avatar: '',
-          coverAvatar: '',
-          dateCreated: serverTimestamp(),
-        };
-
-        // SetDoc (Firestore, Payload)
-        // creates the user profile in the db collection.
-        setDoc(userDocRef, userDocData);
-      } catch ({ ...error }) {
-        dispatch('signupMessagesSnackbar', error.code);
-        store.set('loaders/signupLoader', false);
-      }
+      // SetDoc (Firestore, Payload)
+      // creates the user profile in the db collection.
+      setDoc(userDocRef, userDocData);
+    } catch ({ ...error }) {
+      dispatch('signupMessagesSnackbar', error.code);
+      store.set('loaders/signupLoader', false);
     }
   },
 

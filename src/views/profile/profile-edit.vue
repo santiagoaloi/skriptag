@@ -1,5 +1,5 @@
 <template>
-  <div class="white--text">
+  <div style="color: #ccc">
     <h1 class="mb-6">Profile Setttings</h1>
     <ValidationObserver ref="profileEdit" slim>
       <form class="d-flex flex-column" @submit.prevent="saveProfile()">
@@ -9,7 +9,12 @@
               <v-col cols="12">
                 <v-btn tabindex="-1" :ripple="false" x-small color="white" class="ml-n2 mb-n2" plain>Name</v-btn>
                 <div class="py-2 pr-2">
-                  <Validation-provider v-slot="{ invalid, errors }" name="name" :rules="{ required: true, alpha: true }">
+                  <Validation-provider
+                    v-slot="{ invalid, errors }"
+                    slim
+                    name="name"
+                    :rules="{ required: true, alpha_spaces: true }"
+                  >
                     <vs-input v-model="profile.name" :danger="invalid" maxlength="20" block placeholder="First name">
                       <template #icon>
                         <v-icon dark>mdi-account</v-icon>
@@ -22,7 +27,12 @@
               <v-col cols="12">
                 <v-btn tabindex="-1" :ripple="false" x-small color="white" class="ml-n2 mb-n2" plain>Last name</v-btn>
                 <div class="py-2 pr-2">
-                  <Validation-provider v-slot="{ invalid, errors }" name="last name" :rules="{ required: true, alpha: true }">
+                  <Validation-provider
+                    v-slot="{ invalid, errors }"
+                    slim
+                    name="last name"
+                    :rules="{ required: true, alpha_spaces: true }"
+                  >
                     <vs-input v-model="profile.lastName" :danger="invalid" maxlength="20" block placeholder="Last name">
                       <template #icon>
                         <v-icon dark>mdi-account</v-icon>
