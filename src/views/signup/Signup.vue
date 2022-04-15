@@ -8,7 +8,7 @@
       <ValidationObserver ref="profileEdit" slim>
         <form class="d-flex flex-column" @submit.prevent="validate()">
           <v-row no-gutters>
-            <v-col cols="10">
+            <v-col cols="12" lg="10">
               <v-btn
                 v-animation:shrink="{ longPress: true }"
                 :ripple="false"
@@ -30,7 +30,7 @@
                 </Validation-provider>
               </div>
             </v-col>
-            <v-col cols="10">
+            <v-col cols="12" lg="10">
               <div class="py-2 pr-2">
                 <Validation-provider v-slot="{ invalid, errors }" slim name="password" :rules="{ required: true }">
                   <vs-input v-model="signupForm.password" :danger="invalid" block type="password" placeholder="New password">
@@ -42,7 +42,7 @@
                 </Validation-provider>
               </div>
             </v-col>
-            <v-col cols="5">
+            <v-col cols="12" lg="5">
               <div class="py-2 pr-2">
                 <Validation-provider v-slot="{ invalid, errors }" slim name="name" :rules="{ required: true }">
                   <vs-input v-model="signupForm.name" :danger="invalid" block placeholder="Name">
@@ -54,7 +54,7 @@
                 </Validation-provider>
               </div>
             </v-col>
-            <v-col cols="5">
+            <v-col cols="12" lg="5">
               <div class="py-2 pr-2">
                 <Validation-provider v-slot="{ invalid, errors }" slim name="last name" :rules="{ required: true }">
                   <vs-input v-model="signupForm.lastName" :danger="invalid" block placeholder="Last name">
@@ -62,16 +62,15 @@
                       <v-icon dark>mdi-account</v-icon>
                     </template>
                     <div>{{ errors[0] }}</div>
-                    <template #message-danger> </template>
+                    <template #message-danger> {{ errors[0] }} </template>
                   </vs-input>
                 </Validation-provider>
               </div>
             </v-col>
 
-            <v-col cols="10">
+            <v-col cols="12" lg="10">
               <v-card-actions>
                 <v-spacer />
-
                 <Base-button type="submit" :loading="loading" dark color="grey darken-3" large> Signup</Base-button>
               </v-card-actions>
             </v-col>

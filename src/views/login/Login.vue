@@ -8,7 +8,7 @@
       <ValidationObserver ref="loginForm" slim>
         <form class="d-flex flex-column" @submit.prevent="validateLoginForm()">
           <v-row no-gutters>
-            <v-col cols="10">
+            <v-col cols="12" lg="10">
               <v-btn :ripple="false" x-small color="white" class="ml-n2 mb-n2" plain>Recover my password</v-btn>
               <div class="py-2 pr-2">
                 <Validation-provider v-slot="{ errors }" mode="lazy" name="email" :rules="{ email: true, required: true }">
@@ -21,7 +21,7 @@
                 </Validation-provider>
               </div>
             </v-col>
-            <v-col cols="10">
+            <v-col cols="12" lg="10">
               <div class="py-2 pr-2">
                 <Validation-provider v-slot="{ errors }" mode="lazy" name="password" :rules="{ required: true }">
                   <vs-input v-model="loginForm.password" :danger="errors.length > 0" block type="password" placeholder="Password">
