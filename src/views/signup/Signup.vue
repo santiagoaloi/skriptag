@@ -31,7 +31,7 @@
               </div>
             </v-col>
             <v-col cols="12" lg="10">
-              <div class="py-2 pr-2">
+              <div class="py-5 pr-2">
                 <Validation-provider v-slot="{ invalid, errors }" slim name="password" :rules="{ required: true }">
                   <vs-input v-model="signupForm.password" :danger="invalid" block type="password" placeholder="New password">
                     <template #icon>
@@ -69,7 +69,7 @@
             </v-col>
 
             <v-col cols="12" lg="10">
-              <v-card-actions>
+              <v-card-actions class="py-7">
                 <v-spacer />
                 <Base-button type="submit" :loading="loading" dark color="grey darken-3" large> Signup</Base-button>
               </v-card-actions>

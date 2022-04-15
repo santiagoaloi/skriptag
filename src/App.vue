@@ -89,4 +89,9 @@
     color: rgb(201, 255, 252);
     background: #16867a;
   }
+
+  .vs-input__message {
+    position: absolute;
+    top: 43px;
+  }
 </style>

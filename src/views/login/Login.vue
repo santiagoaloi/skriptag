@@ -10,7 +10,7 @@
           <v-row no-gutters>
             <v-col cols="12" lg="10">
               <v-btn :ripple="false" x-small color="white" class="ml-n2 mb-n2" plain>Recover my password</v-btn>
-              <div class="py-2 pr-2">
+              <div class="py-6 pr-2">
                 <Validation-provider v-slot="{ errors }" mode="lazy" name="email" :rules="{ email: true, required: true }">
                   <vs-input v-model="loginForm.email" :danger="errors.length > 0" maxlength="100" block placeholder="Email">
                     <template #icon>
@@ -32,7 +32,7 @@
                   </vs-input>
                 </Validation-provider>
               </div>
-              <v-card-actions class="px-0">
+              <v-card-actions class="px-0 py-7">
                 <Base-button type="submit" :loading="loading" dark color="grey darken-3" large> Login</Base-button>
               </v-card-actions>
             </v-col>
