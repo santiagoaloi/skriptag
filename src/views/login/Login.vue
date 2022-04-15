@@ -24,7 +24,14 @@
             <v-col cols="12" lg="10">
               <div class="py-2 pr-2">
                 <Validation-provider v-slot="{ errors }" mode="lazy" name="password" :rules="{ required: true }">
-                  <vs-input v-model="loginForm.password" :danger="errors.length > 0" block type="password" placeholder="Password">
+                  <vs-input
+                    v-model="loginForm.password"
+                    maxlength="100"
+                    :danger="errors.length > 0"
+                    block
+                    type="password"
+                    placeholder="Password"
+                  >
                     <template #icon>
                       <v-icon dark>mdi-lock</v-icon>
                     </template>

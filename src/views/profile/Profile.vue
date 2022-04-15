@@ -50,10 +50,17 @@
                 <v-col cols="12">
                   <p class="mb-n2">Profile</p>
                 </v-col>
-                <v-col cols="12">
-                  <base-typing-indicator v-if="!profile.name" class="my-5" />
-                  <h1 v-else style="font-size: 350%" class="mb-2">{{ fullName }}</h1>
-                </v-col>
+                <!-- <v-col cols="12"> -->
+                <!-- <base-typing-indicator v-if="!profile.name" class="my-5" /> -->
+
+                <span
+                  class="d-inline-block text-truncate mb-2 font-weight-bold"
+                  style="font-size: 45px"
+                  :style="$vuetify.breakpoint.mdAndDown ? 'max-width: 390px' : 'max-width: 500px'"
+                >
+                  {{ fullName }}
+                </span>
+                <!-- </v-col> -->
                 <v-col cols="12">
                   <h6 class="mt-n2">Previous login: {{ lastLogin }}</h6>
                 </v-col>
