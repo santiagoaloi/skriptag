@@ -48,10 +48,18 @@
   export default {
     name: 'LoginPage',
 
+    data() {
+      return {
+        loginForm: {
+          email: '',
+          password: '',
+        },
+      };
+    },
+
     computed: {
       ...get('authentication', ['isLoggedIn']),
       loading: sync('loaders/authLoader'),
-      loginForm: sync('authentication/loginForm'),
     },
 
     methods: {
@@ -63,7 +71,7 @@
         try {
           const validated = await this.$refs.loginForm.validate();
           if (validated) {
-            this.login();
+            this.login(this.loginForm);
           } else {
             this.snackbarError('Please correct the fields in red');
           }

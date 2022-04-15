@@ -85,9 +85,17 @@
 
   export default {
     name: 'SignupPage',
-
+    data() {
+      return {
+        signupForm: {
+          name: '',
+          lastName: '',
+          email: '',
+          password: '',
+        },
+      };
+    },
     computed: {
-      ...sync('authentication', ['signupForm']),
       loading: sync('loaders/signupLoader'),
     },
     methods: {
@@ -98,7 +106,7 @@
         try {
           const validated = await this.$refs.profileEdit.validate();
           if (validated) {
-            this.signup();
+            this.signup(this.signupForm);
           } else {
             this.snackbarError('Please correct the fields in red');
           }

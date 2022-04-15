@@ -9,8 +9,6 @@ import router from '@/router';
 
 const state = {
   user: {},
-  loginForm: {},
-  signupForm: {},
   profile: {},
 };
 
@@ -46,15 +44,14 @@ const actions = {
     });
   },
 
-  async login({ dispatch, state }) {
+  async login({ dispatch }, loginForm) {
     store.set('loaders/authLoader', true);
-    const { email, password } = state.loginForm;
+    const { email, password } = loginForm;
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
 
       store.set('authentication/user', userCredential.user);
       store.set('loaders/authLoader', false);
-      state.loginForm = {};
       router.push('profile');
     } catch ({ ...error }) {
       dispatch('loginMessagesSnackbar', error.code);
@@ -62,9 +59,9 @@ const actions = {
     }
   },
 
-  async signup({ dispatch, state }) {
+  async signup({ dispatch }, signupForm) {
     store.set('loaders/signupLoader', true);
-    const { email, password } = state.signupForm;
+    const { email, password } = signupForm;
 
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -84,8 +81,8 @@ const actions = {
       const userDocData = {
         uid: user.uid,
         email,
-        name: state.signupForm.name,
-        lastName: state.signupForm.lastName,
+        name: signupForm.name,
+        lastName: signupForm.lastName,
         avatar: '',
         coverAvatar: '',
         dateCreated: serverTimestamp(),
