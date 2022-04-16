@@ -48,7 +48,9 @@ const actions = {
     }
 
     if (message.includes('auth/email-already-in-use')) {
-      dispatch('snackbar/snackbarError', 'This email is already in use,', { root: true });
+      dispatch('snackbar/snackbarError', 'This email is already in use with another account. Pick another email. ', {
+        root: true,
+      });
       return;
     }
 

@@ -25,7 +25,7 @@
                 </div>
               </v-col>
               <v-col cols="12">
-                <v-btn tabindex="-1" :ripple="false" x-small color="white" class="ml-n2 mb-n2" plain>Last name</v-btn>
+                <v-btn tabindex="-1" :ripple="false" x-small color="white" class="ml-n2 mt-7 mb-n2" plain>Last name</v-btn>
                 <div class="py-2 pr-2">
                   <Validation-provider
                     v-slot="{ invalid, errors }"
@@ -45,8 +45,10 @@
             </v-row>
           </v-col>
           <v-col cols="12">
-            <v-btn class="mr-2" dark small color="grey" @click="cancel()">Cancel</v-btn>
-            <v-btn type="submit" dark small color="teal">Update profile</v-btn>
+            <div class="mt-2">
+              <v-btn class="mr-2" dark small color="grey" @click="cancel()">Cancel</v-btn>
+              <v-btn type="submit" dark small color="teal">Update profile</v-btn>
+            </div>
           </v-col>
         </v-row>
       </form>
@@ -55,20 +57,47 @@
 </template>
 <script>
   import { sync, call } from 'vuex-pathify';
+  import { cloneDeep, merge } from 'lodash';
 
   export default {
     name: 'ProfileEdit',
+
+    data() {
+      return {
+        originProfile: {},
+      };
+    },
 
     computed: {
       ...sync('authentication', ['profile']),
     },
 
+    mounted() {
+      // carbon copy of current profile settings.
+      this.cloneProfile();
+    },
     methods: {
       ...call('authentication', ['updateProfileSettings']),
       ...call('snackbar/*'),
 
       cancel() {
         this.$emit('close');
+        this.rollBack();
+      },
+
+      cloneProfile() {
+        this.originProfile = cloneDeep(this.profile);
+      },
+
+      rollBack() {
+        const originProfile = cloneDeep(this.originProfile);
+
+        // If the user changes the profile or cover image, it will remain
+        // regardless of cancelling the profile edit.
+        const profileMedia = { avatar: this.profile.avatar, coverAvatar: this.profile.coverAvatar };
+
+        // Merge possible new image changes and rollback.
+        this.profile = merge(originProfile, profileMedia);
       },
 
       async saveProfile() {
