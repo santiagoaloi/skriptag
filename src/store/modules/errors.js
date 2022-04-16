@@ -28,7 +28,7 @@ const actions = {
       return;
     }
 
-    dispatch('snackbar/snackbarError', 'Something did not go right.', { root: true });
+    dispatch('snackbar/snackbarError', 'something went wrong.', { root: true });
   },
 
   signupMessagesSnackbar({ dispatch }, message) {
@@ -54,7 +54,7 @@ const actions = {
       return;
     }
 
-    dispatch('snackbar/snackbarError', 'Something did not go right.', { root: true });
+    dispatch('snackbar/snackbarError', 'something went wrong.', { root: true });
   },
 };
 

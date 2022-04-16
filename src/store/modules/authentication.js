@@ -24,6 +24,7 @@ const mutations = make.mutations(state);
 const actions = {
   ...make.actions(state),
 
+  // Saves new user profile basic settings.
   async updateProfileSettings({ getters, state }) {
     const userProfile = doc(db, 'users', getters.userId);
     await updateDoc(userProfile, {
@@ -31,7 +32,7 @@ const actions = {
     });
   },
 
-  // Logout and clear user data object in Vuex.
+  // Logout and clear user data objects in Vuex.
   async logout({ dispatch, getters }) {
     if (getters.isLoggedIn) {
       await signOut(auth);
@@ -43,7 +44,7 @@ const actions = {
     }
   },
 
-  // Remove user.
+  // RValidates the current password and issue a password reset.
   async resetAccountPassword({ dispatch }, { credentials }) {
     try {
       const credential = EmailAuthProvider.credential(auth.currentUser.email, credentials.currentPassword);
@@ -56,7 +57,7 @@ const actions = {
     }
   },
 
-  // Remove user.
+  // Remove account and route to homepage.
   async removeAccount({ dispatch }, password) {
     try {
       store.set('loaders/authLoader', true);
@@ -83,6 +84,7 @@ const actions = {
     });
   },
 
+  // Login user account, load user profile object and route to profile page.
   async login({ dispatch }, loginForm) {
     store.set('loaders/authLoader', true);
     const { email, password } = loginForm;
@@ -98,6 +100,7 @@ const actions = {
     }
   },
 
+  // Creates a new user account and routes to profile page.
   async signup({ dispatch }, signupForm) {
     store.set('loaders/signupLoader', true);
     const { email, password } = signupForm;
@@ -152,6 +155,7 @@ const getters = {
     return `${name} ${lastName}`;
   },
 
+  // Shows first name and first letter of last name.
   firstAndShortLast: (state) => {
     const name = startCase(capitalize(state.profile.name));
     const lastName = startCase(capitalize(state.profile.lastName));
