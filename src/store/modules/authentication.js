@@ -2,7 +2,15 @@
 import { make } from 'vuex-pathify';
 import { isEmpty, capitalize, startCase } from 'lodash';
 import { doc, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from '@firebase/auth';
+import {
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
+  deleteUser,
+  updatePassword,
+} from '@firebase/auth';
 import { auth, db } from '@/firebase/firebase';
 import { store } from '@/store';
 import router from '@/router';
@@ -35,8 +43,41 @@ const actions = {
     }
   },
 
+  // Remove user.
+  async resetAccountPassword({ dispatch }, { credentials }) {
+    try {
+      const credential = EmailAuthProvider.credential(auth.currentUser.email, credentials.currentPassword);
+      const authenticated = await reauthenticateWithCredential(auth.currentUser, credential);
+
+      await updatePassword(authenticated.user, credentials.newPassword);
+      dispatch('snackbar/snackbarSuccess', 'Account password changed', { root: true });
+    } catch ({ ...error }) {
+      dispatch('errors/authMessagesSnackbar', error.code, { root: true });
+    }
+  },
+
+  // Remove user.
+  async removeAccount({ dispatch }, password) {
+    try {
+      store.set('loaders/authLoader', true);
+      const credential = EmailAuthProvider.credential(auth.currentUser.email, password);
+      const authenticated = await reauthenticateWithCredential(auth.currentUser, credential);
+
+      // Pass authenticated.user for deletion.
+      await deleteUser(authenticated.user);
+
+      store.set('authentication/user', {});
+      store.set('authentication/profile', {});
+      dispatch('snackbar/snackbarSuccess', 'Account removed, Hope to see you again soon 💚', { root: true });
+      router.push('/');
+    } catch ({ ...error }) {
+      store.set('loaders/authLoader', false);
+      dispatch('snackbar/snackbarError', 'Incorrect password, try again', { root: true });
+    }
+  },
+
   // If a user is already authenticated, set the user object in Vuex.
-  async fetchUser() {
+  async getCurrentUser() {
     auth.onAuthStateChanged(async (user) => {
       store.set('authentication/user', !user ? {} : user);
     });
@@ -52,7 +93,7 @@ const actions = {
       store.set('loaders/authLoader', false);
       router.push('profile');
     } catch ({ ...error }) {
-      dispatch('errors/loginMessagesSnackbar', error.code, { root: true });
+      dispatch('errors/authMessagesSnackbar', error.code, { root: true });
       store.set('loaders/authLoader', false);
     }
   },

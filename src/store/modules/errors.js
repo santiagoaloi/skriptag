@@ -10,7 +10,7 @@ const mutations = make.mutations(state);
 const actions = {
   ...make.actions(state),
 
-  loginMessagesSnackbar({ dispatch }, message) {
+  authMessagesSnackbar({ dispatch }, message) {
     if (message.includes('auth/invalid-email')) {
       dispatch('snackbar/snackbarError', 'This email is not valid, please check that again.', { root: true });
       return;
@@ -24,7 +24,7 @@ const actions = {
       return;
     }
     if (message.includes('auth/too-many-attempts')) {
-      dispatch('snackbar/snackbarError', 'Too many invalid attemps, please try again later..', { root: true });
+      dispatch('snackbar/snackbarError', 'Too many invalid attemps, please try again later.', { root: true });
       return;
     }
 

@@ -5,6 +5,8 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { getStorage, ref } from 'firebase/storage';
 
 // The .env file contains the api keys used below.
+// const firebaseConfig = JSON.parse(process.env.VUE_APP_FIREBASE_CONFIG);
+
 const firebaseConfig = {
   apiKey: process.env.VUE_APP_SKRIPTAG_FIREBASE_API_KEY,
   authDomain: process.env.VUE_APP_SKRIPTAG_FIREBASE_AUTH_DOMAIN,
@@ -20,5 +22,5 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage();
 const auth = getAuth(app);
-export const getUserState = () => new Promise((resolve, reject) => onAuthStateChanged(getAuth(), resolve, reject));
+export const getUserState = () => new Promise((resolve, reject) => onAuthStateChanged(auth, resolve, reject));
 export { auth, db, storage };

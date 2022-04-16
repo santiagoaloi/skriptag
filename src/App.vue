@@ -94,4 +94,8 @@
     position: absolute;
     top: 43px;
   }
+
+  .v-application a {
+    color: #12e1cc !important;
+  }
 </style>

@@ -25,7 +25,7 @@
                 </div>
               </v-col>
               <v-col cols="12">
-                <v-btn tabindex="-1" :ripple="false" x-small color="white" class="ml-n2 mt-7 mb-n2" plain>Last name</v-btn>
+                <v-btn tabindex="-1" :ripple="false" x-small color="white" class="ml-n2 mt-5 mb-n2" plain>Last name</v-btn>
                 <div class="py-2 pr-2">
                   <Validation-provider
                     v-slot="{ invalid, errors }"
@@ -47,7 +47,7 @@
           <v-col cols="12">
             <div class="mt-2">
               <v-btn class="mr-2" dark small color="grey" @click="cancel()">Cancel</v-btn>
-              <v-btn type="submit" dark small color="teal">Update profile</v-btn>
+              <v-btn type="submit" dark small color="teal">Save</v-btn>
             </div>
           </v-col>
         </v-row>
@@ -83,6 +83,7 @@
       cancel() {
         this.$emit('close');
         this.rollBack();
+        window.scrollTo(0, 0);
       },
 
       cloneProfile() {

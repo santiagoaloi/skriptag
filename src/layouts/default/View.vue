@@ -1,6 +1,6 @@
 <template>
   <v-main>
-    <div class="divContainer">
+    <div id="divContainer" class="divContainer">
       <v-fade-transition hide-on-leave mode="out-in">
         <router-view />
       </v-fade-transition>

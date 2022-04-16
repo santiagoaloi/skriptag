@@ -13,14 +13,16 @@
           @load="imgBannerLoaded = true"
         >
           <v-btn
-            style="position: absolute; right: 0; margin-right: 20px"
+            style="position: absolute; right: 0; margin-right: 30px"
             color="rgba(10,10,10 , .3)"
             dark
             @click="triggerCoverInput()"
           >
-            {{ $vuetify.breakpoint.smAndUp ? 'Change cover image' : '' }}
-            <v-icon v-if="$vuetify.breakpoint.smAndDown"> mdi-camera</v-icon>
+            <v-icon :left="!$vuetify.breakpoint.smAndDown"> mdi-camera</v-icon>
+            <span v-if="!$vuetify.breakpoint.smAndDown"> {{ $vuetify.breakpoint.smAndUp ? 'Change cover image' : '' }} </span>
           </v-btn>
+
+          <!-- v-if="$vuetify.breakpoint.smAndDown" -->
 
           <!-- image upload inputs" -->
           <input ref="coverInput" accept="image/*" style="display: none" type="file" @change="uploadCoverPhoto()" />
@@ -77,7 +79,7 @@
       </div>
     </v-slide-y-transition>
     <v-scale-transition>
-      <profile-items v-if="showProfileItems && imgBannerLoaded" />
+      <profile-cards v-if="showProfileItems && imgBannerLoaded" />
     </v-scale-transition>
   </div>
 </template>
@@ -85,12 +87,12 @@
   import { get, call, sync } from 'vuex-pathify';
   import { uploadBytesResumable, getDownloadURL, ref } from 'firebase/storage';
   import { storage } from '@/firebase/firebase';
-  import profileItems from './ProfileItems';
+  import profileCards from './Profile-cards';
 
   export default {
     name: 'ProfileView',
     components: {
-      profileItems,
+      profileCards,
     },
 
     props: {
