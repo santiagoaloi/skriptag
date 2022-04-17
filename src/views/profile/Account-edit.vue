@@ -51,7 +51,7 @@
                       :progress="getPasswordComplexity(credentials.newPassword)"
                     >
                       <template #icon>
-                        <v-icon dark>mdi-account</v-icon>
+                        <v-icon dark>mdi-lock</v-icon>
                       </template>
                       <template #message-danger> {{ errors[0] }} </template>
                     </vs-input>
@@ -80,7 +80,7 @@
                       placeholder="Repeat New password"
                     >
                       <template #icon>
-                        <v-icon dark>mdi-account</v-icon>
+                        <v-icon dark>mdi-lock</v-icon>
                       </template>
                       <template #message-danger> {{ errors[0] }} </template>
                     </vs-input>
@@ -105,7 +105,7 @@
               </v-col>
 
               <v-col cols="12">
-                <v-btn class="" dark small color="#d45d52" @click="removeAccountDialog = true">Remove my account</v-btn>
+                <v-btn dark small color="#de355f" @click="removeAccountDialog = true">Remove my account</v-btn>
               </v-col>
             </v-row>
             <v-row>

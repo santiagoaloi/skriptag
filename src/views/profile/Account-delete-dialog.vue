@@ -2,10 +2,6 @@
   <BaseDialog v-model="internalValue" no-toolbar dense close-only no-actions width="500" @close="close()">
     <v-card-title class="text-h5"> Remove my account</v-card-title>
     <v-card-text>This action is permament, you will not be able to undo it.</v-card-text>
-    <v-card-text class="mt-n6">
-      If you prefer to disable your account. it will only be re-enabled if you login again in the future.
-    </v-card-text>
-    <v-card-text class="mt-n4" t>If you want to read what a disable account does, check the <a>#FAQ</a> </v-card-text>
 
     <ValidationObserver ref="passwordField" slim>
       <form class="d-flex flex-column" @submit.prevent="validatePassword()">
@@ -21,7 +17,7 @@
                 placeholder="Current account password"
               >
                 <template #icon>
-                  <v-icon dark>mdi-account</v-icon>
+                  <v-icon dark>mdi-lock</v-icon>
                 </template>
                 <template #message-danger> {{ errors[0] }} </template>
               </vs-input>
@@ -32,7 +28,6 @@
         <v-card-actions class="px-6">
           <v-spacer></v-spacer>
           <v-btn color="grey lighten-1" text @click="cancel()"> Cancel </v-btn>
-          <v-btn color="grey lighten-1" text @click="cancel()"> Disable </v-btn>
           <v-btn :loading="loading" color="#de355f" text type="submit"> Remove </v-btn>
         </v-card-actions>
       </form>

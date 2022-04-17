@@ -22,7 +22,7 @@
                     :progress="getPasswordComplexity(newPassword)"
                   >
                     <template #icon>
-                      <v-icon dark>mdi-account</v-icon>
+                      <v-icon dark>mdi-lock</v-icon>
                     </template>
                     <template #message-danger> {{ errors[0] }} </template>
                   </vs-input>
