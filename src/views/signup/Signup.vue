@@ -21,7 +21,7 @@
               >
               <div class="py-2 pr-2">
                 <Validation-provider v-slot="{ errors }" slim name="email" :rules="{ required: true, email: true }">
-                  <vs-input v-model="signupForm.email" maxlength="100" :danger="errors[0] > 0" block placeholder="Email">
+                  <vs-input v-model="signupForm.email" maxlength="100" :danger="errors.length > 0" block placeholder="Email">
                     <template #icon>
                       <v-icon dark>mdi-at</v-icon>
                     </template>
@@ -36,7 +36,7 @@
                   <vs-input
                     v-model="signupForm.password"
                     maxlength="100"
-                    :danger="errors[0] > 0"
+                    :danger="errors.length > 0"
                     block
                     type="password"
                     placeholder="New password"
@@ -53,7 +53,7 @@
             <v-col cols="12" lg="5">
               <div class="py-2 pr-2">
                 <Validation-provider v-slot="{ errors }" slim name="name" :rules="{ required: true }">
-                  <vs-input v-model="signupForm.name" maxlength="20" :danger="errors[0] > 0" block placeholder="Name">
+                  <vs-input v-model="signupForm.name" maxlength="20" :danger="errors.length > 0" block placeholder="Name">
                     <template #icon>
                       <v-icon dark>mdi-account</v-icon>
                     </template>
@@ -65,7 +65,13 @@
             <v-col cols="12" lg="5">
               <div class="py-2 pr-2">
                 <Validation-provider v-slot="{ errors }" slim name="last name" :rules="{ required: true }">
-                  <vs-input v-model="signupForm.lastName" maxlength="20" :danger="errors[0] > 0" block placeholder="Last name">
+                  <vs-input
+                    v-model="signupForm.lastName"
+                    maxlength="20"
+                    :danger="errors.length > 0"
+                    block
+                    placeholder="Last name"
+                  >
                     <template #icon>
                       <v-icon dark>mdi-account</v-icon>
                     </template>
