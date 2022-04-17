@@ -24,6 +24,13 @@ export default [
   },
 
   {
+    path: '/ResetPassword',
+    name: 'resetPassword',
+
+    component: () => import(/* webpackChunkName: 'reset-password' */ '@/views/reset-password'),
+  },
+
+  {
     path: '/Profile',
     name: 'profile',
     meta: {

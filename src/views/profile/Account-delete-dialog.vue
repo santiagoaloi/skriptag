@@ -1,6 +1,6 @@
 <template>
   <BaseDialog v-model="internalValue" no-toolbar dense close-only no-actions width="500" @close="close()">
-    <v-card-title class="text-h5"> Account removal</v-card-title>
+    <v-card-title class="text-h5"> Remove my account</v-card-title>
     <v-card-text>This action is permament, you will not be able to undo it.</v-card-text>
     <v-card-text class="mt-n6">
       If you prefer to disable your account. it will only be re-enabled if you login again in the future.

@@ -10,6 +10,8 @@ import {
   signOut,
   deleteUser,
   updatePassword,
+  sendPasswordResetEmail,
+  confirmPasswordReset,
 } from '@firebase/auth';
 import { auth, db } from '@/firebase/firebase';
 import { store } from '@/store';
@@ -23,6 +25,53 @@ const state = {
 const mutations = make.mutations(state);
 const actions = {
   ...make.actions(state),
+
+  // Creates a new user account and routes to profile page.
+  async accountRecovery({ dispatch }, email) {
+    store.set('loaders/authLoader', true);
+    try {
+      await sendPasswordResetEmail(auth, email);
+      dispatch('snackbar/snackbarSuccess', 'Account recovery email sent.', { root: true });
+      store.set('loaders/authLoader', false);
+      router.push('login');
+    } catch ({ ...error }) {
+      dispatch('errors/authMessagesSnackbar', error.code, { root: true });
+      store.set('loaders/authLoader', false);
+    }
+  },
+
+  // Password reset link with token, allows password recovery.
+  async accountRecoveryResetPassword({ dispatch }, { payload }) {
+    const { oobCode, newPassword } = payload;
+    store.set('loaders/authLoader', true);
+    try {
+      await confirmPasswordReset(auth, oobCode, newPassword);
+      dispatch('snackbar/snackbarSuccess', 'Account password changed.', { root: true });
+      store.set('loaders/authLoader', false);
+      router.push('login');
+    } catch ({ ...error }) {
+      console.log(error.code);
+      dispatch('errors/authMessagesSnackbar', error.code, { root: true });
+      store.set('loaders/authLoader', false);
+    }
+  },
+
+  // Validates the current account password and changes the password.
+  async accountResetPassword({ dispatch }, { credentials }) {
+    store.set('loaders/authLoader', true);
+
+    try {
+      const credential = EmailAuthProvider.credential(auth.currentUser.email, credentials.currentPassword);
+      const authenticated = await reauthenticateWithCredential(auth.currentUser, credential);
+
+      await updatePassword(authenticated.user, credentials.newPassword);
+      dispatch('snackbar/snackbarSuccess', 'Account password changed', { root: true });
+      store.set('loaders/authLoader', false);
+    } catch ({ ...error }) {
+      dispatch('errors/authMessagesSnackbar', error.code, { root: true });
+      store.set('loaders/authLoader', false);
+    }
+  },
 
   // Saves new user profile basic settings.
   async updateProfileSettings({ getters, state }) {
@@ -44,20 +93,7 @@ const actions = {
     }
   },
 
-  // RValidates the current password and issue a password reset.
-  async resetAccountPassword({ dispatch }, { credentials }) {
-    try {
-      const credential = EmailAuthProvider.credential(auth.currentUser.email, credentials.currentPassword);
-      const authenticated = await reauthenticateWithCredential(auth.currentUser, credential);
-
-      await updatePassword(authenticated.user, credentials.newPassword);
-      dispatch('snackbar/snackbarSuccess', 'Account password changed', { root: true });
-    } catch ({ ...error }) {
-      dispatch('errors/authMessagesSnackbar', error.code, { root: true });
-    }
-  },
-
-  // Remove account and route to homepage.
+  // Removes the account and then routes the user to the homepage.
   async removeAccount({ dispatch }, password) {
     try {
       store.set('loaders/authLoader', true);
@@ -146,6 +182,10 @@ const getters = {
 
   userId: (state, getters) => {
     if (getters.isLoggedIn) return state.user.uid;
+  },
+
+  userEmail: (state, getters) => {
+    if (getters.isLoggedIn) return state.user.email;
   },
 
   // Capitalize the first letter of every word.

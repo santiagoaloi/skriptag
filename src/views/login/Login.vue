@@ -2,15 +2,27 @@
   <base-split-2 id="login" col="6" right>
     <div class="pa-3">
       <div class="d-flex flex-wrap flex-column">
-        <h1>Login</h1>
-        <p>Time to get stuff done!</p>
+        <h1 v-if="!recoveryMode">Login</h1>
+        <h1 v-else="!recoveryMode">Reset password</h1>
+
+        <p v-if="!recoveryMode">Time to get stuff done!</p>
+        <p v-else>Account recovery email.</p>
       </div>
       <ValidationObserver ref="loginForm" slim>
         <form class="d-flex flex-column" @submit.prevent="validateLoginForm()">
           <v-row no-gutters>
             <v-col cols="12" lg="10">
-              <v-btn :ripple="false" x-small color="white" class="ml-n2 mb-n2" plain>Recover my password</v-btn>
-              <div class="py-6 pr-2">
+              <v-btn
+                v-if="!recoveryMode"
+                :ripple="false"
+                small
+                color="white"
+                class="ml-n1 mb-2"
+                plain
+                @click="recoveryMode = true"
+                ><v-icon left> mdi-lock</v-icon>Recover my password</v-btn
+              >
+              <div class="pb-7 pr-2">
                 <Validation-provider v-slot="{ errors }" mode="lazy" name="email" :rules="{ email: true, required: true }">
                   <vs-input v-model="loginForm.email" :danger="errors.length > 0" maxlength="100" block placeholder="Email">
                     <template #icon>
@@ -22,7 +34,7 @@
               </div>
             </v-col>
             <v-col cols="12" lg="10">
-              <div class="py-2 pr-2">
+              <div v-if="!recoveryMode" class="pr-2 pb-7">
                 <Validation-provider v-slot="{ errors }" mode="lazy" name="password" :rules="{ required: true }">
                   <vs-input
                     v-model="loginForm.password"
@@ -39,8 +51,16 @@
                   </vs-input>
                 </Validation-provider>
               </div>
-              <v-card-actions class="px-0 py-7">
-                <Base-button type="submit" :loading="loading" dark color="grey darken-3" large> Login</Base-button>
+              <v-card-actions class="pa-0">
+                <Base-button v-if="!recoveryMode" type="submit" :loading="loading" dark color="grey darken-3" large>
+                  Login</Base-button
+                >
+                <Base-button v-if="recoveryMode" dark color="grey darken-3" large @click="recoveryMode = false">
+                  Cancel</Base-button
+                >
+                <Base-button v-if="recoveryMode" :loading="loading" type="submit" dark color="grey darken-3" large>
+                  Reset password</Base-button
+                >
               </v-card-actions>
             </v-col>
           </v-row>
@@ -57,6 +77,7 @@
 
     data() {
       return {
+        recoveryMode: false,
         loginForm: {
           email: '',
           password: '',
@@ -70,7 +91,7 @@
     },
 
     methods: {
-      ...call('authentication/*'),
+      ...call('authentication', ['login', 'accountRecovery']),
       ...call('app', ['sleep']),
       ...call('snackbar/*'),
 
@@ -78,7 +99,14 @@
         try {
           const validated = await this.$refs.loginForm.validate();
           if (validated) {
-            this.login(this.loginForm);
+            if (!this.recoveryMode) {
+              this.login(this.loginForm);
+              return;
+            }
+            if (this.recoveryMode) {
+              this.accountRecovery(this.loginForm.email);
+              return;
+            }
           } else {
             this.snackbarError('Please correct the fields in red');
           }

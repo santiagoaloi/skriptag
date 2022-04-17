@@ -16,7 +16,7 @@ const actions = {
       return;
     }
     if (message.includes('auth/wrong-password')) {
-      dispatch('snackbar/snackbarError', 'You password is incorrect , please try again.', { root: true });
+      dispatch('snackbar/snackbarError', 'Your current password is incorrect , please try again.', { root: true });
       return;
     }
     if (message.includes('auth/user-not-found')) {
@@ -25,6 +25,16 @@ const actions = {
     }
     if (message.includes('auth/too-many-attempts')) {
       dispatch('snackbar/snackbarError', 'Too many invalid attemps, please try again later.', { root: true });
+      return;
+    }
+
+    if (message.includes('auth/invalid-action-code')) {
+      dispatch('snackbar/snackbarError', 'The recovery token is expired or invalid.', { root: true });
+      return;
+    }
+
+    if (message.includes('auth/weak-password')) {
+      dispatch('snackbar/snackbarError', 'The password is to weak.', { root: true });
       return;
     }
 

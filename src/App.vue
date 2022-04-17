@@ -96,6 +96,6 @@
   }
 
   .v-application a {
-    color: #12e1cc !important;
+    color: #6ee6b9 !important;
   }
 </style>

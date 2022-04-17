@@ -7,7 +7,7 @@
           <v-col sm="6" md="6">
             <v-row no-gutters>
               <v-col cols="12">
-                <h3>Change password</h3>
+                <h3 class="mb-2">Change password</h3>
               </v-col>
 
               <v-col cols="6">
@@ -16,6 +16,7 @@
                   <Validation-provider v-slot="{ invalid, errors }" slim name="current password" :rules="{ required: true }">
                     <vs-input
                       v-model="credentials.currentPassword"
+                      type="password"
                       :danger="invalid"
                       maxlength="20"
                       block
@@ -39,7 +40,14 @@
                     name="new password"
                     :rules="{ required: true, confirmed: 'confirmation' }"
                   >
-                    <vs-input v-model="credentials.newPassword" :danger="invalid" maxlength="20" block placeholder="New password">
+                    <vs-input
+                      v-model="credentials.newPassword"
+                      type="password"
+                      :danger="invalid"
+                      maxlength="20"
+                      block
+                      placeholder="New password"
+                    >
                       <template #icon>
                         <v-icon dark>mdi-account</v-icon>
                       </template>
@@ -62,6 +70,7 @@
                   >
                     <vs-input
                       v-model="credentials.newPasswordRepeat"
+                      type="password"
                       :danger="invalid"
                       maxlength="20"
                       block
@@ -77,7 +86,7 @@
               </v-col>
               <v-col cols="12">
                 <div class="mt-8">
-                  <v-btn type="submit" dark small color="grey darken-3">Change password</v-btn>
+                  <v-btn :loading="loading" type="submit" dark small color="grey darken-3">Change password</v-btn>
                 </div>
               </v-col>
 
@@ -96,12 +105,14 @@
                 <v-btn class="" dark small color="#d45d52" @click="removeAccountDialog = true">Remove my account</v-btn>
               </v-col>
             </v-row>
-          </v-col>
-          <v-col cols="12">
-            <div class="mb-5">
-              <v-divider class="my-4" style="background: #404040"></v-divider>
-              <v-btn class="mr-2" dark small color="grey" @click="cancel()">Close</v-btn>
-            </div>
+            <v-row>
+              <v-col cols="12">
+                <div class="mt-n3">
+                  <v-divider class="my-4" style="background: #404040"></v-divider>
+                  <v-btn class="mr-2 my-2" dark small color="grey" @click="cancel()">Close</v-btn>
+                </div>
+              </v-col>
+            </v-row>
           </v-col>
         </v-row>
       </form>
@@ -136,14 +147,14 @@
     },
 
     methods: {
-      ...call('authentication', ['resetAccountPassword']),
+      ...call('authentication', ['accountResetPassword']),
       ...call('snackbar/*'),
 
       async validatePasswords() {
         try {
           const validated = await this.$refs.accountEdit.validate();
           if (validated) {
-            this.resetAccountPassword({ credentials: this.credentials });
+            this.accountResetPassword({ credentials: this.credentials });
           } else {
             this.snackbarError('Please correct the fields in red');
           }

@@ -112,7 +112,7 @@
             this.snackbarError('Please correct the fields in red');
           }
         } catch (error) {
-          this.snackbarError('Something did not go right ');
+          this.snackbarError('something went wrong ');
         }
       },
     },
