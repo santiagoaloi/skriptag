@@ -20,8 +20,8 @@
                 >Already have an account? Login</v-btn
               >
               <div class="py-2 pr-2">
-                <Validation-provider v-slot="{ invalid, errors }" slim name="email" :rules="{ required: true, email: true }">
-                  <vs-input v-model="signupForm.email" maxlength="100" :danger="invalid" block placeholder="Email">
+                <Validation-provider v-slot="{ errors }" slim name="email" :rules="{ required: true, email: true }">
+                  <vs-input v-model="signupForm.email" maxlength="100" :danger="errors[0] > 0" block placeholder="Email">
                     <template #icon>
                       <v-icon dark>mdi-at</v-icon>
                     </template>
@@ -32,11 +32,11 @@
             </v-col>
             <v-col cols="12" lg="10">
               <div class="py-5 pr-2">
-                <Validation-provider v-slot="{ invalid, errors }" slim name="password" :rules="{ required: true }">
+                <Validation-provider v-slot="{ errors }" slim name="password" :rules="{ required: true }">
                   <vs-input
                     v-model="signupForm.password"
                     maxlength="100"
-                    :danger="invalid"
+                    :danger="errors[0] > 0"
                     block
                     type="password"
                     placeholder="New password"
@@ -52,8 +52,8 @@
             </v-col>
             <v-col cols="12" lg="5">
               <div class="py-2 pr-2">
-                <Validation-provider v-slot="{ invalid, errors }" slim name="name" :rules="{ required: true }">
-                  <vs-input v-model="signupForm.name" maxlength="20" :danger="invalid" block placeholder="Name">
+                <Validation-provider v-slot="{ errors }" slim name="name" :rules="{ required: true }">
+                  <vs-input v-model="signupForm.name" maxlength="20" :danger="errors[0] > 0" block placeholder="Name">
                     <template #icon>
                       <v-icon dark>mdi-account</v-icon>
                     </template>
@@ -64,8 +64,8 @@
             </v-col>
             <v-col cols="12" lg="5">
               <div class="py-2 pr-2">
-                <Validation-provider v-slot="{ invalid, errors }" slim name="last name" :rules="{ required: true }">
-                  <vs-input v-model="signupForm.lastName" maxlength="20" :danger="invalid" block placeholder="Last name">
+                <Validation-provider v-slot="{ errors }" slim name="last name" :rules="{ required: true }">
+                  <vs-input v-model="signupForm.lastName" maxlength="20" :danger="errors[0] > 0" block placeholder="Last name">
                     <template #icon>
                       <v-icon dark>mdi-account</v-icon>
                     </template>

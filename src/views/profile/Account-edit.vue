@@ -13,11 +13,11 @@
               <v-col cols="6">
                 <v-btn tabindex="-1" :ripple="false" x-small color="white" class="ml-n2 mb-n2" plain>Current password</v-btn>
                 <div class="py-2 pr-2">
-                  <Validation-provider v-slot="{ invalid, errors }" slim name="current password" :rules="{ required: true }">
+                  <Validation-provider v-slot="{ errors }" slim name="current password" :rules="{ required: true }">
                     <vs-input
                       v-model="credentials.currentPassword"
                       type="password"
-                      :danger="invalid"
+                      :danger="errors[0] > 0"
                       maxlength="20"
                       block
                       placeholder="Current password"
@@ -35,7 +35,7 @@
                 <v-btn tabindex="-1" :ripple="false" x-small color="white" class="ml-n2 mt-7 mb-n2" plain>New Password</v-btn>
                 <div class="py-2 pr-2">
                   <Validation-provider
-                    v-slot="{ invalid, errors }"
+                    v-slot="{ errors }"
                     slim
                     name="new password"
                     :rules="{ required: true, confirmed: 'confirmation' }"
@@ -44,7 +44,7 @@
                     <vs-input
                       v-model="credentials.newPassword"
                       type="password"
-                      :danger="invalid"
+                      :danger="errors[0] > 0"
                       maxlength="20"
                       block
                       placeholder="New password"
@@ -64,7 +64,7 @@
                 >
                 <div class="py-2 pr-2">
                   <Validation-provider
-                    v-slot="{ invalid, errors }"
+                    v-slot="{ errors }"
                     slim
                     name="repeat new password"
                     :rules="{ required: true }"
@@ -74,7 +74,7 @@
                     <vs-input
                       v-model="credentials.newPasswordRepeat"
                       type="password"
-                      :danger="invalid"
+                      :danger="errors[0] > 0"
                       maxlength="20"
                       block
                       placeholder="Repeat New password"
