@@ -107,6 +107,7 @@ const actions = {
       store.set('authentication/profile', {});
       dispatch('snackbar/snackbarSuccess', 'Account removed, Hope to see you again soon 💚', { root: true });
       router.push('/');
+      store.set('loaders/authLoader', false);
     } catch ({ ...error }) {
       store.set('loaders/authLoader', false);
       dispatch('snackbar/snackbarError', 'Incorrect password, try again', { root: true });
