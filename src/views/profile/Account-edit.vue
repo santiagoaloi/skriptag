@@ -1,6 +1,6 @@
 <template>
   <div style="color: #ccc">
-    <h1 class="mb-6">Account Setttings</h1>
+    <h1 class="mb-6 mt-3">Account Setttings</h1>
     <ValidationObserver ref="accountEdit" slim>
       <form class="d-flex flex-column" @submit.prevent="validatePasswords()">
         <v-row>
@@ -89,7 +89,9 @@
               </v-col>
               <v-col cols="12">
                 <div class="mt-8">
-                  <v-btn :loading="loading" type="submit" dark small color="grey darken-3">Change password</v-btn>
+                  <v-btn :loading="loading" type="submit" dark small color="grey darken-3"
+                    ><v-icon left> mdi-refresh</v-icon>Change password</v-btn
+                  >
                 </div>
               </v-col>
 
@@ -105,14 +107,16 @@
               </v-col>
 
               <v-col cols="12">
-                <v-btn dark small color="#de355f" @click="removeAccountDialog = true">Remove my account</v-btn>
+                <v-btn dark small color="#de355f" @click="removeAccountDialog = true">
+                  <v-icon left> mdi-delete-outline</v-icon>Remove my account</v-btn
+                >
               </v-col>
             </v-row>
             <v-row>
               <v-col cols="12">
                 <div class="mt-n3">
                   <v-divider class="my-4" style="background: #404040"></v-divider>
-                  <v-btn class="mr-2 my-2" dark small color="grey" @click="cancel()">Close</v-btn>
+                  <v-btn class="mr-2 my-2" dark small color="grey" @click="cancel()"><v-icon left>mdi-close</v-icon>Close</v-btn>
                 </div>
               </v-col>
             </v-row>

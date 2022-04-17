@@ -52,8 +52,8 @@
         <template v-if="!isLoggedIn">
           <BaseButton
             v-for="button in [
-              { name: 'login', icon: 'account-outline' },
-              { name: 'signup', icon: 'account-plus-outline' },
+              { name: 'login', icon: 'account-arrow-right' },
+              { name: 'signup', icon: 'account-plus' },
             ]"
             :key="button.name"
             dark

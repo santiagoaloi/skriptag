@@ -1,6 +1,6 @@
 <template>
   <div style="color: #ccc">
-    <h1 class="mb-6">Profile Setttings</h1>
+    <h1 class="mb-6 mt-3">Profile details</h1>
     <ValidationObserver ref="profileEdit" slim>
       <form class="d-flex flex-column" @submit.prevent="saveProfile()">
         <v-row>
@@ -46,8 +46,8 @@
           </v-col>
           <v-col cols="12">
             <div class="mt-2">
-              <v-btn class="mr-2" dark small color="grey" @click="cancel()">Cancel</v-btn>
-              <v-btn type="submit" dark small color="teal">Save</v-btn>
+              <v-btn class="mr-2" dark small color="grey" @click="cancel()"><v-icon left>mdi-close</v-icon>Close</v-btn>
+              <v-btn type="submit" dark small color="teal"><v-icon left> mdi-check-bold</v-icon>Save</v-btn>
             </div>
           </v-col>
         </v-row>

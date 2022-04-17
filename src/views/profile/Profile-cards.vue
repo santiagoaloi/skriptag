@@ -3,7 +3,7 @@
     <base-no-split v-if="!switchToCardSettings">
       <template #left>
         <v-row>
-          <v-col cols="3">
+          <v-col cols="2">
             <vs-card class="my-card" @click="switchCard('ProfileEdit')">
               <template #title>
                 <h3>Profile Details</h3>
@@ -12,14 +12,53 @@
                 <img :src="`https://picsum.photos/1280/800?${Date.now().toString().slice(0, 1)}`" alt="" />
               </template>
               <template #text>
-                <p>Edit your profile information such as your names, tags and more...</p>
+                <p>Edit your profile information such as your names, tags,and more...</p>
+              </template>
+            </vs-card>
+          </v-col>
+          <v-col cols="2">
+            <vs-card class="my-card" @click="switchCard('AccountEdit')">
+              <template #title>
+                <h3>Account settings</h3>
+              </template>
+              <template #img>
+                <img :src="`https://picsum.photos/1280/800?${Date.now().toString().slice(0, 1)}`" alt="" />
+              </template>
+              <template #text>
+                <p>Change your authentication settings,account email, 2FA, remove or disable your account.</p>
+              </template>
+            </vs-card>
+          </v-col>
+          <v-col cols="2">
+            <vs-card class="my-card">
+              <template #title>
+                <h3>Billing information</h3>
+              </template>
+              <template #img>
+                <img :src="`https://picsum.photos/1280/800?${Date.now().toString().slice(0, 1)}`" alt="" />
+              </template>
+              <template #text>
+                <p>Change your authentication settings,account email, 2FA, remove or disable your account.</p>
               </template>
             </vs-card>
           </v-col>
           <v-col cols="3">
-            <vs-card class="my-card" @click="switchCard('AccountEdit')">
+            <vs-card class="my-card">
               <template #title>
-                <h3>Account settings</h3>
+                <h3>Your purchased items</h3>
+              </template>
+              <template #img>
+                <img :src="`https://picsum.photos/1280/800?${Date.now().toString().slice(0, 1)}`" alt="" />
+              </template>
+              <template #text>
+                <p>Change your authentication settings,account email, 2FA, remove or disable your account.</p>
+              </template>
+            </vs-card>
+          </v-col>
+          <v-col cols="3">
+            <vs-card class="my-card">
+              <template #title>
+                <h3>Blog posts</h3>
               </template>
               <template #img>
                 <img :src="`https://picsum.photos/1280/800?${Date.now().toString().slice(0, 1)}`" alt="" />
