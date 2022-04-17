@@ -84,9 +84,9 @@
           const validated = await this.$refs.passwordField.validate();
           if (validated) {
             this.removeAccount(this.removeAccountCurrentPassowrd);
-          } else {
-            this.snackbarError('Please correct the fields in red');
+            return;
           }
+          this.snackbarError('Please correct the fields in red');
         } catch (error) {
           this.snackbarError('something went wrong ');
         }

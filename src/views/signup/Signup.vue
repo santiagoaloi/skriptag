@@ -114,9 +114,9 @@
           const validated = await this.$refs.profileEdit.validate();
           if (validated) {
             this.signup(this.signupForm);
-          } else {
-            this.snackbarError('Please correct the fields in red');
+            return;
           }
+          this.snackbarError('Please correct the fields in red');
         } catch (error) {
           this.snackbarError('Something went wrong');
         }

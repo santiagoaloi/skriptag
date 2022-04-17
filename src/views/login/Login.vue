@@ -3,8 +3,7 @@
     <div class="pa-3">
       <div class="d-flex flex-wrap flex-column">
         <h1 v-if="!recoveryMode">Login</h1>
-        <h1 v-else="!recoveryMode">Reset password</h1>
-
+        <h1 v-else>Reset password</h1>
         <p v-if="!recoveryMode">Time to get stuff done!</p>
         <p v-else>Account recovery email.</p>
       </div>
@@ -70,7 +69,7 @@
   </base-split-2>
 </template>
 <script>
-  import { call, sync, get } from 'vuex-pathify';
+  import { call, sync } from 'vuex-pathify';
 
   export default {
     name: 'LoginPage',
@@ -86,7 +85,6 @@
     },
 
     computed: {
-      ...get('authentication', ['isLoggedIn']),
       loading: sync('loaders/authLoader'),
     },
 
@@ -107,17 +105,12 @@
               this.accountRecovery(this.loginForm.email);
               return;
             }
-          } else {
-            this.snackbarError('Please correct the fields in red');
+            return;
           }
+          this.snackbarError('Please correct the fields in red');
         } catch (error) {
           this.snackbarError('something went wrong ');
         }
-      },
-
-      async delayRender(ms) {
-        await this.sleep(ms);
-        this.showSlide = true;
       },
     },
   };
