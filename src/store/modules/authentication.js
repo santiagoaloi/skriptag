@@ -181,6 +181,37 @@ const getters = {
   // Checks if the user is authenticated.
   isLoggedIn: (auth.onAuthStateChanged, (auth) => !isEmpty(auth.user)),
 
+  getPasswordComplexity: () => (value) => {
+    let progress = 0;
+
+    // at least one number
+    if (/\d/.test(value)) {
+      progress += 20;
+    }
+
+    // at least one capital letter
+    if (/(.*[A-Z].*)/.test(value)) {
+      progress += 20;
+    }
+
+    // at least a lowercase
+    if (/(.*[a-z].*)/.test(value)) {
+      progress += 20;
+    }
+
+    // more than 5 digits
+    if (value.length >= 6) {
+      progress += 20;
+    }
+
+    // at least one special character
+    if (/[^A-Za-z0-9]/.test(value)) {
+      progress += 20;
+    }
+
+    return progress;
+  },
+
   userId: (state, getters) => {
     if (getters.isLoggedIn) return state.user.uid;
   },

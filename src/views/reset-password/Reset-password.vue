@@ -19,6 +19,7 @@
                     maxlength="100"
                     block
                     placeholder="New password"
+                    :progress="getPasswordComplexity(newPassword)"
                   >
                     <template #icon>
                       <v-icon dark>mdi-account</v-icon>
@@ -56,8 +57,9 @@
     },
 
     computed: {
-      ...get('authentication', ['isLoggedIn']),
       loading: sync('loaders/authLoader'),
+      ...get('authentication', ['isLoggedIn']),
+      ...get('authentication', ['getPasswordComplexity']),
     },
 
     methods: {

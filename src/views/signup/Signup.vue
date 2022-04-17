@@ -40,6 +40,7 @@
                     block
                     type="password"
                     placeholder="New password"
+                    :progress="getPasswordComplexity(signupForm.password)"
                   >
                     <template #icon>
                       <v-icon dark>mdi-lock</v-icon>
@@ -88,7 +89,7 @@
   </base-split-2>
 </template>
 <script>
-  import { call, sync } from 'vuex-pathify';
+  import { call, sync, get } from 'vuex-pathify';
 
   export default {
     name: 'SignupPage',
@@ -104,9 +105,10 @@
     },
     computed: {
       loading: sync('loaders/signupLoader'),
+      ...get('authentication', ['getPasswordComplexity']),
     },
     methods: {
-      ...call('authentication/*'),
+      ...call('authentication', ['signupForm']),
       ...call('snackbar/*'),
 
       async validate() {

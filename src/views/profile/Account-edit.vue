@@ -32,13 +32,14 @@
               </v-col>
               <v-col sm="6"></v-col>
               <v-col cols="6">
-                <v-btn tabindex="-1" :ripple="false" x-small color="white" class="ml-n2 mt-5 mb-n2" plain>New Password</v-btn>
+                <v-btn tabindex="-1" :ripple="false" x-small color="white" class="ml-n2 mt-7 mb-n2" plain>New Password</v-btn>
                 <div class="py-2 pr-2">
                   <Validation-provider
                     v-slot="{ invalid, errors }"
                     slim
                     name="new password"
                     :rules="{ required: true, confirmed: 'confirmation' }"
+                    mode="passive"
                   >
                     <vs-input
                       v-model="credentials.newPassword"
@@ -47,6 +48,7 @@
                       maxlength="20"
                       block
                       placeholder="New password"
+                      :progress="getPasswordComplexity(credentials.newPassword)"
                     >
                       <template #icon>
                         <v-icon dark>mdi-account</v-icon>
@@ -57,7 +59,7 @@
                 </div>
               </v-col>
               <v-col cols="6">
-                <v-btn tabindex="-1" :ripple="false" x-small color="white" class="ml-n2 mt-5 mb-n2" plain
+                <v-btn tabindex="-1" :ripple="false" x-small color="white" class="ml-n2 mt-7 mb-n2" plain
                   >Repeat New Password</v-btn
                 >
                 <div class="py-2 pr-2">
@@ -67,6 +69,7 @@
                     name="repeat new password"
                     :rules="{ required: true }"
                     vid="confirmation"
+                    mode="passive"
                   >
                     <vs-input
                       v-model="credentials.newPasswordRepeat"
@@ -121,7 +124,7 @@
   </div>
 </template>
 <script>
-  import { call, sync } from 'vuex-pathify';
+  import { call, sync, get } from 'vuex-pathify';
   import AccountDeleteDialog from './Account-delete-dialog.vue';
   // import { cloneDeep, merge } from 'lodash';
 
@@ -136,7 +139,6 @@
           newPassword: '',
           newPasswordRepeat: '',
         },
-
         removeAccountCurrentPassowrd: '',
         removeAccountDialog: false,
       };
@@ -144,6 +146,7 @@
 
     computed: {
       loading: sync('loaders/authLoader'),
+      ...get('authentication', ['getPasswordComplexity']),
     },
 
     methods: {

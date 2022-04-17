@@ -92,7 +92,7 @@
 
   .vs-input__message {
     position: absolute;
-    top: 43px;
+    top: 45px;
   }
 
   .v-application a {

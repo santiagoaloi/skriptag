@@ -1,7 +1,7 @@
 <template>
   <v-btn
     v-animation:shrink="{ link: true, longPress: true }"
-    class="teal--text text--accent-3"
+    style="color: #ccc"
     v-bind="$attrs"
     :ripple="false"
     large

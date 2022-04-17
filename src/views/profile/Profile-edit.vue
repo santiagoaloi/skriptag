@@ -106,7 +106,7 @@
           const validated = await this.$refs.profileEdit.validate();
           if (validated) {
             this.updateProfileSettings();
-            this.snackbarSuccess('Profile saved');
+            this.snackbarSuccess('Profile details saved');
             this.$emit('close');
           } else {
             this.snackbarError('Please correct the fields in red');
