@@ -1,15 +1,17 @@
 <template>
-  <base-split-2 id="login" col="6" right>
+  <base-split-2 v-if="mode" v-show="!isLoggedIn" id="login" col="6" right>
     <div class="pa-3">
       <div class="d-flex flex-wrap flex-column">
-        <h1>Reset Password</h1>
-        <p v-if="!recoveryMode">Type your new password here.</p>
-        <p v-else>Account recovery, password reset.</p>
+        <h1 v-if="mode === 'resetPassword'">Reset Password</h1>
+        <h1 v-else>Account verification</h1>
+
+        <p v-if="mode === 'resetPassword'">Type your new password here.</p>
+        <p v-else>Verification in progres...</p>
       </div>
       <ValidationObserver ref="newPassword" slim>
         <form class="d-flex flex-column" @submit.prevent="validateNewPassword()">
           <v-row no-gutters>
-            <v-col cols="12" lg="10">
+            <v-col v-if="mode === 'resetPassword'" cols="12" lg="10">
               <div class="pb-7 pr-2">
                 <Validation-provider v-slot="{ errors }" mode="lazy" name="new password" :rules="{ required: true }">
                   <vs-input
@@ -31,10 +33,22 @@
             </v-col>
             <v-col cols="12" lg="10">
               <v-card-actions class="pa-0">
-                <Base-button dark color="grey darken-3" large @click="$router.push('login')"> Cancel</Base-button>
-                <Base-button class="teal--text text--accent-3" type="submit" :loading="loading" dark color="grey darken-3" large>
-                  Change password</Base-button
-                >
+                <template v-if="mode === 'resetPassword'">
+                  <Base-button dark color="grey darken-3" large @click="$router.push('login')"> Cancel</Base-button>
+                  <Base-button
+                    class="teal--text text--accent-3"
+                    type="submit"
+                    :loading="loading"
+                    dark
+                    color="grey darken-3"
+                    large
+                  >
+                    Change password</Base-button
+                  >
+                </template>
+                <!-- <template v-if="mode === 'resetPassword'">
+                  <Base-button dark color="grey darken-3" large @click="$router.push('login')"> Change password</Base-button>
+                </template> -->
               </v-card-actions>
             </v-col>
           </v-row>
@@ -47,12 +61,13 @@
   import { call, sync, get } from 'vuex-pathify';
 
   export default {
-    name: 'ResetPassword',
+    name: 'AccountManagement',
 
     data() {
       return {
         newPassword: '',
         oobCode: this.$route.query.oobCode,
+        mode: this.$route.query.mode,
       };
     },
 
@@ -62,9 +77,19 @@
       ...get('authentication', ['getPasswordComplexity']),
     },
 
+    mounted() {
+      if (this.isLoggedIn || !this.mode) {
+        this.$router.push('profile');
+      }
+      setTimeout(() => {
+        if (this.mode === 'verifyEmail') {
+          this.accountEmailVerification(this.oobCode);
+        }
+      }, 1000);
+    },
+
     methods: {
-      ...call('authentication', ['accountRecoveryResetPassword']),
-      ...call('app', ['sleep']),
+      ...call('authentication', ['accountRecoveryResetPassword', 'accountEmailVerification']),
       ...call('snackbar/*'),
 
       async validateNewPassword() {
@@ -78,11 +103,6 @@
         } catch (error) {
           this.snackbarError('something went wrong ');
         }
-      },
-
-      async delayRender(ms) {
-        await this.sleep(ms);
-        this.showSlide = true;
       },
     },
   };

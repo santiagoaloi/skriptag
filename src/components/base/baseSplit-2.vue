@@ -104,16 +104,6 @@
 </script>
 
 <style scoped>
-  .pattern-bg {
-    background-color: #25272c;
-    opacity: 1;
-    background-image: linear-gradient(135deg, #24262a 25%, transparent 25%), linear-gradient(225deg, #24262a 25%, transparent 25%),
-      linear-gradient(45deg, #24262a 25%, transparent 25%), linear-gradient(315deg, #24262a 25%, #25272c 25%);
-    background-position: 65px 0, 65px 0, 0 0, 0 0;
-    background-size: 130px 130px;
-    background-repeat: repeat;
-  }
-
   .diagonal-divider-left {
     clip-path: polygon(0 0, 100% 0, 86% 100%, 0% 100%);
   }

@@ -4,6 +4,8 @@ import { make } from 'vuex-pathify';
 const state = {
   authLoader: false,
   signupLoader: false,
+  verifyLoader: false,
+  removeAccountLoader: false,
 };
 
 const mutations = make.mutations(state);

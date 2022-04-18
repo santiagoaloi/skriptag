@@ -1,9 +1,7 @@
 <template>
   <BaseDialog v-model="internalValue" no-toolbar dense close-only no-actions width="500" @close="cancel()">
-    <v-card-title class="text-h5"> Remove my account</v-card-title>
-    <v-card-text
-      >This action is permament, you will not be able to undo it. All your data, will be removed immediately.
-    </v-card-text>
+    <v-card-title class="text-h5"> Send verification email</v-card-title>
+    <v-card-text>Enter your current password. </v-card-text>
 
     <ValidationObserver ref="passwordField" slim>
       <form class="d-flex flex-column" @submit.prevent="validatePassword()">
@@ -11,13 +9,7 @@
           <v-btn tabindex="-1" :ripple="false" x-small color="white" class="ml-n2 mb-n2" plain>Password</v-btn>
           <div class="py-2 pr-2">
             <Validation-provider v-slot="{ invalid, errors }" slim name="current password" :rules="{ required: true }">
-              <vs-input
-                v-model="removeAccountCurrentPassowrd"
-                :danger="invalid"
-                type="password"
-                block
-                placeholder="Current account password"
-              >
+              <vs-input v-model="password" :danger="invalid" type="password" block placeholder="Current account password">
                 <template #icon>
                   <v-icon dark>mdi-lock</v-icon>
                 </template>
@@ -30,7 +22,7 @@
         <v-card-actions class="px-6">
           <v-spacer></v-spacer>
           <v-btn color="grey lighten-1" text @click="cancel()"> Cancel </v-btn>
-          <v-btn :loading="loading" color="#de355f" text type="submit"> Remove </v-btn>
+          <v-btn :loading="loading" color="#de355f" text type="submit"> continue </v-btn>
         </v-card-actions>
       </form>
     </ValidationObserver>
@@ -41,7 +33,7 @@
   // import { cloneDeep, merge } from 'lodash';
 
   export default {
-    name: 'AccountDeleteDialog',
+    name: 'AccountVerifyDialog',
 
     props: {
       value: {
@@ -51,13 +43,13 @@
     },
     data() {
       return {
-        removeAccountCurrentPassowrd: '',
         internalValue: this.value,
+        password: '',
       };
     },
 
     computed: {
-      loading: sync('loaders/removeAccountLoader'),
+      loading: sync('loaders/verifyLoader'),
     },
 
     watch: {
@@ -73,14 +65,15 @@
     },
 
     methods: {
-      ...call('authentication', ['removeAccount']),
+      ...call('authentication', ['resendActivationEmail']),
       ...call('snackbar/*'),
 
       async validatePassword() {
         try {
           const validated = await this.$refs.passwordField.validate();
           if (validated) {
-            this.removeAccount(this.removeAccountCurrentPassowrd);
+            this.resendActivationEmail(this.password);
+            this.cancel();
             return;
           }
           this.snackbarError('Please correct the fields in red');

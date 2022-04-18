@@ -2,7 +2,7 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { getStorage, ref } from 'firebase/storage';
+import { getStorage } from 'firebase/storage';
 
 // The .env file contains the api keys used below.
 // const firebaseConfig = JSON.parse(process.env.VUE_APP_FIREBASE_CONFIG);

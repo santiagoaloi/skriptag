@@ -5,13 +5,13 @@
     :fullscreen="$vuetify.breakpoint.smAndDown || isMaximized || fullscreen"
     :hide-overlay="noOverlay || fullscreen"
     :overlay-opacity="0.9"
-    :overlay-color="'rgba(14, 9, 15, 1)'"
+    :overlay-color="'rgba(14, 9, 15)'"
     scrollable
     class="d-flex"
     v-on="$listeners"
   >
     <div>
-      <v-toolbar v-if="!noToolbar" class="pr-3 select-none d-flex flex-column" flat :dense="dense" dark color="#24272c">
+      <v-toolbar v-if="!noToolbar" class="pr-3 d-flex flex-column" flat :dense="dense" dark color="#24272c">
         <template v-if="icon">
           <v-btn x-small color="white" text fab class="mr-3 pointer-events-none">
             <v-icon>{{ icon }}</v-icon>

@@ -1,6 +1,6 @@
 <template>
   <v-fade-transition hide-on-leave mode="out-in">
-    <router-view />
+    <router-view class="pattern-bg" />
   </v-fade-transition>
 </template>
 
@@ -97,5 +97,15 @@
 
   .v-application a {
     color: #6ee6b9 !important;
+  }
+
+  .pattern-bg {
+    background-color: #25272c;
+    opacity: 1;
+    background-image: linear-gradient(135deg, #24262a 25%, transparent 25%), linear-gradient(225deg, #24262a 25%, transparent 25%),
+      linear-gradient(45deg, #24262a 25%, transparent 25%), linear-gradient(315deg, #24262a 25%, #25272c 25%);
+    background-position: 65px 0, 65px 0, 0 0, 0 0;
+    background-size: 130px 130px;
+    background-repeat: repeat;
   }
 </style>

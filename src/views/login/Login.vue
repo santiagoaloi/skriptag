@@ -50,17 +50,47 @@
                   </vs-input>
                 </Validation-provider>
               </div>
-              <v-card-actions class="pa-0">
-                <Base-button v-if="!recoveryMode" type="submit" :loading="loading" dark color="grey darken-3" large>
+
+              <div class="ml-n1">
+                <Base-button
+                  v-if="!recoveryMode"
+                  :block="!$vuetify.breakpoint.smAndUp"
+                  :class="$vuetify.breakpoint.smAndUp ? 'ml-2' : 'mt-3'"
+                  type="submit"
+                  :loading="loading"
+                  dark
+                  color="grey darken-3"
+                  large
+                  class="teal--text text--accent-3"
+                >
                   Login</Base-button
                 >
-                <Base-button v-if="recoveryMode" dark color="grey darken-3" large @click="recoveryMode = false">
+
+                <Base-button
+                  v-if="recoveryMode"
+                  :block="!$vuetify.breakpoint.smAndUp"
+                  :class="$vuetify.breakpoint.smAndUp ? 'ml-2' : 'mt-3'"
+                  dark
+                  color="grey darken-3"
+                  large
+                  @click="recoveryMode = false"
+                >
                   Cancel</Base-button
                 >
-                <Base-button v-if="recoveryMode" :loading="loading" type="submit" dark color="grey darken-3" large>
+                <Base-button
+                  v-if="recoveryMode"
+                  :block="!$vuetify.breakpoint.smAndUp"
+                  :class="$vuetify.breakpoint.smAndUp ? 'ml-2' : 'mt-3'"
+                  :loading="loading"
+                  type="submit"
+                  dark
+                  color="grey darken-3"
+                  large
+                  class="teal--text text--accent-3"
+                >
                   Reset password</Base-button
                 >
-              </v-card-actions>
+              </div>
             </v-col>
           </v-row>
         </form>
@@ -90,7 +120,6 @@
 
     methods: {
       ...call('authentication', ['login', 'accountRecovery']),
-      ...call('app', ['sleep']),
       ...call('snackbar/*'),
 
       async validateLoginForm() {
@@ -101,8 +130,10 @@
               this.login(this.loginForm);
               return;
             }
+
             if (this.recoveryMode) {
               this.accountRecovery(this.loginForm.email);
+              this.recoveryMode = false;
               return;
             }
             return;

@@ -6,13 +6,13 @@
     gradient="to bottom , rgba(20,20,20, .8) 40%,  rgba(0,0,0,.9) 160%"
     src="@/assets/static/bg2.jpg"
   >
-    <!-- :src="`https://picsum.photos/1280/800?${Date.now().toString().slice(0, 1)}`" -->
+    :src="`https://picsum.photos/1280/800?${Date.now().toString().slice(0, 1)}`"
 
     <v-sheet style="color: #ccc" class="d-flex justify-center align-center flex-column transparent mx-auto" width="50vw">
       <v-img src="@/assets/static/auth.svg" width="250"> </v-img>
       <h3>WRONG TURN?</h3>
-      <h5>You look lost, stranger. This page requires super-powers.</h5>
-      <v-btn class="mt-4"> Go back</v-btn>
+      <h5>You look lost, stranger. This page requires super-powerss.</h5>
+      <v-btn class="mt-4" @click="$router.push('/')"> Go back</v-btn>
     </v-sheet>
   </v-img>
 </template>

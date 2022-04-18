@@ -9,47 +9,6 @@
         </template>
         Home
       </vs-sidebar-item>
-      <!-- <vs-sidebar-item id="market">
-        <template #icon>
-          <v-icon dark> mdi-cart-outline </v-icon>
-        </template>
-        Market Overview
-      </vs-sidebar-item>
-      <vs-sidebar-item id="Music">
-        <template #icon>
-          <v-icon dark> mdi-music-circle-outline </v-icon>
-        </template>
-        Music
-      </vs-sidebar-item>
-      <vs-sidebar-group>
-        <template #header>
-          <vs-sidebar-item arrow>
-            <template #icon>
-              <v-icon dark> mdi-account-multiple-outline </v-icon>
-            </template>
-            Social media
-          </vs-sidebar-item>
-        </template>
-
-        <vs-sidebar-item id="Instagram">
-          <template #icon>
-            <v-icon dark> mdi-instagram </v-icon>
-          </template>
-          Instagram
-        </vs-sidebar-item>
-        <vs-sidebar-item id="twitter">
-          <template #icon>
-            <v-icon dark> mdi-twitter </v-icon>
-          </template>
-          Twitter
-        </vs-sidebar-item>
-        <vs-sidebar-item id="Facebook">
-          <template #icon>
-            <v-icon dark> mdi-facebook </v-icon>
-          </template>
-          Facebook
-        </vs-sidebar-item>
-      </vs-sidebar-group> -->
 
       <template #footer>
         <v-scale-transition>
@@ -60,9 +19,9 @@
             </vs-avatar>
 
             <vs-avatar class="pa-1 cursor-pointer" @click="$router.push('/profile')">
-              <baseAvatarImg v-if="!profile.avatar" :height="25" />
+              <baseAvatarImg v-if="!avatar" :height="25" />
               <v-avatar v-else min-height="25" min-width="25">
-                <v-img :src="profile.avatar" flat>
+                <v-img :src="avatar" flat>
                   <template #placeholder>
                     <v-row class="fill-height ma-0" align="center" justify="center">
                       <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
@@ -91,7 +50,7 @@
     },
 
     computed: {
-      ...get('authentication', ['isLoggedIn']),
+      ...get('authentication', ['isLoggedIn', 'avatar']),
       ...sync('authentication', ['profile']),
     },
 

@@ -3,8 +3,8 @@
     <base-no-split v-if="!switchToCardSettings">
       <template #left>
         <v-row>
-          <v-col cols="2">
-            <vs-card class="my-card" @click="switchCard('ProfileEdit')">
+          <v-col cols="12" sm="6" md="2">
+            <vs-card disabled class="my-card" @click="switchCard('ProfileEdit')">
               <template #title>
                 <h3>Profile Details</h3>
               </template>
@@ -16,8 +16,8 @@
               </template>
             </vs-card>
           </v-col>
-          <v-col cols="2">
-            <vs-card class="my-card" @click="switchCard('AccountEdit')">
+          <v-col cols="12" sm="6" md="2">
+            <vs-card disabled class="my-card" @click="switchCard('AccountEdit')">
               <template #title>
                 <h3>Account settings</h3>
               </template>
@@ -29,8 +29,8 @@
               </template>
             </vs-card>
           </v-col>
-          <v-col cols="2">
-            <vs-card class="my-card">
+          <v-col cols="12" sm="6" md="2">
+            <vs-card :class="{ 'disabled-card': !verified }" disabled class="my-card">
               <template #title>
                 <h3>Billing information</h3>
               </template>
@@ -42,8 +42,8 @@
               </template>
             </vs-card>
           </v-col>
-          <v-col cols="3">
-            <vs-card class="my-card">
+          <v-col cols="12" sm="6" md="3">
+            <vs-card :class="{ 'disabled-card': !verified }" disabled class="my-card">
               <template #title>
                 <h3>Your purchased items</h3>
               </template>
@@ -55,8 +55,8 @@
               </template>
             </vs-card>
           </v-col>
-          <v-col cols="3">
-            <vs-card class="my-card">
+          <v-col cols="12" sm="6" md="3">
+            <vs-card :class="{ 'disabled-card': !verified }" disabled class="my-card">
               <template #title>
                 <h3>Blog posts</h3>
               </template>
@@ -80,6 +80,7 @@
 </template>
 
 <script>
+  import { get } from 'vuex-pathify';
   import ProfileEdit from './Profile-edit';
   import AccountEdit from './Account-edit';
 
@@ -96,6 +97,9 @@
       };
     },
 
+    computed: {
+      ...get('authentication', ['verified']),
+    },
     methods: {
       switchCard(card) {
         this.switchToCardSettings = true;
@@ -110,6 +114,9 @@
   };
 </script>
 <style>
+  .disabled-card {
+    pointer-events: none;
+  }
   .my-card .vs-card {
     width: auto !important;
     height: 100% !important;

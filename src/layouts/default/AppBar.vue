@@ -44,7 +44,7 @@
           </vs-select> -->
 
         <v-scale-transition>
-          <v-btn v-if="isLoggedIn" style="position: fixed" :ripple="false" color="black white--text" @click="logout">
+          <v-btn v-if="isLoggedIn" style="position: fixed" :ripple="false" dark color="rgba(10,10,10 , .3)" @click="logout">
             {{ `Logout ${firstAndShortLast}` }}
           </v-btn>
         </v-scale-transition>

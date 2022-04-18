@@ -4,6 +4,7 @@ export default [
     name: 'Default',
     component: () => import(/* webpackChunkName: 'home-page' */ '@/views/home'),
   },
+
   {
     path: '/Deny',
     name: 'deny',
@@ -24,10 +25,10 @@ export default [
   },
 
   {
-    path: '/ResetPassword',
-    name: 'resetPassword',
+    path: '/AccountMgmt',
+    name: 'accountMgmt',
 
-    component: () => import(/* webpackChunkName: 'reset-password' */ '@/views/reset-password'),
+    component: () => import(/* webpackChunkName: 'account-mgmt' */ '@/views/account-mgmt'),
   },
 
   {

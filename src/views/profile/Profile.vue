@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-show="isLoggedIn">
     <v-slide-y-transition>
       <div v-show="imgBannerLoaded">
         <v-img
@@ -50,6 +50,12 @@
             <div v-if="$vuetify.breakpoint.smAndUp" class="ml-13">
               <v-row no-gutters>
                 <v-col cols="12">
+                  <v-chip class="mb-4" small :color="verified ? 'teal darken-2' : 'orange darken-1'" text-color="white">
+                    <v-avatar left>
+                      <v-icon small>mdi-check-decagram</v-icon>
+                    </v-avatar>
+                    {{ verified ? 'Verified' : 'pending verification' }}
+                  </v-chip>
                   <p class="mb-n2">{{ profile.email }}</p>
                 </v-col>
                 <!-- <v-col cols="12"> -->
@@ -113,7 +119,7 @@
     },
 
     computed: {
-      ...get('authentication', ['lastLogin', 'userId', 'fullName']),
+      ...get('authentication', ['lastLogin', 'userId', 'fullName', 'verified', 'isLoggedIn']),
       ...sync('authentication', ['profile']),
     },
 
@@ -150,7 +156,7 @@
             this.progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           },
           (error) => {
-            console.log(error.code);
+            // console.log(error.code);
           },
           () => {
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
@@ -180,7 +186,7 @@
             this.progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           },
           (error) => {
-            console.log(error.code);
+            // console.log(error.code);
           },
           () => {
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {

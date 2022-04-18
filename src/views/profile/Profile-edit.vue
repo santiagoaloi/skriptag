@@ -4,7 +4,7 @@
     <ValidationObserver ref="profileEdit" slim>
       <form class="d-flex flex-column" @submit.prevent="saveProfile()">
         <v-row>
-          <v-col sm="6" md="4">
+          <v-col cols="12" sm="6" md="4">
             <v-row no-gutters>
               <v-col cols="12">
                 <v-btn tabindex="-1" :ripple="false" x-small color="white" class="ml-n2 mb-n2" plain>Name</v-btn>
@@ -46,8 +46,24 @@
           </v-col>
           <v-col cols="12">
             <div class="mt-2">
-              <v-btn class="mr-2" dark small color="grey" @click="cancel()"><v-icon left>mdi-close</v-icon>Close</v-btn>
-              <v-btn type="submit" dark small color="teal"><v-icon left> mdi-check-bold</v-icon>Save</v-btn>
+              <v-btn
+                :block="!$vuetify.breakpoint.smAndUp"
+                :class="$vuetify.breakpoint.smAndUp ? '' : 'mt-3'"
+                dark
+                small
+                color="grey"
+                @click="cancel()"
+                ><v-icon left>mdi-close</v-icon>Close</v-btn
+              >
+              <v-btn
+                :block="!$vuetify.breakpoint.smAndUp"
+                :class="$vuetify.breakpoint.smAndUp ? 'ml-2' : 'mt-3'"
+                type="submit"
+                dark
+                small
+                color="teal"
+                ><v-icon left> mdi-check-bold</v-icon>Save</v-btn
+              >
             </div>
           </v-col>
         </v-row>

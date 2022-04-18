@@ -4,16 +4,22 @@
     <ValidationObserver ref="accountEdit" slim>
       <form class="d-flex flex-column" @submit.prevent="validatePasswords()">
         <v-row>
-          <v-col sm="6" md="6">
+          <v-col cols="12" md="6">
             <v-row no-gutters>
               <v-col cols="12">
                 <h3 class="mb-2">Change password</h3>
               </v-col>
 
-              <v-col cols="6">
-                <v-btn tabindex="-1" :ripple="false" x-small color="white" class="ml-n2 mb-n2" plain>Current password</v-btn>
+              <v-col cols="12" sm="6">
+                <v-btn tabindex="-1" :ripple="false" x-small color="white" class="ml-n2 mb-n2" plain>Old password </v-btn>
                 <div class="py-2 pr-2">
-                  <Validation-provider v-slot="{ errors }" slim name="current password" :rules="{ required: true }">
+                  <Validation-provider
+                    v-slot="{ errors }"
+                    mode="passive"
+                    slim
+                    name="current password"
+                    :rules="{ required: true }"
+                  >
                     <vs-input
                       v-model="credentials.currentPassword"
                       type="password"
@@ -30,8 +36,8 @@
                   </Validation-provider>
                 </div>
               </v-col>
-              <v-col sm="6"></v-col>
-              <v-col cols="6">
+              <v-col sm="12"></v-col>
+              <v-col cols="12" sm="6">
                 <v-btn tabindex="-1" :ripple="false" x-small color="white" class="ml-n2 mt-7 mb-n2" plain>New Password</v-btn>
                 <div class="py-2 pr-2">
                   <Validation-provider
@@ -58,10 +64,10 @@
                   </Validation-provider>
                 </div>
               </v-col>
-              <v-col cols="6">
+              <v-col cols="12" sm="6">
                 <v-btn tabindex="-1" :ripple="false" x-small color="white" class="ml-n2 mt-7 mb-n2" plain
-                  >Repeat New Password</v-btn
-                >
+                  >Confirm new password
+                </v-btn>
                 <div class="py-2 pr-2">
                   <Validation-provider
                     v-slot="{ errors }"
@@ -89,7 +95,14 @@
               </v-col>
               <v-col cols="12">
                 <div class="mt-8">
-                  <v-btn :loading="loading" type="submit" dark small color="grey darken-3"
+                  <v-btn
+                    :block="!$vuetify.breakpoint.smAndUp"
+                    :class="$vuetify.breakpoint.smAndUp ? 'ml-2' : 'mt-3'"
+                    :loading="loading"
+                    type="submit"
+                    dark
+                    small
+                    color="grey darken-3"
                     ><v-icon left> mdi-refresh</v-icon>Change password</v-btn
                   >
                 </div>
@@ -106,11 +119,20 @@
                 </div>
               </v-col>
 
-              <v-col cols="12">
-                <v-btn dark small color="#de355f" @click="removeAccountDialog = true">
-                  <v-icon left> mdi-delete-outline</v-icon>Remove my account</v-btn
-                >
-              </v-col>
+              <v-btn :block="!$vuetify.breakpoint.smAndUp" dark small color="#de355f" @click="removeAccountDialog = true">
+                <v-icon left> mdi-delete-outline</v-icon>Remove my account</v-btn
+              >
+              <v-btn
+                v-if="!verified"
+                :block="!$vuetify.breakpoint.smAndUp"
+                :class="$vuetify.breakpoint.smAndUp ? 'ml-2' : 'mt-3'"
+                dark
+                small
+                color="orange darken-3"
+                @click="verifyAccountDialog = true"
+              >
+                <v-icon left> mdi-email-seal</v-icon>Resend verification email</v-btn
+              >
             </v-row>
             <v-row>
               <v-col cols="12">
@@ -125,16 +147,17 @@
       </form>
     </ValidationObserver>
     <account-delete-dialog v-model="removeAccountDialog" @close="removeAccountDialog = false" />
+    <account-verify-dialog v-model="verifyAccountDialog" @close="verifyAccountDialog = false" />
   </div>
 </template>
 <script>
   import { call, sync, get } from 'vuex-pathify';
   import AccountDeleteDialog from './Account-delete-dialog.vue';
-  // import { cloneDeep, merge } from 'lodash';
+  import AccountVerifyDialog from './Account-verify-dialog.vue';
 
   export default {
     name: 'AccountEdit',
-    components: { AccountDeleteDialog },
+    components: { AccountDeleteDialog, AccountVerifyDialog },
 
     data() {
       return {
@@ -145,12 +168,13 @@
         },
         removeAccountCurrentPassowrd: '',
         removeAccountDialog: false,
+        verifyAccountDialog: false,
       };
     },
 
     computed: {
       loading: sync('loaders/authLoader'),
-      ...get('authentication', ['getPasswordComplexity']),
+      ...get('authentication', ['getPasswordComplexity', 'verified']),
     },
 
     methods: {
@@ -162,12 +186,21 @@
           const validated = await this.$refs.accountEdit.validate();
           if (validated) {
             this.accountResetPassword({ credentials: this.credentials });
+            this.clearCredentialsform();
           } else {
             this.snackbarError('Please correct the fields in red');
           }
         } catch (error) {
           this.snackbarError('Something went wrong ');
         }
+      },
+
+      clearCredentialsform() {
+        this.credentials = {
+          currentPassword: '',
+          newPassword: '',
+          newPasswordRepeat: '',
+        };
       },
 
       cancel() {

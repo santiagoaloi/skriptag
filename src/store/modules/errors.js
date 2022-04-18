@@ -12,11 +12,11 @@ const actions = {
 
   authMessagesSnackbar({ dispatch }, message) {
     if (message.includes('auth/invalid-email')) {
-      dispatch('snackbar/snackbarError', 'This email is not valid, please check that again.', { root: true });
+      dispatch('snackbar/snackbarError', 'This email is not valid, please try again.', { root: true });
       return;
     }
     if (message.includes('auth/wrong-password')) {
-      dispatch('snackbar/snackbarError', 'Your current password is incorrect , please try again.', { root: true });
+      dispatch('snackbar/snackbarError', 'Incorrect password , please try again.', { root: true });
       return;
     }
     if (message.includes('auth/user-not-found')) {
@@ -29,7 +29,9 @@ const actions = {
     }
 
     if (message.includes('auth/invalid-action-code')) {
-      dispatch('snackbar/snackbarError', 'The recovery token is expired or invalid.', { root: true });
+      dispatch('snackbar/snackbarError', 'The recovery token is expired', {
+        root: true,
+      });
       return;
     }
 

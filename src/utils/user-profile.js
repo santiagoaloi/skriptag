@@ -7,7 +7,7 @@ export async function setUserAndProfile({ isAuth }) {
   const uuid = isAuth?.uid;
 
   // Set user object to Vuex.
-  store.set('authentication/user', !isAuth ? {} : isAuth);
+  store.set('authentication/user', isAuth ?? {});
 
   // Set user profile to Vuex.
   const PROFILE_COLLECTION = 'users';

@@ -37,7 +37,7 @@ router.beforeEach(async (to, from, next) => {
   // If the route requires the user to be authenticated and it is not,
   // route to the unauthorized view.
   if (requiresAuth && !isAuth) {
-    next('/deny');
+    next('/login');
     return;
   }
 

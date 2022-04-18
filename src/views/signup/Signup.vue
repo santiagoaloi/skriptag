@@ -19,7 +19,7 @@
                 @click="$router.push('login')"
                 >Already have an account? Login</v-btn
               >
-              <div class="py-2 pr-2">
+              <div class="py-5 pr-2">
                 <Validation-provider v-slot="{ errors }" slim name="email" :rules="{ required: true, email: true }">
                   <vs-input v-model="signupForm.email" maxlength="100" :danger="errors.length > 0" block placeholder="Email">
                     <template #icon>
@@ -51,8 +51,8 @@
               </div>
             </v-col>
             <v-col cols="12" lg="5">
-              <div class="py-2 pr-2">
-                <Validation-provider v-slot="{ errors }" slim name="name" :rules="{ required: true }">
+              <div class="py-5 pr-2">
+                <Validation-provider v-slot="{ errors }" slim name="name" :rules="{ required: true, alpha_spaces: true }">
                   <vs-input v-model="signupForm.name" maxlength="20" :danger="errors.length > 0" block placeholder="Name">
                     <template #icon>
                       <v-icon dark>mdi-account</v-icon>
@@ -63,8 +63,8 @@
               </div>
             </v-col>
             <v-col cols="12" lg="5">
-              <div class="py-2 pr-2">
-                <Validation-provider v-slot="{ errors }" slim name="last name" :rules="{ required: true }">
+              <div class="py-5 pr-2">
+                <Validation-provider v-slot="{ errors }" slim name="last name" :rules="{ required: true, alpha_spaces: true }">
                   <vs-input
                     v-model="signupForm.lastName"
                     maxlength="20"
@@ -83,10 +83,21 @@
             </v-col>
 
             <v-col cols="12" lg="10">
-              <v-card-actions class="py-7">
-                <v-spacer />
-                <Base-button type="submit" :loading="loading" dark color="grey darken-3" large> Signup</Base-button>
-              </v-card-actions>
+              <div class="py-7">
+                <Base-button
+                  style="float: right"
+                  :block="!$vuetify.breakpoint.smAndUp"
+                  :class="$vuetify.breakpoint.smAndUp ? 'mr-3' : 'mt-3'"
+                  type="submit"
+                  :loading="loading"
+                  dark
+                  color="grey darken-3"
+                  large
+                  class="teal--text text--accent-3"
+                >
+                  Signup</Base-button
+                >
+              </div>
             </v-col>
           </v-row>
         </form>
@@ -114,7 +125,7 @@
       ...get('authentication', ['getPasswordComplexity']),
     },
     methods: {
-      ...call('authentication', ['signupForm']),
+      ...call('authentication', ['signup']),
       ...call('snackbar/*'),
 
       async validate() {
