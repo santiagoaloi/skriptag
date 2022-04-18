@@ -6,17 +6,12 @@ export default [
   },
 
   {
-    path: '/Deny',
-    name: 'deny',
-    component: () => import(/* webpackChunkName: 'unauthorized-page' */ '@/views/deny'),
-  },
-
-  {
     path: '/Login',
     name: 'login',
 
     component: () => import(/* webpackChunkName: 'login-page' */ '@/views/login'),
   },
+
   {
     path: '/Signup',
     name: 'signup',

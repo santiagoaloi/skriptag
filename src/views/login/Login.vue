@@ -1,29 +1,30 @@
 <template>
-  <base-split-2 id="login" col="6" right>
+  <base-split-2 v-if="!isLoggedIn" id="login" col="6" right>
     <div class="pa-3">
       <div class="d-flex flex-wrap flex-column pl-1">
-        <h1 v-if="!recoveryMode">Login</h1>
-        <h1 v-else>Reset password</h1>
-        <p v-if="!recoveryMode">Time to get stuff done!</p>
-        <p v-else>Account recovery email.</p>
+        <template v-if="!recoveryMode">
+          <h1>Login</h1>
+          <p>Time to get stuff done!</p>
+        </template>
+
+        <template v-if="recoveryMode">
+          <h1>Reset password</h1>
+          <p>Account recovery email.</p>
+        </template>
       </div>
       <ValidationObserver ref="loginForm" slim>
         <form class="d-flex flex-column" @submit.prevent="validateLoginForm()">
-          <v-row no-gutters>
+          <v-row>
             <v-col cols="12" lg="10">
-              <v-btn
-                v-if="!recoveryMode"
-                :ripple="false"
-                small
-                color="white"
-                class="ml-n1 mb-2"
-                plain
-                @click="recoveryMode = true"
-                ><v-icon left> mdi-lock</v-icon>Recover my password</v-btn
-              >
-              <div class="pb-7 pr-2">
-                <Validation-provider v-slot="{ errors }" mode="lazy" name="email" :rules="{ email: true, required: true }">
-                  <vs-input v-model="loginForm.email" :danger="errors.length > 0" maxlength="100" block placeholder="Email">
+              <BaseLink v-if="!recoveryMode" icon="mdi-lock" @click="recoveryMode = true">Recover my password</BaseLink>
+              <div class="pr-2">
+                <Validation-provider
+                  v-slot="{ errors, failed }"
+                  mode="passive"
+                  name="email"
+                  :rules="{ email: true, required: true }"
+                >
+                  <vs-input v-model="loginForm.email" :danger="failed" maxlength="100" block placeholder="Email">
                     <template #icon>
                       <v-icon dark>mdi-account</v-icon>
                     </template>
@@ -33,12 +34,12 @@
               </div>
             </v-col>
             <v-col cols="12" lg="10">
-              <div v-if="!recoveryMode" class="pr-2 pb-7">
-                <Validation-provider v-slot="{ errors }" mode="lazy" name="password" :rules="{ required: true }">
+              <div v-if="!recoveryMode" class="pr-2">
+                <Validation-provider v-slot="{ errors, failed }" mode="passive" name="password" :rules="{ required: true }">
                   <vs-input
                     v-model="loginForm.password"
                     maxlength="100"
-                    :danger="errors.length > 0"
+                    :danger="failed"
                     block
                     type="password"
                     placeholder="Password"
@@ -50,46 +51,17 @@
                   </vs-input>
                 </Validation-provider>
               </div>
+            </v-col>
+            <v-col>
+              <div class="ml-n1 mt-2">
+                <template v-if="!recoveryMode">
+                  <Base-button type="submit" :loading="loading"> Login</Base-button>
+                </template>
 
-              <div class="ml-n1">
-                <Base-button
-                  v-if="!recoveryMode"
-                  :block="!$vuetify.breakpoint.smAndUp"
-                  :class="$vuetify.breakpoint.smAndUp ? 'ml-2' : 'mt-3'"
-                  type="submit"
-                  :loading="loading"
-                  dark
-                  color="grey darken-3"
-                  large
-                  class="teal--text text--accent-3"
-                >
-                  Login</Base-button
-                >
-
-                <Base-button
-                  v-if="recoveryMode"
-                  :block="!$vuetify.breakpoint.smAndUp"
-                  :class="$vuetify.breakpoint.smAndUp ? 'ml-2' : 'mt-3'"
-                  dark
-                  color="grey darken-3"
-                  large
-                  @click="recoveryMode = false"
-                >
-                  Cancel</Base-button
-                >
-                <Base-button
-                  v-if="recoveryMode"
-                  :block="!$vuetify.breakpoint.smAndUp"
-                  :class="$vuetify.breakpoint.smAndUp ? 'ml-2' : 'mt-3'"
-                  :loading="loading"
-                  type="submit"
-                  dark
-                  color="grey darken-3"
-                  large
-                  class="teal--text text--accent-3"
-                >
-                  Reset password</Base-button
-                >
+                <template v-if="recoveryMode">
+                  <Base-button large @click="recoveryMode = false"> Cancel</Base-button>
+                  <Base-button :loading="loading" type="submit"> Reset password</Base-button>
+                </template>
               </div>
             </v-col>
           </v-row>
@@ -99,7 +71,7 @@
   </base-split-2>
 </template>
 <script>
-  import { call, sync } from 'vuex-pathify';
+  import { call, sync, get } from 'vuex-pathify';
 
   export default {
     name: 'LoginPage',
@@ -116,6 +88,7 @@
 
     computed: {
       loading: sync('loaders/authLoader'),
+      ...get('authentication', ['isLoggedIn']),
     },
 
     methods: {

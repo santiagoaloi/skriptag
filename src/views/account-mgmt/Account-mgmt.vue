@@ -17,7 +17,7 @@
                   <vs-input
                     v-model="newPassword"
                     type="password"
-                    :danger="errors.length > 0"
+                    :danger="!errors.length"
                     maxlength="100"
                     block
                     placeholder="New password"

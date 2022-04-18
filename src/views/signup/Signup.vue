@@ -1,27 +1,23 @@
 <template>
   <base-split-2 col="6">
     <div class="pa-3">
-      <div class="d-flex flex-wrap flex-column">
+      <div class="d-flex flex-wrap flex-column pl-1">
         <h1>Signup</h1>
         <p>Join the gang to unlock more content 🤓</p>
       </div>
       <ValidationObserver ref="profileEdit" slim>
         <form class="d-flex flex-column" @submit.prevent="validate()">
-          <v-row no-gutters>
+          <v-row>
             <v-col cols="12" lg="10">
-              <v-btn
-                v-animation:shrink="{ longPress: true }"
-                :ripple="false"
-                x-small
-                color="white"
-                class="ml-n2 mb-n2"
-                plain
-                @click="$router.push('login')"
-                >Already have an account? Login</v-btn
-              >
-              <div class="py-5 pr-2">
-                <Validation-provider v-slot="{ errors }" slim name="email" :rules="{ required: true, email: true }">
-                  <vs-input v-model="signupForm.email" maxlength="100" :danger="errors.length > 0" block placeholder="Email">
+              <BaseLink to="login">Already have an account? Login</BaseLink>
+              <div class="pr-2">
+                <Validation-provider
+                  v-slot="{ errors, failed }"
+                  v-bind="{ ...vvOptions }"
+                  name="email"
+                  :rules="{ required: true, email: true }"
+                >
+                  <vs-input v-model="signupForm.email" maxlength="100" :danger="failed" block placeholder="Email">
                     <template #icon>
                       <v-icon dark>mdi-at</v-icon>
                     </template>
@@ -31,12 +27,17 @@
               </div>
             </v-col>
             <v-col cols="12" lg="10">
-              <div class="py-5 pr-2">
-                <Validation-provider v-slot="{ errors }" slim name="password" :rules="{ required: true }">
+              <div class="pr-2">
+                <Validation-provider
+                  v-slot="{ errors, failed }"
+                  v-bind="{ ...vvOptions }"
+                  name="password"
+                  :rules="{ required: true }"
+                >
                   <vs-input
                     v-model="signupForm.password"
                     maxlength="100"
-                    :danger="errors.length > 0"
+                    :danger="failed"
                     block
                     type="password"
                     placeholder="New password"
@@ -51,9 +52,14 @@
               </div>
             </v-col>
             <v-col cols="12" lg="5">
-              <div class="py-5 pr-2">
-                <Validation-provider v-slot="{ errors }" slim name="name" :rules="{ required: true, alpha_spaces: true }">
-                  <vs-input v-model="signupForm.name" maxlength="20" :danger="errors.length > 0" block placeholder="Name">
+              <div class="pr-2">
+                <Validation-provider
+                  v-slot="{ errors, failed }"
+                  v-bind="{ ...vvOptions }"
+                  name="name"
+                  :rules="{ required: true, alpha_spaces: true }"
+                >
+                  <vs-input v-model="signupForm.name" maxlength="20" :danger="failed" block placeholder="Name">
                     <template #icon>
                       <v-icon dark>mdi-account</v-icon>
                     </template>
@@ -63,15 +69,14 @@
               </div>
             </v-col>
             <v-col cols="12" lg="5">
-              <div class="py-5 pr-2">
-                <Validation-provider v-slot="{ errors }" slim name="last name" :rules="{ required: true, alpha_spaces: true }">
-                  <vs-input
-                    v-model="signupForm.lastName"
-                    maxlength="20"
-                    :danger="errors.length > 0"
-                    block
-                    placeholder="Last name"
-                  >
+              <div class="pr-2">
+                <Validation-provider
+                  v-slot="{ errors, failed }"
+                  v-bind="{ ...vvOptions }"
+                  name="last name"
+                  :rules="{ required: true, alpha_spaces: true }"
+                >
+                  <vs-input v-model="signupForm.lastName" maxlength="20" :danger="failed" block placeholder="Last name">
                     <template #icon>
                       <v-icon dark>mdi-account</v-icon>
                     </template>
@@ -82,21 +87,13 @@
               </div>
             </v-col>
 
-            <v-col cols="12" lg="10">
-              <div class="py-7">
-                <Base-button
-                  style="float: right"
-                  :block="!$vuetify.breakpoint.smAndUp"
-                  :class="$vuetify.breakpoint.smAndUp ? 'mr-3' : 'mt-3'"
-                  type="submit"
-                  :loading="loading"
-                  dark
-                  color="grey darken-3"
-                  large
-                  class="teal--text text--accent-3"
+            <v-col>
+              <div class="ml-n1 mt-2">
+                <Base-button type="submit" :loading="loading">
+                  <v-icon left>mdi-google</v-icon>
+                  Signup with google</Base-button
                 >
-                  Signup</Base-button
-                >
+                <Base-button type="submit" :loading="loading"> Signup</Base-button>
               </div>
             </v-col>
           </v-row>
@@ -112,6 +109,10 @@
     name: 'SignupPage',
     data() {
       return {
+        vvOptions: {
+          mode: 'passive',
+          slim: true,
+        },
         signupForm: {
           name: '',
           lastName: '',

@@ -3,10 +3,10 @@
     <skriptag-title large class="mb-4" />
 
     <article>
-      <h1 class="font-weight-light">
-        Level up your <b>developer</b> skills and boost your <b>carreer</b> - Find learning content, <b> mentoring</b> assistance
-        or interact with other developers!
-      </h1>
+      <h2 class="font-weight-light">
+        Level up your <b>skills</b> and launch your carreer as a <b>developer</b> - Find learning content,
+        <b> mentoring</b> assistance or interact with other developers!
+      </h2>
     </article>
 
     <p class="pt-5">

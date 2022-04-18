@@ -3,7 +3,6 @@
     <component
       :is="size"
       v-animation:shrink="{ link: link, longPress: true }"
-      :class="{ large: large }"
       class="cursor-pointer"
       data-aos="fade"
       data-aos-delay="300"

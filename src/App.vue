@@ -108,4 +108,8 @@
     background-size: 130px 130px;
     background-repeat: repeat;
   }
+
+  h1 {
+    font-size: 300%;
+  }
 </style>

@@ -39,7 +39,7 @@ Vue.directive('animation', {
 
       el.onmousedown = () => {
         // if (binding.value === 'shrink') {
-        el.style.transform = 'scale(0.9)';
+        el.style.transform = 'scale(0.95)';
         el.style.transition = timeout;
 
         if (!longPress) {

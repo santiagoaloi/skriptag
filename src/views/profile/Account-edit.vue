@@ -23,7 +23,7 @@
                     <vs-input
                       v-model="credentials.currentPassword"
                       type="password"
-                      :danger="errors.length > 0"
+                      :danger="!errors.length"
                       maxlength="20"
                       block
                       placeholder="Current password"
@@ -50,7 +50,7 @@
                     <vs-input
                       v-model="credentials.newPassword"
                       type="password"
-                      :danger="errors.length > 0"
+                      :danger="!errors.length"
                       maxlength="20"
                       block
                       placeholder="New password"
@@ -80,7 +80,7 @@
                     <vs-input
                       v-model="credentials.newPasswordRepeat"
                       type="password"
-                      :danger="errors.length > 0"
+                      :danger="!errors.length"
                       maxlength="20"
                       block
                       placeholder="Repeat New password"

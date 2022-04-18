@@ -9,23 +9,23 @@
         </div>
       </template>
 
-      <template v-if="!$vuetify.breakpoint.xs">
+      <template v-if="!$vuetify.breakpoint.smAndDown">
         <vs-navbar-group>
-          Why you
+          Downloads
           <template #items>
-            <vs-navbar-item id="guide"> Guide </vs-navbar-item>
-            <vs-navbar-item id="docs"> Documents </vs-navbar-item>
-            <vs-navbar-item id="components"> Components </vs-navbar-item>
+            <vs-navbar-item id="guide"> Templates </vs-navbar-item>
+            <vs-navbar-item id="docs"> Freebies </vs-navbar-item>
+            <vs-navbar-item id="components"> Courses </vs-navbar-item>
           </template>
         </vs-navbar-group>
 
         <vs-navbar-group>
-          Flush your stress
+          Tutorials
           <template #items>
-            <vs-navbar-item id="Github"> Github </vs-navbar-item>
-            <vs-navbar-item id="Discord"> Discord </vs-navbar-item>
-            <vs-navbar-item id="Twitter"> Twitter </vs-navbar-item>
-            <vs-navbar-item id="Medium"> Medium </vs-navbar-item>
+            <vs-navbar-item id="Github"> Firebase </vs-navbar-item>
+            <vs-navbar-item id="Discord"> VueJS </vs-navbar-item>
+            <vs-navbar-item id="Twitter"> Vuetify </vs-navbar-item>
+            <vs-navbar-item id="Medium"> Javascript </vs-navbar-item>
           </template>
         </vs-navbar-group>
 
@@ -33,23 +33,13 @@
       </template>
 
       <template #right>
-        <!-- <vs-select v-model="dropdown" placeholder="Select" @click.stop>
-            <vs-option label="Vuesax" value="1"> Vuesax </vs-option>
-            <vs-option label="Vue" value="2"> Vue </vs-option>
-            <vs-option label="Javascript" value="3"> Javascript </vs-option>
-            <vs-option disabled label="Sass" value="4"> Sass </vs-option>
-            <vs-option label="Typescript" value="5"> Typescript </vs-option>
-            <vs-option label="Webpack" value="6"> Webpack </vs-option>
-            <vs-option label="Nodejs" value="7"> Nodejs </vs-option>
-          </vs-select> -->
-
         <v-scale-transition>
           <v-btn v-if="isLoggedIn" style="position: fixed" :ripple="false" dark color="rgba(10,10,10 , .3)" @click="logout">
             {{ `Logout ${firstAndShortLast}` }}
           </v-btn>
         </v-scale-transition>
 
-        <template v-if="!isLoggedIn">
+        <template v-if="!isLoggedIn && !$vuetify.breakpoint.smAndDown">
           <BaseButton
             v-for="button in [
               { name: 'login', icon: 'account-arrow-right' },
