@@ -29,7 +29,7 @@
 
         <v-card-actions class="px-6">
           <v-spacer></v-spacer>
-          <v-btn color="grey lighten-1" text @click="cancel()"> Cancel </v-btn>
+          <v-btn color="grey lighten-1" text @click.prevent="cancel()"> Cancel </v-btn>
           <v-btn :loading="loading" color="#de355f" text type="submit"> Remove </v-btn>
         </v-card-actions>
       </form>

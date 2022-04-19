@@ -48,7 +48,7 @@
                     <template #icon>
                       <v-icon dark>mdi-lock</v-icon>
                     </template>
-                    <template v-if="!newPassword" #message-danger> {{ errors[0] }} </template>
+                    <template v-if="!signupForm.password" #message-danger> {{ errors[0] }} </template>
                   </vs-input>
                 </Validation-provider>
               </div>

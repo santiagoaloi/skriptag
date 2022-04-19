@@ -7,11 +7,6 @@
 <script>
   export default {
     name: 'BaseApp',
-    computed: {
-      v() {
-        return this.$vuetify;
-      },
-    },
     mounted() {
       this.$vs.setTheme('dark');
     },

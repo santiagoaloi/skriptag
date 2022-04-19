@@ -8,6 +8,7 @@
     :overlay-color="'rgba(14, 9, 15)'"
     scrollable
     class="d-flex"
+    persist
     v-on="$listeners"
   >
     <div>

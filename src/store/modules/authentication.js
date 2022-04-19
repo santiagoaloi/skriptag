@@ -23,6 +23,8 @@ const state = {
   user: {},
   profile: {},
   showResendActivationEmail: false,
+  removeAccountDialog: false,
+  verifyAccountDialog: false,
 };
 
 const mutations = make.mutations(state);
@@ -220,6 +222,8 @@ const actions = {
 
       await sendEmailVerification(userCredential.user);
       store.set('loaders/verifyLoader', false);
+      store.set('authentication/verifyAccountDialog', false);
+
       dispatch('snackbar/snackbarSuccess', 'We sent you an email to activate your account.', { root: true });
       return;
     } catch ({ ...error }) {

@@ -109,6 +109,7 @@
                 </v-btn>
 
                 <v-btn
+                  v-if="!verified"
                   :block="!$vuetify.breakpoint.smAndUp"
                   dark
                   color="orange darken-3"
@@ -151,14 +152,13 @@
           newPassword: '',
           newPasswordRepeat: '',
         },
-        removeAccountDialog: false,
-        verifyAccountDialog: false,
       };
     },
 
     computed: {
       loading: sync('loaders/authLoader'),
       ...get('authentication', ['getPasswordComplexity', 'verified']),
+      ...sync('authentication', ['removeAccountDialog', 'verifyAccountDialog']),
     },
 
     methods: {

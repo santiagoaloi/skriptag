@@ -21,7 +21,7 @@
 
         <v-card-actions class="px-6">
           <v-spacer></v-spacer>
-          <v-btn color="grey lighten-1" text @click="cancel()"> Cancel </v-btn>
+          <v-btn color="grey lighten-1" text @click.prevent="cancel()"> Cancel </v-btn>
           <v-btn :loading="loading" color="#de355f" text type="submit"> continue </v-btn>
         </v-card-actions>
       </form>
@@ -73,7 +73,6 @@
           const validated = await this.$refs.passwordField.validate();
           if (validated) {
             this.resendActivationEmail(this.password);
-            this.cancel();
             return;
           }
           this.snackbarError('Please correct the fields in red');
