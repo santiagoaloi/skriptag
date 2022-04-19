@@ -10,18 +10,50 @@
       </div>
       <ValidationObserver ref="newPassword" slim>
         <form class="d-flex flex-column" @submit.prevent="validateNewPassword()">
-          <v-row no-gutters>
+          <v-row>
             <v-col v-if="mode === 'resetPassword'" cols="12" lg="10">
-              <div class="pb-7 pr-2">
-                <Validation-provider v-slot="{ errors }" mode="lazy" name="new password" :rules="{ required: true }">
+              <small class="ml-1">Password</small>
+              <div class="pr-2">
+                <Validation-provider
+                  v-slot="{ errors, failed }"
+                  mode="passive"
+                  name="new password"
+                  :rules="{ required: true, confirmed: 'confirmation' }"
+                >
                   <vs-input
                     v-model="newPassword"
                     type="password"
-                    :danger="!errors.length"
+                    :danger="failed"
                     maxlength="100"
                     block
                     placeholder="New password"
                     :progress="getPasswordComplexity(newPassword)"
+                  >
+                    <template #icon>
+                      <v-icon dark>mdi-lock</v-icon>
+                    </template>
+                    <template v-if="!newPassword" #message-danger> {{ errors[0] }} </template>
+                  </vs-input>
+                </Validation-provider>
+              </div>
+            </v-col>
+            <v-col v-if="mode === 'resetPassword'" cols="12" lg="10">
+              <small class="ml-1">Confirm password</small>
+              <div class="pr-2">
+                <Validation-provider
+                  v-slot="{ errors, failed }"
+                  mode="passive"
+                  name="repeat new password"
+                  :rules="{ required: true }"
+                  vid="confirmation"
+                >
+                  <vs-input
+                    v-model="confirmNewPassword"
+                    type="password"
+                    :danger="failed"
+                    maxlength="100"
+                    block
+                    placeholder="New password"
                   >
                     <template #icon>
                       <v-icon dark>mdi-lock</v-icon>
@@ -31,25 +63,13 @@
                 </Validation-provider>
               </div>
             </v-col>
-            <v-col cols="12" lg="10">
-              <v-card-actions class="pa-0">
-                <template v-if="mode === 'resetPassword'">
-                  <Base-button dark color="grey darken-3" large @click="$router.push('login')"> Cancel</Base-button>
-                  <Base-button
-                    class="teal--text text--accent-3"
-                    type="submit"
-                    :loading="loading"
-                    dark
-                    color="grey darken-3"
-                    large
-                  >
-                    Change password</Base-button
-                  >
-                </template>
-                <!-- <template v-if="mode === 'resetPassword'">
-                  <Base-button dark color="grey darken-3" large @click="$router.push('login')"> Change password</Base-button>
-                </template> -->
-              </v-card-actions>
+            <v-col v-if="mode === 'resetPassword'" cols="12" lg="10">
+              <div class="ml-n1">
+                <Base-button dark color="grey darken-3" @click="$router.push('login')"> Cancel</Base-button>
+                <Base-button class="teal--text text--accent-3" type="submit" :loading="loading" dark color="grey darken-3" large>
+                  Change password</Base-button
+                >
+              </div>
             </v-col>
           </v-row>
         </form>
@@ -66,6 +86,7 @@
     data() {
       return {
         newPassword: '',
+        confirmNewPassword: '',
         oobCode: this.$route.query.oobCode,
         mode: this.$route.query.mode,
       };

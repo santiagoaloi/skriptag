@@ -7,6 +7,11 @@
 <script>
   export default {
     name: 'BaseApp',
+    computed: {
+      v() {
+        return this.$vuetify;
+      },
+    },
     mounted() {
       this.$vs.setTheme('dark');
     },
@@ -92,7 +97,12 @@
 
   .vs-input__message {
     position: absolute;
-    top: 40px;
+    top: 43px;
+  }
+
+  .vs-input__progress {
+    position: absolute;
+    top: 43px;
   }
 
   .v-application a {

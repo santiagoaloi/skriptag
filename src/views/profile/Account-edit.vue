@@ -67,7 +67,7 @@
                   vid="confirmation"
                 >
                   <vs-input
-                    v-model="credentials.newPasswordRepeat"
+                    v-model="credentials.confirmNewPasswordRepeat"
                     type="password"
                     :danger="failed"
                     maxlength="20"
@@ -84,7 +84,7 @@
               <v-col cols="12">
                 <div class="mt-4">
                   <v-btn :block="!$vuetify.breakpoint.smAndUp" :loading="loading" type="submit" dark color="grey darken-3"
-                    ><v-icon left> mdi-refresh</v-icon>Change password</v-btn
+                    ><v-icon left> mdi-refresh</v-icon><span>Change password </span></v-btn
                   >
                 </div>
               </v-col>
@@ -102,13 +102,17 @@
 
               <v-col cols="12">
                 <v-btn :block="!$vuetify.breakpoint.smAndUp" dark color="#de355f" @click="removeAccountDialog = true">
-                  <v-icon left> mdi-delete-outline</v-icon>Remove my account</v-btn
-                >
+                  <v-icon :left="$vuetify.breakpoint.lgAndUp"> mdi-delete-outline</v-icon>
+                  <span v-if="$vuetify.breakpoint.xs || (!$vuetify.breakpoint.md && !$vuetify.breakpoint.sm)">
+                    Remove myaccount</span
+                  >
+                </v-btn>
+
                 <v-btn
-                  v-if="!verified"
                   :block="!$vuetify.breakpoint.smAndUp"
                   dark
                   color="orange darken-3"
+                  :class="{ 'ml-3': $vuetify.breakpoint.smAndUp, 'mt-3': !$vuetify.breakpoint.smAndUp }"
                   @click="verifyAccountDialog = true"
                 >
                   <v-icon left> mdi-email-seal</v-icon>Resend verification email</v-btn

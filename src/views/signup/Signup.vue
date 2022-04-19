@@ -48,7 +48,7 @@
                     <template #icon>
                       <v-icon dark>mdi-lock</v-icon>
                     </template>
-                    <template #message-danger> {{ errors[0] }} </template>
+                    <template v-if="!newPassword" #message-danger> {{ errors[0] }} </template>
                   </vs-input>
                 </Validation-provider>
               </div>
@@ -94,7 +94,7 @@
 
             <v-col>
               <div class="ml-n1 mt-2">
-                <Base-button type="submit" :loading="loading">
+                <Base-button type="submit">
                   <v-icon left>mdi-google</v-icon>
                   Signup with google</Base-button
                 >
