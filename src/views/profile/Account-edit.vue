@@ -103,7 +103,7 @@
               <v-col cols="12">
                 <v-btn :block="!$vuetify.breakpoint.smAndUp" dark color="#de355f" @click="removeAccountDialog = true">
                   <v-icon :left="$vuetify.breakpoint.lgAndUp"> mdi-delete-outline</v-icon>
-                  <span v-if="$vuetify.breakpoint.xs || (!$vuetify.breakpoint.md && !$vuetify.breakpoint.sm)">
+                  <span v-if="$vuetify.breakpoint.xs || (!$vuetify.breakpoint.md && !$vuetify.breakpoint.sm) || verified">
                     Remove myaccount</span
                   >
                 </v-btn>
