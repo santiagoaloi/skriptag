@@ -18,12 +18,5 @@
 <script>
   export default {
     name: 'BaseButton',
-
-    props: {
-      customIcon: {
-        type: String,
-        default: '',
-      },
-    },
   };
 </script>

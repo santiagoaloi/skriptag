@@ -92,7 +92,7 @@
 
   .vs-input__message {
     position: absolute;
-    top: 45px;
+    top: 40px;
   }
 
   .v-application a {
@@ -107,6 +107,14 @@
     background-position: 65px 0, 65px 0, 0 0, 0 0;
     background-size: 130px 130px;
     background-repeat: repeat;
+  }
+
+  .v-navigation-drawer--absolute {
+    z-index: 99 !important;
+  }
+
+  .v-navigation-drawer {
+    overflow: visible;
   }
 
   h1 {

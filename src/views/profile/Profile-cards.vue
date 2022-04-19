@@ -4,7 +4,7 @@
       <template #left>
         <v-row>
           <v-col cols="12" sm="6" md="2">
-            <vs-card disabled class="my-card" @click="switchCard('ProfileEdit')">
+            <vs-card class="my-card" @click="switchCard('ProfileEdit')">
               <template #title>
                 <h3>Profile Details</h3>
               </template>
@@ -17,7 +17,7 @@
             </vs-card>
           </v-col>
           <v-col cols="12" sm="6" md="2">
-            <vs-card disabled class="my-card" @click="switchCard('AccountEdit')">
+            <vs-card class="my-card" @click="switchCard('AccountEdit')">
               <template #title>
                 <h3>Account settings</h3>
               </template>
@@ -30,7 +30,7 @@
             </vs-card>
           </v-col>
           <v-col cols="12" sm="6" md="2">
-            <vs-card :class="{ 'disabled-card': !verified }" disabled class="my-card">
+            <vs-card :class="{ 'disabled-card': !verified }" class="my-card">
               <template #title>
                 <h3>Billing information</h3>
               </template>
@@ -43,7 +43,7 @@
             </vs-card>
           </v-col>
           <v-col cols="12" sm="6" md="3">
-            <vs-card :class="{ 'disabled-card': !verified }" disabled class="my-card">
+            <vs-card :class="{ 'disabled-card': !verified }" class="my-card">
               <template #title>
                 <h3>Your purchased items</h3>
               </template>
@@ -56,7 +56,7 @@
             </vs-card>
           </v-col>
           <v-col cols="12" sm="6" md="3">
-            <vs-card :class="{ 'disabled-card': !verified }" disabled class="my-card">
+            <vs-card :class="{ 'disabled-card': !verified }" class="my-card">
               <template #title>
                 <h3>Blog posts</h3>
               </template>
@@ -123,6 +123,10 @@
 
     max-width: unset !important;
     max-height: unset !important;
+  }
+
+  .my-card .vs-card:hover {
+    opacity: 0.9;
   }
 
   .vs-card-content {

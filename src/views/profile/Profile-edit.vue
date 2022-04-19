@@ -3,19 +3,19 @@
     <h1 class="mb-6 mt-3">Profile details</h1>
     <ValidationObserver ref="profileEdit" slim>
       <form class="d-flex flex-column" @submit.prevent="saveProfile()">
-        <v-row>
+        <v-row no-gutters>
           <v-col cols="12" sm="6" md="4">
-            <v-row no-gutters>
+            <v-row>
               <v-col cols="12">
-                <v-btn tabindex="-1" :ripple="false" x-small color="white" class="ml-n2 mb-n2" plain>Name</v-btn>
-                <div class="py-2 pr-2">
+                <small class="ml-1">Name</small>
+                <div class="pr-2">
                   <Validation-provider
-                    v-slot="{ invalid, errors }"
-                    slim
+                    v-slot="{ failed, errors }"
+                    v-bind="{ ...vvOptions }"
                     name="name"
                     :rules="{ required: true, alpha_spaces: true }"
                   >
-                    <vs-input v-model="profile.name" :danger="invalid" maxlength="20" block placeholder="First name">
+                    <vs-input v-model="profile.name" :danger="failed" maxlength="20" block placeholder="First name">
                       <template #icon>
                         <v-icon dark>mdi-account</v-icon>
                       </template>
@@ -25,15 +25,15 @@
                 </div>
               </v-col>
               <v-col cols="12">
-                <v-btn tabindex="-1" :ripple="false" x-small color="white" class="ml-n2 mt-5 mb-n2" plain>Last name</v-btn>
-                <div class="py-2 pr-2">
+                <small class="ml-1">Last name</small>
+                <div class="pr-2">
                   <Validation-provider
-                    v-slot="{ invalid, errors }"
-                    slim
+                    v-slot="{ failed, errors }"
+                    v-bind="{ ...vvOptions }"
                     name="last name"
                     :rules="{ required: true, alpha_spaces: true }"
                   >
-                    <vs-input v-model="profile.lastName" :danger="invalid" maxlength="20" block placeholder="Last name">
+                    <vs-input v-model="profile.lastName" :danger="failed" maxlength="20" block placeholder="Last name">
                       <template #icon>
                         <v-icon dark>mdi-account</v-icon>
                       </template>
@@ -45,12 +45,12 @@
             </v-row>
           </v-col>
           <v-col cols="12">
-            <div class="mt-2">
+            <div class="pt-8">
               <v-btn
+                class="mr-2"
                 :block="!$vuetify.breakpoint.smAndUp"
-                :class="$vuetify.breakpoint.smAndUp ? '' : 'mt-3'"
+                :class="$vuetify.breakpoint.smAndUp ? '' : 'mt-3 '"
                 dark
-                small
                 color="grey"
                 @click="cancel()"
                 ><v-icon left>mdi-close</v-icon>Close</v-btn
@@ -60,7 +60,6 @@
                 :class="$vuetify.breakpoint.smAndUp ? 'ml-2' : 'mt-3'"
                 type="submit"
                 dark
-                small
                 color="teal"
                 ><v-icon left> mdi-check-bold</v-icon>Save</v-btn
               >
@@ -80,6 +79,10 @@
 
     data() {
       return {
+        vvOptions: {
+          mode: 'passive',
+          slim: true,
+        },
         originProfile: {},
       };
     },

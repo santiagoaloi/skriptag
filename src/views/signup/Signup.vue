@@ -10,6 +10,7 @@
           <v-row>
             <v-col cols="12" lg="10">
               <BaseLink to="login">Already have an account? Login</BaseLink>
+              <small class="ml-1">Email</small>
               <div class="pr-2">
                 <Validation-provider
                   v-slot="{ errors, failed }"
@@ -27,6 +28,7 @@
               </div>
             </v-col>
             <v-col cols="12" lg="10">
+              <small class="ml-1">Password</small>
               <div class="pr-2">
                 <Validation-provider
                   v-slot="{ errors, failed }"
@@ -40,7 +42,7 @@
                     :danger="failed"
                     block
                     type="password"
-                    placeholder="New password"
+                    placeholder="Password"
                     :progress="getPasswordComplexity(signupForm.password)"
                   >
                     <template #icon>
@@ -52,6 +54,7 @@
               </div>
             </v-col>
             <v-col cols="12" lg="5">
+              <small class="ml-1">Name</small>
               <div class="pr-2">
                 <Validation-provider
                   v-slot="{ errors, failed }"
@@ -69,6 +72,8 @@
               </div>
             </v-col>
             <v-col cols="12" lg="5">
+              <small class="ml-1">Last name</small>
+
               <div class="pr-2">
                 <Validation-provider
                   v-slot="{ errors, failed }"

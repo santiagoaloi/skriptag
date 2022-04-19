@@ -3,113 +3,94 @@
     <h1 class="mb-6 mt-3">Account Setttings</h1>
     <ValidationObserver ref="accountEdit" slim>
       <form class="d-flex flex-column" @submit.prevent="validatePasswords()">
-        <v-row>
-          <v-col cols="12" md="6">
-            <v-row no-gutters>
+        <v-row no-gutters>
+          <v-col cols="12" sm="6" md="4">
+            <v-row>
               <v-col cols="12">
                 <h3 class="mb-2">Change password</h3>
               </v-col>
 
-              <v-col cols="12" sm="6">
-                <v-btn tabindex="-1" :ripple="false" x-small color="white" class="ml-n2 mb-n2" plain>Old password </v-btn>
-                <div class="py-2 pr-2">
-                  <Validation-provider
-                    v-slot="{ errors }"
-                    mode="passive"
-                    slim
-                    name="current password"
-                    :rules="{ required: true }"
+              <v-col cols="12">
+                <small class="ml-1">Old password</small>
+                <Validation-provider
+                  v-slot="{ errors, failed }"
+                  v-bind="{ ...vvOptions }"
+                  name="current password"
+                  :rules="{ required: true }"
+                >
+                  <vs-input
+                    v-model="credentials.currentPassword"
+                    type="password"
+                    :danger="failed"
+                    maxlength="20"
+                    block
+                    placeholder="Current password"
                   >
-                    <vs-input
-                      v-model="credentials.currentPassword"
-                      type="password"
-                      :danger="!errors.length"
-                      maxlength="20"
-                      block
-                      placeholder="Current password"
-                    >
-                      <template #icon>
-                        <v-icon dark>mdi-account</v-icon>
-                      </template>
-                      <template #message-danger> {{ errors[0] }} </template>
-                    </vs-input>
-                  </Validation-provider>
-                </div>
-              </v-col>
-              <v-col sm="12"></v-col>
-              <v-col cols="12" sm="6">
-                <v-btn tabindex="-1" :ripple="false" x-small color="white" class="ml-n2 mt-7 mb-n2" plain>New Password</v-btn>
-                <div class="py-2 pr-2">
-                  <Validation-provider
-                    v-slot="{ errors }"
-                    slim
-                    name="new password"
-                    :rules="{ required: true, confirmed: 'confirmation' }"
-                    mode="passive"
-                  >
-                    <vs-input
-                      v-model="credentials.newPassword"
-                      type="password"
-                      :danger="!errors.length"
-                      maxlength="20"
-                      block
-                      placeholder="New password"
-                      :progress="getPasswordComplexity(credentials.newPassword)"
-                    >
-                      <template #icon>
-                        <v-icon dark>mdi-lock</v-icon>
-                      </template>
-                      <template #message-danger> {{ errors[0] }} </template>
-                    </vs-input>
-                  </Validation-provider>
-                </div>
-              </v-col>
-              <v-col cols="12" sm="6">
-                <v-btn tabindex="-1" :ripple="false" x-small color="white" class="ml-n2 mt-7 mb-n2" plain
-                  >Confirm new password
-                </v-btn>
-                <div class="py-2 pr-2">
-                  <Validation-provider
-                    v-slot="{ errors }"
-                    slim
-                    name="repeat new password"
-                    :rules="{ required: true }"
-                    vid="confirmation"
-                    mode="passive"
-                  >
-                    <vs-input
-                      v-model="credentials.newPasswordRepeat"
-                      type="password"
-                      :danger="!errors.length"
-                      maxlength="20"
-                      block
-                      placeholder="Repeat New password"
-                    >
-                      <template #icon>
-                        <v-icon dark>mdi-lock</v-icon>
-                      </template>
-                      <template #message-danger> {{ errors[0] }} </template>
-                    </vs-input>
-                  </Validation-provider>
-                </div>
+                    <template #icon>
+                      <v-icon dark>mdi-account</v-icon>
+                    </template>
+                    <template #message-danger> {{ errors[0] }} </template>
+                  </vs-input>
+                </Validation-provider>
               </v-col>
               <v-col cols="12">
-                <div class="mt-8">
-                  <v-btn
-                    :block="!$vuetify.breakpoint.smAndUp"
-                    :class="$vuetify.breakpoint.smAndUp ? 'ml-2' : 'mt-3'"
-                    :loading="loading"
-                    type="submit"
-                    dark
-                    small
-                    color="grey darken-3"
+                <small class="ml-1">New password</small>
+                <Validation-provider
+                  v-slot="{ errors, failed }"
+                  v-bind="{ ...vvOptions }"
+                  name="new password"
+                  :rules="{ required: true, confirmed: 'confirmation' }"
+                >
+                  <vs-input
+                    v-model="credentials.newPassword"
+                    type="password"
+                    :danger="failed"
+                    maxlength="20"
+                    block
+                    placeholder="New password"
+                    :progress="getPasswordComplexity(credentials.newPassword)"
+                  >
+                    <template #icon>
+                      <v-icon dark>mdi-lock</v-icon>
+                    </template>
+                    <template #message-danger> {{ errors[0] }} </template>
+                  </vs-input>
+                </Validation-provider>
+              </v-col>
+              <v-col cols="12">
+                <small class="ml-1">Confirm password</small>
+                <Validation-provider
+                  v-slot="{ errors, failed }"
+                  v-bind="{ ...vvOptions }"
+                  name="repeat new password"
+                  :rules="{ required: true }"
+                  vid="confirmation"
+                >
+                  <vs-input
+                    v-model="credentials.newPasswordRepeat"
+                    type="password"
+                    :danger="failed"
+                    maxlength="20"
+                    block
+                    placeholder="Repeat New password"
+                  >
+                    <template #icon>
+                      <v-icon dark>mdi-lock</v-icon>
+                    </template>
+                    <template #message-danger> {{ errors[0] }} </template>
+                  </vs-input>
+                </Validation-provider>
+              </v-col>
+              <v-col cols="12">
+                <div class="mt-4">
+                  <v-btn :block="!$vuetify.breakpoint.smAndUp" :loading="loading" type="submit" dark color="grey darken-3"
                     ><v-icon left> mdi-refresh</v-icon>Change password</v-btn
                   >
                 </div>
               </v-col>
 
               <v-col cols="12">
-                <div class="mt-8">
+                <div class="mt-4">
                   <h3 class="mb-2">Remove account</h3>
                   <p>
                     <v-icon small style="color: #ccc">mdi-help-circle-outline</v-icon>
@@ -119,27 +100,23 @@
                 </div>
               </v-col>
 
-              <v-btn :block="!$vuetify.breakpoint.smAndUp" dark small color="#de355f" @click="removeAccountDialog = true">
-                <v-icon left> mdi-delete-outline</v-icon>Remove my account</v-btn
-              >
-              <v-btn
-                v-if="!verified"
-                :block="!$vuetify.breakpoint.smAndUp"
-                :class="$vuetify.breakpoint.smAndUp ? 'ml-2' : 'mt-3'"
-                dark
-                small
-                color="orange darken-3"
-                @click="verifyAccountDialog = true"
-              >
-                <v-icon left> mdi-email-seal</v-icon>Resend verification email</v-btn
-              >
-            </v-row>
-            <v-row>
               <v-col cols="12">
-                <div class="mt-n3">
-                  <v-divider class="my-4" style="background: #404040"></v-divider>
-                  <v-btn class="mr-2 my-2" dark small color="grey" @click="cancel()"><v-icon left>mdi-close</v-icon>Close</v-btn>
-                </div>
+                <v-btn :block="!$vuetify.breakpoint.smAndUp" dark color="#de355f" @click="removeAccountDialog = true">
+                  <v-icon left> mdi-delete-outline</v-icon>Remove my account</v-btn
+                >
+                <v-btn
+                  v-if="!verified"
+                  :block="!$vuetify.breakpoint.smAndUp"
+                  dark
+                  color="orange darken-3"
+                  @click="verifyAccountDialog = true"
+                >
+                  <v-icon left> mdi-email-seal</v-icon>Resend verification email</v-btn
+                >
+              </v-col>
+              <v-col cols="12">
+                <v-divider class="my-4" style="background: #404040"></v-divider>
+                <v-btn class="mr-2 my-2" dark color="grey" @click="cancel()"><v-icon left>mdi-close</v-icon>Close</v-btn>
               </v-col>
             </v-row>
           </v-col>
@@ -161,12 +138,15 @@
 
     data() {
       return {
+        vvOptions: {
+          mode: 'passive',
+          slim: true,
+        },
         credentials: {
           currentPassword: '',
           newPassword: '',
           newPasswordRepeat: '',
         },
-        removeAccountCurrentPassowrd: '',
         removeAccountDialog: false,
         verifyAccountDialog: false,
       };

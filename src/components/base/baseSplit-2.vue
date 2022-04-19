@@ -12,7 +12,7 @@
     <v-col :sm="col" cols="12">
       <v-container class="fill-height">
         <v-container>
-          <v-responsive class="mx-auto" width="80%">
+          <v-responsive class="mx-auto" :width="$vuetify.smAndDOwn ? '100%' : '80%'">
             <slot></slot>
           </v-responsive>
         </v-container>

@@ -17,10 +17,11 @@
           <v-row>
             <v-col cols="12" lg="10">
               <BaseLink v-if="!recoveryMode" icon="mdi-lock" @click="recoveryMode = true">Recover my password</BaseLink>
+              <small class="ml-1">Email</small>
               <div class="pr-2">
                 <Validation-provider
                   v-slot="{ errors, failed }"
-                  mode="passive"
+                  v-bind="{ ...vvOptions }"
                   name="email"
                   :rules="{ email: true, required: true }"
                 >
@@ -33,9 +34,15 @@
                 </Validation-provider>
               </div>
             </v-col>
-            <v-col cols="12" lg="10">
-              <div v-if="!recoveryMode" class="pr-2">
-                <Validation-provider v-slot="{ errors, failed }" mode="passive" name="password" :rules="{ required: true }">
+            <v-col v-if="!recoveryMode" cols="12" lg="10">
+              <small class="ml-1">Password</small>
+              <div class="pr-2">
+                <Validation-provider
+                  v-slot="{ errors, failed }"
+                  v-bind="{ ...vvOptions }"
+                  name="password"
+                  :rules="{ required: true }"
+                >
                   <vs-input
                     v-model="loginForm.password"
                     maxlength="100"
@@ -59,8 +66,8 @@
                 </template>
 
                 <template v-if="recoveryMode">
-                  <Base-button large @click="recoveryMode = false"> Cancel</Base-button>
-                  <Base-button :loading="loading" type="submit"> Reset password</Base-button>
+                  <Base-button large @click.prevent="recoveryMode = false"> Cancel</Base-button>
+                  <Base-button type="submit" :loading="loading"> Reset password</Base-button>
                 </template>
               </div>
             </v-col>
@@ -78,6 +85,10 @@
 
     data() {
       return {
+        vvOptions: {
+          mode: 'passive',
+          slim: true,
+        },
         recoveryMode: false,
         loginForm: {
           email: '',
@@ -99,16 +110,17 @@
         try {
           const validated = await this.$refs.loginForm.validate();
           if (validated) {
-            if (!this.recoveryMode) {
-              this.login(this.loginForm);
-              return;
-            }
-
             if (this.recoveryMode) {
               this.accountRecovery(this.loginForm.email);
               this.recoveryMode = false;
               return;
             }
+
+            if (!this.recoveryMode) {
+              this.login(this.loginForm);
+              return;
+            }
+
             return;
           }
           this.snackbarError('Please correct the fields in red');
