@@ -1,6 +1,6 @@
 <template>
   <v-fade-transition hide-on-leave mode="out-in">
-    <router-view class="pattern-bg" />
+    <router-view />
   </v-fade-transition>
 </template>
 
@@ -49,11 +49,7 @@
 
   html {
     background: #24272c !important;
-    overflow: hidden !important;
-  }
-
-  body {
-    overflow: hidden !important;
+    overflow: overlay !important;
   }
 
   /* Hide scrollbar for Chrome, Safari and Opera */

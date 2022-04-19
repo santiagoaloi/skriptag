@@ -4,6 +4,7 @@ import { make } from 'vuex-pathify';
 // Data
 const state = {
   drawer: null,
+  mobileMenu: false,
 };
 
 const mutations = make.mutations(state);

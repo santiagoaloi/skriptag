@@ -10,6 +10,7 @@ import 'vuesax/dist/vuesax.css';
 
 // Styles amd Animations
 import 'aos/dist/aos.css';
+// import 'hamburgers/dist/hamburgers.css';
 
 Vue.config.productionTip = false;
 // Vuesax styles

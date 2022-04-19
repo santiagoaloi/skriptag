@@ -7,3 +7,4 @@
 import './app';
 import './webfontloader';
 import './vee-validate';
+import './vue-burgers';

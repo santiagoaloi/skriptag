@@ -1,7 +1,7 @@
 <template>
   <base-split-2 v-if="!isLoggedIn" id="login" col="6" right>
     <div class="pa-3">
-      <div class="d-flex flex-wrap flex-column pl-1">
+      <div class="d-flex flex-wrap flex-column pl-1" :class="">
         <template v-if="!recoveryMode">
           <h1>Login</h1>
           <p>Time to get stuff done!</p>

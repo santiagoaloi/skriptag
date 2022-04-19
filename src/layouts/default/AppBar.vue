@@ -37,6 +37,8 @@
           <v-btn v-if="isLoggedIn" style="position: fixed" :ripple="false" dark color="rgba(10,10,10 , .3)" @click="logout">
             {{ `Logout ${firstAndShortLast}` }}
           </v-btn>
+
+          <v-burger v-if="$vuetify.breakpoint.smAndDown" :active="mobileMenu" type="spring" @updated="mobileMenu = !mobileMenu" />
         </v-scale-transition>
 
         <template v-if="!isLoggedIn && !$vuetify.breakpoint.smAndDown">
@@ -76,6 +78,7 @@
     computed: {
       drawer: sync('app/drawer'),
       ...get('authentication', ['isLoggedIn', 'profile', 'firstAndShortLast']),
+      ...sync('app', ['mobileMenu']),
     },
 
     methods: {
@@ -89,7 +92,7 @@
     },
   };
 </script>
-<style scoped>
+<style>
   ::v-deep .vs-select__input:hover {
     box-shadow: unset;
     -webkit-transform: unset;
@@ -99,5 +102,17 @@
   ::v-deep .vs-select.activeOptions .vs-select__input {
     -webkit-transform: unset;
     transform: unset;
+  }
+
+  .hamburger-inner,
+  .hamburger-inner::before,
+  .hamburger-inner::after {
+    background-color: white;
+  }
+
+  .hamburger.is-active .hamburger-inner,
+  .hamburger.is-active .hamburger-inner::before,
+  .hamburger.is-active .hamburger-inner::after {
+    background-color: white;
   }
 </style>

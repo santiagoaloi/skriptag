@@ -189,7 +189,7 @@
 
       cancel() {
         this.$emit('close');
-        document.getElementById('divContainer').scrollTop = 0;
+        document.getElementById('containerDiv').scrollTop = 0;
       },
     },
   };

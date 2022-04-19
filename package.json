@@ -15,6 +15,7 @@
     "localforage": "^1.10.0",
     "vee-validate": "3.4.5",
     "vue": "^2.6.11",
+    "vue-burger": "^1.1.0",
     "vue-router": "^3.2.0",
     "vuesax": "^4.0.1-alpha.25",
     "vuetify": "^2.6.0",
