@@ -49,7 +49,7 @@
                     :danger="failed"
                     block
                     type="password"
-                    placeholder="Password"
+                    placeholder="At least 6 characters"
                   >
                     <template #icon>
                       <v-icon dark>mdi-lock</v-icon>

@@ -1,6 +1,6 @@
 <template>
   <v-main>
-    <div id="containerDiv" :style="custommHeight" style="background: #24272c">
+    <div id="containerDiv" :style="custommHeight">
       <v-expand-transition>
         <MobileMenuView v-if="mobileMenu" />
       </v-expand-transition>
@@ -26,10 +26,10 @@
 
       custommHeight() {
         return {
+          'background': ' #24272c',
           'overflow-y': 'overlay',
           'overflow-x': 'hidden',
-          'background': '#24272c',
-          'height': this.$vuetify.breakpoint.smAndDown ? null : 'calc(100vh - 60px)',
+          'height': this.$vuetify.breakpoint.smAndDown ? '' : 'calc(100vh - 60px)',
         };
       },
     },
