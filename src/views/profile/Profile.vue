@@ -2,85 +2,100 @@
   <div v-show="isLoggedIn">
     <v-slide-y-transition>
       <div v-show="imgBannerLoaded">
-        <v-img
-          :src="src"
-          flat
-          height="240"
-          class="d-flex align-center"
-          :transition="false"
-          style="color: #ccc"
-          gradient="to top right, rgba(0,0,0,.73), rgba(50,50,50,.7)"
-          @load="imgBannerLoaded = true"
-        >
-          <v-btn
-            style="position: absolute; right: 0; margin-right: 30px"
-            color="rgba(10,10,10 , .3)"
-            dark
-            @click="triggerCoverInput()"
+        <v-hover v-slot="{ hover }">
+          <v-img
+            :src="src"
+            flat
+            height="240"
+            class="d-flex align-center"
+            :transition="false"
+            style="color: #ccc"
+            gradient="to top right, rgba(0,0,0,.73), rgba(50,50,50,.7)"
+            @load="imgBannerLoaded = true"
           >
-            <v-icon :left="!$vuetify.breakpoint.smAndDown"> mdi-camera</v-icon>
-            <span v-if="!$vuetify.breakpoint.smAndDown"> {{ $vuetify.breakpoint.smAndUp ? 'Change cover image' : '' }} </span>
-          </v-btn>
-
-          <!-- v-if="$vuetify.breakpoint.smAndDown" -->
-
-          <!-- image upload inputs" -->
-          <input ref="coverInput" accept="image/*" style="display: none" type="file" @change="uploadCoverPhoto()" />
-          <input ref="avatarInput" accept="image/*" style="display: none" type="file" @change="uploadProfilePhoto()" />
-
-          <div :class="$vuetify.breakpoint.smAndUp ? 'ml-13' : 'justify-center'" class="d-flex align-center justify-start">
-            <baseAvatarImg v-if="!profile.avatar" class="hoverAvatar" :height="180" @click="triggerAvatarInput()" />
-            <v-avatar v-else min-height="180" min-width="180">
-              <v-img
-                class="hoverAvatar"
-                min-height="100%"
-                min-width="100%"
-                :src="profile.avatar"
-                flat
-                @click="triggerAvatarInput()"
+            <v-fade-transition>
+              <v-btn
+                v-show="hover"
+                style="position: absolute; right: 0; margin-right: 30px"
+                color="rgba(10,10,10 , .3)"
+                dark
+                @click="triggerCoverInput()"
               >
-                <template #placeholder>
-                  <v-row class="fill-height ma-0" align="center" justify="center">
-                    <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
-                  </v-row>
-                </template>
-              </v-img>
-            </v-avatar>
+                <v-icon :left="!$vuetify.breakpoint.smAndDown"> mdi-camera</v-icon>
+                <span v-if="!$vuetify.breakpoint.smAndDown"> {{ $vuetify.breakpoint.smAndUp ? 'Change cover image' : '' }} </span>
+              </v-btn>
+            </v-fade-transition>
 
-            <div v-if="$vuetify.breakpoint.smAndUp" class="ml-13">
-              <v-row no-gutters>
-                <v-col cols="12">
-                  <v-chip class="mb-4" small :color="verified ? 'teal darken-2' : 'orange darken-1'" text-color="white">
-                    <v-avatar left>
-                      <v-icon small>mdi-check-decagram</v-icon>
-                    </v-avatar>
-                    {{ verified ? 'Verified' : 'pending verification' }}
-                  </v-chip>
-                  <p class="mb-n2">{{ profile.email }}</p>
-                </v-col>
-                <!-- <v-col cols="12"> -->
-                <!-- <base-typing-indicator v-if="!profile.name" class="my-5" /> -->
+            <!-- v-if="$vuetify.breakpoint.smAndDown" -->
 
-                <span
-                  class="d-inline-block text-truncate mb-2 font-weight-bold"
-                  style="font-size: 55px"
-                  :style="$vuetify.breakpoint.mdAndDown ? 'max-width: 390px' : 'max-width: 500px'"
+            <!-- image upload inputs" -->
+            <input ref="coverInput" accept="image/*" style="display: none" type="file" @change="uploadCoverPhoto()" />
+            <input ref="avatarInput" accept="image/*" style="display: none" type="file" @change="uploadProfilePhoto()" />
+
+            <div :class="$vuetify.breakpoint.smAndUp ? 'ml-13' : 'justify-center'" class="d-flex align-center justify-start">
+              <baseAvatarImg v-if="!profile.avatar" class="hoverAvatar" :height="180" @click="triggerAvatarInput()" />
+              <v-avatar v-else min-height="180" min-width="180">
+                <v-img
+                  class="hoverAvatar"
+                  min-height="100%"
+                  min-width="100%"
+                  :src="profile.avatar"
+                  flat
+                  @click="triggerAvatarInput()"
                 >
-                  {{ fullName }}
-                </span>
-                <!-- </v-col> -->
-                <v-col cols="12">
-                  <h6 class="mt-n2">Previous login: {{ lastLogin }}</h6>
-                </v-col>
-              </v-row>
+                  <template #placeholder>
+                    <v-row class="fill-height ma-0" align="center" justify="center">
+                      <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+                    </v-row>
+                  </template>
+                </v-img>
+              </v-avatar>
+
+              <div v-if="$vuetify.breakpoint.smAndUp" class="ml-13">
+                <v-row no-gutters>
+                  <v-col cols="12">
+                    <v-chip class="mb-4" small :color="verified ? 'teal darken-2' : 'orange darken-1'" text-color="white">
+                      <v-avatar left>
+                        <v-icon small>mdi-check-decagram</v-icon>
+                      </v-avatar>
+                      {{ verified ? 'Verified' : 'pending verification' }}
+                    </v-chip>
+                    <v-chip class="mb-4 ml-3" small color="pink" text-color="white">
+                      <v-avatar left>
+                        <v-icon small>mdi-account-star</v-icon>
+                      </v-avatar>
+                      admin
+                    </v-chip>
+                    <p class="mb-n2">{{ profile.email }}</p>
+                  </v-col>
+                  <!-- <v-col cols="12"> -->
+                  <!-- <base-typing-indicator v-if="!profile.name" class="my-5" /> -->
+
+                  <span
+                    class="d-inline-block text-truncate mb-2 font-weight-bold"
+                    style="font-size: 55px"
+                    :style="$vuetify.breakpoint.mdAndDown ? 'max-width: 390px' : 'max-width: 500px'"
+                  >
+                    {{ fullName }}
+                  </span>
+                  <!-- </v-col> -->
+                  <v-col cols="12">
+                    <h6 class="mt-n2">Previous login: {{ lastLogin }}</h6>
+                  </v-col>
+                </v-row>
+              </div>
             </div>
-          </div>
-          <template #placeholder>
-            <v-row class="fill-height ma-0" align="center" justify="center">
-              <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
-            </v-row>
-          </template>
-        </v-img>
+            <template #placeholder>
+              <v-row class="fill-height ma-0" align="center" justify="center">
+                <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+              </v-row>
+            </template>
+          </v-img>
+        </v-hover>
+
+        <v-alert v-if="!verified" tile color="#212326" type="error">
+          Some profile settings will not be enabled until you verify your account.
+        </v-alert>
         <v-progress-linear v-if="progress > 0" v-model="progress" color="teal" style="position: absolute"></v-progress-linear>
       </div>
     </v-slide-y-transition>
@@ -156,7 +171,7 @@
             this.progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           },
           (error) => {
-            // console.log(error.code);
+            console.log(error.code);
           },
           () => {
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {

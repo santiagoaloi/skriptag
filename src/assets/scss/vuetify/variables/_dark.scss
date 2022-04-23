@@ -1,0 +1,24 @@
+$back-base: rgb(54, 57, 63);
+$text-base: #e5eaed;
+
+$theme-dark-colors: (
+  '0': #000000,
+  '1': darken($back-base, 7.5%),
+  '2': darken($back-base, 5%),
+  '3': darken($back-base, 2.5%),
+  '4': $back-base,
+  '6': lighten($back-base, 2.5%),
+  '8': lighten($back-base, 5%),
+  '12': lighten($back-base, 7.5%),
+  '16': lighten($back-base, 10%),
+  '24': lighten($back-base, 12.5%),
+);
+
+$material-dark: (
+  'table': (
+    'active': #303444e6,
+    'hover': #383f43,
+    'group': #354553,
+  ),
+
+);

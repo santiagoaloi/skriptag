@@ -3,8 +3,8 @@
     v-animation:shrink="{ link: true, longPress: true }"
     v-bind="$attrs"
     dark
+    :large="!small"
     color="#343b3d"
-    large
     class="teal--text text--accent-4"
     :ripple="false"
     :block="!$vuetify.breakpoint.smAndUp"
@@ -18,5 +18,11 @@
 <script>
   export default {
     name: 'BaseButton',
+    props: {
+      small: {
+        type: Boolean,
+        default: false,
+      },
+    },
   };
 </script>

@@ -1,7 +1,7 @@
 <template>
   <base-split-2 v-if="!isLoggedIn" id="login" col="6" right>
     <div class="pa-3">
-      <div class="d-flex flex-wrap flex-column pl-1" :class="">
+      <div class="d-flex flex-wrap flex-column pl-1">
         <template v-if="!recoveryMode">
           <h1>Login</h1>
           <p>Time to get stuff done!</p>
@@ -17,7 +17,7 @@
           <v-row>
             <v-col cols="12" lg="10">
               <BaseLink v-if="!recoveryMode" icon="mdi-lock" @click="recoveryMode = true">Recover my password</BaseLink>
-              <small class="ml-1">Email</small>
+              <small class="pl-1">Email</small>
               <div class="pr-2">
                 <Validation-provider
                   v-slot="{ errors, failed }"
@@ -35,7 +35,7 @@
               </div>
             </v-col>
             <v-col v-if="!recoveryMode" cols="12" lg="10">
-              <small class="ml-1">Password</small>
+              <small class="pl-1">Password</small>
               <div class="pr-2">
                 <Validation-provider
                   v-slot="{ errors, failed }"
@@ -49,7 +49,7 @@
                     :danger="failed"
                     block
                     type="password"
-                    placeholder="At least 6 characters"
+                    placeholder="Your account password"
                   >
                     <template #icon>
                       <v-icon dark>mdi-lock</v-icon>

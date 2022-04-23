@@ -1,11 +1,12 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
+import { getStorage } from 'firebase/storage';
 import { getFirestore } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { getStorage } from 'firebase/storage';
+import { connectFunctionsEmulator, getFunctions } from 'firebase/functions';
 
-// The .env file contains the api keys used below.
-// const firebaseConfig = JSON.parse(process.env.VUE_APP_FIREBASE_CONFIG);
+// Activate Emulators
+const useFunctionsEmulator = true;
 
 const firebaseConfig = {
   apiKey: process.env.VUE_APP_SKRIPTAG_FIREBASE_API_KEY,
@@ -22,5 +23,13 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage();
 const auth = getAuth(app);
-export const getUserState = () => new Promise((resolve, reject) => onAuthStateChanged(auth, resolve, reject));
-export { auth, db, storage };
+const functions = getFunctions(app);
+const getUserState = () => new Promise((resolve, reject) => onAuthStateChanged(auth, resolve, reject));
+
+// If the functions emulator is enabled,
+// Run local functions instead.
+if (useFunctionsEmulator) {
+  connectFunctionsEmulator(functions, 'localhost', 5001);
+}
+
+export { db, storage, auth, functions, getUserState };

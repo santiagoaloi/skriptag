@@ -38,6 +38,14 @@
     -o-user-drag: none;
   }
 
+  .selectable {
+    -webkit-user-select: text !important;
+    -khtml-user-select: text !important;
+    -moz-user-select: text !important;
+    -o-user-select: text !important;
+    user-select: text !important;
+  }
+
   .vs-select__option {
     font-family: revert;
     font-size: 15px;
@@ -120,5 +128,9 @@
 
   h1 {
     font-size: 300%;
+  }
+
+  .v-tab {
+    text-transform: unset !important;
   }
 </style>

@@ -30,7 +30,7 @@
             </vs-card>
           </v-col>
           <v-col cols="12" sm="6" md="2">
-            <vs-card :class="{ 'disabled-card': !verified }" class="my-card">
+            <vs-card :disabled="!verified" :class="{ 'disabled-card': !verified }" class="my-card">
               <template #title>
                 <h3>Billing information</h3>
               </template>
@@ -42,7 +42,27 @@
               </template>
             </vs-card>
           </v-col>
+
           <v-col cols="12" sm="6" md="3">
+            <vs-card
+              :disabled="!verified"
+              :class="{ 'disabled-card': !verified }"
+              class="my-card"
+              @click="switchCard('SkriptagEdit')"
+            >
+              <template #title>
+                <h3>Manage Skriptag</h3>
+              </template>
+              <template #img>
+                <img :src="`https://picsum.photos/1280/800?${Date.now().toString().slice(0, 1)}`" alt="" />
+              </template>
+              <template #text>
+                <p>Manage users, roles, and project settings.</p>
+              </template>
+            </vs-card>
+          </v-col>
+
+          <!-- <v-col cols="12" sm="6" md="3">
             <vs-card :class="{ 'disabled-card': !verified }" class="my-card">
               <template #title>
                 <h3>Your purchased items</h3>
@@ -67,7 +87,7 @@
                 <p>Change your authentication settings,account email, 2FA, remove or disable your account.</p>
               </template>
             </vs-card>
-          </v-col>
+          </v-col> -->
         </v-row>
       </template>
     </base-no-split>
@@ -83,12 +103,14 @@
   import { get } from 'vuex-pathify';
   import ProfileEdit from './Profile-edit';
   import AccountEdit from './Account-edit';
+  import SkriptagEdit from './Skriptag-edit';
 
   export default {
     name: 'ProfileItems',
     components: {
       ProfileEdit,
       AccountEdit,
+      SkriptagEdit,
     },
     data() {
       return {
