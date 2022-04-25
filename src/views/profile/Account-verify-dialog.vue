@@ -49,7 +49,7 @@
     },
 
     computed: {
-      loading: sync('loaders/verifyLoader'),
+      loading: sync('loaders/resendVerificationLoader'),
     },
 
     watch: {

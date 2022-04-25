@@ -1,5 +1,5 @@
 <template>
-  <div v-show="isLoggedIn">
+  <div v-show="isLoggedIn" :disabled="verificationInProgressLoader">
     <v-slide-y-transition>
       <div v-show="imgBannerLoaded">
         <v-hover v-slot="{ hover }">
@@ -52,7 +52,13 @@
               <div v-if="$vuetify.breakpoint.smAndUp" class="ml-13">
                 <v-row no-gutters>
                   <v-col cols="12">
-                    <v-chip class="mb-4" small :color="verified ? 'teal darken-2' : 'orange darken-1'" text-color="white">
+                    <v-chip
+                      :loading="verificationInProgressLoader"
+                      class="mb-4"
+                      small
+                      :color="verified ? 'teal darken-2' : 'orange darken-1'"
+                      text-color="white"
+                    >
                       <v-avatar left>
                         <v-icon small>mdi-check-decagram</v-icon>
                       </v-avatar>
@@ -92,9 +98,12 @@
           </v-img>
         </v-hover>
 
-        <v-alert v-if="!verified" tile color="#212326" type="error">
-          Some profile settings will not be enabled until you verify your account.
-        </v-alert>
+        <v-fade-transition>
+          <v-alert v-if="!verified" tile color="#212326" type="error">
+            Some profile settings will not be enabled until you verify your account.
+          </v-alert>
+        </v-fade-transition>
+
         <v-progress-linear v-if="progress > 0" v-model="progress" color="teal" style="position: absolute"></v-progress-linear>
       </div>
     </v-slide-y-transition>
@@ -135,6 +144,7 @@
     computed: {
       ...get('authentication', ['lastLogin', 'userId', 'fullName', 'verified', 'isLoggedIn']),
       ...sync('authentication', ['profile']),
+      ...sync('loaders', ['verificationInProgressLoader']),
     },
 
     mounted() {
@@ -232,6 +242,11 @@
   };
 </script>
 <style>
+  [disabled] {
+    cursor: wait !important;
+    pointer-events: none;
+  }
+
   .my-card .vs-card {
     width: auto !important;
     height: 100% !important;

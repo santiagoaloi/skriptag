@@ -37,20 +37,21 @@ const actions = {
 
   // Re-sends the account activation email.
   async resendEmailVerification({ dispatch, getters }, password) {
-    store.set('loaders/verifyLoader', true);
+    store.set('loaders/resendVerificationLoader', true);
 
     try {
       const userCredential = await signInWithEmailAndPassword(auth, getters.userEmail, password);
 
       await sendEmailVerification(userCredential.user);
-      store.set('loaders/verifyLoader', false);
+      store.set('loaders/resendVerificationLoader', false);
       store.set('authentication/verifyAccountDialog', false);
 
       dispatch('snackbar/snackbarSuccess', 'We sent you an email to activate your account.', { root: true });
       return;
     } catch ({ ...error }) {
+      console.log(error.code);
       dispatch('errors/authMessagesSnackbar', error.code, { root: true });
-      store.set('loaders/verifyLoader', false);
+      store.set('loaders/resendVerificationLoader', false);
     }
   },
 
@@ -60,6 +61,7 @@ const actions = {
 
     if (result.data.verified) {
       dispatch('refreshProfile');
+      store.set('loaders/verificationInProgressLoader', false);
     }
   },
 
@@ -133,6 +135,8 @@ const actions = {
   //  Set the flag "verified" to the user account.
   async accountEmailVerification({ dispatch, state, getters }, code) {
     try {
+      store.set('loaders/verificationInProgressLoader', true);
+
       const metadata = await checkActionCode(auth, code);
       await applyActionCode(auth, code);
 
@@ -154,9 +158,11 @@ const actions = {
       dispatch('snackbar/snackbarSuccess', 'Your account is already verified.', {
         root: true,
       });
+      store.set('loaders/verificationInProgressLoader', false);
     } catch ({ ...error }) {
       router.push('login');
       dispatch('errors/authMessagesSnackbar', error.code, { root: true });
+      store.set('loaders/verificationInProgressLoader', false);
     }
   },
 
