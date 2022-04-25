@@ -4,8 +4,9 @@
       <v-expand-transition>
         <MobileMenuView v-if="mobileMenu" />
       </v-expand-transition>
+
       <v-fade-transition hide-on-leave mode="out-in">
-        <Router-view v-if="!mobileMenu" />
+        <router-view v-if="!mobileMenu"></router-view>
       </v-fade-transition>
     </div>
   </v-main>

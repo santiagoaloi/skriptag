@@ -29,7 +29,10 @@
                     <template #icon>
                       <v-icon dark>mdi-account</v-icon>
                     </template>
-                    <template #message-danger> {{ errors[0] }} </template>
+                    <template #message-danger>
+                      <v-icon v-if="failed" color="pink" style="margin-top: -1px" x-small dark>mdi-alert-circle-outline</v-icon>
+                      {{ errors[0] }}
+                    </template>
                   </vs-input>
                 </Validation-provider>
               </v-col>
@@ -53,7 +56,10 @@
                     <template #icon>
                       <v-icon dark>mdi-lock</v-icon>
                     </template>
-                    <template #message-danger> {{ errors[0] }} </template>
+                    <template #message-danger>
+                      <v-icon v-if="failed" color="pink" style="margin-top: -1px" x-small dark>mdi-alert-circle-outline</v-icon>
+                      {{ errors[0] }}
+                    </template>
                   </vs-input>
                 </Validation-provider>
               </v-col>
@@ -77,7 +83,10 @@
                     <template #icon>
                       <v-icon dark>mdi-lock</v-icon>
                     </template>
-                    <template #message-danger> {{ errors[0] }} </template>
+                    <template #message-danger>
+                      <v-icon v-if="failed" color="pink" style="margin-top: -1px" x-small dark>mdi-alert-circle-outline</v-icon>
+                      {{ errors[0] }}
+                    </template>
                   </vs-input>
                 </Validation-provider>
               </v-col>

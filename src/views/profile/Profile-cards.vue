@@ -1,6 +1,6 @@
 <template>
   <div>
-    <base-no-split v-if="!switchToCardSettings">
+    <base-no-split v-show="!switchToCardSettings">
       <template #left>
         <v-row>
           <v-col cols="12" sm="6" md="2">
@@ -92,8 +92,10 @@
       </template>
     </base-no-split>
     <v-fade-transition hide-on-leave>
-      <v-card-text v-if="switchToCardSettings" class="px-8">
-        <component :is="activeCard" @close="close()" />
+      <v-card-text v-show="switchToCardSettings" class="px-8">
+        <keep-alive>
+          <component :is="activeCard" @close="close()" />
+        </keep-alive>
       </v-card-text>
     </v-fade-transition>
   </div>

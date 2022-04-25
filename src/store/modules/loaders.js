@@ -6,6 +6,8 @@ const state = {
   signupLoader: false,
   verifyLoader: false,
   removeAccountLoader: false,
+  disableAccountLoader: false,
+  deleteAccountLoader: false,
 };
 
 const mutations = make.mutations(state);

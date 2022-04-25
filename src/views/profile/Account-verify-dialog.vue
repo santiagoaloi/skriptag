@@ -65,14 +65,14 @@
     },
 
     methods: {
-      ...call('authentication', ['resendActivationEmail']),
+      ...call('authentication', ['resendEmailVerification']),
       ...call('snackbar/*'),
 
       async validatePassword() {
         try {
           const validated = await this.$refs.passwordField.validate();
           if (validated) {
-            this.resendActivationEmail(this.password);
+            this.resendEmailVerification(this.password);
             return;
           }
           this.snackbarError('Please correct the fields in red');

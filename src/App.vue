@@ -99,6 +99,11 @@
     top: 43px;
   }
 
+  .vs-tooltip {
+    font-family: Arial, Helvetica, sans-serif !important;
+    background: #212326 !important;
+  }
+
   .vs-input__progress {
     position: absolute;
     top: 43px;
@@ -132,5 +137,17 @@
 
   .v-tab {
     text-transform: unset !important;
+  }
+
+  /* disables list color change on click */
+  .disable-hover.v-list-item--link:before {
+    background-color: unset !important;
+  }
+
+  .theme--light.v-tabs > .v-tabs-bar .v-tab:not(.v-tab--active),
+  .theme--light.v-tabs > .v-tabs-bar .v-tab:not(.v-tab--active) > .v-icon,
+  .theme--light.v-tabs > .v-tabs-bar .v-tab:not(.v-tab--active) > .v-btn,
+  .theme--light.v-tabs > .v-tabs-bar .v-tab--disabled {
+    color: #ccc;
   }
 </style>

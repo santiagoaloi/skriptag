@@ -26,8 +26,6 @@
               </v-btn>
             </v-fade-transition>
 
-            <!-- v-if="$vuetify.breakpoint.smAndDown" -->
-
             <!-- image upload inputs" -->
             <input ref="coverInput" accept="image/*" style="display: none" type="file" @change="uploadCoverPhoto()" />
             <input ref="avatarInput" accept="image/*" style="display: none" type="file" @change="uploadProfilePhoto()" />
@@ -64,12 +62,13 @@
                       <v-avatar left>
                         <v-icon small>mdi-account-star</v-icon>
                       </v-avatar>
-                      admin
+                      Root
                     </v-chip>
                     <p class="mb-n2">{{ profile.email }}</p>
                   </v-col>
-                  <!-- <v-col cols="12"> -->
-                  <!-- <base-typing-indicator v-if="!profile.name" class="my-5" /> -->
+                  <v-col cols="12">
+                    <base-typing-indicator v-if="!profile.name && !profile.lastName" class="py-12" />
+                  </v-col>
 
                   <span
                     class="d-inline-block text-truncate mb-2 font-weight-bold"
@@ -159,10 +158,12 @@
       uploadProfilePhoto() {
         const file = this.$refs.avatarInput.files[0];
         const fileSize = this.$refs.avatarInput.files[0].size;
+
         if (fileSize > 2048000) {
           this.snackbarError('The avatar image size cannot be bigger than 2MB');
           return;
         }
+
         const photoRef = ref(storage, `users/${this.userId}/${file.name}`);
         const uploadTask = uploadBytesResumable(photoRef, file);
         uploadTask.on(
@@ -171,7 +172,7 @@
             this.progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           },
           (error) => {
-            console.log(error.code);
+            console.log(error);
           },
           () => {
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
@@ -188,6 +189,7 @@
       uploadCoverPhoto() {
         const file = this.$refs.coverInput.files[0];
         const fileSize = this.$refs.coverInput.files[0].size;
+
         if (fileSize > 2048000) {
           this.snackbarError('The cover image size cannot be bigger than 2MB');
           return;
@@ -201,7 +203,7 @@
             this.progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           },
           (error) => {
-            // console.log(error.code);
+            console.log(error);
           },
           () => {
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {

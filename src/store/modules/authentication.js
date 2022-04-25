@@ -1,7 +1,9 @@
 // Utilities
 import { make } from 'vuex-pathify';
 import { isEmpty, capitalize, startCase } from 'lodash';
-import { doc, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
+import { httpsCallable } from 'firebase/functions';
+
+import { doc, addDoc, setDoc, updateDoc, collection, serverTimestamp } from 'firebase/firestore';
 import {
   EmailAuthProvider,
   reauthenticateWithCredential,
@@ -14,49 +16,124 @@ import {
   sendEmailVerification,
   confirmPasswordReset,
   applyActionCode,
+  checkActionCode,
 } from '@firebase/auth';
-import { auth, db } from '@/firebase/firebase';
+import { auth, db, functions } from '@/firebase/firebase';
 import { store } from '@/store';
 import router from '@/router';
 
 const state = {
   user: {},
   profile: {},
-  showResendActivationEmail: false,
+  showresendEmailVerification: false,
   removeAccountDialog: false,
   verifyAccountDialog: false,
+  response: '',
 };
 
 const mutations = make.mutations(state);
 const actions = {
   ...make.actions(state),
 
-  // Generates a password recovery email.
-  async accountEmailVerification({ dispatch, state, getters }, code) {
+  // Re-sends the account activation email.
+  async resendEmailVerification({ dispatch, getters }, password) {
+    store.set('loaders/verifyLoader', true);
+
     try {
-      if (getters.isLoggedIn && !getters.verified) {
-        await applyActionCode(auth, code);
+      const userCredential = await signInWithEmailAndPassword(auth, getters.userEmail, password);
 
-        // reloads user object to reflect emailVerified value as true.
-        state.user.reload();
+      await sendEmailVerification(userCredential.user);
+      store.set('loaders/verifyLoader', false);
+      store.set('authentication/verifyAccountDialog', false);
 
-        router.push('login');
-        dispatch('snackbar/snackbarSuccess', 'Your account is now verified', {
+      dispatch('snackbar/snackbarSuccess', 'We sent you an email to activate your account.', { root: true });
+      return;
+    } catch ({ ...error }) {
+      dispatch('errors/authMessagesSnackbar', error.code, { root: true });
+      store.set('loaders/verifyLoader', false);
+    }
+  },
+
+  async findUserByEmailAndVerify({}, email) {
+    const veriyUser = httpsCallable(functions, 'verifiyUserByEmail');
+    const result = await veriyUser(email);
+  },
+
+  async disableAccountByEmail({ dispatch }, email) {
+    try {
+      store.set('loaders/disableAccountLoader', true);
+      const disableAccount = httpsCallable(functions, 'disableUserByEmail');
+      const result = await disableAccount(email);
+
+      if (result.data.disabled) {
+        store.set('loaders/disableAccountLoader', false);
+
+        dispatch('snackbar/snackbarSuccess', `${email} disabled`, {
           root: true,
         });
+      }
+    } catch ({ ...error }) {
+      store.set('loaders/disableAccountLoader', false);
+      dispatch('errors/authMessagesSnackbar', error.code, { root: true });
+    }
+  },
+
+  async enableAccountByEmail({ dispatch }, email) {
+    try {
+      store.set('loaders/disableAccountLoader', true);
+      const enableAccount = httpsCallable(functions, 'enableUserByEmail');
+      const result = await enableAccount(email);
+
+      if (result.data.enabled) {
+        store.set('loaders/disableAccountLoader', false);
+
+        dispatch('snackbar/snackbarSuccess', `${email} enabled`, {
+          root: true,
+        });
+      }
+    } catch ({ ...error }) {
+      store.set('loaders/disableAccountLoader', false);
+      dispatch('errors/authMessagesSnackbar', error.code, { root: true });
+    }
+  },
+
+  async deleteAccountByEmail({ dispatch }, email) {
+    try {
+      store.set('loaders/deleteAccountLoader', true);
+      const deleteAccount = httpsCallable(functions, 'deleteUserByEmail');
+      const result = await deleteAccount(email);
+
+      if (result.data.deleted) {
+        store.set('loaders/deleteAccountLoader', false);
+
+        dispatch('snackbar/snackbarSuccess', `${email} deleted`, {
+          root: true,
+        });
+      }
+    } catch ({ ...error }) {
+      store.set('loaders/deleteAccountLoader', false);
+      dispatch('errors/authMessagesSnackbar', error.code, { root: true });
+    }
+  },
+
+  //  Set the flag "verified" to the user account.
+  async accountEmailVerification({ dispatch, state, getters }, code) {
+    try {
+      const metadata = await checkActionCode(auth, code);
+      await applyActionCode(auth, code);
+
+      // Set user profile verified key to true (admin function)
+      dispatch('findUserByEmailAndVerify', metadata.data.email);
+
+      if (getters.isLoggedIn && !getters.verified) {
+        // reloads user object to reflect emailVerified value as true.
+        state.user.reload();
+        router.push('profile');
         return;
       }
 
       if (!getters.isLoggedIn) {
-        await applyActionCode(auth, code);
-
-        // reloads user object to reflect emailVerified value as true.
-        // state.user.reload();
-
         router.push('login');
-        dispatch('snackbar/snackbarSuccess', 'Your account is now verified', {
-          root: true,
-        });
         return;
       }
 
@@ -126,7 +203,7 @@ const actions = {
   },
 
   // Logout and clear user data objects in Vuex.
-  async logout({}) {
+  async logout() {
     await signOut(auth);
     store.set('authentication/user', {});
     store.set('authentication/profile', {});
@@ -157,6 +234,7 @@ const actions = {
   // Creates a new user account and routes to profile page.
   async signup({ dispatch }, signupForm) {
     store.set('loaders/signupLoader', true);
+
     const { email, password } = signupForm;
 
     try {
@@ -164,24 +242,7 @@ const actions = {
 
       const { user } = userCredential;
 
-      // Adds a document in a  firestore collection.
-      // doc (Firestore instance, collection name, collection id).
-      const userDocRef = doc(db, 'users', user.uid);
-
-      // User profile fields to be created in db (payload)
-      const userDocData = {
-        uid: user.uid,
-        email,
-        name: signupForm.name,
-        lastName: signupForm.lastName,
-        avatar: '',
-        coverAvatar: '',
-        dateCreated: serverTimestamp(),
-      };
-
-      // SetDoc (Firestore, Payload)
-      // creates the user profile in the db collection.
-      setDoc(userDocRef, userDocData);
+      dispatch('addUserToUsersCollection', { user, signupForm });
 
       // Set user in Vuex and navigate to the new user profile.
       store.set('authentication/user', user);
@@ -193,6 +254,41 @@ const actions = {
       dispatch('errors/signupMessagesSnackbar', error.code, { root: true });
       store.set('loaders/signupLoader', false);
     }
+  },
+
+  addUserToUsersCollection(_, { user, signupForm }) {
+    const { email } = signupForm;
+
+    // Adds a document in a  firestore collection.
+    // doc (Firestore instance, collection name, collection id).
+    const userDocRef = doc(db, 'users', user.uid);
+
+    // User profile fields to be created in db (payload)
+    const userDocData = {
+      uid: user.uid,
+      email,
+      name: signupForm.name,
+      lastName: signupForm.lastName,
+      avatar: '',
+      coverAvatar: '',
+      dateCreated: serverTimestamp(),
+    };
+
+    // SetDoc (Firestore, Payload)
+    // creates the user profile in the db collection.
+    setDoc(userDocRef, userDocData);
+  },
+
+  async addRole(_, { role }) {
+    const { name, description } = role;
+    const colRef = collection(db, 'roles');
+
+    // Add a new document with a generated id.
+    await addDoc(colRef, {
+      name,
+      alias: name,
+      description,
+    });
   },
 
   // Login user account, load user profile object and route to profile page.
@@ -210,31 +306,14 @@ const actions = {
     } catch ({ ...error }) {
       dispatch('errors/authMessagesSnackbar', error.code, { root: true });
       store.set('loaders/authLoader', false);
-    }
-  },
-
-  // Re-sends the account activation email.
-  async resendActivationEmail({ dispatch, getters }, password) {
-    store.set('loaders/verifyLoader', true);
-
-    try {
-      const userCredential = await signInWithEmailAndPassword(auth, getters.userEmail, password);
-
-      await sendEmailVerification(userCredential.user);
-      store.set('loaders/verifyLoader', false);
-      store.set('authentication/verifyAccountDialog', false);
-
-      dispatch('snackbar/snackbarSuccess', 'We sent you an email to activate your account.', { root: true });
-      return;
-    } catch ({ ...error }) {
-      dispatch('errors/authMessagesSnackbar', error.code, { root: true });
-      store.set('loaders/verifyLoader', false);
+      console.log(error.code);
     }
   },
 };
 
 const getters = {
   // Checks if the user is authenticated.
+
   isLoggedIn: (auth.onAuthStateChanged, (auth) => !isEmpty(auth.user)),
 
   getPasswordComplexity: () => (value) => {
@@ -277,7 +356,7 @@ const getters = {
   },
 
   verified: (state, getters) => {
-    if (getters.isLoggedIn) return state.user?.emailVerified;
+    if (getters.isLoggedIn) return state.profile?.verified;
   },
 
   // Capitalize the first letter of every word.
