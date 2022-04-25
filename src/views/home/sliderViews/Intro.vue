@@ -11,6 +11,7 @@
 
     <p class="pt-5">
       Learn coding , download free and premium application templates, access JS/VueJS training material, participate in Skriptag's
+      blogs and product reviews.
     </p>
   </base-split-2>
 </template>

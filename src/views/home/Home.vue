@@ -1,7 +1,6 @@
 <template>
   <div class="fill-height">
     <intro-slide right />
-    <!-- <intro-slide /> -->
   </div>
 </template>
 <script>

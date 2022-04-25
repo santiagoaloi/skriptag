@@ -248,8 +248,7 @@ const actions = {
     await signOut(auth);
     store.set('authentication/user', {});
     store.set('authentication/profile', {});
-
-    router.push('login');
+    router.push('/');
   },
 
   // Creates a new user account and routes to profile page.

@@ -84,7 +84,7 @@
                     :danger="failed"
                     block
                     type="password"
-                    placeholder="Repeat New password"
+                    placeholder="Repeat password"
                     @focus="resetValidation()"
                   >
                     <template #icon>
