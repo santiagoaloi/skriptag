@@ -15,7 +15,6 @@ export async function setUserAndProfile({ isAuth }) {
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      console.log(docSnap.data());
       store.set('authentication/profile', docSnap.data());
     }
   }

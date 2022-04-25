@@ -11,19 +11,19 @@ admin.initializeApp();
 //     .catch((error) => error),
 // );
 
-// exports.verifiyUserByEmail = functions.https.onCall(async (email) => {
-//   try {
-//     const user = await admin.auth().getUserByEmail(email);
-//     const id = user.uid;
-//     const docRef = admin.firestore().doc(`users/${id}`);
-//     await docRef.update({ verified: true });
-//     return {
-//       message: `Success! ${email} is changed to not verified.`,
-//     };
-//   } catch (ex) {
-//     return { message: `Error!  ${ex.message}` };
-//   }
-// });
+exports.verifiyUserByEmail = functions.https.onCall(async (email) => {
+  try {
+    const user = await admin.auth().getUserByEmail(email);
+    const id = user.uid;
+    const docRef = admin.firestore().doc(`users/${id}`);
+    await docRef.update({ verified: true });
+    return {
+      verified: true,
+    };
+  } catch (ex) {
+    return { message: `Error!  ${ex.message}` };
+  }
+});
 
 exports.disableUserByEmail = functions.https.onCall(async (email) => {
   try {

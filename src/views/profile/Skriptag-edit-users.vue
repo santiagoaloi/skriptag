@@ -116,6 +116,7 @@
                             :key="item.name"
                             :ripple="false"
                             link
+                            :disabled="item.disabled"
                             @click="triggerFn(item.function, user.email)"
                           >
                             <v-list-item-title v-text="item.name" />
@@ -136,7 +137,7 @@
 </template>
 <script>
   import { onSnapshot, collection } from 'firebase/firestore';
-  import { call, sync } from 'vuex-pathify';
+  import { call, sync, get } from 'vuex-pathify';
   import { db } from '@/firebase/firebase';
 
   // Roles collection ref
@@ -164,6 +165,8 @@
 
     computed: {
       ...sync('loaders', ['disableAccountLoader', 'deleteAccountLoader']),
+      ...get('authentication', ['userId']),
+
       filteredUsers() {
         const search = this.search.toString().toLowerCase();
         return this.users.filter((user) =>
@@ -181,13 +184,14 @@
 
       rowActions(user) {
         return [
-          { name: 'Manage Roles', test: 'triggerRolesDialog' },
-          { name: 'Reset Password', function: '' },
+          { name: 'Manage Roles', test: 'triggerRolesDialog', disabled: false },
+          { name: 'Reset Password', function: '', disabled: false },
           {
             name: user.disabled ? 'Enable account' : 'disable account',
             function: user.disabled ? 'enableAccountByEmail' : 'disableAccountByEmail',
+            disabled: false,
           },
-          { name: 'Delete account', function: 'deleteAccountByEmail' },
+          { name: 'Delete account', function: 'deleteAccountByEmail', disabled: user.uid === this.userId },
         ];
       },
 

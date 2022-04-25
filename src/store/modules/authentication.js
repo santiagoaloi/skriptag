@@ -3,7 +3,7 @@ import { make } from 'vuex-pathify';
 import { isEmpty, capitalize, startCase } from 'lodash';
 import { httpsCallable } from 'firebase/functions';
 
-import { doc, addDoc, setDoc, updateDoc, collection, serverTimestamp, onSnapshot } from 'firebase/firestore';
+import { doc, addDoc, setDoc, updateDoc, collection, serverTimestamp, getDoc } from 'firebase/firestore';
 import {
   EmailAuthProvider,
   reauthenticateWithCredential,
@@ -54,9 +54,13 @@ const actions = {
     }
   },
 
-  async findUserByEmailAndVerify({}, email) {
+  async findUserByEmailAndVerify({ dispatch }, email) {
     const veriyUser = httpsCallable(functions, 'verifiyUserByEmail');
     const result = await veriyUser(email);
+
+    if (result.data.verified) {
+      dispatch('refreshProfile');
+    }
   },
 
   async disableAccountByEmail({ dispatch }, email) {
@@ -109,10 +113,20 @@ const actions = {
         dispatch('snackbar/snackbarSuccess', `${email} deleted`, {
           root: true,
         });
+        return;
       }
     } catch ({ ...error }) {
       store.set('loaders/deleteAccountLoader', false);
       dispatch('errors/authMessagesSnackbar', error.code, { root: true });
+    }
+  },
+
+  async refreshProfile({ getters }) {
+    const docRef = doc(db, 'users', getters.userId);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      store.set('authentication/profile', docSnap.data());
     }
   },
 
