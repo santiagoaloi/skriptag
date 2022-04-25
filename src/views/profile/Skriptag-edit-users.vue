@@ -19,7 +19,7 @@
         />
         <Base-button small class="ml-2" large> Add user</Base-button>
         <vs-tooltip shadow circle color="#ccc">
-          <Base-button small class="ml-2" large @click="getRolesSnaphot()"> <v-icon> mdi-refresh</v-icon></Base-button>
+          <Base-button small class="ml-2" large @click="getUsersSnapshot()"> <v-icon> mdi-refresh</v-icon></Base-button>
           <template #tooltip> Reload </template>
         </vs-tooltip>
 
@@ -173,7 +173,7 @@
     },
 
     mounted() {
-      this.getRolesSnaphot();
+      this.getUsersSnapshot();
     },
 
     methods: {
@@ -238,11 +238,10 @@
       },
 
       triggerFn(fn, params) {
-        alert(params);
         this[fn](params);
       },
 
-      getRolesSnaphot() {
+      getUsersSnapshot() {
         this.loading = true;
 
         this.loadingSpinner = this.$vs.loading({

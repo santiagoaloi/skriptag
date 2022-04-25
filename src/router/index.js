@@ -26,11 +26,6 @@ router.beforeEach(async (to, from, next) => {
   // if a user is authenticated , the user object will be returned in isAuth.
   const isAuth = await getUserState();
 
-  // Sets the user and user-profile to Vuex.
-  if (isAuth) {
-    await setUserAndProfile({ isAuth });
-  }
-
   const isLoginPageAndAuthenticated = to.matched.some((record) => record.name === 'login' && isAuth);
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
 
@@ -47,7 +42,14 @@ router.beforeEach(async (to, from, next) => {
     next('/profile');
     return;
   }
-  // Unprotected routes are all routable.
+
+  if (requiresAuth) {
+    // Unprotected routes are all routable.
+    await setUserAndProfile({ isAuth });
+    next();
+    return;
+  }
+
   next();
 });
 

@@ -3,7 +3,7 @@ import { make } from 'vuex-pathify';
 import { isEmpty, capitalize, startCase } from 'lodash';
 import { httpsCallable } from 'firebase/functions';
 
-import { doc, addDoc, setDoc, updateDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { doc, addDoc, setDoc, updateDoc, collection, serverTimestamp, onSnapshot } from 'firebase/firestore';
 import {
   EmailAuthProvider,
   reauthenticateWithCredential,
@@ -202,33 +202,34 @@ const actions = {
     });
   },
 
+  // Login user account, load user profile object and route to profile page.
+  async login({ dispatch }, loginForm) {
+    store.set('loaders/authLoader', true);
+    const { email, password } = loginForm;
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+
+      const { user } = userCredential;
+
+      store.set('authentication/user', user);
+      // store.set('authentication/uid', user.uid);
+
+      store.set('loaders/authLoader', false);
+      router.push('profile');
+    } catch ({ ...error }) {
+      dispatch('errors/authMessagesSnackbar', error.code, { root: true });
+      store.set('loaders/authLoader', false);
+      console.log(error.code);
+    }
+  },
+
   // Logout and clear user data objects in Vuex.
   async logout() {
     await signOut(auth);
     store.set('authentication/user', {});
     store.set('authentication/profile', {});
+
     router.push('login');
-  },
-
-  // Removes the account and then routes the user to the homepage.
-  async removeAccount({ dispatch }, password) {
-    try {
-      store.set('loaders/removeAccountLoader', true);
-      const credential = EmailAuthProvider.credential(auth.currentUser.email, password);
-      const authenticated = await reauthenticateWithCredential(auth.currentUser, credential);
-
-      // Pass authenticated.user for deletion.
-      await deleteUser(authenticated.user);
-
-      store.set('authentication/user', {});
-      store.set('authentication/profile', {});
-      dispatch('snackbar/snackbarSuccess', 'Account removed, Hope to see you again soon 💚', { root: true });
-      router.push('/');
-      store.set('loaders/removeAccountLoader', false);
-    } catch ({ ...error }) {
-      store.set('loaders/removeAccountLoader', false);
-      // dispatch('snackbar/snackbarError', 'Incorrect password, try again', { root: true });
-    }
   },
 
   // Creates a new user account and routes to profile page.
@@ -253,6 +254,26 @@ const actions = {
     } catch ({ ...error }) {
       dispatch('errors/signupMessagesSnackbar', error.code, { root: true });
       store.set('loaders/signupLoader', false);
+    }
+  },
+
+  // Removes the account and then routes the user to the homepage.
+  async removeAccount({ dispatch }, password) {
+    try {
+      store.set('loaders/removeAccountLoader', true);
+      const credential = EmailAuthProvider.credential(auth.currentUser.email, password);
+      const authenticated = await reauthenticateWithCredential(auth.currentUser, credential);
+
+      // Pass authenticated.user for deletion.
+      await deleteUser(authenticated.user);
+
+      store.set('authentication/user', {});
+      store.set('authentication/profile', {});
+      dispatch('snackbar/snackbarSuccess', 'Account removed, Hope to see you again soon 💚', { root: true });
+      router.push('/');
+      store.set('loaders/removeAccountLoader', false);
+    } catch ({ ...error }) {
+      store.set('loaders/removeAccountLoader', false);
     }
   },
 
@@ -289,25 +310,6 @@ const actions = {
       alias: name,
       description,
     });
-  },
-
-  // Login user account, load user profile object and route to profile page.
-  async login({ dispatch }, loginForm) {
-    store.set('loaders/authLoader', true);
-    const { email, password } = loginForm;
-    try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-
-      const { user } = userCredential;
-
-      store.set('authentication/user', user);
-      store.set('loaders/authLoader', false);
-      router.push('profile');
-    } catch ({ ...error }) {
-      dispatch('errors/authMessagesSnackbar', error.code, { root: true });
-      store.set('loaders/authLoader', false);
-      console.log(error.code);
-    }
   },
 };
 
@@ -349,6 +351,10 @@ const getters = {
 
   userId: (state, getters) => {
     if (getters.isLoggedIn) return state.user?.uid;
+  },
+
+  isProfileLoaded: (state, getters) => {
+    if (getters.isLoggedIn) return !isEmpty(state.profile);
   },
 
   userEmail: (state, getters) => {

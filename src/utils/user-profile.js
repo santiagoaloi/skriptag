@@ -1,19 +1,22 @@
-import { doc, onSnapshot } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/firebase/firebase';
 import { store } from '@/store';
 
 export async function setUserAndProfile({ isAuth }) {
-  // user unique ID.
-  const uuid = isAuth?.uid;
-
   // Set user object to Vuex.
   store.set('authentication/user', isAuth ?? {});
 
-  // Set user profile to Vuex.
-  const docRef = doc(db, 'users', uuid);
-  const unsubscribe = onSnapshot(docRef, (docSnap) => {
-    const profileData = docSnap.data();
-    // Set user-profile object to Vuex.
-    store.set('authentication/profile', profileData);
-  });
+  const currentId = store.getters['authentication/userId'];
+  const isLoggedIn = store.getters['authentication/isLoggedIn'];
+  const isProfileLoaded = store.getters['authentication/isProfileLoaded'];
+
+  if (isLoggedIn && !isProfileLoaded) {
+    const docRef = doc(db, 'users', currentId);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      console.log(docSnap.data());
+      store.set('authentication/profile', docSnap.data());
+    }
+  }
 }

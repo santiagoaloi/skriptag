@@ -6,7 +6,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { connectFunctionsEmulator, getFunctions } from 'firebase/functions';
 
 // Activate Emulators
-const useFunctionsEmulator = true;
+const useFunctionsEmulator = false;
 
 const firebaseConfig = {
   apiKey: process.env.VUE_APP_SKRIPTAG_FIREBASE_API_KEY,

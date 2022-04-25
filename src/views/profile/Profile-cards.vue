@@ -93,9 +93,7 @@
     </base-no-split>
     <v-fade-transition hide-on-leave>
       <v-card-text v-show="switchToCardSettings" class="px-8">
-        <keep-alive>
-          <component :is="activeCard" @close="close()" />
-        </keep-alive>
+        <component :is="activeCard" @close="close()" />
       </v-card-text>
     </v-fade-transition>
   </div>

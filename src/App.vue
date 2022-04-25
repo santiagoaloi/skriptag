@@ -7,9 +7,12 @@
 <script>
   export default {
     name: 'BaseApp',
+
     mounted() {
       this.$vs.setTheme('dark');
     },
+
+    methods: {},
   };
 </script>
 <style>
@@ -96,12 +99,12 @@
 
   .vs-input__message {
     position: absolute;
-    top: 43px;
+    top: 43px !important;
   }
 
   .vs-tooltip {
     font-family: Arial, Helvetica, sans-serif !important;
-    background: #212326 !important;
+    background: #212326 !important !important;
   }
 
   .vs-input__progress {
@@ -110,7 +113,7 @@
   }
 
   .v-application a {
-    color: #6ee6b9 !important;
+    color: #6ee6b9 !important !important;
   }
 
   .pattern-bg {
@@ -128,11 +131,11 @@
   }
 
   .v-navigation-drawer {
-    overflow: visible;
+    overflow: visible !important;
   }
 
   h1 {
-    font-size: 300%;
+    font-size: 300% !important;
   }
 
   .v-tab {
@@ -148,6 +151,6 @@
   .theme--light.v-tabs > .v-tabs-bar .v-tab:not(.v-tab--active) > .v-icon,
   .theme--light.v-tabs > .v-tabs-bar .v-tab:not(.v-tab--active) > .v-btn,
   .theme--light.v-tabs > .v-tabs-bar .v-tab--disabled {
-    color: #ccc;
+    color: #ccc !important;
   }
 </style>

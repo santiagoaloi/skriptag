@@ -22,6 +22,9 @@ const vuexLocal = new VuexPersist({
     app: {
       ...state.app,
     },
+    authentication: {
+      uid: state.authentication.uid,
+    },
   }),
 });
 
