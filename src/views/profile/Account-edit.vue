@@ -25,6 +25,7 @@
                     maxlength="20"
                     block
                     placeholder="Current password"
+                    @focus="resetValidation()"
                   >
                     <template #icon>
                       <v-icon dark>mdi-account</v-icon>
@@ -51,7 +52,8 @@
                     maxlength="20"
                     block
                     placeholder="New password"
-                    :progress="getPasswordComplexity(credentials.newPassword)"
+                    :progress="!failed ? getPasswordComplexity(credentials.newPassword) : null"
+                    @focus="resetValidation()"
                   >
                     <template #icon>
                       <v-icon dark>mdi-lock</v-icon>
@@ -79,6 +81,7 @@
                     maxlength="20"
                     block
                     placeholder="Repeat New password"
+                    @focus="resetValidation()"
                   >
                     <template #icon>
                       <v-icon dark>mdi-lock</v-icon>
@@ -174,10 +177,15 @@
       ...call('authentication', ['accountResetPassword']),
       ...call('snackbar/*'),
 
+      resetValidation() {
+        this.$refs.accountEdit.reset();
+      },
       async validatePasswords() {
         try {
           const validated = await this.$refs.accountEdit.validate();
           if (validated) {
+            this.$refs.accountEdit.reset();
+
             this.accountResetPassword({ credentials: this.credentials });
             this.clearCredentialsform();
           } else {

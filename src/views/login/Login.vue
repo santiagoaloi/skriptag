@@ -25,7 +25,14 @@
                   name="email"
                   :rules="{ email: true, required: true }"
                 >
-                  <vs-input v-model="loginForm.email" :danger="failed" maxlength="100" block placeholder="Email">
+                  <vs-input
+                    v-model="loginForm.email"
+                    :danger="failed"
+                    maxlength="100"
+                    block
+                    placeholder="Email"
+                    @focus="resetValidation()"
+                  >
                     <template #icon>
                       <v-icon dark>mdi-account</v-icon>
                     </template>
@@ -53,6 +60,7 @@
                     block
                     type="password"
                     placeholder="Your account password"
+                    @focus="resetValidation()"
                   >
                     <template #icon>
                       <v-icon dark>mdi-lock</v-icon>
@@ -111,6 +119,10 @@
     methods: {
       ...call('authentication', ['login', 'accountRecovery']),
       ...call('snackbar/*'),
+
+      resetValidation() {
+        this.$refs.loginForm.reset();
+      },
 
       async validateLoginForm() {
         try {

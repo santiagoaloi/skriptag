@@ -10,7 +10,6 @@ import 'vuesax/dist/vuesax.css';
 
 // Styles amd Animations
 import 'aos/dist/aos.css';
-// import 'hamburgers/dist/hamburgers.css';
 
 Vue.config.productionTip = false;
 // Vuesax styles
@@ -28,7 +27,7 @@ Vue.config.productionTip = false;
 
 // Remember to disable when not needed.
 // This shows Vue dev tools in production
-Vue.config.devtools = true;
+Vue.config.devtools = false;
 
 Vue.directive('animation', {
   bind(el, binding) {

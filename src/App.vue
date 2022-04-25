@@ -104,7 +104,7 @@
 
   .vs-tooltip {
     font-family: Arial, Helvetica, sans-serif !important;
-    background: #212326 !important !important;
+    background: #212326 !important;
   }
 
   .vs-input__progress {
@@ -113,7 +113,7 @@
   }
 
   .v-application a {
-    color: #6ee6b9 !important !important;
+    color: #6ee6b9 !important;
   }
 
   .pattern-bg {

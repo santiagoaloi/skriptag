@@ -15,7 +15,14 @@
                     name="name"
                     :rules="{ required: true, alpha_spaces: true }"
                   >
-                    <vs-input v-model="profile.name" :danger="failed" maxlength="20" block placeholder="First name">
+                    <vs-input
+                      v-model="profile.name"
+                      :danger="failed"
+                      maxlength="20"
+                      block
+                      placeholder="First name"
+                      @focus="resetValidation()"
+                    >
                       <template #icon>
                         <v-icon dark>mdi-account</v-icon>
                       </template>
@@ -36,7 +43,14 @@
                     name="last name"
                     :rules="{ required: true, alpha_spaces: true }"
                   >
-                    <vs-input v-model="profile.lastName" :danger="failed" maxlength="20" block placeholder="Last name">
+                    <vs-input
+                      v-model="profile.lastName"
+                      :danger="failed"
+                      maxlength="20"
+                      block
+                      placeholder="Last name"
+                      @focus="resetValidation()"
+                    >
                       <template #icon>
                         <v-icon dark>mdi-account</v-icon>
                       </template>
@@ -124,6 +138,10 @@
 
         // Merge possible new image changes and rollback.
         this.profile = merge(originProfile, profileMedia);
+      },
+
+      resetValidation() {
+        this.$refs.profileEdit.reset();
       },
 
       async saveProfile() {
