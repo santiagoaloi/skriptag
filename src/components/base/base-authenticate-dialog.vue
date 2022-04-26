@@ -34,7 +34,7 @@
 
         <v-card-actions class="px-6">
           <v-spacer></v-spacer>
-          <v-btn :disabled="loading" color="grey lighten-1" text @click.prevent="close()"> close </v-btn>
+          <v-btn :disabled="loading" color="grey lighten-1" text @click.prevent="close()"> Close </v-btn>
           <v-btn :loading="loading" color="#de355f" text type="submit"> Continue </v-btn>
         </v-card-actions>
       </form>

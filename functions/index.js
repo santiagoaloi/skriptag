@@ -84,3 +84,20 @@ exports.deleteUserByEmail = functions.https.onCall(async (email) => {
     return { message: `Error!  ${ex.message}` };
   }
 });
+
+exports.chageUserPasswordByEmail = functions.https.onCall(async ({ payload }) => {
+  try {
+    const { email, password } = payload;
+    const user = await admin.auth().getUserByEmail(email);
+
+    await admin.auth().updateUser(user.uid, {
+      password,
+    });
+
+    return {
+      changed: true,
+    };
+  } catch (ex) {
+    return { message: `Error!  ${ex.message}` };
+  }
+});

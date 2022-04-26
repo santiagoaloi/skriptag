@@ -97,6 +97,21 @@ const actions = {
     }
   },
 
+  async chageUserPasswordByEmail({ dispatch }, { payload }) {
+    try {
+      const changePassword = httpsCallable(functions, 'chageUserPasswordByEmail');
+      const result = await changePassword({ payload });
+
+      if (result.data.changed) {
+        return {
+          changed: true,
+        };
+      }
+    } catch ({ ...error }) {
+      dispatch('errors/authMessagesSnackbar', error.code, { root: true });
+    }
+  },
+
   async refreshProfile({ getters }) {
     const docRef = doc(db, 'users', getters.userId);
     const docSnap = await getDoc(docRef);

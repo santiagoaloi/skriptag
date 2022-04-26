@@ -159,6 +159,15 @@
       @close="deleteAccountDialog = false"
       @authenticatedWithPayload="deleteAccount"
     />
+
+    <base-authenticate-change-password-dialog
+      v-model="changePasswordDialog"
+      :title="changePasswordTitle()"
+      :text="changePasswordText()"
+      :payload="payload"
+      @close="changePasswordDialog = false"
+      @authenticatedWithPayload="changeAccountPassword"
+    />
   </div>
 </template>
 
@@ -195,6 +204,7 @@
         enableAccountLoader: false,
         deleteAccountDialog: false,
         deleteAccountLoader: false,
+        changePasswordDialog: false,
         payload: null,
       };
     },
@@ -215,13 +225,18 @@
     },
 
     methods: {
-      ...call('authentication', ['disableAccountByEmail', 'enableAccountByEmail', 'deleteAccountByEmail']),
+      ...call('authentication', [
+        'disableAccountByEmail',
+        'enableAccountByEmail',
+        'deleteAccountByEmail',
+        'chageUserPasswordByEmail',
+      ]),
       ...call('snackbar/*'),
 
       rowActions(user) {
         return [
-          { name: 'Manage Roles', test: 'triggerRolesDialog', disabled: false },
-          { name: 'Reset Password', method: '', disabled: false },
+          { name: 'Manage Roles', test: 'changeRolesDialog', disabled: false },
+          { name: 'Reset Password', method: 'changePasswordTrigger', disabled: false },
           {
             name: user.disabled ? 'Enable account' : 'Disable account',
             method: user.disabled ? 'enableAccountTrigger' : 'disableAccountTrigger',
@@ -260,6 +275,19 @@
         return 'This action is permament, you will not be able to undo it. All your data, will be removed immediately.';
       },
 
+      changePasswordTitle() {
+        return 'Change account password';
+      },
+
+      changePasswordText() {
+        return 'Set a manual password for this account, the user will get notified of this change, but the password has to be sent to the user somehow, sms is a good option.';
+      },
+
+      changePasswordTrigger({ account }) {
+        this.payload = account;
+        this.changePasswordDialog = true;
+      },
+
       disableAccountTrigger({ account }) {
         this.payload = account;
         this.disableAccountDialog = true;
@@ -276,7 +304,7 @@
       },
 
       async deleteAccount(account) {
-        this.deleteAccountDialog = true;
+        this.deleteAccountLoader = true;
 
         try {
           const { email } = account;
@@ -293,6 +321,16 @@
         } catch ({ ...error }) {
           this.deleteAccountLoader = false;
         }
+      },
+
+      async changeAccountPassword({ result }) {
+        try {
+          const { email, changed } = result;
+          if (changed) {
+            this.snackbarSuccess(`${email} password changed.`);
+            this.changePasswordDialog = false;
+          }
+        } catch ({ ...error }) {}
       },
 
       async disableAccount(account) {
