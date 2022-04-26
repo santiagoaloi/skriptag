@@ -10,7 +10,6 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signOut,
-  deleteUser,
   updatePassword,
   sendPasswordResetEmail,
   sendEmailVerification,
@@ -26,8 +25,6 @@ const state = {
   user: {},
   profile: {},
   showresendEmailVerification: false,
-  removeAccountDialog: false,
-  verifyAccountDialog: false,
   response: '',
 };
 
@@ -36,23 +33,13 @@ const actions = {
   ...make.actions(state),
 
   // Re-sends the account activation email.
-  async resendEmailVerification({ dispatch, getters }, password) {
-    store.set('loaders/resendVerificationLoader', true);
-
+  async resendEmailVerification({ state }) {
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, getters.userEmail, password);
-
-      await sendEmailVerification(userCredential.user);
-      store.set('loaders/resendVerificationLoader', false);
-      store.set('authentication/verifyAccountDialog', false);
-
-      dispatch('snackbar/snackbarSuccess', 'We sent you an email to activate your account.', { root: true });
-      return;
-    } catch ({ ...error }) {
-      console.log(error.code);
-      dispatch('errors/authMessagesSnackbar', error.code, { root: true });
-      store.set('loaders/resendVerificationLoader', false);
-    }
+      await sendEmailVerification(state.user);
+      return {
+        sent: true,
+      };
+    } catch ({ ...error }) {}
   },
 
   async findUserByEmailAndVerify({ dispatch }, email) {
@@ -105,20 +92,15 @@ const actions = {
 
   async deleteAccountByEmail({ dispatch }, email) {
     try {
-      store.set('loaders/deleteAccountLoader', true);
       const deleteAccount = httpsCallable(functions, 'deleteUserByEmail');
       const result = await deleteAccount(email);
 
       if (result.data.deleted) {
-        store.set('loaders/deleteAccountLoader', false);
-
-        dispatch('snackbar/snackbarSuccess', `${email} deleted`, {
-          root: true,
-        });
-        return;
+        return {
+          deleted: true,
+        };
       }
     } catch ({ ...error }) {
-      store.set('loaders/deleteAccountLoader', false);
       dispatch('errors/authMessagesSnackbar', error.code, { root: true });
     }
   },
@@ -276,23 +258,12 @@ const actions = {
     }
   },
 
-  // Removes the account and then routes the user to the homepage.
-  async removeAccount({ dispatch }, password) {
-    try {
-      store.set('loaders/removeAccountLoader', true);
-      const credential = EmailAuthProvider.credential(auth.currentUser.email, password);
-      const authenticated = await reauthenticateWithCredential(auth.currentUser, credential);
+  async reAuthenticate(_, password) {
+    const credential = EmailAuthProvider.credential(auth.currentUser.email, password);
+    const authenticated = await reauthenticateWithCredential(auth.currentUser, credential);
 
-      // Pass authenticated.user for deletion.
-      await deleteUser(authenticated.user);
-
-      store.set('authentication/user', {});
-      store.set('authentication/profile', {});
-      dispatch('snackbar/snackbarSuccess', 'Account removed, Hope to see you again soon 💚', { root: true });
-      router.push('/');
-      store.set('loaders/removeAccountLoader', false);
-    } catch ({ ...error }) {
-      store.set('loaders/removeAccountLoader', false);
+    if (authenticated.user) {
+      return authenticated.user;
     }
   },
 

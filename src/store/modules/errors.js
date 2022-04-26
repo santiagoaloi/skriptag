@@ -43,6 +43,15 @@ const actions = {
       return;
     }
 
+    if (message.includes('auth/too-many-requests')) {
+      dispatch(
+        'snackbar/snackbarError',
+        'Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later.',
+        { root: true },
+      );
+      return;
+    }
+
     dispatch('snackbar/snackbarError', 'something went wrong.', { root: true });
   },
 
@@ -66,6 +75,11 @@ const actions = {
       dispatch('snackbar/snackbarError', 'This email is already in use with another account. Pick another email. ', {
         root: true,
       });
+      return;
+    }
+
+    if (message.includes('auth/too-many-requests')) {
+      dispatch('snackbar/snackbarError', 'Too many attempts, try again later.', { root: true });
       return;
     }
 

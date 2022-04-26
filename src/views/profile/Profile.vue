@@ -56,17 +56,14 @@
               <div v-if="$vuetify.breakpoint.smAndUp" class="ml-13">
                 <v-row no-gutters>
                   <v-col cols="12">
-                    <v-chip
-                      :loading="verificationInProgressLoader"
-                      class="mb-4"
-                      small
-                      :color="verified ? 'teal darken-2' : 'orange darken-1'"
-                      text-color="white"
-                    >
+                    <v-chip class="mb-4" small :color="verified ? 'teal darken-2' : 'orange darken-1'" text-color="white">
                       <v-avatar left>
-                        <v-icon small>mdi-check-decagram</v-icon>
+                        <v-icon small> {{ verificationInProgressLoader ? 'mdi-circle-slice-2' : 'mdi-account-star' }}</v-icon>
                       </v-avatar>
-                      {{ verified ? 'Verified' : 'pending verification' }}
+                      <span v-if="verificationInProgressLoader"> loading... </span>
+                      <span v-else>
+                        {{ verified ? 'Verified' : 'pending verification' }}
+                      </span>
                     </v-chip>
                     <v-chip class="mb-4 ml-3" small color="pink" text-color="white">
                       <v-avatar left>
@@ -103,7 +100,7 @@
         </v-hover>
 
         <v-fade-transition>
-          <v-alert v-if="!verified" tile color="#212326" type="error">
+          <v-alert v-if="!verified" dark dense tile color="#212326" icon="mdi-information-outline">
             Some profile settings will not be enabled until you verify your account.
           </v-alert>
         </v-fade-transition>

@@ -54,7 +54,6 @@ exports.enableUserByEmail = functions.https.onCall(async (email) => {
       disabled: false,
     });
 
-    console.log(id);
     const docRef = admin.firestore().doc(`users/${id}`);
     await docRef.update({ disabled: false });
     return {

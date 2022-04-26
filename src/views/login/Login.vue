@@ -14,9 +14,9 @@
       </div>
       <ValidationObserver ref="loginForm" slim>
         <form class="d-flex flex-column" @submit.prevent="validateLoginForm()">
+          <BaseLink v-if="!recoveryMode" icon="mdi-lock" @click="recoveryMode = true">Recover my password</BaseLink>
           <v-row>
             <v-col cols="12" lg="10">
-              <BaseLink v-if="!recoveryMode" icon="mdi-lock" @click="recoveryMode = true">Recover my password</BaseLink>
               <small class="pl-1">Email</small>
               <div class="pr-2">
                 <Validation-provider

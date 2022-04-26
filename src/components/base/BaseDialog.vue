@@ -9,6 +9,8 @@
     scrollable
     class="d-flex"
     persist
+    persistent
+    no-click-animation
     v-on="$listeners"
   >
     <div>

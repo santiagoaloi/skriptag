@@ -133,28 +133,41 @@
               </v-col>
               <v-col cols="12">
                 <v-divider class="my-4" style="background: #404040"></v-divider>
-                <v-btn class="mr-2 my-2" dark color="grey" @click="cancel()"><v-icon left>mdi-close</v-icon>Close</v-btn>
+                <v-btn class="mr-2 my-2" dark color="grey" @click="close()"><v-icon left>mdi-close</v-icon>Close</v-btn>
               </v-col>
             </v-row>
           </v-col>
         </v-row>
       </form>
     </ValidationObserver>
-    <account-delete-dialog v-model="removeAccountDialog" @close="removeAccountDialog = false" />
-    <account-verify-dialog v-model="verifyAccountDialog" @close="verifyAccountDialog = false" />
+    <base-authenticate-dialog
+      v-model="removeAccountDialog"
+      :title="accountRemoveTitle()"
+      :text="accountRemoveText()"
+      :loading="deleteAccountLoader"
+      @close="removeAccountDialog = false"
+      @authenticated="removeAccount"
+    />
+    <base-authenticate-dialog
+      v-model="verifyAccountDialog"
+      :title="accountVerificationTitle()"
+      :text="accountVerificationText()"
+      :loading="resendVerificationLoader"
+      @close="verifyAccountDialog = false"
+      @authenticated="sendVerificationEmail"
+    />
   </div>
 </template>
 <script>
   import { call, sync, get } from 'vuex-pathify';
-  import AccountDeleteDialog from './Account-delete-dialog.vue';
-  import AccountVerifyDialog from './Account-verify-dialog.vue';
 
   export default {
     name: 'AccountEdit',
-    components: { AccountDeleteDialog, AccountVerifyDialog },
 
     data() {
       return {
+        verifyAccountDialog: false,
+        removeAccountDialog: false,
         vvOptions: {
           mode: 'passive',
           slim: true,
@@ -170,11 +183,11 @@
     computed: {
       loading: sync('loaders/authLoader'),
       ...get('authentication', ['getPasswordComplexity', 'verified']),
-      ...sync('authentication', ['removeAccountDialog', 'verifyAccountDialog']),
+      ...sync('loaders', ['deleteAccountLoader', 'resendVerificationLoader']),
     },
 
     methods: {
-      ...call('authentication', ['accountResetPassword']),
+      ...call('authentication', ['accountResetPassword', 'deleteAccountByEmail', 'resendEmailVerification', 'logout']),
       ...call('snackbar/*'),
 
       resetValidation() {
@@ -196,6 +209,22 @@
         }
       },
 
+      accountRemoveTitle() {
+        return 'Remove my account';
+      },
+
+      accountRemoveText() {
+        return 'This action is permament, you will not be able to undo it. All your data, will be removed immediately.';
+      },
+
+      accountVerificationTitle() {
+        return 'Send verification email';
+      },
+
+      accountVerificationText() {
+        return 'Enter your current password.';
+      },
+
       clearCredentialsform() {
         this.credentials = {
           currentPassword: '',
@@ -204,7 +233,44 @@
         };
       },
 
-      cancel() {
+      async removeAccount(account) {
+        this.deleteAccountLoader = true;
+
+        try {
+          const result = await this.deleteAccountByEmail(account.email);
+
+          if (result.deleted) {
+            this.logout();
+            this.snackbarSuccess(`${account.email} removed.`);
+            this.deleteAccountLoader = false;
+            this.removeAccountDialog = false;
+            return;
+          }
+          this.deleteAccountLoader = false;
+        } catch ({ ...error }) {
+          this.deleteAccountLoader = false;
+        }
+      },
+
+      async sendVerificationEmail(account) {
+        this.resendVerificationLoader = true;
+
+        try {
+          const result = await this.resendEmailVerification();
+
+          if (result.sent) {
+            this.snackbarSuccess(`Verification email sent to ${account.email}`);
+            this.resendVerificationLoader = false;
+            this.verifyAccountDialog = false;
+            return;
+          }
+          this.resendVerificationLoader = false;
+        } catch ({ ...error }) {
+          this.resendVerificationLoader = false;
+        }
+      },
+
+      close() {
         this.$emit('close');
         document.getElementById('containerDiv').scrollTop = 0;
       },
