@@ -64,6 +64,10 @@
         type: Boolean,
         default: false,
       },
+      payload: {
+        type: [Boolean, String, Object, Array],
+        default: null,
+      },
     },
     data() {
       return {
@@ -105,6 +109,7 @@
 
             if (authenticated) {
               this.$emit('authenticated', authenticated);
+              this.$emit('authenticatedWithPayload', this.payload);
               this.password = '';
               return;
             }

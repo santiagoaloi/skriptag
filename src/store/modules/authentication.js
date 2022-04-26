@@ -54,38 +54,30 @@ const actions = {
 
   async disableAccountByEmail({ dispatch }, email) {
     try {
-      store.set('loaders/disableAccountLoader', true);
       const disableAccount = httpsCallable(functions, 'disableUserByEmail');
       const result = await disableAccount(email);
 
       if (result.data.disabled) {
-        store.set('loaders/disableAccountLoader', false);
-
-        dispatch('snackbar/snackbarSuccess', `${email} disabled`, {
-          root: true,
-        });
+        return {
+          disabled: true,
+        };
       }
     } catch ({ ...error }) {
-      store.set('loaders/disableAccountLoader', false);
       dispatch('errors/authMessagesSnackbar', error.code, { root: true });
     }
   },
 
   async enableAccountByEmail({ dispatch }, email) {
     try {
-      store.set('loaders/disableAccountLoader', true);
       const enableAccount = httpsCallable(functions, 'enableUserByEmail');
       const result = await enableAccount(email);
 
       if (result.data.enabled) {
-        store.set('loaders/disableAccountLoader', false);
-
-        dispatch('snackbar/snackbarSuccess', `${email} enabled`, {
-          root: true,
-        });
+        return {
+          enabled: true,
+        };
       }
     } catch ({ ...error }) {
-      store.set('loaders/disableAccountLoader', false);
       dispatch('errors/authMessagesSnackbar', error.code, { root: true });
     }
   },

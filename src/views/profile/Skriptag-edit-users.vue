@@ -118,7 +118,7 @@
                               :ripple="false"
                               link
                               :disabled="item.disabled"
-                              @click="triggerFn(item.function, user.email)"
+                              @click="triggerFn({ account: { ...item, ...user } })"
                             >
                               <v-list-item-title v-text="item.name" />
                             </v-list-item>
@@ -136,11 +136,24 @@
       </v-card>
     </v-container>
 
-    <account-management-dialog
-      v-model="accountActionDialog"
-      :title="dialogTitle"
-      :text="dialogText"
-      @close="accountActionDialog = false"
+    <base-authenticate-dialog
+      v-model="disableAccountDialog"
+      :title="accountDisableTitle()"
+      :text="accountDisableText()"
+      :loading="disableAccountLoader"
+      :payload="payload"
+      @close="disableAccountDialog = false"
+      @authenticatedWithPayload="disableAccount"
+    />
+
+    <base-authenticate-dialog
+      v-model="enableAccountDialog"
+      :title="accountEnableTitle()"
+      :text="accountEnableText()"
+      :loading="enableAccountLoader"
+      :payload="payload"
+      @close="enableAccountDialog = false"
+      @authenticatedWithPayload="enableAccount"
     />
   </div>
 </template>
@@ -149,17 +162,12 @@
   import { onSnapshot, collection } from 'firebase/firestore';
   import { call, sync, get } from 'vuex-pathify';
   import { db } from '@/firebase/firebase';
-  import AccountManagementDialog from './Authenticate-dialog.vue';
 
   // Roles collection ref
   const colRef = collection(db, 'users');
 
   export default {
     name: 'SkriptagEditUsers',
-
-    components: {
-      AccountManagementDialog,
-    },
     data() {
       return {
         search: '',
@@ -177,12 +185,16 @@
         ],
         selectedItem: false,
         selected: [],
-        accountActionDialog: false,
+        disableAccountDialog: false,
+        disableAccountLoader: false,
+        enableAccountDialog: false,
+        enableAccountLoader: false,
+        payload: null,
       };
     },
 
     computed: {
-      ...sync('loaders', ['disableAccountLoader', 'deleteAccountLoader']),
+      ...sync('loaders', ['deleteAccountLoader']),
       ...get('authentication', ['userId']),
 
       filteredUsers() {
@@ -194,18 +206,31 @@
     },
 
     watch: {
-      disableAccountLoader(newValue) {
-        if (newValue) {
-          this.loadingSpinner = this.$vs.loading({
-            target: this.$refs.content,
-            color: 'primary',
-          });
-        }
+      // disableAccountLoader(newValue) {
+      //   if (newValue) {
+      //     this.loadingSpinner = this.$vs.loading({
+      //       target: this.$refs.content,
+      //       color: 'primary',
+      //     });
+      //   }
 
-        if (!newValue) {
-          this.loadingSpinner.close();
-        }
-      },
+      //   if (!newValue) {
+      //     this.loadingSpinner.close();
+      //   }
+      // },
+
+      // enableAccountLoader(newValue) {
+      //   if (newValue) {
+      //     this.loadingSpinner = this.$vs.loading({
+      //       target: this.$refs.content,
+      //       color: 'primary',
+      //     });
+      //   }
+
+      //   if (!newValue) {
+      //     this.loadingSpinner.close();
+      //   }
+      // },
 
       deleteAccountLoader(newValue) {
         if (newValue) {
@@ -226,27 +251,88 @@
 
     methods: {
       ...call('authentication', ['disableAccountByEmail', 'enableAccountByEmail', 'deleteAccountByEmail']),
+      ...call('snackbar/*'),
 
       rowActions(user) {
         return [
           { name: 'Manage Roles', test: 'triggerRolesDialog', disabled: false },
-          { name: 'Reset Password', function: '', disabled: false },
+          { name: 'Reset Password', method: '', disabled: false },
           {
-            name: user.disabled ? 'Enable account' : 'disable account',
-            function: user.disabled ? 'enableAccount' : 'disableAccount',
-            disabled: false,
+            name: user.disabled ? 'Enable account' : 'Disable account',
+            method: user.disabled ? 'enableAccountTrigger' : 'disableAccountTrigger',
+            disabled: user.uid === this.userId,
           },
-          { name: 'Delete account', function: 'deleteAccount', disabled: user.uid === this.userId },
+          { name: 'Delete account', method: 'deleteAccount', disabled: user.uid === this.userId },
         ];
       },
 
-      triggerFn({ payload }) {
-        const { fn } = payload;
-        this[fn]({ payload });
+      triggerFn({ account }) {
+        const { method } = account;
+        this[method]({ account });
       },
 
-      enableAccount({ payload }) {
-        this.dialogTitle = 'Enable account';
+      accountDisableTitle() {
+        return 'Disable account';
+      },
+
+      accountDisableText() {
+        return 'This account wont be able to login once its disabled.';
+      },
+
+      accountEnableTitle() {
+        return 'Enable account';
+      },
+
+      accountEnableText() {
+        return 'This account will be able to login once its enabled.';
+      },
+
+      disableAccountTrigger({ account }) {
+        this.payload = account;
+        this.disableAccountDialog = true;
+      },
+
+      async disableAccount(account) {
+        this.disableAccountDialog = true;
+
+        try {
+          const { email } = account;
+          this.disableAccountLoader = true;
+          const result = await this.disableAccountByEmail(email);
+
+          if (result.disabled) {
+            this.snackbarSuccess(`${email} disabled.`);
+            this.disableAccountDialog = false;
+            this.disableAccountLoader = false;
+            return;
+          }
+          this.disableAccountLoader = false;
+        } catch ({ ...error }) {
+          this.disableAccountLoader = false;
+        }
+      },
+
+      enableAccountTrigger({ account }) {
+        this.payload = account;
+        this.enableAccountDialog = true;
+      },
+
+      async enableAccount(account) {
+        try {
+          this.enableAccountLoader = true;
+          const { email } = account;
+          const result = await this.enableAccountByEmail(email);
+
+          if (result.enabled) {
+            this.snackbarSuccess(`${email} enabled.`);
+            this.enableAccountDialog = false;
+            this.enableAccountLoader = false;
+            return;
+          }
+          this.enableAccountLoader = false;
+        } catch ({ ...error }) {
+          this.enableAccountLoader = false;
+        }
       },
 
       getTooltipMessage(user) {

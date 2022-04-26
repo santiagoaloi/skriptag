@@ -7,7 +7,6 @@ const state = {
   resendVerificationLoader: false,
   verificationInProgressLoader: false,
   removeAccountLoader: false,
-  disableAccountLoader: false,
   deleteAccountLoader: false,
 };
 
