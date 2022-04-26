@@ -72,7 +72,7 @@
                 :class="$vuetify.breakpoint.smAndUp ? '' : 'mt-3 '"
                 dark
                 color="grey"
-                @click="cancel()"
+                @click="close()"
                 ><v-icon left>mdi-close</v-icon>Close</v-btn
               >
               <v-btn
@@ -119,7 +119,7 @@
       ...call('authentication', ['updateProfileSettings']),
       ...call('snackbar/*'),
 
-      cancel() {
+      close() {
         this.$emit('close');
         this.rollBack();
         window.scrollTo(0, 0);

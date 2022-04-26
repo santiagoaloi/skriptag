@@ -1,5 +1,5 @@
 <template>
-  <BaseDialog v-model="internalValue" no-toolbar dense close-only no-actions width="500" @close="cancel()">
+  <BaseDialog v-model="internalValue" no-toolbar dense close-only no-actions width="500" @close="close()">
     <v-card-title class="text-h5"> {{ title }}</v-card-title>
     <v-card-text>{{ text }}</v-card-text>
 
@@ -34,7 +34,7 @@
 
         <v-card-actions class="px-6">
           <v-spacer></v-spacer>
-          <v-btn :disabled="loading" color="grey lighten-1" text @click.prevent="cancel()"> Cancel </v-btn>
+          <v-btn :disabled="loading" color="grey lighten-1" text @click.prevent="close()"> close </v-btn>
           <v-btn :loading="loading" color="#de355f" text type="submit"> Continue </v-btn>
         </v-card-actions>
       </form>
@@ -125,7 +125,7 @@
         }
       },
 
-      cancel() {
+      close() {
         this.$emit('close');
         // document.getElementById('containerDiv').scrollTop = 0;
       },

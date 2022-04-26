@@ -166,6 +166,7 @@
 
     data() {
       return {
+        deleteAccountLoader: false,
         verifyAccountDialog: false,
         removeAccountDialog: false,
         vvOptions: {
@@ -183,7 +184,7 @@
     computed: {
       loading: sync('loaders/authLoader'),
       ...get('authentication', ['getPasswordComplexity', 'verified']),
-      ...sync('loaders', ['deleteAccountLoader', 'resendVerificationLoader']),
+      ...sync('loaders', ['resendVerificationLoader']),
     },
 
     methods: {

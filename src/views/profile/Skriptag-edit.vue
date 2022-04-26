@@ -1,7 +1,7 @@
 <template>
   <div style="color: #ccc">
     <div class="d-flex align-center">
-      <h2 class="mb-6 mt-3 cursor-pointer" @click="cancel()">Profile</h2>
+      <h2 class="mb-6 mt-3 cursor-pointer" @click="close()">Profile</h2>
       <v-icon class="mt-n2" size="25" dark> mdi-chevron-right</v-icon>
       <h2 class="mb-6 mt-3">Skriptag edit</h2>
     </div>
@@ -52,7 +52,7 @@
     },
 
     methods: {
-      cancel() {
+      close() {
         this.$emit('close');
         window.scrollTo(0, 0);
       },

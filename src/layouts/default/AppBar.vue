@@ -9,7 +9,7 @@
         </div>
       </template>
 
-      <template v-if="!$vuetify.breakpoint.smAndDown">
+      <template v-if="!$vuetify.breakpoint.xs">
         <vs-navbar-group>
           Downloads
           <template #items>
@@ -34,7 +34,7 @@
 
       <template #right>
         <v-scale-transition>
-          <v-btn v-if="isLoggedIn" style="position: fixed" :ripple="false" dark color="rgba(10,10,10 , .3)" @click="logout">
+          <v-btn v-if="isLoggedIn" class="mr-3" :ripple="false" dark color="rgba(10,10,10 , .3)" @click="logout">
             {{ `Logout ${firstAndShortLast}` }}
           </v-btn>
 

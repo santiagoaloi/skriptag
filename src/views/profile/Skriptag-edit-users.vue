@@ -1,13 +1,7 @@
 <template>
   <div>
     <v-container class="pa-10">
-      <v-card
-        ref="content"
-        :disabled="disableAccountLoader || deleteAccountLoader"
-        class="mx-auto transparent"
-        flat
-        min-height="35vh"
-      >
+      <v-card ref="content" class="mx-auto transparent" flat min-height="35vh">
         <v-card-actions v-if="$vuetify.breakpoint.smAndUp">
           <v-text-field
             v-model="search"
@@ -155,12 +149,22 @@
       @close="enableAccountDialog = false"
       @authenticatedWithPayload="enableAccount"
     />
+
+    <base-authenticate-dialog
+      v-model="deleteAccountDialog"
+      :title="accountDeleteTitle()"
+      :text="accountDeleteText()"
+      :loading="deleteAccountLoader"
+      :payload="payload"
+      @close="deleteAccountDialog = false"
+      @authenticatedWithPayload="deleteAccount"
+    />
   </div>
 </template>
 
 <script>
   import { onSnapshot, collection } from 'firebase/firestore';
-  import { call, sync, get } from 'vuex-pathify';
+  import { call, get } from 'vuex-pathify';
   import { db } from '@/firebase/firebase';
 
   // Roles collection ref
@@ -189,12 +193,13 @@
         disableAccountLoader: false,
         enableAccountDialog: false,
         enableAccountLoader: false,
+        deleteAccountDialog: false,
+        deleteAccountLoader: false,
         payload: null,
       };
     },
 
     computed: {
-      ...sync('loaders', ['deleteAccountLoader']),
       ...get('authentication', ['userId']),
 
       filteredUsers() {
@@ -222,7 +227,7 @@
             method: user.disabled ? 'enableAccountTrigger' : 'disableAccountTrigger',
             disabled: user.uid === this.userId,
           },
-          { name: 'Delete account', method: 'deleteAccount', disabled: user.uid === this.userId },
+          { name: 'Delete account', method: 'deleteAccountTrigger', disabled: user.uid === this.userId },
         ];
       },
 
@@ -247,9 +252,47 @@
         return 'This account will be able to login once its enabled.';
       },
 
+      accountDeleteTitle() {
+        return 'Remove account';
+      },
+
+      accountDeleteText() {
+        return 'This action is permament, you will not be able to undo it. All your data, will be removed immediately.';
+      },
+
       disableAccountTrigger({ account }) {
         this.payload = account;
         this.disableAccountDialog = true;
+      },
+
+      enableAccountTrigger({ account }) {
+        this.payload = account;
+        this.enableAccountDialog = true;
+      },
+
+      deleteAccountTrigger({ account }) {
+        this.payload = account;
+        this.deleteAccountDialog = true;
+      },
+
+      async deleteAccount(account) {
+        this.deleteAccountDialog = true;
+
+        try {
+          const { email } = account;
+          this.deleteAccountLoader = true;
+          const result = await this.deleteAccountByEmail(email);
+
+          if (result.deleted) {
+            this.snackbarSuccess(`${email} deleted.`);
+            this.deleteAccountDialog = false;
+            this.deleteAccountLoader = false;
+            return;
+          }
+          this.disableAccountLoader = false;
+        } catch ({ ...error }) {
+          this.deleteAccountLoader = false;
+        }
       },
 
       async disableAccount(account) {
@@ -270,11 +313,6 @@
         } catch ({ ...error }) {
           this.disableAccountLoader = false;
         }
-      },
-
-      enableAccountTrigger({ account }) {
-        this.payload = account;
-        this.enableAccountDialog = true;
       },
 
       async enableAccount(account) {

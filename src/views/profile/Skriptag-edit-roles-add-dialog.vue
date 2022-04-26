@@ -62,11 +62,6 @@
 </template>
 <script>
   import { call } from 'vuex-pathify';
-  import { collection, doc, addDoc, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
-  import { db } from '@/firebase/firebase';
-
-  // Roles collection ref
-  const colRef = collection(db, 'roles');
 
   export default {
     name: 'SkriptagEditAddRoleDialog',

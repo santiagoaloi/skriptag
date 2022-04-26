@@ -7,7 +7,6 @@ const state = {
   resendVerificationLoader: false,
   verificationInProgressLoader: false,
   removeAccountLoader: false,
-  deleteAccountLoader: false,
 };
 
 const mutations = make.mutations(state);
