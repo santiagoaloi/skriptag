@@ -18,7 +18,7 @@
                 v-show="hover"
                 fab
                 icon
-                style="position: absolute; right: 0; margin-right: 30px"
+                style="position: absolute; right: 0; margin-right: 80px; margin-top: 2 0px"
                 color="rgba(10,10,10 , .5)"
                 dark
                 @click="triggerCoverInput()"

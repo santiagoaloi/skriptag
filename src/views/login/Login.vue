@@ -117,7 +117,7 @@
     },
 
     methods: {
-      ...call('authentication', ['login', 'accountRecovery']),
+      ...call('authentication', ['login', 'accountRecoveryRequest']),
       ...call('snackbar/*'),
 
       resetValidation() {
@@ -129,7 +129,7 @@
           const validated = await this.$refs.loginForm.validate();
           if (validated) {
             if (this.recoveryMode) {
-              this.accountRecovery(this.loginForm.email);
+              this.accountRecoveryRequest(this.loginForm.email);
               this.recoveryMode = false;
               return;
             }

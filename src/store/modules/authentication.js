@@ -141,7 +141,7 @@ const actions = {
   },
 
   // Generates a password recovery email.
-  async accountRecovery({ dispatch }, email) {
+  async accountRecoveryRequest({ dispatch }, email) {
     store.set('loaders/authLoader', true);
     try {
       await sendPasswordResetEmail(auth, email);

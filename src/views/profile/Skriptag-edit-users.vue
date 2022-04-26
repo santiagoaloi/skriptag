@@ -205,46 +205,6 @@
       },
     },
 
-    watch: {
-      // disableAccountLoader(newValue) {
-      //   if (newValue) {
-      //     this.loadingSpinner = this.$vs.loading({
-      //       target: this.$refs.content,
-      //       color: 'primary',
-      //     });
-      //   }
-
-      //   if (!newValue) {
-      //     this.loadingSpinner.close();
-      //   }
-      // },
-
-      // enableAccountLoader(newValue) {
-      //   if (newValue) {
-      //     this.loadingSpinner = this.$vs.loading({
-      //       target: this.$refs.content,
-      //       color: 'primary',
-      //     });
-      //   }
-
-      //   if (!newValue) {
-      //     this.loadingSpinner.close();
-      //   }
-      // },
-
-      deleteAccountLoader(newValue) {
-        if (newValue) {
-          this.loadingSpinner = this.$vs.loading({
-            target: this.$refs.content,
-            color: 'primary',
-          });
-        }
-
-        if (!newValue) {
-          this.loadingSpinner.close();
-        }
-      },
-    },
     mounted() {
       this.getUsersSnapshot();
     },
