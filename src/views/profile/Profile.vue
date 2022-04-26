@@ -16,13 +16,17 @@
             <v-fade-transition>
               <v-btn
                 v-show="hover"
+                fab
+                icon
                 style="position: absolute; right: 0; margin-right: 30px"
-                color="rgba(10,10,10 , .3)"
+                color="rgba(10,10,10 , .5)"
                 dark
                 @click="triggerCoverInput()"
               >
-                <v-icon :left="!$vuetify.breakpoint.smAndDown"> mdi-camera</v-icon>
-                <span v-if="!$vuetify.breakpoint.smAndDown"> {{ $vuetify.breakpoint.smAndUp ? 'Change cover image' : '' }} </span>
+                <vs-tooltip shadow color="#ccc">
+                  <v-icon class="white--text"> mdi-camera</v-icon>
+                  <template #tooltip> Change cover image </template>
+                </vs-tooltip>
               </v-btn>
             </v-fade-transition>
 

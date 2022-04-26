@@ -27,7 +27,7 @@ Vue.config.productionTip = false;
 
 // Remember to disable when not needed.
 // This shows Vue dev tools in production
-Vue.config.devtools = false;
+// Vue.config.devtools = false;
 
 Vue.directive('animation', {
   bind(el, binding) {

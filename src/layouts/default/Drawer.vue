@@ -12,7 +12,7 @@
 
       <template #footer>
         <vs-row v-if="isLoggedIn" justify="space-between">
-          <vs-sidebar-item to="/">
+          <vs-sidebar-item to="/profile">
             <template #icon>
               <vs-row v-if="isLoggedIn" justify="space-between">
                 <vs-avatar class="pa-1 cursor-pointer" badge-color="#91fcdc" badge-position="top-right">
@@ -24,7 +24,7 @@
             Notifications
           </vs-sidebar-item>
 
-          <vs-sidebar-item to="/">
+          <vs-sidebar-item to="/profile">
             <template #icon>
               <vs-row v-if="isLoggedIn" justify="space-between">
                 <vs-avatar class="pa-1 cursor-pointer" @click="$router.push('/profile')">
@@ -44,29 +44,6 @@
             Profile
           </vs-sidebar-item>
         </vs-row>
-
-        <!-- 
-        <v-scale-transition>
-          <vs-row v-if="isLoggedIn" justify="space-between">
-            <vs-avatar class="pa-1 cursor-pointer" badge-color="#91fcdc" badge-position="top-right">
-              <v-icon dark> mdi-bell-outline </v-icon>
-              <template #badge> 28 </template>
-            </vs-avatar>
-
-            <vs-avatar class="pa-1 cursor-pointer" @click="$router.push('/profile')">
-              <baseAvatarImg v-if="!avatar" :height="25" />
-              <v-avatar v-else min-height="25" min-width="25">
-                <v-img :src="avatar" flat>
-                  <template #placeholder>
-                    <v-row class="fill-height ma-0" align="center" justify="center">
-                      <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
-                    </v-row>
-                  </template>
-                </v-img>
-              </v-avatar>
-            </vs-avatar>
-          </vs-row>
-        </v-scale-transition> -->
       </template>
     </vs-sidebar>
   </v-navigation-drawer>
