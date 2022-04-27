@@ -16,6 +16,8 @@ import {
   confirmPasswordReset,
   applyActionCode,
   checkActionCode,
+  signInWithPopup,
+  GoogleAuthProvider,
 } from '@firebase/auth';
 import { auth, db, functions } from '@/firebase/firebase';
 import { store } from '@/store';
@@ -23,7 +25,7 @@ import router from '@/router';
 
 const state = {
   user: {},
-  profile: {},
+  userProfile: {},
   showresendEmailVerification: false,
   response: '',
 };
@@ -117,7 +119,7 @@ const actions = {
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      store.set('authentication/profile', docSnap.data());
+      store.set('authentication/userProfile', docSnap.data());
     }
   },
 
@@ -207,7 +209,7 @@ const actions = {
   async updateProfileSettings({ getters, state }) {
     const userProfile = doc(db, 'users', getters.userId);
     await updateDoc(userProfile, {
-      ...state.profile,
+      ...state.userProfile,
     });
   },
 
@@ -236,7 +238,7 @@ const actions = {
   async logout() {
     await signOut(auth);
     store.set('authentication/user', {});
-    store.set('authentication/profile', {});
+    store.set('authentication/userProfile', {});
     router.push('/');
   },
 
@@ -251,7 +253,9 @@ const actions = {
 
       const { user } = userCredential;
 
-      dispatch('addUserToUsersCollection', { user, signupForm });
+      const authProvider = 'email';
+
+      dispatch('addUserToUsersCollection', { user, signupForm, authProvider });
 
       // Set user in Vuex and navigate to the new user profile.
       store.set('authentication/user', user);
@@ -265,13 +269,51 @@ const actions = {
     }
   },
 
-  async reAuthenticate(_, password) {
-    const credential = EmailAuthProvider.credential(auth.currentUser.email, password);
-    const authenticated = await reauthenticateWithCredential(auth.currentUser, credential);
+  async signupWithGoogle({ dispatch }) {
+    store.set('loaders/signupLoader', true);
 
-    if (authenticated.user) {
-      return authenticated.user;
+    try {
+      const provider = new GoogleAuthProvider();
+
+      const userCredential = await signInWithPopup(auth, provider);
+
+      const { user } = userCredential;
+
+      // Don't re-create the user prfofile, it the the user
+      // already has a profile created.
+      const docRef = doc(db, 'users', user.uid);
+      const docSnap = await getDoc(docRef);
+
+      if (!docSnap.exists()) {
+        dispatch('addUserToUsersCollectionGgoogle', { user });
+      }
+
+      // Set user in Vuex and navigate to the new user profile.
+      store.set('authentication/user', user);
+      store.set('loaders/signupLoader', false);
+      router.push('profile');
+    } catch ({ ...error }) {
+      // dispatch('errors/signupMessagesSnackbar', error.code, { root: true });
+      store.set('loaders/signupLoader', false);
     }
+  },
+
+  addUserToUsersCollectionGgoogle(_, { user }) {
+    // Adds a document in a  firestore collection.
+    // doc (Firestore instance, collection name, collection id).
+    const userDocRef = doc(db, 'users', user.uid);
+
+    console.log(user);
+
+    // User profile fields to be created in db (payload)
+    const userDocData = {
+      coverAvatar: '',
+      dateCreated: serverTimestamp(),
+    };
+
+    // SetDoc (Firestore, Payload)
+    // creates the user profile in the db collection.
+    setDoc(userDocRef, userDocData);
   },
 
   addUserToUsersCollection(_, { user, signupForm }) {
@@ -287,7 +329,7 @@ const actions = {
       email,
       name: signupForm.name,
       lastName: signupForm.lastName,
-      avatar: '',
+      photoURL: '',
       coverAvatar: '',
       dateCreated: serverTimestamp(),
     };
@@ -295,6 +337,13 @@ const actions = {
     // SetDoc (Firestore, Payload)
     // creates the user profile in the db collection.
     setDoc(userDocRef, userDocData);
+  },
+
+  async reAuthenticate(_, password) {
+    const credential = EmailAuthProvider.credential(auth.currentUser.email, password);
+    const authenticated = await reauthenticateWithCredential(auth.currentUser, credential);
+
+    return authenticated.user || {};
   },
 
   async addRole(_, { role }) {
@@ -359,31 +408,46 @@ const getters = {
   },
 
   verified: (state, getters) => {
-    if (getters.isLoggedIn) return state.profile?.verified;
+    if (getters.isLoggedIn) return state.userProfile?.verified || getters.isAuthExternalProvider;
   },
 
   // Capitalize the first letter of every word.
   fullName: (state) => {
-    if (state.profile) {
-      const name = startCase(capitalize(state.profile.name));
-      const lastName = startCase(capitalize(state.profile.lastName));
+    if (state.userProfile && state.userProfile.name && state.userProfile.lastName) {
+      const name = startCase(capitalize(state.userProfile.name));
+      const lastName = startCase(capitalize(state.userProfile.lastName));
       return `${name} ${lastName} `;
+    }
+  },
+
+  isAuthExternalProvider: (state, getters) => {
+    if (getters.isLoggedIn) return state.user.providerData[0].providerId !== 'password';
+  },
+
+  authProvider: (state, getters) => {
+    if (getters.isLoggedIn) return state.user.providerData[0].providerId;
+  },
+
+  profile: (state, getters) => {
+    if (getters.isAuthExternalProvider) {
+      return { ...state.user?.providerData[0], metadata: state.user?.metadata, ...state.userProfile };
+    }
+    if (!getters.isAuthExternalProvider) {
+      return { metadata: state.user?.metadata, ...state.userProfile };
     }
   },
 
   // Shows first name and first letter of last name.
   firstAndShortLast: (state) => {
-    if (state.profile) {
-      const name = startCase(capitalize(state.profile.name));
-      const lastName = startCase(capitalize(state.profile.lastName));
+    if (state.userProfile && state.userProfile.name && state.userProfile.lastName) {
+      const name = startCase(capitalize(state.userProfile.name));
+      const lastName = startCase(capitalize(state.userProfile.lastName));
       return name && lastName ? `${name} ${lastName[0]}.` : `${name}`;
     }
   },
 
   // returns current user last login date/time.
   lastLogin: (state) => state.user?.metadata?.lastSignInTime,
-
-  avatar: (state) => state.profile?.avatar,
 };
 
 export default {

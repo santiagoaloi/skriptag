@@ -35,15 +35,20 @@
             <input ref="avatarInput" accept="image/*" style="display: none" type="file" @change="uploadProfilePhoto()" />
 
             <div :class="$vuetify.breakpoint.smAndUp ? 'ml-13' : 'justify-center'" class="d-flex align-center justify-start">
-              <baseAvatarImg v-if="!profile.avatar" class="hoverAvatar" :height="180" @click="triggerAvatarInput()" />
+              <baseAvatarImg
+                v-if="!profile.photoURL"
+                :class="{ hoverAvatar: !isAuthExternalProvider }"
+                :height="180"
+                @click="!isAuthExternalProvider && triggerAvatarInput()"
+              />
               <v-avatar v-else min-height="180" min-width="180">
                 <v-img
-                  class="hoverAvatar"
+                  :class="{ hoverAvatar: !isAuthExternalProvider }"
                   min-height="100%"
                   min-width="100%"
-                  :src="profile.avatar"
+                  :src="profile.photoURL"
                   flat
-                  @click="triggerAvatarInput()"
+                  @click="!isAuthExternalProvider && triggerAvatarInput()"
                 >
                   <template #placeholder>
                     <v-row class="fill-height ma-0" align="center" justify="center">
@@ -74,7 +79,7 @@
                     <p class="mb-n2">{{ profile.email }}</p>
                   </v-col>
                   <v-col cols="12">
-                    <base-typing-indicator v-if="!profile.name && !profile.lastName" class="py-12" />
+                    <base-typing-indicator v-if="!profile.name && !profile.lastName & !profile.displayName" class="py-12" />
                   </v-col>
 
                   <span
@@ -82,11 +87,11 @@
                     style="font-size: 55px"
                     :style="$vuetify.breakpoint.mdAndDown ? 'max-width: 390px' : 'max-width: 500px'"
                   >
-                    {{ fullName }}
+                    {{ fullName || profile.displayName }}
                   </span>
                   <!-- </v-col> -->
                   <v-col cols="12">
-                    <h6 class="mt-n2">Previous login: {{ lastLogin }}</h6>
+                    <h6 class="mt-n2">Previous login: {{ profile.metadata.lastSignInTime }}</h6>
                   </v-col>
                 </v-row>
               </div>
@@ -134,7 +139,6 @@
     data() {
       return {
         src: '',
-        avatar: '',
         progress: 0,
         imgBannerLoaded: false,
         showProfileItems: false,
@@ -143,9 +147,9 @@
     },
 
     computed: {
-      ...get('authentication', ['lastLogin', 'userId', 'fullName', 'verified', 'isLoggedIn']),
-      ...sync('authentication', ['profile']),
+      ...get('authentication', ['profile', 'fullName', 'verified', 'isLoggedIn', 'isAuthExternalProvider']),
       ...sync('loaders', ['verificationInProgressLoader']),
+      ...sync('authentication', ['userProfile']),
     },
 
     mounted() {
@@ -175,7 +179,7 @@
           return;
         }
 
-        const photoRef = ref(storage, `users/${this.userId}/${file.name}`);
+        const photoRef = ref(storage, `users/${this.profile.userId}/${file.name}`);
         const uploadTask = uploadBytesResumable(photoRef, file);
         uploadTask.on(
           'state_changed',
@@ -187,7 +191,7 @@
           },
           () => {
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-              this.profile.avatar = downloadURL;
+              this.userProfile.photoURL = downloadURL;
               this.updateProfileSettings();
               setTimeout(() => {
                 this.progress = 0;
@@ -206,7 +210,7 @@
           return;
         }
 
-        const photoRef = ref(storage, `users/${this.userId}/${file.name}`);
+        const photoRef = ref(storage, `users/${this.profile.userId}/${file.name}`);
         const uploadTask = uploadBytesResumable(photoRef, file);
         uploadTask.on(
           'state_changed',
@@ -218,7 +222,7 @@
           },
           () => {
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-              this.profile.coverAvatar = downloadURL;
+              this.userProfile.coverAvatar = downloadURL;
               this.updateProfileSettings();
               this.getSrc();
               setTimeout(() => {

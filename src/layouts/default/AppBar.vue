@@ -35,7 +35,7 @@
       <template #right>
         <v-scale-transition>
           <v-btn v-if="isLoggedIn" class="mr-3" :ripple="false" dark color="rgba(10,10,10 , .3)" @click="logout">
-            {{ `Logout ${firstAndShortLast}` }}
+            {{ `Logout ${firstAndShortLast || profile.email}` }}
           </v-btn>
 
           <v-burger v-if="$vuetify.breakpoint.smAndDown" :active="mobileMenu" type="spring" @updated="mobileMenu = !mobileMenu" />

@@ -28,9 +28,9 @@
             <template #icon>
               <vs-row v-if="isLoggedIn" justify="space-between">
                 <vs-avatar class="pa-1 cursor-pointer" @click="$router.push('/profile')">
-                  <baseAvatarImg v-if="!avatar" :height="25" />
+                  <baseAvatarImg v-if="!profile.photoURL" :height="25" />
                   <v-avatar v-else min-height="25" min-width="25">
-                    <v-img :src="avatar" flat>
+                    <v-img :src="profile.photoURL" flat>
                       <template #placeholder>
                         <v-row class="fill-height ma-0" align="center" justify="center">
                           <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
@@ -62,8 +62,7 @@
     },
 
     computed: {
-      ...get('authentication', ['isLoggedIn', 'avatar']),
-      ...sync('authentication', ['profile']),
+      ...get('authentication', ['isLoggedIn', 'profile']),
     },
 
     mounted() {

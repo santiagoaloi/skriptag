@@ -1,6 +1,6 @@
 <template>
   <base-split-2 v-if="!isLoggedIn" id="login" col="6" right>
-    <div class="pa-3">
+    <v-container>
       <div class="d-flex flex-wrap flex-column pl-1">
         <template v-if="!recoveryMode">
           <h1>Login</h1>
@@ -11,94 +11,48 @@
           <h1>Reset password</h1>
           <p>Account recovery email.</p>
         </template>
-      </div>
-      <ValidationObserver ref="loginForm" slim>
-        <form class="d-flex flex-column" @submit.prevent="validateLoginForm()">
-          <BaseLink v-if="!recoveryMode" icon="mdi-lock" @click="recoveryMode = true">Recover my password</BaseLink>
-          <v-row>
-            <v-col cols="12" lg="10">
-              <small class="pl-1">Email</small>
-              <div class="pr-2">
-                <Validation-provider
-                  v-slot="{ errors, failed }"
-                  v-bind="{ ...vvOptions }"
-                  name="email"
-                  :rules="{ email: true, required: true }"
-                >
-                  <vs-input
-                    v-model="loginForm.email"
-                    :danger="failed"
-                    maxlength="100"
-                    block
-                    placeholder="Email"
-                    @focus="resetValidation()"
-                  >
-                    <template #icon>
-                      <v-icon dark>mdi-account</v-icon>
-                    </template>
-                    <template #message-danger>
-                      <v-icon v-if="failed" color="pink" style="margin-top: -1px" x-small dark>mdi-alert-circle-outline</v-icon>
-                      {{ errors[0] }}
-                    </template>
-                  </vs-input>
-                </Validation-provider>
-              </div>
-            </v-col>
-            <v-col v-if="!recoveryMode" cols="12" lg="10">
-              <small class="pl-1">Password</small>
-              <div class="pr-2">
-                <Validation-provider
-                  v-slot="{ errors, failed }"
-                  v-bind="{ ...vvOptions }"
-                  name="password"
-                  :rules="{ required: true }"
-                >
-                  <vs-input
-                    v-model="loginForm.password"
-                    maxlength="100"
-                    :danger="failed"
-                    block
-                    type="password"
-                    placeholder="Your account password"
-                    @focus="resetValidation()"
-                  >
-                    <template #icon>
-                      <v-icon dark>mdi-lock</v-icon>
-                    </template>
-                    <template #message-danger>
-                      <v-icon v-if="failed" color="pink" style="margin-top: -1px" x-small dark>mdi-alert-circle-outline</v-icon>
-                      {{ errors[0] }}
-                    </template>
-                  </vs-input>
-                </Validation-provider>
-              </div>
-            </v-col>
-            <v-col>
-              <div class="ml-n1 mt-2">
-                <template v-if="!recoveryMode">
-                  <Base-button type="submit" :loading="loading"> Login</Base-button>
-                </template>
 
-                <template v-if="recoveryMode">
-                  <Base-button large @click.prevent="recoveryMode = false"> Cancel</Base-button>
-                  <Base-button type="submit" :loading="loading"> Reset password</Base-button>
-                </template>
-              </div>
-            </v-col>
-          </v-row>
-        </form>
-      </ValidationObserver>
-    </div>
+        <v-fade-transition hide-on-leave>
+          <v-sheet
+            v-if="!recoveryMode && mode !== 'email'"
+            class="transparent"
+            :width="$vuetify.breakpoint.smAndDown ? '100%' : 350"
+          >
+            <Base-button class="my-3" block> <v-icon left> mdi-microsoft</v-icon> Sign-in with Microsoft</Base-button>
+            <Base-button class="my-3" block @click="google()"> <v-icon left> mdi-google</v-icon> Sign-in with Google</Base-button>
+            <Base-button class="my-3" block> <v-icon left> mdi-apple</v-icon> Sign-in with Apple</Base-button>
+
+            <div class="d-flex align-center">
+              <v-divider class="grey darken-3" /> <span class="mx-3" style="color: #ccc"> or </span>
+              <v-divider class="grey darken-3" />
+            </div>
+            <Base-button class="mt-2" block @click="mode = 'email'">
+              <v-icon left> mdi-mail</v-icon> Sign-in with Email</Base-button
+            >
+          </v-sheet>
+        </v-fade-transition>
+
+        <v-fade-transition hide-on-leave>
+          <LoginWithEmail v-if="mode === 'email'" @goBack="mode = ''" />
+        </v-fade-transition>
+      </div>
+    </v-container>
   </base-split-2>
 </template>
 <script>
   import { call, sync, get } from 'vuex-pathify';
+  import LoginWithEmail from './LoginWithEmail.vue';
 
   export default {
     name: 'LoginPage',
 
+    components: {
+      LoginWithEmail,
+    },
+
     data() {
       return {
+        mode: '',
         vvOptions: {
           mode: 'passive',
           slim: true,
@@ -117,8 +71,12 @@
     },
 
     methods: {
-      ...call('authentication', ['login', 'accountRecoveryRequest']),
+      ...call('authentication', ['login', 'accountRecoveryRequest', 'signupWithGoogle']),
       ...call('snackbar/*'),
+
+      google() {
+        this.signupWithGoogle();
+      },
 
       resetValidation() {
         this.$refs.loginForm.reset();

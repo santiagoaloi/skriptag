@@ -1,184 +1,48 @@
 <template>
   <base-split-2 col="6">
-    <div class="pa-3">
-      <div class="d-flex flex-wrap flex-column pl-1">
-        <h1>Signup</h1>
-        <p>Join the gang to unlock more content 🤓</p>
+    <v-container>
+      <div class="d-flex flex-wrap flex-column">
+        <h2 class="mb-5">Signup</h2>
+        <div>
+          <v-alert
+            style="color: #ccc"
+            dense
+            text
+            dark
+            color="teal accent-3"
+            border="left"
+            elevation="6"
+            colored-border
+            icon="mdi-chevron-up"
+          >
+            You can also use authentication providers like google, apple or microsot. Login with your credentials directly, and
+            your account wuill be created right away.
+          </v-alert>
+        </div>
+
+        <h5></h5>
+        <BaseLink to="login">Already have an account? Login</BaseLink>
+
+        <SignupWithEmail />
       </div>
-      <ValidationObserver ref="profileEdit" slim>
-        <form class="d-flex flex-column" @submit.prevent="validate()">
-          <v-row>
-            <v-col cols="12" lg="12">
-              <BaseLink to="login">Already have an account? Login</BaseLink>
-              <small class="ml-1">Email</small>
-              <div class="pr-2">
-                <Validation-provider
-                  v-slot="{ errors, failed }"
-                  v-bind="{ ...vvOptions }"
-                  name="email"
-                  :rules="{ required: true, email: true }"
-                >
-                  <vs-input
-                    v-model="signupForm.email"
-                    maxlength="100"
-                    :danger="failed"
-                    block
-                    placeholder="Email"
-                    @focus="resetValidation()"
-                  >
-                    <template #icon>
-                      <v-icon dark>mdi-at</v-icon>
-                    </template>
-                    <template #message-danger>
-                      <v-icon v-if="failed" color="pink" style="margin-top: -1px" x-small dark>mdi-alert-circle-outline</v-icon>
-                      {{ errors[0] }}
-                    </template>
-                  </vs-input>
-                </Validation-provider>
-              </div>
-            </v-col>
-            <v-col cols="12" lg="6">
-              <small class="ml-1">Password</small>
-              <div class="pr-2">
-                <Validation-provider
-                  v-slot="{ errors, failed }"
-                  v-bind="{ ...vvOptions }"
-                  name="password"
-                  :rules="{ required: true, confirmed: 'confirmation' }"
-                >
-                  <vs-input
-                    v-model="signupForm.password"
-                    maxlength="100"
-                    :danger="failed"
-                    block
-                    type="password"
-                    placeholder="At least 6 characters"
-                    :progress="!failed ? getPasswordComplexity(signupForm.password) : null"
-                    @focus="resetValidation()"
-                  >
-                    <template #icon>
-                      <v-icon dark>mdi-lock</v-icon>
-                    </template>
-
-                    <template #message-danger>
-                      <v-icon v-if="failed" color="pink" style="margin-top: -1px" x-small dark>mdi-alert-circle-outline</v-icon>
-                      {{ errors[0] }}
-                    </template>
-                  </vs-input>
-                </Validation-provider>
-              </div>
-            </v-col>
-            <v-col cols="12" lg="6">
-              <small class="ml-1">Confirm password</small>
-              <div class="pr-2">
-                <Validation-provider
-                  v-slot="{ errors, failed }"
-                  v-bind="{ ...vvOptions }"
-                  name="password'"
-                  :rules="{ required: true }"
-                  vid="confirmation"
-                >
-                  <vs-input
-                    v-model="signupForm.confirmNewPasswordRepeat"
-                    maxlength="100"
-                    :danger="failed"
-                    block
-                    type="password"
-                    placeholder="Repeat password"
-                    @focus="resetValidation()"
-                  >
-                    <template #icon>
-                      <v-icon dark>mdi-lock</v-icon>
-                    </template>
-
-                    <template #message-danger>
-                      <v-icon v-if="failed" color="pink" style="margin-top: -1px" x-small dark>mdi-alert-circle-outline</v-icon>
-                      {{ errors[0] }}
-                    </template>
-                  </vs-input>
-                </Validation-provider>
-              </div>
-            </v-col>
-            <v-col cols="12" lg="6">
-              <small class="ml-1">Name</small>
-              <div class="pr-2">
-                <Validation-provider
-                  v-slot="{ errors, failed }"
-                  v-bind="{ ...vvOptions }"
-                  name="name"
-                  :rules="{ required: true, alpha_spaces: true }"
-                >
-                  <vs-input
-                    v-model="signupForm.name"
-                    maxlength="20"
-                    :danger="failed"
-                    block
-                    placeholder="Name"
-                    @focus="resetValidation()"
-                  >
-                    <template #icon>
-                      <v-icon dark>mdi-account</v-icon>
-                    </template>
-                    <template #message-danger>
-                      <v-icon v-if="failed" color="pink" style="margin-top: -1px" x-small dark>mdi-alert-circle-outline</v-icon>
-                      {{ errors[0] }}
-                    </template>
-                  </vs-input>
-                </Validation-provider>
-              </div>
-            </v-col>
-            <v-col cols="12" lg="6">
-              <small class="ml-1">Last name</small>
-
-              <div class="pr-2">
-                <Validation-provider
-                  v-slot="{ errors, failed }"
-                  v-bind="{ ...vvOptions }"
-                  name="last name"
-                  :rules="{ required: true, alpha_spaces: true }"
-                >
-                  <vs-input
-                    v-model="signupForm.lastName"
-                    maxlength="20"
-                    :danger="failed"
-                    block
-                    placeholder="Last name"
-                    @focus="resetValidation()"
-                  >
-                    <template #icon>
-                      <v-icon dark>mdi-account</v-icon>
-                    </template>
-                    <template #message-danger>
-                      <v-icon v-if="failed" color="pink" style="margin-top: -1px" x-small dark>mdi-alert-circle-outline</v-icon>
-                      {{ errors[0] }}
-                    </template>
-                  </vs-input>
-                </Validation-provider>
-              </div>
-            </v-col>
-
-            <v-col cols="12">
-              <div class="ml-n1 mt-2">
-                <Base-button type="submit">
-                  <v-icon left>mdi-google</v-icon>
-                  Signup with google</Base-button
-                >
-                <Base-button type="submit" :loading="loading"> Signup</Base-button>
-              </div>
-            </v-col>
-          </v-row>
-        </form>
-      </ValidationObserver>
-    </div>
+    </v-container>
   </base-split-2>
 </template>
 <script>
   import { call, sync, get } from 'vuex-pathify';
+  // import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+  // import { auth } from '@/firebase/firebase';
+  import SignupWithEmail from './SignupWithEmail.vue';
 
   export default {
     name: 'SignupPage',
+
+    components: {
+      SignupWithEmail,
+    },
     data() {
       return {
+        mode: '',
         vvOptions: {
           mode: 'passive',
           slim: true,
@@ -197,8 +61,12 @@
       ...get('authentication', ['getPasswordComplexity']),
     },
     methods: {
-      ...call('authentication', ['signup']),
+      ...call('authentication', ['signup', 'signupWithGoogle']),
       ...call('snackbar/*'),
+
+      google() {
+        this.signupWithGoogle();
+      },
 
       resetValidation() {
         this.$refs.profileEdit.reset();

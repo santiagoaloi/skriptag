@@ -48,9 +48,9 @@
                   <td class="py-4">
                     <vs-tooltip :not-hover="!user.verified && !user.disabled" shadow circle color="#ccc">
                       <v-badge :color="getStatusColor(user)" :icon="getStatusIcon(user)" overlap>
-                        <baseAvatarImg v-if="!user.avatar" class="hoverAvatar" :height="35" @click="triggerAvatarInput()" />
+                        <baseAvatarImg v-if="!user.photoURL" class="hoverAvatar" :height="35" @click="triggerAvatarInput()" />
                         <v-avatar v-else size="35">
-                          <v-img :src="user.avatar" flat>
+                          <v-img :src="user.photoURL" flat>
                             <template #placeholder>
                               <v-row class="fill-height ma-0" align="center" justify="center">
                                 <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>

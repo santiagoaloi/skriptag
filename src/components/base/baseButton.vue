@@ -7,8 +7,8 @@
     color="#343b3d"
     class="teal--text text--accent-4"
     :ripple="false"
-    :block="!$vuetify.breakpoint.smAndUp"
-    :class="$vuetify.breakpoint.smAndUp ? 'ml-2' : 'mt-3'"
+    :block="$vuetify.breakpoint.xs || block"
+    :class="$vuetify.breakpoint.smAndUp ? 'ml-0' : 'mt-3'"
     v-on="$listeners"
   >
     <slot> </slot>
@@ -20,6 +20,11 @@
     name: 'BaseButton',
     props: {
       small: {
+        type: Boolean,
+        default: false,
+      },
+
+      block: {
         type: Boolean,
         default: false,
       },

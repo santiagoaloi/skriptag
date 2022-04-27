@@ -16,7 +16,7 @@
                     :rules="{ required: true, alpha_spaces: true }"
                   >
                     <vs-input
-                      v-model="profile.name"
+                      v-model="userProfile.name"
                       :danger="failed"
                       maxlength="20"
                       block
@@ -44,7 +44,7 @@
                     :rules="{ required: true, alpha_spaces: true }"
                   >
                     <vs-input
-                      v-model="profile.lastName"
+                      v-model="userProfile.lastName"
                       :danger="failed"
                       maxlength="20"
                       block
@@ -91,7 +91,7 @@
   </div>
 </template>
 <script>
-  import { sync, call } from 'vuex-pathify';
+  import { sync, call, get } from 'vuex-pathify';
   import { cloneDeep, merge } from 'lodash';
 
   export default {
@@ -108,7 +108,8 @@
     },
 
     computed: {
-      ...sync('authentication', ['profile']),
+      ...sync('authentication', ['userProfile']),
+      ...get('authentication', ['isAuthExternalProvider']),
     },
 
     mounted() {
@@ -126,7 +127,7 @@
       },
 
       cloneProfile() {
-        this.originProfile = cloneDeep(this.profile);
+        this.originProfile = cloneDeep(this.userProfile);
       },
 
       rollBack() {
@@ -134,10 +135,19 @@
 
         // If the user changes the profile or cover image, it will remain
         // regardless of cancelling the profile edit.
-        const profileMedia = { avatar: this.profile.avatar, coverAvatar: this.profile.coverAvatar };
+
+        if (!this.isAuthExternalProvider) {
+          const profileMedia = { photoURL: this.userProfile.photoURL, coverAvatar: this.userProfile.coverAvatar };
+          this.userProfile = merge(originProfile, profileMedia);
+          return;
+        }
+
+        if (this.isAuthExternalProvider) {
+          const profileMedia = { coverAvatar: this.userProfile.coverAvatar };
+          this.userProfile = merge(originProfile, profileMedia);
+        }
 
         // Merge possible new image changes and rollback.
-        this.profile = merge(originProfile, profileMedia);
       },
 
       resetValidation() {

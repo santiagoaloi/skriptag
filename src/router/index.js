@@ -43,13 +43,7 @@ router.beforeEach(async (to, from, next) => {
     return;
   }
 
-  if (requiresAuth) {
-    // Unprotected routes are all routable.
-    await setUserAndProfile({ isAuth });
-    next();
-    return;
-  }
-
+  await setUserAndProfile({ isAuth });
   next();
 });
 
