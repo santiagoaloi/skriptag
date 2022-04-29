@@ -3,7 +3,7 @@
     <base-no-split v-show="!switchToCardSettings">
       <template #left>
         <v-row>
-          <v-col cols="12" sm="6" md="2">
+          <v-col cols="12" sm="6" md="3">
             <vs-card class="my-card" @click="switchCard('ProfileEdit')">
               <template #title>
                 <h3>Profile Details</h3>
@@ -16,7 +16,7 @@
               </template>
             </vs-card>
           </v-col>
-          <v-col cols="12" sm="6" md="2">
+          <v-col cols="12" sm="6" md="3">
             <vs-card class="my-card" @click="switchCard('AccountEdit')">
               <template #title>
                 <h3>Account settings</h3>
@@ -29,7 +29,7 @@
               </template>
             </vs-card>
           </v-col>
-          <v-col cols="12" sm="6" md="2">
+          <v-col cols="12" sm="6" md="3">
             <vs-card :disabled="!verified" :class="{ 'disabled-card': !verified }" class="my-card">
               <template #title>
                 <h3>Billing information</h3>
@@ -136,7 +136,7 @@
 
         return {
           gradient: gradientOptions(),
-          height: '140',
+          height: this.$vuetify.breakpoint.smAndDown ? '300' : '140',
         };
       },
 

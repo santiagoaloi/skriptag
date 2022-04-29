@@ -1,6 +1,10 @@
 <template>
   <div style="color: #ccc">
-    <h1 class="mb-6 mt-3">Account Setttings</h1>
+    <div class="d-flex align-center">
+      <h2 class="mb-6 mt-3 cursor-pointer" @click="close()">Profile</h2>
+      <v-icon class="mt-n2" size="25" dark> mdi-chevron-right</v-icon>
+      <h2 class="mb-6 mt-3">Account settings</h2>
+    </div>
     <ValidationObserver ref="accountEdit" slim>
       <form class="d-flex flex-column" @submit.prevent="validatePasswords()">
         <v-row no-gutters>
