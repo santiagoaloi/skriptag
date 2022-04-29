@@ -1,10 +1,10 @@
 <template>
-  <base-split-2 v-bind="$attrs">
+  <base-split-2 src="https://media.skriptag.com/img/2.svg" v-bind="$attrs">
     <skriptag-title large class="mb-4" />
 
     <article>
       <h2 class="font-weight-light">
-        Level up your <b>skills</b> and launch your carreer as a <b>developer</b> - Find learning content,
+        Level up your <b>skills</b> and launch your career as a <b>developer</b> - Find learning content,
         <b> mentoring</b> assistance or interact with other developers!
       </h2>
     </article>

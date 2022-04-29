@@ -95,8 +95,14 @@
               </v-col>
               <v-col cols="12">
                 <div class="mt-4">
-                  <v-btn :block="!$vuetify.breakpoint.smAndUp" :loading="loading" type="submit" dark color="grey darken-3"
-                    ><v-icon left> mdi-refresh</v-icon><span>Change password </span></v-btn
+                  <v-btn
+                    :ripple="false"
+                    :block="!$vuetify.breakpoint.smAndUp"
+                    :loading="loading"
+                    type="submit"
+                    dark
+                    color="#2a3143"
+                    ><v-icon left> mdi-refresh</v-icon><span>Update password </span></v-btn
                   >
                 </div>
               </v-col>
@@ -133,7 +139,9 @@
               </v-col>
               <v-col cols="12">
                 <v-divider class="my-4" style="background: #404040"></v-divider>
-                <v-btn class="mr-2 my-2" dark color="grey" @click="close()"><v-icon left>mdi-close</v-icon>Close</v-btn>
+                <v-btn :ripple="false" class="mr-2 my-2" dark color="#1b1e25" @click="close()"
+                  ><v-icon left>mdi-close</v-icon>Close</v-btn
+                >
               </v-col>
             </v-row>
           </v-col>

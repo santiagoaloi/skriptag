@@ -1,14 +1,12 @@
 <template>
-  <v-main>
-    <div id="containerDiv" :style="custommHeight">
-      <v-expand-transition>
-        <MobileMenuView v-if="mobileMenu" />
-      </v-expand-transition>
+  <v-main id="containerDiv" :style="custommHeight">
+    <v-expand-transition>
+      <MobileMenuView v-if="mobileMenu" />
+    </v-expand-transition>
 
-      <v-fade-transition hide-on-leave mode="out-in">
-        <router-view v-if="!mobileMenu"></router-view>
-      </v-fade-transition>
-    </div>
+    <v-fade-transition hide-on-leave mode="out-in">
+      <router-view v-if="!mobileMenu"></router-view>
+    </v-fade-transition>
   </v-main>
 </template>
 
@@ -28,10 +26,7 @@
       custommHeight() {
         return {
           'background': ' #24272c',
-          'overflow-y': 'overlay',
           'overflow-x': 'hidden',
-          // 'height': this.$vuetify.breakpoint.smAndDown ? '' : 'calc(100vh - 60px)',
-          'height': '100%',
         };
       },
     },

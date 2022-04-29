@@ -34,7 +34,7 @@
 
       <template #right>
         <v-scale-transition>
-          <v-btn v-if="isLoggedIn" class="mr-3" :ripple="false" dark color="rgba(10,10,10 , .3)" @click="logout">
+          <v-btn v-if="isLoggedIn" class="mr-3" :ripple="false" dark color="#2a3143" @click="logout">
             {{ `Logout ${firstAndShortLast || profile.email}` }}
           </v-btn>
 
@@ -44,14 +44,14 @@
         <template v-if="!isLoggedIn && !$vuetify.breakpoint.smAndDown">
           <BaseButton
             v-for="button in [
-              { name: 'login', icon: 'account-arrow-right' },
-              { name: 'signup', icon: 'account-plus' },
+              { link: 'login', name: 'Login', icon: 'account-arrow-right' },
+              { link: 'signup', name: 'Sign up', icon: 'account-plus' },
             ]"
             :key="button.name"
             dark
             color="grey darken-3"
             class="ml-3"
-            @click="$router.push(`${button.name}`)"
+            @click="$router.push(`${button.link}`)"
           >
             <v-icon left> mdi-{{ button.icon }}</v-icon
             >{{ button.name }}

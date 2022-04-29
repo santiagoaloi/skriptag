@@ -33,6 +33,11 @@
         type: [Number, String],
         default: 5,
       },
+
+      src: {
+        type: [String],
+        default: '',
+      },
     },
 
     data() {
@@ -82,8 +87,8 @@
         if (!imageLoaded) return;
 
         const direction = 'to bottom';
-        const fromColor = 'rgba(20,20,20, .4) 40%';
-        const toColor = ' rgba(0,0,0,.8) 160%';
+        const fromColor = 'rgba(56, 61, 87, .3) 40%';
+        const toColor = ' rgba(56, 61, 87,.8) 160%';
 
         return `${direction}, ${fromColor}, ${toColor}`;
       },
@@ -94,7 +99,7 @@
           gradient: gradientOptions(),
           width: '100%',
           style: { height: '100%' },
-          src: `https://picsum.photos/1280/800?${Date.now().toString().slice(0, 1)}`,
+          src: this.src || `https://picsum.photos/1280/800?${Date.now().toString().slice(0, 1)}`,
           transition: `${right ? 'slide-x-reverse-transition' : 'slide-x-transition'}`,
         };
       },

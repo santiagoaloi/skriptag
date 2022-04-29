@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer app absolute width="50" color="transparent">
+  <v-navigation-drawer app width="50" color="#24272c">
     <vs-sidebar v-show="showSidebar" v-model="route" reduce open square>
       <vs-sidebar-item id="/" to="/" class="mt-14">
         <template #icon>

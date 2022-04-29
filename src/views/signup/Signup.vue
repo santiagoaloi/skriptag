@@ -1,22 +1,23 @@
 <template>
-  <base-split-2 col="6">
+  <base-split-2 col="6" src="https://media.skriptag.com/img/3.svg" v-bind="$attrs">
     <v-container>
       <div class="d-flex flex-wrap flex-column">
-        <h2 class="mb-5">Signup</h2>
+        <h2 class="mb-5">Signup with email</h2>
         <div>
           <v-alert
             style="color: #ccc"
             dense
             text
             dark
-            color="teal accent-3"
+            color="teal accent-4"
             border="left"
             elevation="6"
             colored-border
             icon="mdi-chevron-up"
           >
-            You can also use authentication providers like google, apple or microsot. Login with your credentials directly, and
-            your account wuill be created right away.
+            To sign in with google or github,
+            <span class="cursor-pointer teal--text text--accent-4" @click="$router.push('login')"> go to the login page</span>. An
+            account will be created right away.
           </v-alert>
         </div>
 

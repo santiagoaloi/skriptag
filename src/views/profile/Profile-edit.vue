@@ -67,20 +67,22 @@
           <v-col cols="12">
             <div class="pt-8">
               <v-btn
+                :ripple="false"
                 class="mr-2"
                 :block="!$vuetify.breakpoint.smAndUp"
                 :class="$vuetify.breakpoint.smAndUp ? '' : 'mt-3 '"
                 dark
-                color="grey"
+                color="#1b1e25"
                 @click="close()"
                 ><v-icon left>mdi-close</v-icon>Close</v-btn
               >
               <v-btn
+                :ripple="false"
                 :block="!$vuetify.breakpoint.smAndUp"
                 :class="$vuetify.breakpoint.smAndUp ? 'ml-2' : 'mt-3'"
                 type="submit"
                 dark
-                color="teal"
+                color="#2a3143"
                 ><v-icon left> mdi-check-bold</v-icon>Save</v-btn
               >
             </div>

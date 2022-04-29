@@ -29,7 +29,7 @@
       <v-list-item-title>Blog</v-list-item-title>
     </v-list-item>
 
-    <v-list-group color="teal lighten-3" no-action sub-group>
+    <v-list-group color="indigo lighten-3" no-action sub-group>
       <template #activator>
         <v-list-item-content>
           <v-list-item-title>Downloads</v-list-item-title>
@@ -45,7 +45,7 @@
       </v-list-item>
     </v-list-group>
 
-    <v-list-group color="teal lighten-3" :value="true" no-action sub-group>
+    <v-list-group color="indigo lighten-3" :value="true" no-action sub-group>
       <template #activator>
         <v-list-item-content>
           <v-list-item-title>Tutorials</v-list-item-title>

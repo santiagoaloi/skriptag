@@ -7,8 +7,8 @@
     </div>
 
     <v-tabs v-model="selectedTab" background-color="transparent">
-      <v-tabs-slider color="primary"></v-tabs-slider>
-      <v-tab v-for="tab in tabs" :key="tab.component" :disabled="tab.disabled" :ripple="false">
+      <v-tabs-slider color="#3a3f50"></v-tabs-slider>
+      <v-tab v-for="tab in tabs" :key="tab.component" active-class="active" :disabled="tab.disabled" :ripple="false">
         {{ tab.name }}
       </v-tab>
     </v-tabs>
@@ -59,3 +59,9 @@
     },
   };
 </script>
+
+<style scoped>
+  .active {
+    color: #b2b6c3;
+  }
+</style>

@@ -17,7 +17,7 @@ const actions = {
   ...make.actions(state),
 
   snackbarSuccess(_, message) {
-    const payload = { value: true, text: message, color: 'grey darken-2', icon: 'mdi-check' };
+    const payload = { value: true, text: message, color: '#2a3143', icon: 'mdi-check' };
     store.set('snackbar/data', { ...payload });
   },
 
@@ -25,7 +25,7 @@ const actions = {
     const payload = {
       value: true,
       text: message,
-      color: 'pink darken-1',
+      color: 'pink accent-3',
       icon: 'mdi-alert-octagon',
     };
 

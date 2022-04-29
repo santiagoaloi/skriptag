@@ -1,5 +1,5 @@
 <template>
-  <base-split-2 v-if="!isLoggedIn" id="login" col="6" right>
+  <base-split-2 cols="6" right src="https://media.skriptag.com/img/11.svg" v-bind="$attrs">
     <v-container>
       <div class="d-flex flex-wrap flex-column pl-1">
         <template v-if="!recoveryMode">
@@ -18,9 +18,9 @@
             class="transparent"
             :width="$vuetify.breakpoint.smAndDown ? '100%' : 350"
           >
-            <Base-button disabled class="my-3" block> <v-icon left> mdi-microsoft</v-icon> Sign-in with Microsoft</Base-button>
+            <!-- <Base-button disabled class="my-3" block> <v-icon left> mdi-microsoft</v-icon> Sign-in with Microsoft</Base-button> -->
             <Base-button class="my-3" block @click="google()"> <v-icon left> mdi-google</v-icon> Sign-in with Google</Base-button>
-            <Base-button disabled class="my-3" block> <v-icon left> mdi-apple</v-icon> Sign-in with Apple</Base-button>
+            <Base-button disabled class="my-3" block> <v-icon left> mdi-github</v-icon> Sign-in with Github</Base-button>
 
             <div class="d-flex align-center">
               <v-divider class="grey darken-3" /> <span class="mx-3" style="color: #ccc"> or </span>

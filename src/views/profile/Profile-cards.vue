@@ -9,7 +9,7 @@
                 <h3>Profile Details</h3>
               </template>
               <template #img>
-                <img :src="`https://picsum.photos/1280/800?${Date.now().toString().slice(0, 1)}`" alt="" />
+                <v-img src="https://media.skriptag.com/img/a1.svg" v-bind="imageOptions()" />
               </template>
               <template #text>
                 <p>Edit your profile information such as your names, tags,and more...</p>
@@ -22,7 +22,7 @@
                 <h3>Account settings</h3>
               </template>
               <template #img>
-                <img :src="`https://picsum.photos/1280/800?${Date.now().toString().slice(0, 1)}`" alt="" />
+                <v-img src="https://media.skriptag.com/img/a2.svg" v-bind="imageOptions()" />
               </template>
               <template #text>
                 <p>Change your authentication settings,account email, 2FA, remove or disable your account.</p>
@@ -35,7 +35,7 @@
                 <h3>Billing information</h3>
               </template>
               <template #img>
-                <img :src="`https://picsum.photos/1280/800?${Date.now().toString().slice(0, 1)}`" alt="" />
+                <v-img src="https://media.skriptag.com/img/a4.svg" v-bind="imageOptions()" />
               </template>
               <template #text>
                 <p>Change your authentication settings,account email, 2FA, remove or disable your account.</p>
@@ -54,7 +54,7 @@
                 <h3>Manage Skriptag</h3>
               </template>
               <template #img>
-                <img :src="`https://picsum.photos/1280/800?${Date.now().toString().slice(0, 1)}`" alt="" />
+                <v-img src="https://media.skriptag.com/img/a5.svg" v-bind="imageOptions()" />
               </template>
               <template #text>
                 <p>Manage users, roles, and project settings.</p>
@@ -123,6 +123,23 @@
       ...get('authentication', ['verified']),
     },
     methods: {
+      gradientOptions() {
+        const direction = 'to bottom';
+        const fromColor = 'rgba(56, 61, 87, .3) 40%';
+        const toColor = ' rgba(56, 61, 87,.8) 160%';
+
+        return `${direction}, ${fromColor}, ${toColor}`;
+      },
+
+      imageOptions() {
+        const { gradientOptions } = this;
+
+        return {
+          gradient: gradientOptions(),
+          height: '140',
+        };
+      },
+
       switchCard(card) {
         this.switchToCardSettings = true;
         this.activeCard = card;

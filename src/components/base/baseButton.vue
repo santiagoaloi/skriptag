@@ -4,8 +4,8 @@
     v-bind="$attrs"
     dark
     :large="!small"
-    color="#343b3d"
-    class="teal--text text--accent-4"
+    color="#2a3143"
+    class="indigo--text text--lighten-5"
     :ripple="false"
     :block="$vuetify.breakpoint.xs || block"
     :class="$vuetify.breakpoint.smAndUp ? 'ml-0' : 'mt-3'"

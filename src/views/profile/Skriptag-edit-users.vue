@@ -1,13 +1,13 @@
 <template>
   <div>
-    <v-container class="pa-10">
+    <v-container :fluid="$vuetify.breakpoint.lgAndDown" class="pa-10">
       <v-card ref="content" class="mx-auto transparent" flat min-height="35vh">
         <v-card-actions v-if="$vuetify.breakpoint.smAndUp">
           <v-text-field
             v-model="search"
             placeholder="Search by email adrress, or user ID"
             dark
-            background-color="#212326"
+            background-color="#1c1e24"
             hide-details
             dense
             solo

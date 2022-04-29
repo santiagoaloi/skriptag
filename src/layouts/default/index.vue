@@ -3,6 +3,7 @@
     <default-drawer />
     <default-app-bar />
     <default-view />
+
     <base-snackbar />
   </v-app>
 </template>

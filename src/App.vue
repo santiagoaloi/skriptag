@@ -11,8 +11,6 @@
     mounted() {
       this.$vs.setTheme('dark');
     },
-
-    methods: {},
   };
 </script>
 <style>
@@ -135,7 +133,7 @@
   }
 
   h1 {
-    font-size: 300% !important;
+    font-size: 350% !important;
   }
 
   .v-tab {
@@ -152,5 +150,19 @@
   .theme--light.v-tabs > .v-tabs-bar .v-tab:not(.v-tab--active) > .v-btn,
   .theme--light.v-tabs > .v-tabs-bar .v-tab--disabled {
     color: #ccc !important;
+  }
+
+  .v-application--wrap {
+    min-height: 99vh !important;
+  }
+
+  .vs-input {
+    border: 2px solid transparent;
+    background: #1b1e25;
+    color: #ccc;
+  }
+
+  .vs-input:focus {
+    background: #1b1e25;
   }
 </style>

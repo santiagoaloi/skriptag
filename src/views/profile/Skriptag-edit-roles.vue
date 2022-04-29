@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-container class="pa-10">
+    <v-container :fluid="$vuetify.breakpoint.lgAndDown" class="pa-10">
       <v-card ref="content" class="mx-auto transparent" flat min-height="35vh">
         <v-card-actions v-if="$vuetify.breakpoint.smAndUp">
           <v-text-field
