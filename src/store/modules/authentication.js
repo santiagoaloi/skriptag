@@ -35,6 +35,7 @@ const actions = {
   ...make.actions(state),
 
   // Re-sends the account activation email.
+  // This relates to the authenticated user.
   async resendEmailVerification({ state }) {
     try {
       await sendEmailVerification(state.user);
@@ -44,6 +45,7 @@ const actions = {
     } catch ({ ...error }) {}
   },
 
+  // Admin SDK, verifies the user via verificaion link.
   async findUserByEmailAndVerify({ dispatch }, email) {
     const veriyUser = httpsCallable(functions, 'verifiyUserByEmail');
     const result = await veriyUser(email);
@@ -54,6 +56,7 @@ const actions = {
     }
   },
 
+  // Admin SDK, disable any account matching the email.
   async disableAccountByEmail({ dispatch }, email) {
     try {
       const disableAccount = httpsCallable(functions, 'disableUserByEmail');
@@ -69,6 +72,7 @@ const actions = {
     }
   },
 
+  // Admin SDK, enable any account matching the email.
   async enableAccountByEmail({ dispatch }, email) {
     try {
       const enableAccount = httpsCallable(functions, 'enableUserByEmail');
@@ -84,6 +88,7 @@ const actions = {
     }
   },
 
+  // Admin SDK, remove any account matching the email.
   async deleteAccountByEmail({ dispatch }, email) {
     try {
       const deleteAccount = httpsCallable(functions, 'deleteUserByEmail');
@@ -99,6 +104,7 @@ const actions = {
     }
   },
 
+  // Admin SDK, change account password { email, password}
   async chageUserPasswordByEmail({ dispatch }, { payload }) {
     try {
       const changePassword = httpsCallable(functions, 'chageUserPasswordByEmail');
@@ -114,6 +120,7 @@ const actions = {
     }
   },
 
+  // Get the doc with the ID of the the authenticated user.
   async refreshProfile({ getters }) {
     const docRef = doc(db, 'users', getters.userId);
     const docSnap = await getDoc(docRef);
@@ -157,7 +164,7 @@ const actions = {
     }
   },
 
-  // Generates a password recovery email.
+  // Generates a password recovery email from the login screen.
   async accountRecoveryRequest({ dispatch }, email) {
     store.set('loaders/authLoader', true);
     try {
@@ -230,7 +237,6 @@ const actions = {
     } catch ({ ...error }) {
       dispatch('errors/authMessagesSnackbar', error.code, { root: true });
       store.set('loaders/authLoader', false);
-      console.log(error.code);
     }
   },
 
@@ -267,6 +273,31 @@ const actions = {
     }
   },
 
+  // Creates user profile.
+  addUserToUsersCollection(_, { user, signupForm }) {
+    const { email } = signupForm;
+
+    // Adds a document in a  firestore collection.
+    // doc (Firestore instance, collection name, collection id).
+    const userDocRef = doc(db, 'users', user.uid);
+
+    // User profile fields to be created in db (payload)
+    const userDocData = {
+      uid: user.uid,
+      email,
+      name: signupForm.name.trim(),
+      lastName: signupForm.lastName.trim(),
+      photoURL: '',
+      coverAvatar: '',
+    };
+
+    // SetDoc (Firestore, Payload)
+    // creates the user profile in the db collection.
+    setDoc(userDocRef, userDocData);
+  },
+
+  // Creates a new user account or login existing
+  // using google credentials, and routes to profile page.
   async signupWithGoogle({ dispatch }) {
     store.set('loaders/signupLoader', true);
 
@@ -296,6 +327,7 @@ const actions = {
     }
   },
 
+  // If the google account has not profile docuemnt, it creates it.
   addUserToUsersCollectionGgoogle(_, { user }) {
     // Adds a document in a  firestore collection.
     // doc (Firestore instance, collection name, collection id).
@@ -324,28 +356,8 @@ const actions = {
     setDoc(userDocRef, userDocData);
   },
 
-  addUserToUsersCollection(_, { user, signupForm }) {
-    const { email } = signupForm;
-
-    // Adds a document in a  firestore collection.
-    // doc (Firestore instance, collection name, collection id).
-    const userDocRef = doc(db, 'users', user.uid);
-
-    // User profile fields to be created in db (payload)
-    const userDocData = {
-      uid: user.uid,
-      email,
-      name: signupForm.name.trim(),
-      lastName: signupForm.lastName.trim(),
-      photoURL: '',
-      coverAvatar: '',
-    };
-
-    // SetDoc (Firestore, Payload)
-    // creates the user profile in the db collection.
-    setDoc(userDocRef, userDocData);
-  },
-
+  // Validates current user password, if validated
+  // returns the user object.
   async reAuthenticate(_, password) {
     const credential = EmailAuthProvider.credential(auth.currentUser.email, password);
     const authenticated = await reauthenticateWithCredential(auth.currentUser, credential);

@@ -78,14 +78,16 @@
         </v-fade-transition>
       </v-card>
     </v-container>
-    <skriptag-edit-add-role-dialog v-model="addRoleDialog" @close="addRoleDialog = false" />
+    <skriptag-edit-role-add-dialog v-model="addRoleDialog" @close="addRoleDialog = false" />
+    <!-- <skriptag-edit-edit-role-dialog v-model="addRoleDialog" @close="addRoleDialog = false" /> -->
   </div>
 </template>
 <script>
   import { collection, onSnapshot } from 'firebase/firestore';
   import { call } from 'vuex-pathify';
   import { db } from '@/firebase/firebase';
-  import SkriptagEditAddRoleDialog from './Skriptag-edit-roles-add-dialog';
+  import SkriptagEditRoleAddDialog from './Skriptag-edit-roles-add-dialog';
+  // import SkriptagEditRoleEditDialog from './Skriptag-edit-roles-edit-dialog';
 
   // Roles collection ref
   const colRef = collection(db, 'roles');
@@ -93,7 +95,7 @@
   export default {
     name: 'SkriptagEditRoles',
     components: {
-      SkriptagEditAddRoleDialog,
+      SkriptagEditRoleAddDialog,
     },
     data() {
       return {

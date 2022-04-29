@@ -65,10 +65,10 @@
       },
 
       rowClass() {
-        const { smAndDown } = this.$vuetify.breakpoint;
-        if (!smAndDown) {
-          return 'fill-height';
-        }
+        // const { smAndDown } = this.$vuetify.breakpoint;
+        // if (!smAndDown) {
+        return 'fill-height';
+        // }
       },
 
       colOrder() {
@@ -89,12 +89,11 @@
       },
       imageOptions() {
         const { right, gradientOptions } = this;
-        const { xs } = this.$vuetify.breakpoint;
 
         return {
           gradient: gradientOptions(),
           width: '100%',
-          style: { height: xs ? '90%' : '100%' },
+          style: { height: '100%' },
           src: `https://picsum.photos/1280/800?${Date.now().toString().slice(0, 1)}`,
           transition: `${right ? 'slide-x-reverse-transition' : 'slide-x-transition'}`,
         };

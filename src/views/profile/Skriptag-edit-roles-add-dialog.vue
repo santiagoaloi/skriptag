@@ -64,7 +64,7 @@
   import { call } from 'vuex-pathify';
 
   export default {
-    name: 'SkriptagEditAddRoleDialog',
+    name: 'SkriptagEditRoleAddDialog',
     props: {
       value: {
         type: Boolean,

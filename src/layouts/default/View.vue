@@ -30,7 +30,8 @@
           'background': ' #24272c',
           'overflow-y': 'overlay',
           'overflow-x': 'hidden',
-          'height': this.$vuetify.breakpoint.smAndDown ? '' : 'calc(100vh - 60px)',
+          // 'height': this.$vuetify.breakpoint.smAndDown ? '' : 'calc(100vh - 60px)',
+          'height': '100%',
         };
       },
     },
