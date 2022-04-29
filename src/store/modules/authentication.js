@@ -313,7 +313,7 @@ const actions = {
       // First name in the names array
       name: names[0],
       // Rest of the names in the names array
-      lastName: names.slice(1).join(' '),
+      lastName: names.slice(1).join('').trim(),
       verified: true,
       photoURL,
       coverAvatar: '',
@@ -335,8 +335,8 @@ const actions = {
     const userDocData = {
       uid: user.uid,
       email,
-      name: signupForm.name,
-      lastName: signupForm.lastName,
+      name: signupForm.name.trim(),
+      lastName: signupForm.lastName.trim(),
       photoURL: '',
       coverAvatar: '',
     };
@@ -407,7 +407,7 @@ const getters = {
   },
 
   isProfileLoaded: (state, getters) => {
-    if (getters.isLoggedIn) return !isEmpty(state.profile);
+    if (getters.isLoggedIn) return !isEmpty(state.userProfile);
   },
 
   userEmail: (state, getters) => {
@@ -423,7 +423,7 @@ const getters = {
     if (state.userProfile && state.userProfile.name && state.userProfile.lastName) {
       const name = startCase(capitalize(state.userProfile.name));
       const lastName = startCase(capitalize(state.userProfile.lastName));
-      return `${name} ${lastName} `;
+      return `${name} ${lastName}`;
     }
   },
 

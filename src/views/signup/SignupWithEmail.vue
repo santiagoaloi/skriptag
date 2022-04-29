@@ -14,7 +14,7 @@
                 :rules="{ required: true, email: true }"
               >
                 <vs-input
-                  v-model="signupForm.email"
+                  v-model.trim="signupForm.email"
                   maxlength="100"
                   :danger="failed"
                   block

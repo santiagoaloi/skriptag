@@ -1,10 +1,7 @@
 // Utilities
 import { make } from 'vuex-pathify';
 
-const state = {
-  authLoader: false,
-  signupLoader: false,
-};
+const state = {};
 
 const mutations = make.mutations(state);
 const actions = {
@@ -28,12 +25,12 @@ const actions = {
       return;
     }
     if (message.includes('auth/user-disabled')) {
-      dispatch('snackbar/snackbarError', 'This account is disabled', { root: true });
+      dispatch('snackbar/snackbarError', 'This account is disabled.', { root: true });
       return;
     }
 
     if (message.includes('auth/invalid-action-code')) {
-      dispatch('snackbar/snackbarError', 'The recovery token is expired', {
+      dispatch('snackbar/snackbarError', 'The recovery token is expired.', {
         root: true,
       });
       return;

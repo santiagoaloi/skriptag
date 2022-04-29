@@ -3,14 +3,6 @@ const functions = require('firebase-functions');
 
 admin.initializeApp();
 
-// exports.listAllUsersEmulator = functions.https.onCall(() =>
-//   admin
-//     .auth()
-//     .listUsers(1000)
-//     .then((listUsersResult) => listUsersResult.users)
-//     .catch((error) => error),
-// );
-
 exports.verifiyUserByEmail = functions.https.onCall(async (email) => {
   try {
     const user = await admin.auth().getUserByEmail(email);
@@ -33,10 +25,6 @@ exports.disableUserByEmail = functions.https.onCall(async (email) => {
       disabled: true,
     });
 
-    const docRef = admin.firestore().collection('users').doc(user.uid);
-
-    await docRef.update({ disabled: true });
-
     // Send an email notifying the user.
     // Trigger Email extension.
     admin
@@ -45,10 +33,25 @@ exports.disableUserByEmail = functions.https.onCall(async (email) => {
       .add({
         to: email,
         message: {
-          subject: 'Skriptag | Account Disabled ',
-          html: 'Hi, </br> Your account has been disasbled. Please contact us or reply to this email if you need assistance.',
+          subject: 'Skriptag | Account Disabled.',
+          html: `
+          <table role="presentation" style="width:100%;border-collapse:collapse;border:0;border-spacing:0;">
+           <tr>
+            <td style="width:260px;padding:0;vertical-align:top;">
+            <p>Hello,</p>
+              <p>Your account ${email} is now disabled. </p>
+              <p>If you need assistance reply to this email and we'll get back to you asap.</a></p>
+              <p>Thanks,</p>
+              <p>Your skriptag team</p>
+            </td>
+            </tr>
+         </table>`,
         },
       });
+
+    const docRef = admin.firestore().collection('users').doc(user.uid);
+
+    await docRef.update({ disabled: true });
 
     return {
       disabled: true,
@@ -76,19 +79,18 @@ exports.enableUserByEmail = functions.https.onCall(async (email) => {
         to: email,
         message: {
           subject: 'Skriptag | Account Enabled ',
-          html: `<table role="presentation" style="width:100%;border-collapse:collapse;border:0;border-spacing:0;">
+          html: `
+          <table role="presentation" style="width:100%;border-collapse:collapse;border:0;border-spacing:0;">
            <tr>
-        <td style="width:260px;padding:0;vertical-align:top;">
-            <p>Your account ${email} is now enabled. </p>
-            <p><a href="https://skriptag.com/login">Login</a></p>
-        </td>
-        <td style="width:20px;padding:0;font-size:0;line-height:0;">&nbsp;</td>
-        <td style="width:260px;padding:0;vertical-align:top;">
-            <p>Morbi porttitor, eget est accumsan dictum, nisi libero ultricies ipsum, in posuere mauris neque at erat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. In tempus adipiscing felis, sit amet blandit ipsum volutpat sed.</p>
-            <p><a href="https://skriptag.com">Skriptag</a></p>
-        </td>
-    </tr>
-</table>`,
+            <td style="width:260px;padding:0;vertical-align:top;">
+            <p>Hello,</p>
+              <p>Your account ${email} is now enabled. </p>
+              <p>Click here to <a href="https://skriptag.com/login">Login</a></p>
+              <p>Thanks,</p>
+              <p>Your skriptag team</p>
+            </td>
+            </tr>
+         </table>`,
         },
       });
 
@@ -108,6 +110,30 @@ exports.deleteUserByEmail = functions.https.onCall(async (email) => {
     const id = user.uid;
 
     await admin.auth().deleteUser(id);
+
+    // Send an email notifying the user.
+    // Trigger Email extension.
+    admin
+      .firestore()
+      .collection('mail')
+      .add({
+        to: email,
+        message: {
+          subject: 'Skriptag | Account Removed.',
+          html: `
+          <table role="presentation" style="width:100%;border-collapse:collapse;border:0;border-spacing:0;">
+           <tr>
+            <td style="width:260px;padding:0;vertical-align:top;">
+            <p>Hello,</p>
+              <p>Your account ${email} is now removed from our records.</p>
+              <p>If you need assistance reply to this email and we'll get back to you asap.</a></p>
+              <p>Thanks,</p>
+              <p>Your skriptag team</p>
+            </td>
+            </tr>
+         </table>`,
+        },
+      });
 
     // The Delete User Data extension will take some seconds
     // before deleting the user document, this will visually
