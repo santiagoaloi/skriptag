@@ -5,6 +5,7 @@ node_modules
 # Firebase 🔥
 .firebase
 
+
 # local env files
 .env
 
@@ -22,3 +23,4 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+*.log

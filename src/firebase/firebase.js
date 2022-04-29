@@ -1,12 +1,12 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
-import { getStorage } from 'firebase/storage';
-import { getFirestore } from 'firebase/firestore';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { connectStorageEmulator, getStorage } from 'firebase/storage';
 import { connectFunctionsEmulator, getFunctions } from 'firebase/functions';
+import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore';
+import { connectAuthEmulator, getAuth, onAuthStateChanged } from 'firebase/auth';
 
 // Activate Emulators
-const useFunctionsEmulator = false;
+const useEmulators = true;
 
 const firebaseConfig = {
   apiKey: process.env.VUE_APP_SKRIPTAG_FIREBASE_API_KEY,
@@ -20,16 +20,19 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
 const storage = getStorage();
-const auth = getAuth(app);
 const functions = getFunctions(app);
+const db = getFirestore(app);
+const auth = getAuth(app);
 const getUserState = () => new Promise((resolve, reject) => onAuthStateChanged(auth, resolve, reject));
 
-// If the functions emulator is enabled,
-// Run local functions instead.
-if (useFunctionsEmulator) {
-  connectFunctionsEmulator(functions, 'localhost', 5001);
+// If  useEmulators is true, run all the emulators
+// instead of production servers.
+if (useEmulators) {
+  connectStorageEmulator(storage, 'localhost', 5001);
+  connectFunctionsEmulator(functions, 'localhost', 5002);
+  connectFirestoreEmulator(db, 'localhost', 5003);
+  connectAuthEmulator(auth, 'http://localhost:5004', { disableWarnings: true });
 }
 
 export { db, storage, auth, functions, getUserState };

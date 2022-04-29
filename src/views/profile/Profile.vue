@@ -179,7 +179,7 @@
           return;
         }
 
-        const photoRef = ref(storage, `users/${this.profile.userId}/${file.name}`);
+        const photoRef = ref(storage, `users/${this.profile.uid}/${file.name}`);
         const uploadTask = uploadBytesResumable(photoRef, file);
         uploadTask.on(
           'state_changed',
@@ -210,7 +210,7 @@
           return;
         }
 
-        const photoRef = ref(storage, `users/${this.profile.userId}/${file.name}`);
+        const photoRef = ref(storage, `users/${this.profile.uid}/${file.name}`);
         const uploadTask = uploadBytesResumable(photoRef, file);
         uploadTask.on(
           'state_changed',

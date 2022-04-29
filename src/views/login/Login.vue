@@ -18,9 +18,9 @@
             class="transparent"
             :width="$vuetify.breakpoint.smAndDown ? '100%' : 350"
           >
-            <Base-button class="my-3" block> <v-icon left> mdi-microsoft</v-icon> Sign-in with Microsoft</Base-button>
+            <Base-button disabled class="my-3" block> <v-icon left> mdi-microsoft</v-icon> Sign-in with Microsoft</Base-button>
             <Base-button class="my-3" block @click="google()"> <v-icon left> mdi-google</v-icon> Sign-in with Google</Base-button>
-            <Base-button class="my-3" block> <v-icon left> mdi-apple</v-icon> Sign-in with Apple</Base-button>
+            <Base-button disabled class="my-3" block> <v-icon left> mdi-apple</v-icon> Sign-in with Apple</Base-button>
 
             <div class="d-flex align-center">
               <v-divider class="grey darken-3" /> <span class="mx-3" style="color: #ccc"> or </span>

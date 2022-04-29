@@ -253,9 +253,7 @@ const actions = {
 
       const { user } = userCredential;
 
-      const authProvider = 'email';
-
-      dispatch('addUserToUsersCollection', { user, signupForm, authProvider });
+      dispatch('addUserToUsersCollection', { user, signupForm });
 
       // Set user in Vuex and navigate to the new user profile.
       store.set('authentication/user', user);
@@ -303,12 +301,22 @@ const actions = {
     // doc (Firestore instance, collection name, collection id).
     const userDocRef = doc(db, 'users', user.uid);
 
-    console.log(user);
+    const { uid, email, displayName, photoURL } = user;
+
+    // Get an array of names
+    const names = displayName.split(/(\s+)/);
 
     // User profile fields to be created in db (payload)
     const userDocData = {
+      uid,
+      email,
+      // First name in the names array
+      name: names[0],
+      // Rest of the names in the names array
+      lastName: names.slice(1).join(' '),
+      verified: true,
+      photoURL,
       coverAvatar: '',
-      dateCreated: serverTimestamp(),
     };
 
     // SetDoc (Firestore, Payload)
@@ -331,7 +339,6 @@ const actions = {
       lastName: signupForm.lastName,
       photoURL: '',
       coverAvatar: '',
-      dateCreated: serverTimestamp(),
     };
 
     // SetDoc (Firestore, Payload)
@@ -419,6 +426,12 @@ const getters = {
       return `${name} ${lastName} `;
     }
   },
+
+  // isAuthMultiProvider: (state, getters) => {
+
+  //   if (getters.isLoggedIn) return  state.user.providerData.some((provider) => provider.uid !== 'uid') ? 'background: #303036' : '';
+
+  // },
 
   isAuthExternalProvider: (state, getters) => {
     if (getters.isLoggedIn) return state.user.providerData[0].providerId !== 'password';

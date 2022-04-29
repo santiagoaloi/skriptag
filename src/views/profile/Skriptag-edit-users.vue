@@ -420,12 +420,15 @@
       getUsersSnapshot() {
         this.loading = true;
 
+        // Spinner while loading
         this.loadingSpinner = this.$vs.loading({
           target: this.$refs.content,
           color: 'primary',
         });
 
         // realtime collection data
+        // reacts to CRUD operations.
+
         onSnapshot(colRef, (snapshot) => {
           const users = [];
 

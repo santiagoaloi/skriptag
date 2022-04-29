@@ -16,7 +16,7 @@
                   v-slot="{ errors, failed }"
                   v-bind="{ ...vvOptions }"
                   name="current password"
-                  :rules="{ required: true }"
+                  :rules="{ required: false }"
                 >
                   <vs-input
                     v-model="credentials.currentPassword"
