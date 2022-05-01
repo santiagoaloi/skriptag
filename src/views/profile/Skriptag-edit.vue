@@ -62,6 +62,6 @@
 
 <style scoped>
   .active {
-    color: #b2b6c3;
+    color: #b2b6c3 !important;
   }
 </style>

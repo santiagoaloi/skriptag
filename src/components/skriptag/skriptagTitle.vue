@@ -11,10 +11,10 @@
       <span
         data-aos="fade"
         data-aos-delay="600"
-        data-aos-once="false"
+        data-aos-once="true"
         :class="small ? 'ml-n8' : large ? 'ml-n16' : 'ml-n11'"
         class="primary-font-color"
-        data-aos-duration="600"
+        data-aos-duration="800"
         >ˆ
       </span>
     </component>

@@ -34,11 +34,11 @@
 
       <template #right>
         <v-scale-transition>
-          <v-btn v-if="isLoggedIn" class="mr-3" :ripple="false" dark color="#2a3143" @click="logout">
+          <v-btn v-if="!$vuetify.breakpoint.smAndDown" class="mr-3" :ripple="false" dark color="#2a3143" @click="logout">
             {{ `Logout ${firstAndShortLast || profile.email}` }}
           </v-btn>
 
-          <v-burger v-if="$vuetify.breakpoint.smAndDown" :active="mobileMenu" type="spring" @updated="mobileMenu = !mobileMenu" />
+          <v-burger v-else :active="mobileMenu" type="spring" @updated="mobileMenu = !mobileMenu" />
         </v-scale-transition>
 
         <template v-if="!isLoggedIn && !$vuetify.breakpoint.smAndDown">
@@ -82,7 +82,7 @@
     },
 
     methods: {
-      ...call('authentication/*'),
+      ...call('authentication', ['logout']),
 
       auth() {
         this.login().then(() => {

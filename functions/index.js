@@ -35,6 +35,10 @@ exports.disableUserByEmail = functions.https.onCall(async (email) => {
         message: {
           subject: 'Skriptag | Account Disabled.',
           html: `
+          <div itemscope="" itemtype="https://skriptag.com">
+            <meta itemprop="name" content="Skriptag Support">
+            <meta itemprop="logo" content="https://media.skriptag.com/favt-slim.png">
+          </div>
           <table role="presentation" style="width:100%;border-collapse:collapse;border:0;border-spacing:0;">
            <tr>
             <td style="width:260px;padding:0;vertical-align:top;">

@@ -133,7 +133,7 @@
   }
 
   h1 {
-    font-size: 350% !important;
+    font-size: 298% !important;
   }
 
   .v-tab {

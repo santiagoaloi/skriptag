@@ -1,6 +1,6 @@
 <template>
   <v-app class="no-select no-drag">
-    <default-drawer />
+    <default-drawer v-if="$vuetify.breakpoint.mdAndUp" />
     <default-app-bar />
     <default-view />
 

@@ -1,11 +1,11 @@
 <template>
   <v-main id="containerDiv" :style="custommHeight">
     <v-expand-transition>
-      <MobileMenuView v-if="mobileMenu" />
+      <MobileMenuView v-if="mobileMenu && $vuetify.breakpoint.smAndDown" />
     </v-expand-transition>
 
     <v-fade-transition hide-on-leave mode="out-in">
-      <router-view v-if="!mobileMenu"></router-view>
+      <router-view v-if="!mobileMenu || !$vuetify.breakpoint.smAndDown"></router-view>
     </v-fade-transition>
   </v-main>
 </template>
