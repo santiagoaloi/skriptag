@@ -43,7 +43,7 @@
                 :height="180"
                 @click="!isAuthExternalProvider && triggerAvatarInput()"
               />
-              <v-avatar v-else height="180" width="180">
+              <v-avatar v-else size="180">
                 <v-img
                   :class="{ hoverAvatar: !isAuthExternalProvider }"
                   :src="profile.photoURL"
