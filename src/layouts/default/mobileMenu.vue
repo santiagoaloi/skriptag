@@ -43,7 +43,7 @@
           </vs-avatar>
         </v-list-item-icon>
 
-        <v-list-item-title>Profile</v-list-item-title>
+        <v-list-item-title>{{ profile.name }}'s profile</v-list-item-title><br />
       </v-list-item>
     </template>
 

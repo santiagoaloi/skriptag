@@ -9,7 +9,7 @@
         </div>
       </template>
 
-      <template v-if="!$vuetify.breakpoint.xs">
+      <template v-if="!$vuetify.breakpoint.smAndDown">
         <vs-navbar-group>
           Downloads
           <template #items>
@@ -20,7 +20,7 @@
         </vs-navbar-group>
 
         <vs-navbar-group>
-          Tutorials
+          Training
           <template #items>
             <vs-navbar-item id="Github"> Firebase </vs-navbar-item>
             <vs-navbar-item id="Discord"> VueJS </vs-navbar-item>
