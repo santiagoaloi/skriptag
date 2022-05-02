@@ -6,9 +6,7 @@
     :hide-overlay="noOverlay || fullscreen"
     :overlay-opacity="0.9"
     :overlay-color="'rgba(14, 9, 15)'"
-    scrollable
     class="d-flex"
-    persist
     persistent
     no-click-animation
     v-on="$listeners"

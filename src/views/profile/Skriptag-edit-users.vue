@@ -26,7 +26,7 @@
             v-model="selected"
             show-select
             tile
-            class="solidBackground selectable"
+            class="solidBackground"
             dark
             :headers="headers"
             :items="users"
@@ -38,6 +38,7 @@
                 <tr
                   v-for="user in filteredUsers"
                   :key="user.uid"
+                  class="selectable"
                   :style="isSelected(user.uid)"
                   @mouseleave="user.hover = false"
                   @mouseenter="user.hover = true"
@@ -66,23 +67,13 @@
                   <td>{{ user.email }}</td>
                   <td>{{ user.uid }}</td>
                   <td>
-                    <div class="d-flex justify-center align-center">
-                      <v-fade-transition>
-                        <div v-if="user.hover">
-                          <vs-tooltip top shadow circle color="#ccc">
-                            <v-avatar class="mx-1" size="25" color="pink"> A </v-avatar>
-                            <template #tooltip> Administrator </template>
-                          </vs-tooltip>
-                        </div>
-                      </v-fade-transition>
-                      <v-fade-transition>
-                        <div v-if="user.hover">
-                          <vs-tooltip top shadow circle color="#ccc">
-                            <v-avatar class="mx-1" size="25" color="orange"> M </v-avatar>
-                            <template #tooltip> Moderator </template>
-                          </vs-tooltip>
-                        </div>
-                      </v-fade-transition>
+                    <div class="d-flex flex-wrap justify-center align-center">
+                      <div v-for="role in user.roles" :key="role">
+                        <vs-tooltip top shadow circle color="#ccc">
+                          <v-avatar class="mx-1" size="25" color="#373c4c"> {{ role[0] }} </v-avatar>
+                          <template #tooltip> {{ role }} </template>
+                        </vs-tooltip>
+                      </div>
                     </div>
                   </td>
 
@@ -168,19 +159,33 @@
       @close="changePasswordDialog = false"
       @authenticatedWithPayload="changeAccountPassword"
     />
+
+    <edit-user-roles-dialog
+      v-if="editUserRolesDialog"
+      v-model="editUserRolesDialog"
+      :payload="payload"
+      @save="saveRoles"
+      @close="editUserRolesDialog = false"
+    />
   </div>
 </template>
 
 <script>
   import { onSnapshot, collection } from 'firebase/firestore';
-  import { call, get } from 'vuex-pathify';
+  import { call, get, sync } from 'vuex-pathify';
   import { db } from '@/firebase/firebase';
+  import editUserRolesDialog from './Skriptag-edit-users-edit-roles.vue';
 
   // Roles collection ref
-  const colRef = collection(db, 'users');
+  const colRefUsers = collection(db, 'users');
+  const colRefRoles = collection(db, 'roles');
+  const colRefCapabilities = collection(db, 'capabilities');
 
   export default {
     name: 'SkriptagEditUsers',
+    components: {
+      editUserRolesDialog,
+    },
     data() {
       return {
         search: '',
@@ -188,12 +193,11 @@
         dialogText: '',
         loadingSpinner: null,
         loading: false,
-        users: [],
         headers: [
-          { text: 'Avatar', value: 'avatar' },
+          { text: 'Avatar', value: 'avatar', width: '100px' },
           { text: 'Identifier', value: 'email' },
           { text: 'User ID', value: 'uid' },
-          { text: 'Roles', align: 'center', value: 'roles', width: '200px', sortable: false },
+          { text: 'Roles', align: 'center', value: 'roles', width: '250px', sortable: false },
           { text: '', align: 'center', value: 'actions', width: '200px', sortable: false },
         ],
         selectedItem: false,
@@ -205,12 +209,13 @@
         deleteAccountDialog: false,
         deleteAccountLoader: false,
         changePasswordDialog: false,
+        editUserRolesDialog: false,
         payload: null,
       };
     },
-
     computed: {
       ...get('authentication', ['userId']),
+      ...sync('authentication', ['users', 'roles', 'capabilities']),
 
       filteredUsers() {
         const search = this.search.toString().toLowerCase();
@@ -222,6 +227,8 @@
 
     mounted() {
       this.getUsersSnapshot();
+      this.getRolesSnaphot();
+      this.getCapabilitiesSnaphot();
     },
 
     methods: {
@@ -230,12 +237,33 @@
         'enableAccountByEmail',
         'deleteAccountByEmail',
         'chageUserPasswordByEmail',
+        'assignRolesToUser',
       ]),
       ...call('snackbar/*'),
 
+      async saveRoles(data) {
+        try {
+          const payload = { roles: data.roles, uid: data.uid };
+
+          const result = await this.assignRolesToUser(payload);
+
+          if (result.assigned) {
+            this.snackbarSuccess(`roles assigned successfully.`);
+            this.editUserRolesDialog = false;
+          }
+        } catch (error) {
+          this.snackbarError(`There was an error assigning roles.`);
+        }
+      },
+
+      triggerFn({ account }) {
+        const { method } = account;
+        this[method]({ account });
+      },
+
       rowActions(user) {
         return [
-          { name: 'Manage Roles', test: 'changeRolesDialog', disabled: false },
+          { name: 'Manage Roles', method: 'changeRolesTrigger', disabled: false },
           { name: 'Reset Password', method: 'changePasswordTrigger', disabled: false },
           {
             name: user.disabled ? 'Enable account' : 'Disable account',
@@ -244,11 +272,6 @@
           },
           { name: 'Delete account', method: 'deleteAccountTrigger', disabled: user.uid === this.userId },
         ];
-      },
-
-      triggerFn({ account }) {
-        const { method } = account;
-        this[method]({ account });
       },
 
       accountDisableTitle() {
@@ -281,6 +304,11 @@
 
       changePasswordText() {
         return 'Set a manual password for this account, the user will get notified of this change, but the password has to be sent to the user somehow, sms is a good option.';
+      },
+
+      changeRolesTrigger({ account }) {
+        this.payload = account;
+        this.editUserRolesDialog = true;
       },
 
       changePasswordTrigger({ account }) {
@@ -417,6 +445,26 @@
         return this.selected.some((user) => user.uid === uid) ? 'background: #303036' : '';
       },
 
+      getCapabilitiesSnaphot() {
+        onSnapshot(colRefCapabilities, (snapshot) => {
+          const capabilities = [];
+          snapshot.docs.forEach((doc) => {
+            capabilities.push({ ...doc.data(), hover: false });
+          });
+          this.capabilities = capabilities;
+        });
+      },
+
+      getRolesSnaphot() {
+        onSnapshot(colRefRoles, (snapshot) => {
+          const roles = [];
+          snapshot.docs.forEach((doc) => {
+            roles.push({ ...doc.data(), hover: false });
+          });
+          this.roles = roles;
+        });
+      },
+
       getUsersSnapshot() {
         this.loading = true;
 
@@ -428,8 +476,7 @@
 
         // realtime collection data
         // reacts to CRUD operations.
-
-        onSnapshot(colRef, (snapshot) => {
+        onSnapshot(colRefUsers, (snapshot) => {
           const users = [];
 
           snapshot.docs.forEach((doc) => {

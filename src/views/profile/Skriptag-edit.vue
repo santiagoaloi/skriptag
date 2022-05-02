@@ -25,12 +25,14 @@
 <script>
   import EditUsers from './Skriptag-edit-users.vue';
   import EditRoles from './Skriptag-edit-roles.vue';
+  import EditCapabilities from './Skriptag-edit-capabilities.vue';
 
   export default {
     name: 'SkriptagEdit',
     components: {
       EditUsers,
       EditRoles,
+      EditCapabilities,
     },
     data() {
       return {
@@ -45,6 +47,11 @@
           {
             name: 'Roles',
             componentName: 'EditRoles',
+            disabled: false,
+          },
+          {
+            name: 'Capabilites',
+            componentName: 'EditCapabilities',
             disabled: false,
           },
         ],

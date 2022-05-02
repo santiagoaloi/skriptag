@@ -6,9 +6,9 @@ admin.initializeApp();
 exports.verifiyUserByEmail = functions.https.onCall(async (email) => {
   try {
     const user = await admin.auth().getUserByEmail(email);
-    const id = user.uid;
-    const docRef = admin.firestore().doc(`users/${id}`);
+    const docRef = admin.firestore().collection('users').doc(user.uid);
     await docRef.update({ verified: true });
+
     return {
       verified: true,
     };

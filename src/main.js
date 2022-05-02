@@ -6,12 +6,14 @@ import router from './router';
 import { store } from '@/store';
 import vuetify from './plugins/vuetify';
 import './plugins';
-import 'vuesax/dist/vuesax.css';
 
 // Styles amd Animations
 import 'aos/dist/aos.css';
+import 'vuesax/dist/vuesax.css';
+import './assets/css/style.css';
 
 Vue.config.productionTip = false;
+
 // Vuesax styles
 Vue.use(Vuesax, {
   colors: {

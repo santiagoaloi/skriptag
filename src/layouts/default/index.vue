@@ -3,7 +3,6 @@
     <default-drawer v-if="$vuetify.breakpoint.mdAndUp" />
     <default-app-bar />
     <default-view />
-
     <base-snackbar />
   </v-app>
 </template>

@@ -1,4 +1,111 @@
 <template>
+  <!-- <div
+    class="vs-select__options vs-select-leave-active vs-select-leave-to"
+    style="--vs-color: 103, 216, 177; top: 342.265px; left: 464.194px; width: 404.121px"
+  >
+    <div class="vs-select__options__content">
+      <div class="vs-select__options__content__not-data">No data available</div>
+      <button class="vs-select__option isMultiple hiddenOption">
+        <div class="vs-checkbox-content vs-component--primary">
+          <div class="vs-checkbox-con">
+            <input id="431" type="checkbox" class="vs-checkbox" />
+            <div class="vs-checkbox-mask">
+              <i class="vs-icon-check"
+                ><span
+                  ><div class="line1"></div>
+                  <div class="line2"></div></span
+              ></i>
+            </div>
+          </div>
+          <label for="431" class="vs-checkbox-label"> Vuesax </label>
+        </div></button
+      ><button class="vs-select__option isMultiple hiddenOption">
+        <div class="vs-checkbox-content vs-component--primary">
+          <div class="vs-checkbox-con">
+            <input id="434" type="checkbox" class="vs-checkbox" />
+            <div class="vs-checkbox-mask">
+              <i class="vs-icon-check"
+                ><span
+                  ><div class="line1"></div>
+                  <div class="line2"></div></span
+              ></i>
+            </div>
+          </div>
+          <label for="434" class="vs-checkbox-label"> Vuesax </label>
+        </div></button
+      ><button class="vs-select__option isMultiple hiddenOption">
+        <div class="vs-checkbox-content vs-component--primary">
+          <div class="vs-checkbox-con">
+            <input id="437" type="checkbox" class="vs-checkbox" />
+            <div class="vs-checkbox-mask">
+              <i class="vs-icon-check"
+                ><span
+                  ><div class="line1"></div>
+                  <div class="line2"></div></span
+              ></i>
+            </div>
+          </div>
+          <label for="437" class="vs-checkbox-label"> Vuesax </label>
+        </div></button
+      ><button class="vs-select__option isMultiple hiddenOption">
+        <div class="vs-checkbox-content vs-component--primary">
+          <div class="vs-checkbox-con">
+            <input id="440" type="checkbox" class="vs-checkbox" />
+            <div class="vs-checkbox-mask">
+              <i class="vs-icon-check"
+                ><span
+                  ><div class="line1"></div>
+                  <div class="line2"></div></span
+              ></i>
+            </div>
+          </div>
+          <label for="440" class="vs-checkbox-label"> Vuesax </label>
+        </div></button
+      ><button class="vs-select__option isMultiple hiddenOption">
+        <div class="vs-checkbox-content vs-component--primary">
+          <div class="vs-checkbox-con">
+            <input id="443" type="checkbox" class="vs-checkbox" />
+            <div class="vs-checkbox-mask">
+              <i class="vs-icon-check"
+                ><span
+                  ><div class="line1"></div>
+                  <div class="line2"></div></span
+              ></i>
+            </div>
+          </div>
+          <label for="443" class="vs-checkbox-label"> Vuesax </label>
+        </div></button
+      ><button class="vs-select__option isMultiple hiddenOption">
+        <div class="vs-checkbox-content vs-component--primary">
+          <div class="vs-checkbox-con">
+            <input id="446" type="checkbox" class="vs-checkbox" />
+            <div class="vs-checkbox-mask">
+              <i class="vs-icon-check"
+                ><span
+                  ><div class="line1"></div>
+                  <div class="line2"></div></span
+              ></i>
+            </div>
+          </div>
+          <label for="446" class="vs-checkbox-label"> Vuesax </label>
+        </div></button
+      ><button class="vs-select__option isMultiple hiddenOption">
+        <div class="vs-checkbox-content vs-component--primary">
+          <div class="vs-checkbox-con">
+            <input id="449" type="checkbox" class="vs-checkbox" />
+            <div class="vs-checkbox-mask">
+              <i class="vs-icon-check"
+                ><span
+                  ><div class="line1"></div>
+                  <div class="line2"></div></span
+              ></i>
+            </div>
+          </div>
+          <label for="449" class="vs-checkbox-label"> Vuesax </label>
+        </div>
+      </button>
+    </div>
+  </div> -->
   <v-fade-transition hide-on-leave mode="out-in">
     <router-view />
   </v-fade-transition>
@@ -13,156 +120,3 @@
     },
   };
 </script>
-<style>
-  .v-application--wrap {
-    background: #24272c !important;
-  }
-
-  .v-main {
-    background: #24272c !important;
-  }
-
-  /* Removes the possibility of selecting text  */
-  .no-select {
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -o-user-select: none;
-    user-select: none;
-  }
-  /* Removes the possibility of dragging content  */
-
-  .no-drag {
-    -webkit-user-drag: none;
-    -khtml-user-drag: none;
-    -moz-user-drag: none;
-    -o-user-drag: none;
-  }
-
-  .selectable {
-    -webkit-user-select: text !important;
-    -khtml-user-select: text !important;
-    -moz-user-select: text !important;
-    -o-user-select: text !important;
-    user-select: text !important;
-  }
-
-  .vs-select__option {
-    font-family: revert;
-    font-size: 15px;
-  }
-
-  .primary-font-color {
-    color: rgb(var(--vs-primary));
-  }
-
-  html {
-    background: #24272c !important;
-    overflow: overlay !important;
-  }
-
-  /* Hide scrollbar for Chrome, Safari and Opera */
-  .scrollbar-hidden::-webkit-scrollbar {
-    display: none;
-  }
-
-  /* Hide scrollbar for IE, Edge add Firefox */
-  .scrollbar-hidden {
-    -ms-overflow-style: none;
-    scrollbar-width: none; /* Firefox */
-  }
-
-  /* Apply  scrollbar styles */
-  ::-webkit-scrollbar {
-    width: 16px !important;
-    height: 6px !important;
-  }
-  ::-webkit-scrollbar-thumb {
-    background-color: #383f43;
-  }
-  ::-webkit-scrollbar-track {
-    background: rgb(17, 27, 33);
-  }
-
-  ::-moz-selection {
-    /* Code for Firefox */
-    color: rgb(201, 255, 252);
-    background: #16867a;
-  }
-
-  ::selection {
-    color: rgb(201, 255, 252);
-    background: #16867a;
-  }
-
-  .vs-input__message {
-    position: absolute;
-    top: 43px !important;
-  }
-
-  .vs-tooltip {
-    font-family: Arial, Helvetica, sans-serif !important;
-    background: #212326 !important;
-  }
-
-  .vs-input__progress {
-    position: absolute;
-    top: 43px;
-  }
-
-  .v-application a {
-    color: #6ee6b9 !important;
-  }
-
-  .pattern-bg {
-    background-color: #25272c;
-    opacity: 1;
-    background-image: linear-gradient(135deg, #24262a 25%, transparent 25%), linear-gradient(225deg, #24262a 25%, transparent 25%),
-      linear-gradient(45deg, #24262a 25%, transparent 25%), linear-gradient(315deg, #24262a 25%, #25272c 25%);
-    background-position: 65px 0, 65px 0, 0 0, 0 0;
-    background-size: 130px 130px;
-    background-repeat: repeat;
-  }
-
-  .v-navigation-drawer--absolute {
-    z-index: 99 !important;
-  }
-
-  .v-navigation-drawer {
-    overflow: visible !important;
-  }
-
-  h1 {
-    font-size: 298% !important;
-  }
-
-  .v-tab {
-    text-transform: unset !important;
-  }
-
-  /* disables list color change on click */
-  .disable-hover.v-list-item--link:before {
-    background-color: unset !important;
-  }
-
-  .theme--light.v-tabs > .v-tabs-bar .v-tab:not(.v-tab--active),
-  .theme--light.v-tabs > .v-tabs-bar .v-tab:not(.v-tab--active) > .v-icon,
-  .theme--light.v-tabs > .v-tabs-bar .v-tab:not(.v-tab--active) > .v-btn,
-  .theme--light.v-tabs > .v-tabs-bar .v-tab--disabled {
-    color: #ccc !important;
-  }
-
-  .v-application--wrap {
-    min-height: 99vh !important;
-  }
-
-  .vs-input {
-    border: 2px solid transparent;
-    background: #1b1e25;
-    color: #ccc;
-  }
-
-  .vs-input:focus {
-    background: #1b1e25;
-  }
-</style>

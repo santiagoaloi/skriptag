@@ -60,15 +60,15 @@
             </Validation-provider>
           </div>
         </v-col>
-        <v-col>
+        <v-col cols="12">
           <div class="ml-n1 mt-2">
             <template v-if="!recoveryMode">
-              <Base-button class="mr-sm-2" @click="$emit('goBack')"> Other sign-in options</Base-button>
+              <Base-button class="mr-sm-3" @click="$emit('goBack')"> Other sign-in options</Base-button>
               <Base-button type="submit" :loading="loading"> Login</Base-button>
             </template>
 
             <template v-if="recoveryMode">
-              <Base-button large @click.prevent="recoveryMode = false"> Cancel</Base-button>
+              <Base-button class="mr-sm-3" large @click.prevent="recoveryMode = false"> Cancel</Base-button>
               <Base-button type="submit" :loading="loading"> Reset password</Base-button>
             </template>
           </div>

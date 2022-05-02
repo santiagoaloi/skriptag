@@ -113,9 +113,9 @@
         <v-progress-linear v-if="progress > 0" v-model="progress" color="teal" style="position: absolute"></v-progress-linear>
       </div>
     </v-slide-y-transition>
-    <v-scale-transition>
+    <v-fade-transition>
       <profile-cards v-if="showProfileItems && imgBannerLoaded" />
-    </v-scale-transition>
+    </v-fade-transition>
   </div>
 </template>
 <script>

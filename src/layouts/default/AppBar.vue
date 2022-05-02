@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar flat height="60" color="transparent" app>
+  <v-app-bar absolute flat height="60" color="transparent" app>
     <vs-navbar v-model="active" style="position: relative" fixed shadow square>
       <template #left>
         <div>
@@ -28,27 +28,23 @@
             <vs-navbar-item id="Medium"> Javascript </vs-navbar-item>
           </template>
         </vs-navbar-group>
-
         <vs-navbar-item id="blog" :active="active == 'blog'"> Blog </vs-navbar-item>
       </template>
 
       <template #right>
-        <v-scale-transition>
-          <v-btn
-            v-if="isLoggedIn && !$vuetify.breakpoint.smAndDown"
-            class="mr-3"
-            :ripple="false"
-            dark
-            color="#2a3143"
-            @click="logout"
-          >
-            {{ `Logout ${firstAndShortLast || profile.email}` }}
-          </v-btn>
-        </v-scale-transition>
+        <v-btn
+          v-if="isLoggedIn && !$vuetify.breakpoint.smAndDown"
+          class="mr-3"
+          :ripple="false"
+          dark
+          color="#2a3143"
+          @click="logout"
+        >
+          {{ `Logout ${firstAndShortLast || profile.email}` }}
+        </v-btn>
 
-        <v-scale-transition>
-          <v-burger v-if="$vuetify.breakpoint.smAndDown" :active="mobileMenu" type="spring" @updated="mobileMenu = !mobileMenu" />
-        </v-scale-transition>
+        <!-- Mobile menu icon -->
+        <v-burger v-if="$vuetify.breakpoint.smAndDown" :active="mobileMenu" type="spring" @updated="mobileMenu = !mobileMenu" />
 
         <template v-if="!isLoggedIn && !$vuetify.breakpoint.smAndDown">
           <BaseButton
@@ -92,12 +88,6 @@
 
     methods: {
       ...call('authentication', ['logout']),
-
-      auth() {
-        this.login().then(() => {
-          this.$emit('logged-in', 'loginSlide');
-        });
-      },
     },
   };
 </script>

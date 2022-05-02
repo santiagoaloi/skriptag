@@ -1,0 +1,270 @@
+body {
+  overflow-x: hidden !important;
+  overflow-y: overlay !important;
+  background: #24272c !important;
+}
+.v-application--wrap {
+  background: #24272c !important;
+}
+
+.v-main {
+  background: #24272c !important;
+}
+
+/* Removes the possibility of selecting text  */
+.no-select {
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+/* Removes the possibility of dragging content  */
+
+.no-drag {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+}
+
+.selectable {
+  -webkit-user-select: text !important;
+  -khtml-user-select: text !important;
+  -moz-user-select: text !important;
+  -o-user-select: text !important;
+  user-select: text !important;
+}
+
+.vs-select__option {
+  font-family: revert;
+  height: 30px !important;
+}
+
+.primary-font-color {
+  color: rgb(var(--vs-primary));
+}
+
+html {
+  background: #24272c !important;
+  overflow: overlay !important;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none !important;
+}
+
+/* Hide scrollbar for IE, Edge add Firefox */
+.scrollbar-hidden {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important; /* Firefox */
+}
+
+/* Apply  scrollbar styles */
+::-webkit-scrollbar {
+  width: 16px !important;
+  height: 6px !important;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #383f43;
+}
+::-webkit-scrollbar-track {
+  background: rgb(17, 27, 33) !important;
+}
+
+::-moz-selection {
+  /* Code for Firefox */
+  color: rgb(201, 255, 252);
+  background: #16867a !important;
+}
+
+::selection {
+  color: rgb(201, 255, 252);
+  background: #16867a !important;
+}
+
+.vs-input__message {
+  position: absolute;
+  top: 43px !important;
+}
+
+.vs-tooltip {
+  font-family: Arial, Helvetica, sans-serif !important;
+  background: #212326 !important;
+}
+
+.vs-select__options__content__not-data {
+  font-family: Arial, Helvetica, sans-serif !important;
+  color: #ccc;
+}
+
+[class*='vs-'] {
+  color: #ccc !important;
+}
+
+.vs-input__progress {
+  position: absolute;
+  top: 43px;
+}
+
+.v-application a {
+  color: #6ee6b9 !important;
+}
+
+.pattern-bg {
+  background-color: #25272c;
+  opacity: 1;
+  background-image: linear-gradient(135deg, #24262a 25%, transparent 25%), linear-gradient(225deg, #24262a 25%, transparent 25%),
+    linear-gradient(45deg, #24262a 25%, transparent 25%), linear-gradient(315deg, #24262a 25%, #25272c 25%);
+  background-position: 65px 0, 65px 0, 0 0, 0 0;
+  background-size: 130px 130px;
+  background-repeat: repeat;
+}
+
+.v-navigation-drawer--absolute {
+  z-index: 99 !important;
+}
+
+.v-navigation-drawer {
+  overflow: visible !important;
+}
+
+h1 {
+  font-size: 298% !important;
+}
+
+.v-tab {
+  text-transform: unset !important;
+}
+
+/* disables list color change on click */
+.disable-hover.v-list-item--link:before {
+  background-color: unset !important;
+}
+
+.theme--light.v-tabs > .v-tabs-bar .v-tab:not(.v-tab--active),
+.theme--light.v-tabs > .v-tabs-bar .v-tab:not(.v-tab--active) > .v-icon,
+.theme--light.v-tabs > .v-tabs-bar .v-tab:not(.v-tab--active) > .v-btn,
+.theme--light.v-tabs > .v-tabs-bar .v-tab--disabled {
+  color: #ccc !important;
+}
+
+.v-application--wrap {
+  height: 0vh !important;
+}
+
+.vs-input {
+  border: 2px solid transparent;
+  background: #1b1e25;
+  color: #ccc;
+}
+
+.vs-input:focus {
+  background: #1b1e25;
+}
+
+.vs-select__option {
+  font-family: revert;
+  font-size: 15px;
+  color: #ccc;
+}
+
+.vs-select__chips {
+  color: #ccc;
+  box-shadow: unset !important;
+  -webkit-transform: unset !important;
+  transform: unset !important;
+  -webkit-transition: unset !important;
+  transition: unset !important;
+}
+
+.vs-select__chips:focus {
+  box-shadow: unset !important;
+  -webkit-transform: unset !important;
+  transform: unset !important;
+  -webkit-transition: unset !important;
+  transition: unset !important;
+}
+.vs-select__chips:hover {
+  transition: unset !important;
+  background: #1b1e25 !important;
+  box-shadow: unset !important;
+  -webkit-transform: unset !important;
+  transform: unset !important;
+  -webkit-transition: unset !important;
+}
+.vs-select__chips:not(:hover) {
+  background: #1b1e25 !important;
+}
+
+.vs-select--state-dark .vs-select__input {
+  background: red !important;
+  color: rgba(var(--vs-dark), 1);
+}
+
+.vs-select-content {
+  max-width: unset;
+  background: unset !important;
+}
+
+.vs-select__input:focus {
+  -webkit-box-shadow: unset !important;
+  box-shadow: unset !important;
+}
+
+.vs-select.top.activeOptions .vs-select__input,
+.vs-select.top.activeOptions .vs-select__chips {
+  -webkit-box-shadow: unset !important;
+  box-shadow: unset !important;
+}
+
+.vs-select__option.activeOption {
+  background: unset !important;
+  color: #ccc !important;
+  pointer-events: none;
+}
+
+.vs-select.activeOptions .vs-select__input {
+  border-radius: 12px 12px 0px 0px;
+  background: unset !important;
+  -webkit-box-shadow: unset !important;
+  box-shadow: unset !important;
+  -webkit-transform: unset !important;
+  transform: unset !important;
+  -webkit-transition: unset !important;
+  transition: unset !important;
+  border: 2px solid transparent;
+  color: rgba(var(--vs-text), 1);
+}
+
+.vs-select__options:after {
+  background: rgb(76, 71, 71) !important;
+}
+
+.vs-select__options__content::-webkit-scrollbar-thumb {
+  background: #383f43 !important;
+  border-radius: unset !important;
+}
+
+.vs-checkbox-mask:before {
+  border: 2px solid rgb(97, 97, 97) !important;
+}
+.vs-select.activeOptions .vs-select__input {
+  -webkit-transform: unset !important;
+  transform: unset !important;
+}
+
+.vs-select__option.isMultiple.isHover {
+  background: #383f43 !important;
+  width: 98%;
+  height: 20px;
+}
+
+.vs-select__option.isMultiple {
+  width: 98%;
+}
+
+.vs-select__chips__input {
+height: 28px;
+}

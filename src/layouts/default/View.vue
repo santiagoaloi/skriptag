@@ -1,6 +1,7 @@
 <template>
-  <v-main id="containerDiv" :style="custommHeight">
-    <v-expand-transition>
+  <v-main id="containerDiv">
+    <v-expand-transition
+      >H
       <MobileMenuView v-if="mobileMenu && $vuetify.breakpoint.smAndDown" />
     </v-expand-transition>
 
@@ -22,13 +23,6 @@
     },
     computed: {
       ...sync('app', ['mobileMenu']),
-
-      custommHeight() {
-        return {
-          'background': ' #24272c',
-          'overflow-x': 'hidden',
-        };
-      },
     },
   };
 </script>

@@ -5,14 +5,14 @@
         <v-card-actions v-if="$vuetify.breakpoint.smAndUp">
           <v-text-field
             v-model="search"
-            placeholder="Search by role name"
+            placeholder="Search by capability name"
             dark
             background-color="#1c1e24"
             hide-details
             dense
             solo
           />
-          <Base-button small class="ml-2" large @click="addRoleDialog = true"> Add role</Base-button>
+          <Base-button small class="ml-2" large @click="addCapabilityDialog = true"> Add capability</Base-button>
           <vs-tooltip shadow circle color="#ccc">
             <!-- <Base-button small class="ml-2" large @click="listUsers()"> <v-icon> mdi-refresh</v-icon></Base-button> -->
             <template #tooltip> Reload </template>
@@ -29,19 +29,24 @@
             class="solidBackground selectable"
             dark
             :headers="headers"
-            :items="roles"
+            :items="capabilities"
             :items-per-page="5"
             item-key="uid"
           >
             <template #body="{}">
               <tbody>
-                <tr v-for="role in roles" :key="role.name" @mouseleave="role.hover = false" @mouseenter="role.hover = true">
+                <tr
+                  v-for="capability in capabilities"
+                  :key="capability.name"
+                  @mouseleave="capability.hover = false"
+                  @mouseenter="capability.hover = true"
+                >
                   <td>
-                    <v-checkbox v-model="selected" multiple :value="role" style="margin: 0px; padding: 0px" hide-details />
+                    <v-checkbox v-model="selected" multiple :value="capability" style="margin: 0px; padding: 0px" hide-details />
                   </td>
 
-                  <td>{{ role.alias }}</td>
-                  <td>{{ role.description }}</td>
+                  <td>{{ capability.alias }}</td>
+                  <td>{{ capability.description }}</td>
 
                   <td>
                     <div class="d-flex justify-center">
@@ -49,7 +54,7 @@
                         <v-menu absolute rounded="md">
                           <template #activator="{ on }">
                             <v-fade-transition>
-                              <div v-if="role.hover">
+                              <div v-if="capability.hover">
                                 <v-icon class="cursor-pointer ml-3" v-on="on">mdi-dots-vertical</v-icon>
                               </div>
                             </v-fade-transition>
@@ -61,7 +66,7 @@
                               :key="item.name"
                               :ripple="false"
                               link
-                              @click="triggerFn(item.function, role)"
+                              @click="triggerFn(item.function)"
                             >
                               <v-list-item-title v-text="item.name" />
                             </v-list-item>
@@ -78,46 +83,29 @@
         </v-fade-transition>
       </v-card>
     </v-container>
-    <skriptag-edit-role-add-dialog v-model="addRoleDialog" @close="addRoleDialog = false" />
-
-    <base-authenticate-dialog
-      v-if="removeRoleDialog"
-      v-model="removeRoleDialog"
-      :title="removeRoleTitle()"
-      :text="removeRoleText()"
-      :payload="payload"
-      :loading="removeRoleLoader"
-      @close="removeRoleDialog = false"
-      @authenticatedWithPayload="removeRole"
-    />
-
-    <!-- <skriptag-edit-edit-role-dialog v-model="addRoleDialog" @close="addRoleDialog = false" /> -->
+    <skriptag-edit-capability-add-dialog v-model="addCapabilityDialog" @close="addCapabilityDialog = false" />
   </div>
 </template>
 <script>
   import { call, sync } from 'vuex-pathify';
-  import SkriptagEditRoleAddDialog from './Skriptag-edit-roles-add-dialog';
-  // import SkriptagEditRoleEditDialog from './Skriptag-edit-roles-edit-dialog';
+  import SkriptagEditCapabilityAddDialog from './Skriptag-edit-capabilities-add-dialog';
 
   export default {
-    name: 'SkriptagEditRoles',
+    name: 'SkriptagEditCapabilities',
     components: {
-      SkriptagEditRoleAddDialog,
+      SkriptagEditCapabilityAddDialog,
     },
     data() {
       return {
-        payload: [],
-        removeRoleDialog: false,
-        addRoleDialog: false,
+        addCapabilityDialog: false,
         rowActions: [
-          { name: 'Edit role', function: '' },
-          { name: 'Delete role', function: 'removeRoleTrigger' },
+          { name: 'Edit capability', function: '' },
+          { name: 'Delete capability', function: '' },
         ],
         search: '',
         loading: false,
-        removeRoleLoader: false,
         headers: [
-          { text: 'Role', value: 'alias', align: 'left', width: '150px' },
+          { text: 'Capability', value: 'alias', align: 'left', width: '150px' },
           { text: 'Description', value: 'description', align: 'left' },
           { text: '', align: 'center', value: 'actions', width: '200px', sortable: false },
         ],
@@ -126,44 +114,19 @@
     },
 
     computed: {
-      ...sync('authentication', ['roles']),
+      ...sync('authentication', ['capabilities']),
     },
 
     methods: {
-      ...call('authentication', ['addRole', 'deleteRole']),
-      ...call('snackbar/*'),
-
-      removeRoleTitle() {
-        return 'Remove role';
-      },
-
-      removeRoleText() {
-        return 'This will also remove the role from any users that has this role assigned to it.';
-      },
-
-      triggerFn(fn, params) {
-        this[fn](params);
-      },
-
-      removeRoleTrigger(role) {
-        this.payload = role;
-        this.removeRoleDialog = true;
-      },
-
-      async removeRole(role) {
-        this.removeRoleLoader = true;
-        const { name } = role;
-        const result = await this.deleteRole(name);
-        if (result.deleted) {
-          this.removeRoleDialog = false;
-          this.removeRoleLoader = false;
-        }
-        this.snackbarSuccess(`${name} role removed successfully`);
-      },
+      ...call('authentication', ['addCapability']),
 
       // isSelected(uid) {
       //   return this.selected.some((user) => user.uid === uid) ? 'background: #303036' : '';
       // },
+
+      triggerFn(fn, params) {
+        this[fn](params);
+      },
     },
   };
 </script>

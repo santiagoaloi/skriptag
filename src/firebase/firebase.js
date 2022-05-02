@@ -6,7 +6,7 @@ import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore';
 import { connectAuthEmulator, getAuth, onAuthStateChanged } from 'firebase/auth';
 
 // Activate Emulatorsgi
-const useEmulators = true;
+const useEmulators = false;
 
 const firebaseConfig = {
   apiKey: process.env.VUE_APP_SKRIPTAG_FIREBASE_API_KEY,
@@ -30,7 +30,7 @@ const getUserState = () => new Promise((resolve, reject) => onAuthStateChanged(a
 // instead of production servers.
 if (useEmulators) {
   // connectStorageEmulator(storage, 'localhost', 5001);
-  connectFunctionsEmulator(functions, 'localhost', 5002);
+  // connectFunctionsEmulator(functions, 'localhost', 5002);
   // connectFirestoreEmulator(db, 'localhost', 5003);
   // connectAuthEmulator(auth, 'http://localhost:5004', { disableWarnings: true });
 }

@@ -3,7 +3,7 @@ import { make } from 'vuex-pathify';
 import { isEmpty, capitalize, startCase } from 'lodash';
 import { httpsCallable } from 'firebase/functions';
 
-import { doc, addDoc, setDoc, updateDoc, collection, serverTimestamp, getDoc } from 'firebase/firestore';
+import { doc, getDoc, getDocs, addDoc, setDoc, updateDoc, deleteDoc, collection, query, where } from 'firebase/firestore';
 import {
   EmailAuthProvider,
   reauthenticateWithCredential,
@@ -26,6 +26,9 @@ import router from '@/router';
 const state = {
   user: {},
   userProfile: {},
+  roles: [],
+  users: [],
+  capabilities: [],
   showresendEmailVerification: false,
   response: '',
 };
@@ -365,14 +368,68 @@ const actions = {
     return authenticated.user || {};
   },
 
+  async assignRolesToUser(_, payload) {
+    try {
+      const { uid, roles } = payload;
+
+      const userProfile = doc(db, 'users', uid);
+      await updateDoc(userProfile, {
+        roles,
+      });
+
+      return {
+        assigned: true,
+      };
+    } catch (ex) {
+      return {
+        assigned: false,
+      };
+    }
+  },
+
   async addRole(_, { role }) {
-    const { name, description } = role;
+    const { name, description, capabilities } = role;
     const colRef = collection(db, 'roles');
+
+    // Avoid empty array strings.
+    const cleanCapabilities = capabilities.filter((c) => c !== '');
 
     // Add a new document with a generated id.
     await addDoc(colRef, {
-      name,
-      alias: name,
+      name: name.trim(),
+      alias: name.trim(),
+      description,
+      capabilities: cleanCapabilities,
+    });
+  },
+
+  async deleteRole(_, role) {
+    const collRef = collection(db, 'roles');
+    const q = query(collRef, where('name', '==', role));
+
+    const querySnap = await getDocs(q);
+    const docSnap = querySnap.docs[0];
+    const docRef = docSnap.ref;
+
+    try {
+      await deleteDoc(docRef);
+
+      return {
+        deleted: true,
+      };
+    } catch (ex) {
+      console.log(`failed to delete id(${docRef.id}): ${ex.message}`);
+    }
+  },
+
+  async addCapability(_, { capability }) {
+    const { name, description } = capability;
+    const colRef = collection(db, 'capabilities');
+
+    // Add a new document with a generated id.
+    await addDoc(colRef, {
+      name: name.trim(),
+      alias: name.trim(),
       description,
     });
   },
@@ -473,6 +530,9 @@ const getters = {
 
   // returns current user last login date/time.
   lastLogin: (state) => state.user?.metadata?.lastSignInTime,
+
+  allCapabilities: (state) => state.capabilities.flatMap((c) => c.name),
+  allRoles: (state) => state.roles.flatMap((c) => c.alias),
 };
 
 export default {
