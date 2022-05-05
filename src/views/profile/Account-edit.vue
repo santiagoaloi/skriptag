@@ -156,7 +156,7 @@
       v-model="removeAccountDialog"
       :title="accountRemoveTitle()"
       :text="accountRemoveText()"
-      :loading="deleteAccountLoader"
+      :loading="removeAccountLoader"
       @close="removeAccountDialog = false"
       @authenticated="removeAccount"
     />
@@ -178,7 +178,7 @@
 
     data() {
       return {
-        deleteAccountLoader: false,
+        removeAccountLoader: false,
         verifyAccountDialog: false,
         removeAccountDialog: false,
         vvOptions: {
@@ -247,7 +247,7 @@
       },
 
       async removeAccount(account) {
-        this.deleteAccountLoader = true;
+        this.removeAccountLoader = true;
 
         try {
           const result = await this.deleteAccountByEmail(account.email);
@@ -255,13 +255,13 @@
           if (result.deleted) {
             this.logout();
             this.snackbarSuccess(`${account.email} removed.`);
-            this.deleteAccountLoader = false;
+            this.removeAccountLoader = false;
             this.removeAccountDialog = false;
             return;
           }
-          this.deleteAccountLoader = false;
+          this.removeAccountLoader = false;
         } catch ({ ...error }) {
-          this.deleteAccountLoader = false;
+          this.removeAccountLoader = false;
         }
       },
 

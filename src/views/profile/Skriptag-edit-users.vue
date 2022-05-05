@@ -142,13 +142,13 @@
     />
 
     <base-authenticate-dialog
-      v-model="deleteAccountDialog"
-      :title="accountDeleteTitle()"
-      :text="accountDeleteText()"
-      :loading="deleteAccountLoader"
+      v-model="removeAccountDialog"
+      :title="accountRemoveTitle()"
+      :text="accountRemoveText()"
+      :loading="removeAccountLoader"
       :payload="payload"
-      @close="deleteAccountDialog = false"
-      @authenticatedWithPayload="deleteAccount"
+      @close="removeAccountDialog = false"
+      @authenticatedWithPayload="removeAccount"
     />
 
     <base-authenticate-change-password-dialog
@@ -206,8 +206,8 @@
         disableAccountLoader: false,
         enableAccountDialog: false,
         enableAccountLoader: false,
-        deleteAccountDialog: false,
-        deleteAccountLoader: false,
+        removeAccountDialog: false,
+        removeAccountLoader: false,
         changePasswordDialog: false,
         editUserRolesDialog: false,
         payload: null,
@@ -270,7 +270,7 @@
             method: user.disabled ? 'enableAccountTrigger' : 'disableAccountTrigger',
             disabled: user.uid === this.userId,
           },
-          { name: 'Delete account', method: 'deleteAccountTrigger', disabled: user.uid === this.userId },
+          { name: 'Remove account', method: 'removeAccountTrigger', disabled: user.uid === this.userId },
         ];
       },
 
@@ -290,11 +290,11 @@
         return 'This account will be able to login once its enabled.';
       },
 
-      accountDeleteTitle() {
+      accountRemoveTitle() {
         return 'Remove account';
       },
 
-      accountDeleteText() {
+      accountRemoveText() {
         return 'This action is permament, you will not be able to undo it. All your data, will be removed immediately.';
       },
 
@@ -326,28 +326,28 @@
         this.enableAccountDialog = true;
       },
 
-      deleteAccountTrigger({ account }) {
+      removeAccountTrigger({ account }) {
         this.payload = account;
-        this.deleteAccountDialog = true;
+        this.removeAccountDialog = true;
       },
 
-      async deleteAccount(account) {
-        this.deleteAccountLoader = true;
+      async removeAccount(account) {
+        this.removeAccountLoader = true;
 
         try {
           const { email } = account;
-          this.deleteAccountLoader = true;
+          this.removeAccountLoader = true;
           const result = await this.deleteAccountByEmail(email);
 
           if (result.deleted) {
-            this.snackbarSuccess(`${email} deleted.`);
-            this.deleteAccountDialog = false;
-            this.deleteAccountLoader = false;
+            this.snackbarSuccess(`${email} removed.`);
+            this.removeAccountDialog = false;
+            this.removeAccountLoader = false;
             return;
           }
           this.disableAccountLoader = false;
         } catch ({ ...error }) {
-          this.deleteAccountLoader = false;
+          this.removeAccountLoader = false;
         }
       },
 

@@ -1,5 +1,5 @@
 <template>
-  <base-split-2 v-if="mode" v-show="!isLoggedIn" id="login" col="6" right>
+  <base-split-2 v-if="mode" v-show="!isLoggedIn" id="login" col="6" right src="https://media.skriptag.com/img/11.svg">
     <div class="pa-3">
       <div class="d-flex flex-wrap flex-column">
         <h1 v-if="mode === 'resetPassword'">Reset Password</h1>

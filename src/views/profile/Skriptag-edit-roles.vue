@@ -88,7 +88,7 @@
       :payload="payload"
       :loading="removeRoleLoader"
       @close="removeRoleDialog = false"
-      @authenticatedWithPayload="removeRole"
+      @authenticatedWithPayload="removeRoleVuex"
     />
 
     <!-- <skriptag-edit-edit-role-dialog v-model="addRoleDialog" @close="addRoleDialog = false" /> -->
@@ -111,7 +111,7 @@
         addRoleDialog: false,
         rowActions: [
           { name: 'Edit role', function: '' },
-          { name: 'Delete role', function: 'removeRoleTrigger' },
+          { name: 'Remove role', function: 'removeRoleTrigger' },
         ],
         search: '',
         loading: false,
@@ -130,7 +130,7 @@
     },
 
     methods: {
-      ...call('authentication', ['addRole', 'deleteRole']),
+      ...call('authentication', ['addRole', 'removeRole']),
       ...call('snackbar/*'),
 
       removeRoleTitle() {
@@ -150,15 +150,19 @@
         this.removeRoleDialog = true;
       },
 
-      async removeRole(role) {
+      async removeRoleVuex(role) {
         this.removeRoleLoader = true;
         const { name } = role;
-        const result = await this.deleteRole(name);
+        const result = await this.removeRole(name);
         if (result.deleted) {
           this.removeRoleDialog = false;
           this.removeRoleLoader = false;
+          this.snackbarSuccess(`${name} role removed successfully`);
+          return;
         }
-        this.snackbarSuccess(`${name} role removed successfully`);
+
+        this.snackbarError(`There was an error removing ${name}`);
+        this.removeRoleLoader = false;
       },
 
       // isSelected(uid) {

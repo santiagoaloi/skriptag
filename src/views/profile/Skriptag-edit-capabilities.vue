@@ -13,10 +13,6 @@
             solo
           />
           <Base-button small class="ml-2" large @click="addCapabilityDialog = true"> Add capability</Base-button>
-          <vs-tooltip shadow circle color="#ccc">
-            <!-- <Base-button small class="ml-2" large @click="listUsers()"> <v-icon> mdi-refresh</v-icon></Base-button> -->
-            <template #tooltip> Reload </template>
-          </vs-tooltip>
 
           <Base-button small class="ml-2" large> <v-icon> mdi-dots-vertical</v-icon></Base-button>
         </v-card-actions>
@@ -66,7 +62,7 @@
                               :key="item.name"
                               :ripple="false"
                               link
-                              @click="triggerFn(item.function)"
+                              @click="triggerFn(item.function, capability)"
                             >
                               <v-list-item-title v-text="item.name" />
                             </v-list-item>
@@ -84,6 +80,16 @@
       </v-card>
     </v-container>
     <skriptag-edit-capability-add-dialog v-model="addCapabilityDialog" @close="addCapabilityDialog = false" />
+    <base-authenticate-dialog
+      v-if="removeCapabilityDialog"
+      v-model="removeCapabilityDialog"
+      :title="removeCapabilityTitle()"
+      :text="removeCapabilityText()"
+      :payload="payload"
+      :loading="removeCapabilityLoader"
+      @close="removeCapabilityDialog = false"
+      @authenticatedWithPayload="removeCapabilityVuex"
+    />
   </div>
 </template>
 <script>
@@ -97,10 +103,12 @@
     },
     data() {
       return {
+        removeCapabilityDialog: false,
         addCapabilityDialog: false,
+        removeCapabilityLoader: false,
         rowActions: [
           { name: 'Edit capability', function: '' },
-          { name: 'Delete capability', function: '' },
+          { name: 'Remove capability', function: 'removeCapabilityTrigger' },
         ],
         search: '',
         loading: false,
@@ -118,15 +126,44 @@
     },
 
     methods: {
-      ...call('authentication', ['addCapability']),
-
-      // isSelected(uid) {
-      //   return this.selected.some((user) => user.uid === uid) ? 'background: #303036' : '';
-      // },
+      ...call('authentication', ['addCapability', 'removeCapability']),
+      ...call('snackbar/*'),
 
       triggerFn(fn, params) {
         this[fn](params);
       },
+
+      removeCapabilityTitle() {
+        return 'Remove capability';
+      },
+
+      removeCapabilityText() {
+        return 'This will also remove the capability from any roles that has this capability assigned to it.';
+      },
+
+      removeCapabilityTrigger(capability) {
+        this.payload = capability;
+        this.removeCapabilityDialog = true;
+      },
+
+      async removeCapabilityVuex(capability) {
+        this.removeCapabilityLoader = true;
+        const { name } = capability;
+        const result = await this.removeCapability(name);
+        if (result.deleted) {
+          this.removeCapabilityDialog = false;
+          this.removeCapabilityLoader = false;
+          this.snackbarSuccess(`${name} capability removed successfully`);
+          return;
+        }
+
+        this.snackbarError(`There was an error removing ${name}`);
+        this.removeCapabilityLoader = false;
+      },
+
+      // isSelected(uid) {
+      //   return this.selected.some((user) => user.uid === uid) ? 'background: #303036' : '';
+      // },
     },
   };
 </script>

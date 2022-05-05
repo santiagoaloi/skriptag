@@ -391,19 +391,16 @@ const actions = {
     const { name, description, capabilities } = role;
     const colRef = collection(db, 'roles');
 
-    // Avoid empty array strings.
-    const cleanCapabilities = capabilities.filter((c) => c !== '');
-
     // Add a new document with a generated id.
     await addDoc(colRef, {
       name: name.trim(),
       alias: name.trim(),
       description,
-      capabilities: cleanCapabilities,
+      capabilities: (capabilities || []).filter((c) => c !== ''), // No empty values
     });
   },
 
-  async deleteRole(_, role) {
+  async removeRole(_, role) {
     const collRef = collection(db, 'roles');
     const q = query(collRef, where('name', '==', role));
 
@@ -432,6 +429,25 @@ const actions = {
       alias: name.trim(),
       description,
     });
+  },
+
+  async removeCapability(_, capability) {
+    const collRef = collection(db, 'capabilities');
+    const q = query(collRef, where('name', '==', capability));
+
+    const querySnap = await getDocs(q);
+    const docSnap = querySnap.docs[0];
+    const docRef = docSnap.ref;
+
+    try {
+      await deleteDoc(docRef);
+
+      return {
+        deleted: true,
+      };
+    } catch (error) {
+      console.log(`failed to delete id(${docRef.id}): ${error.message}`);
+    }
   },
 };
 
