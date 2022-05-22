@@ -554,9 +554,9 @@ const actions = {
       onSnapshot(colRefUsers, (snapshot) => {
         const users = [];
 
-        snapshot.docs.forEach((doc) => {
+        snapshot.docs.forEach((document) => {
           // Add the hover key, for row hovering actions.
-          users.push({ ...doc.data(), hover: false });
+          users.push({ ...document.data(), hover: false });
         });
 
         state.users = users;

@@ -70,10 +70,7 @@
       },
 
       rowClass() {
-        // const { smAndDown } = this.$vuetify.breakpoint;
-        // if (!smAndDown) {
         return 'fill-height';
-        // }
       },
 
       colOrder() {

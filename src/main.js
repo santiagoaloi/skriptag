@@ -40,7 +40,6 @@ Vue.directive('animation', {
       const timeout = '0.3s';
 
       el.onmousedown = () => {
-        // if (binding.value === 'shrink') {
         el.style.transform = 'scale(0.95)';
         el.style.transition = timeout;
 

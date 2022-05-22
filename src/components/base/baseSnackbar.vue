@@ -10,7 +10,7 @@
   >
     <div class="d-flex align-center">
       <v-icon class="mr-4"> {{ snackbar.data.icon }}</v-icon>
-      <div v-html="snackbar.data.text" />
+      {{ snackbar.data.text }}
     </div>
     <template #action="{ attrs }">
       <v-btn dark text fab x-small v-bind="attrs" @click="snackbar.data.value = false">
