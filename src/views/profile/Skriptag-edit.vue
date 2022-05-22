@@ -1,11 +1,5 @@
 <template>
   <div style="color: #ccc">
-    <div class="d-flex align-center">
-      <h2 class="mb-6 mt-3 cursor-pointer" @click="close()">Profile</h2>
-      <v-icon class="mt-n2" size="25" dark> mdi-chevron-right</v-icon>
-      <h2 class="mb-6 mt-3">Skriptag edit</h2>
-    </div>
-
     <v-tabs v-model="selectedTab" background-color="transparent">
       <v-tabs-slider color="#3a3f50"></v-tabs-slider>
       <v-tab v-for="tab in tabs" :key="tab.component" active-class="active" :disabled="tab.disabled" :ripple="false">
@@ -23,9 +17,9 @@
   </div>
 </template>
 <script>
-  import EditUsers from './Skriptag-edit-users.vue';
-  import EditRoles from './Skriptag-edit-roles.vue';
-  import EditCapabilities from './Skriptag-edit-capabilities.vue';
+  import EditUsers from './users/users.vue';
+  import EditRoles from './roles/roles.vue';
+  import EditCapabilities from './capabilities/capabilities.vue';
 
   export default {
     name: 'SkriptagEdit',
@@ -60,7 +54,7 @@
 
     methods: {
       close() {
-        this.$emit('close');
+        this.$router.push('/profile');
         window.scrollTo(0, 0);
       },
     },

@@ -14,6 +14,7 @@ export async function setUserAndProfile({ isAuth }) {
     const docRef = doc(db, 'users', currentId);
     const docSnap = await getDoc(docRef);
 
+    // Set the uuer profile, if the user profile exists in firebase.
     if (docSnap.exists()) {
       store.set('authentication/userProfile', docSnap.data());
     }

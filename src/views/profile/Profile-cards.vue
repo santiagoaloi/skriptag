@@ -1,128 +1,89 @@
 <template>
-  <div>
-    <base-no-split v-show="!switchToCardSettings">
-      <template #left>
-        <v-row>
-          <v-col cols="12" sm="6" md="3">
-            <vs-card class="my-card" @click="switchCard('ProfileEdit')">
-              <template #title>
-                <h3>Profile Details</h3>
-              </template>
-              <template #img>
-                <v-img src="https://media.skriptag.com/img/a1.svg" v-bind="imageOptions()" />
-              </template>
-              <template #text>
-                <p>Edit your profile information such as your names, tags,and more...</p>
-              </template>
-            </vs-card>
-          </v-col>
-          <v-col cols="12" sm="6" md="3">
-            <vs-card class="my-card" @click="switchCard('AccountEdit')">
-              <template #title>
-                <h3>Account settings</h3>
-              </template>
-              <template #img>
-                <v-img src="https://media.skriptag.com/img/a2.svg" v-bind="imageOptions()" />
-              </template>
-              <template #text>
-                <p>Change your authentication settings,account email, 2FA, remove or disable your account.</p>
-              </template>
-            </vs-card>
-          </v-col>
-          <v-col cols="12" sm="6" md="3">
-            <vs-card :disabled="!verified" :class="{ 'disabled-card': !verified }" class="my-card">
-              <template #title>
-                <h3>Billing information</h3>
-              </template>
-              <template #img>
-                <v-img src="https://media.skriptag.com/img/a4.svg" v-bind="imageOptions()" />
-              </template>
-              <template #text>
-                <p>Change your authentication settings,account email, 2FA, remove or disable your account.</p>
-              </template>
-            </vs-card>
-          </v-col>
-
-          <v-col cols="12" sm="6" md="3">
-            <vs-card
-              :disabled="!verified"
-              :class="{ 'disabled-card': !verified }"
-              class="my-card"
-              @click="switchCard('SkriptagEdit')"
-            >
-              <template #title>
-                <h3>Manage Skriptag</h3>
-              </template>
-              <template #img>
-                <v-img src="https://media.skriptag.com/img/a5.svg" v-bind="imageOptions()" />
-              </template>
-              <template #text>
-                <p>Manage users, roles, and project settings.</p>
-              </template>
-            </vs-card>
-          </v-col>
-
-          <!-- <v-col cols="12" sm="6" md="3">
-            <vs-card :class="{ 'disabled-card': !verified }" class="my-card">
-              <template #title>
-                <h3>Your purchased items</h3>
-              </template>
-              <template #img>
-                <img :src="`https://picsum.photos/1280/800?${Date.now().toString().slice(0, 1)}`" alt="" />
-              </template>
-              <template #text>
-                <p>Change your authentication settings,account email, 2FA, remove or disable your account.</p>
-              </template>
-            </vs-card>
-          </v-col>
-          <v-col cols="12" sm="6" md="3">
-            <vs-card :class="{ 'disabled-card': !verified }" class="my-card">
-              <template #title>
-                <h3>Blog posts</h3>
-              </template>
-              <template #img>
-                <img :src="`https://picsum.photos/1280/800?${Date.now().toString().slice(0, 1)}`" alt="" />
-              </template>
-              <template #text>
-                <p>Change your authentication settings,account email, 2FA, remove or disable your account.</p>
-              </template>
-            </vs-card>
-          </v-col> -->
-        </v-row>
-      </template>
-    </base-no-split>
-    <v-fade-transition hide-on-leave>
-      <v-card-text v-show="switchToCardSettings" class="px-8">
-        <component :is="activeCard" @close="close()" />
-      </v-card-text>
-    </v-fade-transition>
-  </div>
+  <base-no-split>
+    <template #left>
+      <v-row>
+        <v-col v-for="(card, i) in allCardsFiltered" :key="i" cols="12" sm="6" :md="card.responsiveSize">
+          <vs-card
+            :class="{ 'disabled-card': card.disabled }"
+            :disabled="card.disabled"
+            class="my-card"
+            @click="$router.push(`/profile/${card.route}`)"
+          >
+            <template #title>
+              <h3>{{ card.title }}</h3>
+            </template>
+            <template #img>
+              <v-img v-ripple :src="card.img" v-bind="imageOptions()" />
+            </template>
+            <template #text>
+              <p>{{ card.text }}</p>
+            </template>
+          </vs-card>
+        </v-col>
+      </v-row>
+    </template>
+  </base-no-split>
 </template>
 
 <script>
   import { get } from 'vuex-pathify';
-  import ProfileEdit from './Profile-edit';
-  import AccountEdit from './Account-edit';
-  import SkriptagEdit from './Skriptag-edit';
 
   export default {
     name: 'ProfileItems',
-    components: {
-      ProfileEdit,
-      AccountEdit,
-      SkriptagEdit,
-    },
-    data() {
-      return {
-        switchToCardSettings: false,
-        activeCard: null,
-      };
-    },
 
     computed: {
-      ...get('authentication', ['verified']),
+      ...get('authentication', ['verified', 'profile']),
+
+      allCardsFiltered() {
+        // Show only the visible cards based on permissions.
+        return this.allCards().filter((card) => card.visible);
+      },
     },
     methods: {
+      allCards() {
+        return [
+          {
+            title: 'Profile Details',
+            text: 'Edit your profile information such as your names, tags,and more...',
+            img: 'https://media.skriptag.com/img/a1.svg',
+            route: 'profile-edit',
+            responsiveSize: 3,
+            disabled: false,
+            visible: true,
+          },
+
+          {
+            title: 'Account settings',
+            text: 'Change your authentication settings,account email, 2FA, remove or disable your account.',
+            img: 'https://media.skriptag.com/img/a2.svg',
+            route: 'account-edit',
+            responsiveSize: 3,
+            disabled: false,
+            visible: true,
+          },
+
+          {
+            title: 'Billing information',
+            text: 'Add or change your payment methods, download your invoices, check your purchase history.',
+            img: 'https://media.skriptag.com/img/a4.svg',
+            route: '',
+            responsiveSize: 3,
+            disabled: true,
+            visible: true,
+          },
+
+          {
+            title: 'Manage Skriptag',
+            text: 'Manage users, roles, and project settings.',
+            img: 'https://media.skriptag.com/img/a5.svg',
+            route: 'skriptag-edit',
+            responsiveSize: 3,
+            disabled: !this.profile.roles.includes('root'),
+            visible: this.profile.roles.includes('root'),
+          },
+        ];
+      },
+
       gradientOptions() {
         const direction = 'to bottom';
         const fromColor = 'rgba(56, 61, 87, .3) 40%';
@@ -140,14 +101,8 @@
         };
       },
 
-      switchCard(card) {
-        this.switchToCardSettings = true;
-        this.activeCard = card;
-      },
-
       close() {
         this.switchToCardSettings = false;
-        this.activeCard = null;
       },
     },
   };

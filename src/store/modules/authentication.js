@@ -3,7 +3,19 @@ import { make } from 'vuex-pathify';
 import { isEmpty, capitalize, startCase } from 'lodash';
 import { httpsCallable } from 'firebase/functions';
 
-import { doc, getDoc, getDocs, addDoc, setDoc, updateDoc, deleteDoc, collection, query, where } from 'firebase/firestore';
+import {
+  doc,
+  getDoc,
+  getDocs,
+  addDoc,
+  setDoc,
+  updateDoc,
+  deleteDoc,
+  collection,
+  query,
+  where,
+  onSnapshot,
+} from 'firebase/firestore';
 import {
   EmailAuthProvider,
   reauthenticateWithCredential,
@@ -31,6 +43,7 @@ const state = {
   capabilities: [],
   showresendEmailVerification: false,
   response: '',
+  usersLoaded: false,
 };
 
 const mutations = make.mutations(state);
@@ -48,12 +61,13 @@ const actions = {
     } catch ({ ...error }) {}
   },
 
-  // Admin SDK, verifies the user via verificaion link.
+  // Admin SDK, verifies the user email via verificaion link.
   async findUserByEmailAndVerify({ dispatch }, email) {
     const veriyUser = httpsCallable(functions, 'verifiyUserByEmail');
     const result = await veriyUser(email);
 
     if (result.data.verified) {
+      dispatch('snackbar/snackbarSuccess', `Your account ${email} is now verified.`, { root: true });
       dispatch('refreshProfile');
       store.set('loaders/verificationInProgressLoader', false);
     }
@@ -97,9 +111,9 @@ const actions = {
       const deleteAccount = httpsCallable(functions, 'deleteUserByEmail');
       const result = await deleteAccount(email);
 
-      if (result.data.deleted) {
+      if (result.data.removed) {
         return {
-          deleted: true,
+          removed: true,
         };
       }
     } catch ({ ...error }) {
@@ -107,7 +121,27 @@ const actions = {
     }
   },
 
-  // Admin SDK, change account password { email, password}
+  async unlinkProfileImage({ getters, dispatch }) {
+    try {
+      const userProfile = doc(db, 'users', getters.userId);
+
+      await updateDoc(userProfile, {
+        photoURL: '',
+      });
+
+      dispatch('refreshProfile');
+
+      return {
+        saved: true,
+      };
+    } catch (ex) {
+      return {
+        saved: false,
+      };
+    }
+  },
+
+  // Admin SDK, change account password { email, password }
   async chageUserPasswordByEmail({ dispatch }, { payload }) {
     try {
       const changePassword = httpsCallable(functions, 'chageUserPasswordByEmail');
@@ -123,7 +157,7 @@ const actions = {
     }
   },
 
-  // Get the doc with the ID of the the authenticated user.
+  // Get the user profile associated with the authenticated user.
   async refreshProfile({ getters }) {
     const docRef = doc(db, 'users', getters.userId);
     const docSnap = await getDoc(docRef);
@@ -161,7 +195,7 @@ const actions = {
       });
       store.set('loaders/verificationInProgressLoader', false);
     } catch ({ ...error }) {
-      router.push('login');
+      await router.push('login');
       dispatch('errors/authMessagesSnackbar', error.code, { root: true });
       store.set('loaders/verificationInProgressLoader', false);
     }
@@ -173,8 +207,10 @@ const actions = {
     try {
       await sendPasswordResetEmail(auth, email);
       dispatch('snackbar/snackbarSuccess', 'Account recovery email sent.', { root: true });
+
+      await router.push('login');
+
       store.set('loaders/authLoader', false);
-      router.push('login');
     } catch ({ ...error }) {
       dispatch('errors/authMessagesSnackbar', error.code, { root: true });
       store.set('loaders/authLoader', false);
@@ -189,8 +225,8 @@ const actions = {
     try {
       await confirmPasswordReset(auth, oobCode, newPassword);
       dispatch('snackbar/snackbarSuccess', 'Account password changed.', { root: true });
+      await router.push('login');
       store.set('loaders/authLoader', false);
-      router.push('login');
     } catch ({ ...error }) {
       dispatch('errors/authMessagesSnackbar', error.code, { root: true });
       store.set('loaders/authLoader', false);
@@ -217,10 +253,21 @@ const actions = {
 
   // Saves new user profile basic settings.
   async updateProfileSettings({ getters, state }) {
-    const userProfile = doc(db, 'users', getters.userId);
-    await updateDoc(userProfile, {
-      ...state.userProfile,
-    });
+    try {
+      const userProfile = doc(db, 'users', getters.userId);
+
+      await updateDoc(userProfile, {
+        ...state.userProfile,
+      });
+
+      return {
+        saved: true,
+      };
+    } catch (ex) {
+      return {
+        saved: false,
+      };
+    }
   },
 
   // Login user account, load user profile object and route to profile page.
@@ -234,9 +281,8 @@ const actions = {
 
       store.set('authentication/user', user);
       // store.set('authentication/uid', user.uid);
-
+      await router.push('profile');
       store.set('loaders/authLoader', false);
-      router.push('profile');
     } catch ({ ...error }) {
       dispatch('errors/authMessagesSnackbar', error.code, { root: true });
       store.set('loaders/authLoader', false);
@@ -264,14 +310,16 @@ const actions = {
 
       dispatch('addUserToUsersCollection', { user, signupForm });
 
+      await sendEmailVerification(userCredential.user);
+
       // Set user in Vuex and navigate to the new user profile.
       store.set('authentication/user', user);
-      store.set('loaders/signupLoader', false);
-      router.push('profile');
 
-      await sendEmailVerification(userCredential.user);
+      await router.push('profile');
+
+      store.set('loaders/signupLoader', false);
     } catch ({ ...error }) {
-      dispatch('errors/signupMessagesSnackbar', error.code, { root: true });
+      dispatch('errors/authMessagesSnackbar', error.code, { root: true });
       store.set('loaders/signupLoader', false);
     }
   },
@@ -292,6 +340,9 @@ const actions = {
       lastName: signupForm.lastName.trim(),
       photoURL: '',
       coverAvatar: '',
+      disabled: false,
+      verified: false,
+      roles: [],
     };
 
     // SetDoc (Firestore, Payload)
@@ -307,11 +358,14 @@ const actions = {
     try {
       const provider = new GoogleAuthProvider();
 
-      const userCredential = await signInWithPopup(auth, provider);
+      provider.setCustomParameters({
+        prompt: 'consent',
+      });
 
+      const userCredential = await signInWithPopup(auth, provider);
       const { user } = userCredential;
 
-      // Don't re-create the user prfofile, it the the user
+      // Don't re-create the user prfofile, if the the user
       // already has a profile created.
       const docRef = doc(db, 'users', user.uid);
       const docSnap = await getDoc(docRef);
@@ -322,10 +376,12 @@ const actions = {
 
       // Set user in Vuex and navigate to the new user profile.
       store.set('authentication/user', user);
-      store.set('loaders/signupLoader', false);
+
       router.push('profile');
+
+      store.set('loaders/signupLoader', false);
     } catch ({ ...error }) {
-      // dispatch('errors/signupMessagesSnackbar', error.code, { root: true });
+      // dispatch('errors/authMessagesSnackbar', error.code, { root: true });
       store.set('loaders/signupLoader', false);
     }
   },
@@ -368,6 +424,7 @@ const actions = {
     return authenticated.user || {};
   },
 
+  // Assigns a role to a seletred user.
   async assignRolesToUser(_, payload) {
     try {
       const { uid, roles } = payload;
@@ -387,19 +444,31 @@ const actions = {
     }
   },
 
+  // Creates a new role.
   async addRole(_, { role }) {
-    const { name, description, capabilities } = role;
-    const colRef = collection(db, 'roles');
+    try {
+      const { name, description, capabilities } = role;
+      const colRef = collection(db, 'roles');
 
-    // Add a new document with a generated id.
-    await addDoc(colRef, {
-      name: name.trim(),
-      alias: name.trim(),
-      description,
-      capabilities: (capabilities || []).filter((c) => c !== ''), // No empty values
-    });
+      // Add a new document with a generated id.
+      await addDoc(colRef, {
+        name: name.trim(),
+        // alias: name.trim(),
+        description,
+        capabilities: (capabilities || []).filter((c) => c !== ''), // No empty values
+      });
+
+      return {
+        added: true,
+      };
+    } catch (ex) {
+      return {
+        added: false,
+      };
+    }
   },
 
+  //  Removes a selected role.
   async removeRole(_, role) {
     const collRef = collection(db, 'roles');
     const q = query(collRef, where('name', '==', role));
@@ -410,15 +479,42 @@ const actions = {
 
     try {
       await deleteDoc(docRef);
-
       return {
-        deleted: true,
+        removed: true,
       };
     } catch (ex) {
-      console.log(`failed to delete id(${docRef.id}): ${ex.message}`);
+      return {
+        removed: false,
+      };
     }
   },
 
+  //  Edits a selected role.
+  async editRole(_, role) {
+    const { capabilities } = role;
+    const collRef = collection(db, 'roles');
+    const q = query(collRef, where('name', '==', role.name));
+
+    const querySnap = await getDocs(q);
+    const docSnap = querySnap.docs[0];
+    const docRef = docSnap.ref;
+
+    try {
+      await updateDoc(docRef, {
+        capabilities,
+      });
+
+      return {
+        edited: true,
+      };
+    } catch (ex) {
+      return {
+        edited: false,
+      };
+    }
+  },
+
+  //  Add a new  capability to be used in a role.
   async addCapability(_, { capability }) {
     const { name, description } = capability;
     const colRef = collection(db, 'capabilities');
@@ -426,11 +522,12 @@ const actions = {
     // Add a new document with a generated id.
     await addDoc(colRef, {
       name: name.trim(),
-      alias: name.trim(),
+      // alias: name.trim(),
       description,
     });
   },
 
+  //  Removes a selected capability.
   async removeCapability(_, capability) {
     const collRef = collection(db, 'capabilities');
     const q = query(collRef, where('name', '==', capability));
@@ -443,10 +540,33 @@ const actions = {
       await deleteDoc(docRef);
 
       return {
-        deleted: true,
+        removed: true,
       };
     } catch (error) {
-      console.log(`failed to delete id(${docRef.id}): ${error.message}`);
+      // console.log(`failed to delete id(${docRef.id}): ${error.message}`);
+    }
+  },
+
+  async getUsersSnapshot({ state }) {
+    if (!state.usersLoaded) {
+      // realtime collection data
+      // reacts to CRUD operations.
+      const colRefUsers = collection(db, 'users');
+
+      // realtime collection data
+      // reacts to CRUD operations.
+      onSnapshot(colRefUsers, (snapshot) => {
+        const users = [];
+
+        snapshot.docs.forEach((doc) => {
+          // Add the hover key, for row hovering actions.
+          users.push({ ...doc.data(), hover: false });
+        });
+
+        state.users = users;
+      });
+
+      state.usersLoaded = true;
     }
   },
 };
@@ -518,18 +638,19 @@ const getters = {
 
   // },
 
-  isAuthExternalProvider: (state, getters) => {
-    if (getters.isLoggedIn) return state.user.providerData[0].providerId !== 'password';
-  },
-
   authProvider: (state, getters) => {
     if (getters.isLoggedIn) return state.user.providerData[0].providerId;
+  },
+
+  isAuthExternalProvider: (state, getters) => {
+    if (getters.isLoggedIn) return state.user.providerData[0].providerId !== 'password';
   },
 
   profile: (state, getters) => {
     if (getters.isAuthExternalProvider) {
       return { ...state.user?.providerData[0], metadata: state.user?.metadata, ...state.userProfile };
     }
+
     if (!getters.isAuthExternalProvider) {
       return { metadata: state.user?.metadata, ...state.userProfile };
     }
@@ -545,10 +666,9 @@ const getters = {
   },
 
   // returns current user last login date/time.
+  allRoles: (state) => state.roles.flatMap((role) => role.name),
   lastLogin: (state) => state.user?.metadata?.lastSignInTime,
-
   allCapabilities: (state) => state.capabilities.flatMap((c) => c.name),
-  allRoles: (state) => state.roles.flatMap((c) => c.alias),
 };
 
 export default {

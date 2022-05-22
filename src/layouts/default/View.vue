@@ -1,9 +1,6 @@
 <template>
   <v-main id="containerDiv">
-    <v-expand-transition
-      >H
-      <MobileMenuView v-if="mobileMenu && $vuetify.breakpoint.smAndDown" />
-    </v-expand-transition>
+    <MobileMenuView v-if="mobileMenu && $vuetify.breakpoint.smAndDown" />
 
     <v-fade-transition hide-on-leave mode="out-in">
       <router-view v-if="!mobileMenu || !$vuetify.breakpoint.smAndDown"></router-view>
@@ -23,6 +20,18 @@
     },
     computed: {
       ...sync('app', ['mobileMenu']),
+    },
+
+    watch: {
+      '$vuetify.breakpoint.mdAndUp': {
+        immediate: true,
+        deep: true,
+        handler(newValue) {
+          if (newValue) {
+            this.mobileMenu = false;
+          }
+        },
+      },
     },
   };
 </script>

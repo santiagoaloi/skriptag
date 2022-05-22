@@ -1,11 +1,11 @@
 <template>
   <BaseDialog v-model="internalValue" no-toolbar dense close-only no-actions width="500" @close="close()">
-    <v-card-title class="text-h5"> Add new role</v-card-title>
+    <v-card-title class="text-h5"> {{ isEditing ? 'Edit role' : 'Add new role' }} </v-card-title>
 
-    <ValidationObserver ref="addRole" slim>
+    <ValidationObserver ref="role" slim>
       <v-card-text class="mt-n6">
         <v-row>
-          <v-col cols="12">
+          <v-col cols="6">
             <small class="ml-1">Role name</small>
             <div class="pr-2 py-1">
               <Validation-provider
@@ -14,7 +14,14 @@
                 name="role name"
                 :rules="{ required: true }"
               >
-                <vs-input v-model="role.name" :danger="failed" block placeholder="Role name" @focus="resetValidation()">
+                <vs-input
+                  v-model="role.name"
+                  :disabled="isEditing"
+                  :danger="failed"
+                  block
+                  placeholder="Role name"
+                  @focus="resetValidation()"
+                >
                   <template #icon>
                     <v-icon dark>mdi-account-cog</v-icon>
                   </template>
@@ -26,6 +33,7 @@
               </Validation-provider>
             </div>
           </v-col>
+
           <v-col cols="12">
             <small class="ml-1">Role description</small>
             <div class="pr-2 py-1">
@@ -57,7 +65,14 @@
           <v-col cols="12">
             <small class="ml-1">Capabilities</small>
             <div class="pr-2 py-1">
-              <vs-select v-model="role.capabilities" collapse-chips filter multiple color="#3a3f50">
+              <vs-select
+                v-model="role.capabilities"
+                :disabled="!allCapabilities.length"
+                collapse-chips
+                filter
+                multiple
+                color="#3a3f50"
+              >
                 <vs-option v-for="capability in allCapabilities" :key="capability" :label="capability" :value="capability">
                   {{ capability }}
                 </vs-option>
@@ -70,7 +85,7 @@
       <v-card-actions class="px-6">
         <v-spacer></v-spacer>
         <v-btn color="grey lighten-1" text @click.prevent="close()"> Cancel </v-btn>
-        <v-btn color="teal" text @click="validateAddRole()"> Add </v-btn>
+        <v-btn color="teal" text @click="validateRole()"> Save</v-btn>
       </v-card-actions>
     </ValidationObserver>
   </BaseDialog>
@@ -83,20 +98,30 @@
   const defaultRole = () => ({
     name: '',
     description: '',
-    capabilities: '',
+    capabilities: [],
   });
 
   export default {
-    name: 'SkriptagEditRoleAddDialog',
+    name: 'RoleOptionsDialog',
     props: {
       value: {
+        type: Boolean,
+        default: false,
+      },
+
+      payload: {
+        type: [Boolean, String, Object, Array],
+        default: null,
+      },
+
+      isEditing: {
         type: Boolean,
         default: false,
       },
     },
     data() {
       return {
-        cap: [],
+        loading: false,
         vvOptions: {
           mode: 'passive',
           slim: true,
@@ -123,28 +148,38 @@
       },
     },
 
+    mounted() {
+      if (this.isEditing) {
+        const { name, description, capabilities } = this.payload;
+        this.role = {
+          name,
+          description,
+          capabilities,
+        };
+      }
+    },
+
     methods: {
       ...call('authentication', ['addRole']),
       ...call('snackbar/*'),
 
       resetValidation() {
-        this.$refs.addRole.reset();
+        this.$refs.role.reset();
       },
 
-      async validateAddRole() {
+      async validateRole() {
         try {
-          const validated = await this.$refs.addRole.validate();
+          this.loading = true;
+          const validated = await this.$refs.role.validate();
           if (validated) {
-            const { role } = this;
-            this.addRole({ role });
-            this.close();
-            this.snackbarSuccess('Role added successfully');
-
+            this.$emit('save', this.role);
             return;
           }
+          this.loading = false;
           this.snackbarError('Please correct the fields in red');
         } catch (error) {
           this.snackbarError('something went wrong ');
+          this.loading = false;
         }
       },
 

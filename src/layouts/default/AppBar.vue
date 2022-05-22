@@ -1,51 +1,37 @@
 <template>
-  <v-app-bar absolute flat height="60" color="transparent" app>
-    <vs-navbar v-model="active" style="position: relative" fixed shadow square>
-      <template #left>
-        <div>
-          <v-container>
-            <skriptag-title link small @click="$router.push('/')" />
-          </v-container>
-        </div>
-      </template>
+  <vs-navbar v-model="active" style="position: relative" fixed shadow square>
+    <template #left>
+      <div>
+        <v-container>
+          <skriptag-title :class="{ 'ml-12 ': !$vuetify.breakpoint.smAndDown }" link small @click="$router.push('/')" />
+        </v-container>
+      </div>
+    </template>
 
-      <template v-if="!$vuetify.breakpoint.smAndDown">
-        <vs-navbar-group>
-          Downloads
-          <template #items>
-            <vs-navbar-item id="guide"> Templates </vs-navbar-item>
-            <vs-navbar-item id="docs"> Freebies </vs-navbar-item>
-            <vs-navbar-item id="components"> Courses </vs-navbar-item>
-          </template>
-        </vs-navbar-group>
+    <template v-if="!$vuetify.breakpoint.smAndDown">
+      <vs-navbar-group>
+        Downloads
+        <template #items>
+          <vs-navbar-item id="guide"> Templates </vs-navbar-item>
+          <vs-navbar-item id="docs"> Freebies </vs-navbar-item>
+          <vs-navbar-item id="components"> Courses </vs-navbar-item>
+        </template>
+      </vs-navbar-group>
 
-        <vs-navbar-group>
-          Training
-          <template #items>
-            <vs-navbar-item id="Github"> Firebase </vs-navbar-item>
-            <vs-navbar-item id="Discord"> VueJS </vs-navbar-item>
-            <vs-navbar-item id="Twitter"> Vuetify </vs-navbar-item>
-            <vs-navbar-item id="Medium"> Javascript </vs-navbar-item>
-          </template>
-        </vs-navbar-group>
-        <vs-navbar-item id="blog" :active="active == 'blog'"> Blog </vs-navbar-item>
-      </template>
+      <vs-navbar-group>
+        Training
+        <template #items>
+          <vs-navbar-item id="Github"> Firebase </vs-navbar-item>
+          <vs-navbar-item id="Discord"> VueJS </vs-navbar-item>
+          <vs-navbar-item id="Twitter"> Vuetify </vs-navbar-item>
+          <vs-navbar-item id="Medium"> Javascript </vs-navbar-item>
+        </template>
+      </vs-navbar-group>
+      <vs-navbar-item id="blog" :active="active == 'blog'"> Blog </vs-navbar-item>
+    </template>
 
-      <template #right>
-        <v-btn
-          v-if="isLoggedIn && !$vuetify.breakpoint.smAndDown"
-          class="mr-3"
-          :ripple="false"
-          dark
-          color="#2a3143"
-          @click="logout"
-        >
-          {{ `Logout ${firstAndShortLast || profile.email}` }}
-        </v-btn>
-
-        <!-- Mobile menu icon -->
-        <v-burger v-if="$vuetify.breakpoint.smAndDown" :active="mobileMenu" type="spring" @updated="mobileMenu = !mobileMenu" />
-
+    <template #right>
+      <v-scale-transition hide-on-leave group>
         <template v-if="!isLoggedIn && !$vuetify.breakpoint.smAndDown">
           <BaseButton
             v-for="button in [
@@ -62,17 +48,26 @@
             >{{ button.name }}
           </BaseButton>
         </template>
-      </template>
-    </vs-navbar>
-  </v-app-bar>
+      </v-scale-transition>
+
+      <v-scale-transition hide-on-leave>
+        <BaseButton v-if="isLoggedIn && !$vuetify.breakpoint.smAndDown" @click="logout">
+          {{ `Logout ${firstAndShortLast || ''}` }}
+        </BaseButton>
+      </v-scale-transition>
+      <v-burger v-if="$vuetify.breakpoint.smAndDown" :active="mobileMenu" type="spring" @updated="mobileMenu = !mobileMenu" />
+    </template>
+  </vs-navbar>
 </template>
 
 <script>
-  // Utilities
   import { sync, get, call } from 'vuex-pathify';
+  import baseButton from '@/components/base/baseButton.vue';
+  // Utilities
 
   export default {
     name: 'DefaultAppBar',
+    components: { baseButton },
     data() {
       return {
         dropdown: [],

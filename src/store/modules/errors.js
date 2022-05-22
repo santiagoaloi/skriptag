@@ -30,7 +30,7 @@ const actions = {
     }
 
     if (message.includes('auth/invalid-action-code')) {
-      dispatch('snackbar/snackbarError', 'The recovery token is expired.', {
+      dispatch('snackbar/snackbarError', 'The recovery token is expired or already used before.', {
         root: true,
       });
       return;
@@ -49,34 +49,8 @@ const actions = {
       return;
     }
 
-    dispatch('snackbar/snackbarError', 'something went wrong.', { root: true });
-  },
-
-  signupMessagesSnackbar({ dispatch }, message) {
-    if (message.includes('auth/weak-password')) {
-      dispatch('snackbar/snackbarError', 'Password should be at least 6 characters long.', { root: true });
-      return;
-    }
-
     if (message.includes('auth/email-already-in-use')) {
       dispatch('snackbar/snackbarError', 'Aother account is already using this email.', { root: true });
-      return;
-    }
-
-    if (message.includes('auth/invalid-email')) {
-      dispatch('snackbar/snackbarError', 'Too many invalid attemps, please try again later.', { root: true });
-      return;
-    }
-
-    if (message.includes('auth/email-already-in-use')) {
-      dispatch('snackbar/snackbarError', 'This email is already in use with another account. Pick another email. ', {
-        root: true,
-      });
-      return;
-    }
-
-    if (message.includes('auth/too-many-requests')) {
-      dispatch('snackbar/snackbarError', 'Too many attempts, try again later.', { root: true });
       return;
     }
 

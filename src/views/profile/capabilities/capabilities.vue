@@ -5,19 +5,14 @@
         <v-card-actions v-if="$vuetify.breakpoint.smAndUp">
           <v-text-field
             v-model="search"
-            placeholder="Search by role name"
+            placeholder="Search by capability name"
             dark
             background-color="#1c1e24"
             hide-details
             dense
             solo
           />
-          <Base-button small class="ml-2" large @click="addRoleDialog = true"> Add role</Base-button>
-          <vs-tooltip shadow circle color="#ccc">
-            <!-- <Base-button small class="ml-2" large @click="listUsers()"> <v-icon> mdi-refresh</v-icon></Base-button> -->
-            <template #tooltip> Reload </template>
-          </vs-tooltip>
-
+          <Base-button small class="ml-2" large @click="addCapabilityDialog = true"> Add capability</Base-button>
           <Base-button small class="ml-2" large> <v-icon> mdi-dots-vertical</v-icon></Base-button>
         </v-card-actions>
         <v-fade-transition>
@@ -29,19 +24,24 @@
             class="solidBackground selectable"
             dark
             :headers="headers"
-            :items="roles"
+            :items="capabilities"
             :items-per-page="5"
             item-key="uid"
           >
             <template #body="{}">
               <tbody>
-                <tr v-for="role in roles" :key="role.name" @mouseleave="role.hover = false" @mouseenter="role.hover = true">
+                <tr
+                  v-for="capability in capabilities"
+                  :key="capability.name"
+                  @mouseleave="capability.hover = false"
+                  @mouseenter="capability.hover = true"
+                >
                   <td>
-                    <v-checkbox v-model="selected" multiple :value="role" style="margin: 0px; padding: 0px" hide-details />
+                    <v-checkbox v-model="selected" multiple :value="capability" style="margin: 0px; padding: 0px" hide-details />
                   </td>
 
-                  <td>{{ role.alias }}</td>
-                  <td>{{ role.description }}</td>
+                  <td>{{ capability.name }}</td>
+                  <td>{{ capability.description }}</td>
 
                   <td>
                     <div class="d-flex justify-center">
@@ -49,7 +49,7 @@
                         <v-menu absolute rounded="md">
                           <template #activator="{ on }">
                             <v-fade-transition>
-                              <div v-if="role.hover">
+                              <div v-if="capability.hover">
                                 <v-icon class="cursor-pointer ml-3" v-on="on">mdi-dots-vertical</v-icon>
                               </div>
                             </v-fade-transition>
@@ -61,7 +61,7 @@
                               :key="item.name"
                               :ripple="false"
                               link
-                              @click="triggerFn(item.function, role)"
+                              @click="triggerFn(item.function, capability)"
                             >
                               <v-list-item-title v-text="item.name" />
                             </v-list-item>
@@ -78,46 +78,41 @@
         </v-fade-transition>
       </v-card>
     </v-container>
-    <skriptag-edit-role-add-dialog v-model="addRoleDialog" @close="addRoleDialog = false" />
-
+    <capabilities-options-dialog v-model="addCapabilityDialog" @close="addCapabilityDialog = false" />
     <base-authenticate-dialog
-      v-if="removeRoleDialog"
-      v-model="removeRoleDialog"
-      :title="removeRoleTitle()"
-      :text="removeRoleText()"
+      v-if="removeCapabilityDialog"
+      v-model="removeCapabilityDialog"
+      :title="removeCapabilityTitle()"
+      :text="removeCapabilityText()"
       :payload="payload"
-      :loading="removeRoleLoader"
-      @close="removeRoleDialog = false"
-      @authenticatedWithPayload="removeRoleVuex"
+      :loading="removeCapabilityLoader"
+      @close="removeCapabilityDialog = false"
+      @authenticatedWithPayload="removeCapabilityVuex"
     />
-
-    <!-- <skriptag-edit-edit-role-dialog v-model="addRoleDialog" @close="addRoleDialog = false" /> -->
   </div>
 </template>
 <script>
   import { call, sync } from 'vuex-pathify';
-  import SkriptagEditRoleAddDialog from './Skriptag-edit-roles-add-dialog';
-  // import SkriptagEditRoleEditDialog from './Skriptag-edit-roles-edit-dialog';
+  import CapabilitiesOptionsDialog from './capabilities-options-dialog.vue';
 
   export default {
-    name: 'SkriptagEditRoles',
+    name: 'Capabilities',
     components: {
-      SkriptagEditRoleAddDialog,
+      CapabilitiesOptionsDialog,
     },
     data() {
       return {
-        payload: [],
-        removeRoleDialog: false,
-        addRoleDialog: false,
+        removeCapabilityDialog: false,
+        addCapabilityDialog: false,
+        removeCapabilityLoader: false,
         rowActions: [
-          { name: 'Edit role', function: '' },
-          { name: 'Remove role', function: 'removeRoleTrigger' },
+          { name: 'Edit capability', function: '' },
+          { name: 'Remove capability', function: 'removeCapabilityTrigger' },
         ],
         search: '',
         loading: false,
-        removeRoleLoader: false,
         headers: [
-          { text: 'Role', value: 'alias', align: 'left', width: '150px' },
+          { text: 'Capability', value: 'name', align: 'left', width: '150px' },
           { text: 'Description', value: 'description', align: 'left' },
           { text: '', align: 'center', value: 'actions', width: '200px', sortable: false },
         ],
@@ -126,43 +121,43 @@
     },
 
     computed: {
-      ...sync('authentication', ['roles']),
+      ...sync('authentication', ['capabilities']),
     },
 
     methods: {
-      ...call('authentication', ['addRole', 'removeRole']),
+      ...call('authentication', ['addCapability', 'removeCapability']),
       ...call('snackbar/*'),
-
-      removeRoleTitle() {
-        return 'Remove role';
-      },
-
-      removeRoleText() {
-        return 'This will also remove the role from any users that has this role assigned to it.';
-      },
 
       triggerFn(fn, params) {
         this[fn](params);
       },
 
-      removeRoleTrigger(role) {
-        this.payload = role;
-        this.removeRoleDialog = true;
+      removeCapabilityTitle() {
+        return 'Remove capability';
       },
 
-      async removeRoleVuex(role) {
-        this.removeRoleLoader = true;
-        const { name } = role;
-        const result = await this.removeRole(name);
-        if (result.deleted) {
-          this.removeRoleDialog = false;
-          this.removeRoleLoader = false;
-          this.snackbarSuccess(`${name} role removed successfully`);
+      removeCapabilityText() {
+        return 'This will also remove the capability from any roles that has this capability assigned to it.';
+      },
+
+      removeCapabilityTrigger(capability) {
+        this.payload = capability;
+        this.removeCapabilityDialog = true;
+      },
+
+      async removeCapabilityVuex(capability) {
+        this.removeCapabilityLoader = true;
+        const { name } = capability;
+        const result = await this.removeCapability(name);
+        if (result.removed) {
+          this.removeCapabilityDialog = false;
+          this.removeCapabilityLoader = false;
+          this.snackbarSuccess(`${name} capability removed successfully`);
           return;
         }
 
         this.snackbarError(`There was an error removing ${name}`);
-        this.removeRoleLoader = false;
+        this.removeCapabilityLoader = false;
       },
 
       // isSelected(uid) {

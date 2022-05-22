@@ -76,7 +76,7 @@
   import { call } from 'vuex-pathify';
 
   export default {
-    name: 'SkriptagEditCapabilityAddDialog',
+    name: 'CapabilitiesOptionsDialog',
     props: {
       value: {
         type: Boolean,

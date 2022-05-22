@@ -34,6 +34,38 @@ export default [
     },
 
     component: () => import(/* webpackChunkName: 'profile-page' */ '@/views/profile'),
+    children: [
+      {
+        path: '/Profile/skriptag-edit',
+        name: 'skriptag-edit',
+        meta: {
+          requiresAuth: true,
+          title: 'skriptag edit',
+        },
+
+        component: () => import(/* webpackChunkName: 'profile-skriptag-edit' */ '@/views/profile/Skriptag-edit'),
+      },
+      {
+        path: '/Profile/profile-edit',
+        name: 'profile-edit',
+        meta: {
+          requiresAuth: true,
+          title: 'profile edit',
+        },
+
+        component: () => import(/* webpackChunkName: 'profile-profile-edit' */ '@/views/profile/Profile-edit'),
+      },
+      {
+        path: '/Profile/account-edit',
+        name: 'account-edit',
+        meta: {
+          requiresAuth: true,
+          title: 'account edit',
+        },
+
+        component: () => import(/* webpackChunkName: 'profile-account-edit' */ '@/views/profile/Account-edit'),
+      },
+    ],
   },
 
   {

@@ -7,7 +7,7 @@
             :src="src"
             flat
             height="240"
-            class="d-flex align-center"
+            class="d-flex align-center elevation-14"
             :transition="false"
             style="color: #ccc"
             gradient="to top right, rgba(0,0,0,.73), rgba(50,50,50,.7)"
@@ -21,6 +21,7 @@
                 :style="`
                  position: absolute; right: 0;
                  margin-right: ${!$vuetify.breakpoint.smAndDown ? '80px' : '20px'}`"
+                class="mt-5"
                 color="rgba(10,10,10 , .5)"
                 dark
                 @click="triggerCoverInput()"
@@ -32,36 +33,40 @@
               </v-btn>
             </v-fade-transition>
 
-            <!-- image upload inputs" -->
+            <!-- image upload inputs -->
             <input ref="coverInput" accept="image/*" style="display: none" type="file" @change="uploadCoverPhoto()" />
             <input ref="avatarInput" accept="image/*" style="display: none" type="file" @change="uploadProfilePhoto()" />
 
             <div :class="$vuetify.breakpoint.smAndUp ? 'ml-13' : 'justify-center'" class="d-flex align-center justify-start">
-              <baseAvatarImg
-                v-if="!profile.photoURL"
-                :class="{ hoverAvatar: !isAuthExternalProvider }"
-                :height="180"
-                @click="!isAuthExternalProvider && triggerAvatarInput()"
-              />
-              <v-avatar v-else size="180">
-                <v-img
-                  :class="{ hoverAvatar: !isAuthExternalProvider }"
-                  :src="profile.photoURL"
-                  flat
-                  @click="!isAuthExternalProvider && triggerAvatarInput()"
-                >
-                  <template #placeholder>
-                    <v-row class="fill-height ma-0" align="center" justify="center">
-                      <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
-                    </v-row>
-                  </template>
-                </v-img>
-              </v-avatar>
+              <!-- @click="!isAuthExternalProvider && triggerAvatarInput()" -->
+
+              <v-badge
+                offset-x="40"
+                offset-y="34"
+                bottom
+                bordered
+                color="black"
+                :icon="profile.photoURL ? 'mdi-trash-can-outline' : 'mdi-plus'"
+                overlap
+                class="cursor-pointer"
+              >
+                <baseAvatarImg v-if="!profile.photoURL" class="hoverAvatar" :height="180" @click="triggerAvatarInput()" />
+
+                <v-avatar v-else v-ripple size="180">
+                  <v-img class="hoverAvatar" :src="profile.photoURL" flat @click="triggerAvatarInput()">
+                    <template #placeholder>
+                      <v-row class="fill-height ma-0" align="center" justify="center">
+                        <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+                      </v-row>
+                    </template>
+                  </v-img>
+                </v-avatar>
+              </v-badge>
 
               <div v-if="$vuetify.breakpoint.smAndUp" class="ml-13">
                 <v-row no-gutters>
                   <v-col cols="12">
-                    <v-chip class="mb-4" small :color="verified ? 'teal darken-2' : 'orange darken-1'" text-color="white">
+                    <v-chip class="mb-4" small :color="verified ? 'indigo darken-2' : 'orange darken-1'" text-color="white">
                       <v-avatar left>
                         <v-icon small> {{ verificationInProgressLoader ? 'mdi-circle-slice-2' : 'mdi-account-star' }}</v-icon>
                       </v-avatar>
@@ -70,9 +75,9 @@
                         {{ verified ? 'Verified' : 'pending verification' }}
                       </span>
                     </v-chip>
-                    <v-chip class="mb-4 ml-3" small color="pink" text-color="white">
+                    <v-chip v-if="profile.roles.includes('root')" class="mb-4 ml-3" small color="pink" text-color="white">
                       <v-avatar left>
-                        <v-icon small>mdi-account-star</v-icon>
+                        <v-icon small>mdi-lock</v-icon>
                       </v-avatar>
                       Root
                     </v-chip>
@@ -91,7 +96,10 @@
                   </span>
                   <!-- </v-col> -->
                   <v-col cols="12">
-                    <h6 class="mt-n2">Previous login: {{ profile.metadata.lastSignInTime }}</h6>
+                    <h5 class="mt-n2">
+                      <span class="grey--text text--accent-1"> Previous login: {{ profile.metadata.lastSignInTime }} </span> • 44
+                      followers
+                    </h5>
                   </v-col>
                 </v-row>
               </div>
@@ -110,12 +118,22 @@
           </v-alert>
         </v-fade-transition>
 
-        <v-progress-linear v-if="progress > 0" v-model="progress" color="teal" style="position: absolute"></v-progress-linear>
+        <v-progress-linear v-if="progress > 0" v-model="progress" color="indigo" style="position: absolute"></v-progress-linear>
       </div>
     </v-slide-y-transition>
-    <v-fade-transition>
-      <profile-cards v-if="showProfileItems && imgBannerLoaded" />
-    </v-fade-transition>
+
+    <profile-cards v-if="showProfileItems && imgBannerLoaded && $route.name === 'profile'" />
+
+    <!-- route to profile cards (childs of profile route) -->
+    <v-card-text class="px-8">
+      <div v-if="$route.name !== 'profile'" class="d-flex align-center white--text">
+        <h2 class="mb-6 mt-3 cursor-pointer" @click="$router.push('/profile')">Profile</h2>
+        <v-icon class="mt-n2" size="25" dark> mdi-chevron-right</v-icon>
+        <h2 class="mb-6 mt-3">{{ $route.meta.title }}</h2>
+      </div>
+
+      <router-view />
+    </v-card-text>
   </div>
 </template>
 <script>
@@ -159,7 +177,7 @@
 
     methods: {
       ...call('app', ['sleep']),
-      ...call('authentication', ['updateProfileSettings']),
+      ...call('authentication', ['updateProfileSettings', 'unlinkProfileImage']),
       ...call('snackbar/*'),
 
       triggerAvatarInput() {
@@ -174,7 +192,7 @@
         const file = this.$refs.avatarInput.files[0];
         const fileSize = this.$refs.avatarInput.files[0].size;
 
-        if (fileSize > 2048000) {
+        if (fileSize > 2 * 1024 * 1024) {
           this.snackbarError('The avatar image size cannot be bigger than 2MB');
           return;
         }
@@ -205,7 +223,7 @@
         const file = this.$refs.coverInput.files[0];
         const fileSize = this.$refs.coverInput.files[0].size;
 
-        if (fileSize > 2048000) {
+        if (fileSize > 2 * 1024 * 1024) {
           this.snackbarError('The cover image size cannot be bigger than 2MB');
           return;
         }
@@ -238,6 +256,7 @@
           this.src = this.profile.coverAvatar || `https://media.skriptag.com/img/banner.png`;
         }, 400);
       },
+
       async delayRender(ms) {
         await this.sleep(ms);
         this.showProfileItems = true;

@@ -64,7 +64,10 @@
                     </vs-tooltip>
                   </td>
 
-                  <td>{{ user.email }}</td>
+                  <td>
+                    {{ user.email }} <br />
+                    {{ user.name }} {{ user.lastName }}
+                  </td>
                   <td>{{ user.uid }}</td>
                   <td>
                     <div class="d-flex flex-wrap justify-center align-center">
@@ -122,6 +125,7 @@
     </v-container>
 
     <base-authenticate-dialog
+      v-if="disableAccountDialog"
       v-model="disableAccountDialog"
       :title="accountDisableTitle()"
       :text="accountDisableText()"
@@ -132,6 +136,7 @@
     />
 
     <base-authenticate-dialog
+      v-if="enableAccountDialog"
       v-model="enableAccountDialog"
       :title="accountEnableTitle()"
       :text="accountEnableText()"
@@ -142,6 +147,7 @@
     />
 
     <base-authenticate-dialog
+      v-if="removeAccountDialog"
       v-model="removeAccountDialog"
       :title="accountRemoveTitle()"
       :text="accountRemoveText()"
@@ -152,6 +158,7 @@
     />
 
     <base-authenticate-change-password-dialog
+      v-if="changePasswordDialog"
       v-model="changePasswordDialog"
       :title="changePasswordTitle()"
       :text="changePasswordText()"
@@ -160,11 +167,11 @@
       @authenticatedWithPayload="changeAccountPassword"
     />
 
-    <edit-user-roles-dialog
+    <user-roles-dialog
       v-if="editUserRolesDialog"
       v-model="editUserRolesDialog"
       :payload="payload"
-      @save="saveRoles"
+      @save="saveUserRoles"
       @close="editUserRolesDialog = false"
     />
   </div>
@@ -174,17 +181,16 @@
   import { onSnapshot, collection } from 'firebase/firestore';
   import { call, get, sync } from 'vuex-pathify';
   import { db } from '@/firebase/firebase';
-  import editUserRolesDialog from './Skriptag-edit-users-edit-roles.vue';
+  import UserRolesDialog from './user-roles-dialog.vue';
 
   // Roles collection ref
-  const colRefUsers = collection(db, 'users');
   const colRefRoles = collection(db, 'roles');
   const colRefCapabilities = collection(db, 'capabilities');
 
   export default {
     name: 'SkriptagEditUsers',
     components: {
-      editUserRolesDialog,
+      UserRolesDialog,
     },
     data() {
       return {
@@ -214,7 +220,7 @@
       };
     },
     computed: {
-      ...get('authentication', ['userId']),
+      ...get('authentication', ['userId', 'fullName']),
       ...sync('authentication', ['users', 'roles', 'capabilities']),
 
       filteredUsers() {
@@ -238,10 +244,11 @@
         'deleteAccountByEmail',
         'chageUserPasswordByEmail',
         'assignRolesToUser',
+        'getUsersSnapshot',
       ]),
       ...call('snackbar/*'),
 
-      async saveRoles(data) {
+      async saveUserRoles(data) {
         try {
           const payload = { roles: data.roles, uid: data.uid };
 
@@ -339,7 +346,7 @@
           this.removeAccountLoader = true;
           const result = await this.deleteAccountByEmail(email);
 
-          if (result.deleted) {
+          if (result.removed) {
             this.snackbarSuccess(`${email} removed.`);
             this.removeAccountDialog = false;
             this.removeAccountLoader = false;
@@ -419,7 +426,7 @@
         }
 
         if (user.verified) {
-          return 'mdi-check-decagram';
+          return 'mdi-check';
         }
 
         if (!user.verified) {
@@ -433,7 +440,7 @@
         }
 
         if (user.verified) {
-          return 'green';
+          return 'indigo darken-2';
         }
 
         if (!user.verified) {
@@ -463,34 +470,6 @@
           });
           this.roles = roles;
         });
-      },
-
-      getUsersSnapshot() {
-        this.loading = true;
-
-        // Spinner while loading
-        this.loadingSpinner = this.$vs.loading({
-          target: this.$refs.content,
-          color: 'primary',
-        });
-
-        // realtime collection data
-        // reacts to CRUD operations.
-        onSnapshot(colRefUsers, (snapshot) => {
-          const users = [];
-
-          snapshot.docs.forEach((doc) => {
-            // Add the hover key, for row hovering actions.
-            users.push({ ...doc.data(), hover: false });
-          });
-
-          this.users = users;
-        });
-
-        setTimeout(() => {
-          this.loadingSpinner.close();
-          this.loading = false;
-        }, 200);
       },
     },
   };

@@ -5,6 +5,8 @@ body {
 }
 .v-application--wrap {
   background: #24272c !important;
+  height: 0vh !important;
+
 }
 
 .v-main {
@@ -39,6 +41,9 @@ body {
 .vs-select__option {
   font-family: revert;
   height: 30px !important;
+  font-family: revert;
+  font-size: 15px;
+  color: #ccc;
 }
 
 .primary-font-color {
@@ -150,10 +155,7 @@ h1 {
   color: #ccc !important;
 }
 
-.v-application--wrap {
-  height: 0vh !important;
-}
-
+ 
 .vs-input {
   border: 2px solid transparent;
   background: #1b1e25;
@@ -164,12 +166,7 @@ h1 {
   background: #1b1e25;
 }
 
-.vs-select__option {
-  font-family: revert;
-  font-size: 15px;
-  color: #ccc;
-}
-
+ 
 .vs-select__chips {
   color: #ccc;
   box-shadow: unset !important;
@@ -236,6 +233,8 @@ h1 {
   transition: unset !important;
   border: 2px solid transparent;
   color: rgba(var(--vs-text), 1);
+  -webkit-transform: unset !important;
+  transform: unset !important;
 }
 
 .vs-select__options:after {
@@ -250,11 +249,7 @@ h1 {
 .vs-checkbox-mask:before {
   border: 2px solid rgb(97, 97, 97) !important;
 }
-.vs-select.activeOptions .vs-select__input {
-  -webkit-transform: unset !important;
-  transform: unset !important;
-}
-
+ 
 .vs-select__option.isMultiple.isHover {
   background: #383f43 !important;
   width: 98%;
@@ -267,4 +262,17 @@ h1 {
 
 .vs-select__chips__input {
 height: 28px;
+}
+
+.vs-navbar-content {
+
+  z-index: 3!important;
+
+}
+
+
+.vs-sidebar-content {
+
+  z-index: 3!important;
+
 }

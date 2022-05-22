@@ -71,8 +71,8 @@ new Vue({
   created() {
     AOS.init();
   },
-  vuetify,
   store,
   router,
+  vuetify,
   render: (h) => h(App),
 }).$mount('#app');

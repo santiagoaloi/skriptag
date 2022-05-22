@@ -94,13 +94,24 @@
       },
       imageOptions() {
         const { right, gradientOptions } = this;
+        const { xs } = this.$vuetify.breakpoint;
 
         return {
           gradient: gradientOptions(),
           width: '100%',
           style: { height: '100%' },
           src: this.src || `https://picsum.photos/1280/800?${Date.now().toString().slice(0, 1)}`,
-          transition: `${right ? 'slide-x-reverse-transition' : 'slide-x-transition'}`,
+          transition: (() => {
+            if (xs) {
+              return 'fade-transition';
+            }
+            if (right) {
+              return 'slide-x-reverse-transition';
+            }
+            if (!right) {
+              return 'slide-x-transition';
+            }
+          })(),
         };
       },
     },

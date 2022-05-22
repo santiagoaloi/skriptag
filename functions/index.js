@@ -146,7 +146,7 @@ exports.deleteUserByEmail = functions.https.onCall(async (email) => {
     await docRef.update({ removed: true });
 
     return {
-      deleted: true,
+      removed: true,
     };
   } catch (ex) {
     return { message: `Error!  ${ex.message}` };

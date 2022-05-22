@@ -1,8 +1,8 @@
 <template>
   <v-app class="no-select no-drag">
-    <default-drawer v-if="$vuetify.breakpoint.mdAndUp" />
     <default-app-bar />
-    <default-view />
+    <default-drawer v-if="$vuetify.breakpoint.mdAndUp" />
+    <default-view :style="$vuetify.breakpoint.mdAndUp ? 'margin-left: 50px;margin-top: 44px' : 'margin-top: 44px'" />
     <base-snackbar />
   </v-app>
 </template>

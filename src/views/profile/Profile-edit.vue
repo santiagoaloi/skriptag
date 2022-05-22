@@ -1,11 +1,5 @@
 <template>
   <div style="color: #ccc">
-    <div class="d-flex align-center">
-      <h2 class="mb-6 mt-3 cursor-pointer" @click="close()">Profile</h2>
-      <v-icon class="mt-n2" size="25" dark> mdi-chevron-right</v-icon>
-      <h2 class="mb-6 mt-3">Profile edit</h2>
-    </div>
-
     <ValidationObserver ref="profileEdit" slim>
       <form class="d-flex flex-column" @submit.prevent="saveProfile()">
         <v-row no-gutters>
@@ -88,6 +82,7 @@
                 type="submit"
                 dark
                 color="#2a3143"
+                :loading="loading"
                 ><v-icon left> mdi-check-bold</v-icon>Save</v-btn
               >
             </div>
@@ -111,6 +106,7 @@
           slim: true,
         },
         originProfile: {},
+        loading: false,
       };
     },
 
@@ -128,7 +124,7 @@
       ...call('snackbar/*'),
 
       close() {
-        this.$emit('close');
+        this.$router.push('/profile');
         this.rollBack();
         window.scrollTo(0, 0);
       },
@@ -163,16 +159,23 @@
 
       async saveProfile() {
         try {
+          this.loading = true;
           const validated = await this.$refs.profileEdit.validate();
           if (validated) {
-            this.updateProfileSettings();
-            this.snackbarSuccess('Profile details saved');
-            this.$emit('close');
+            const profile = await this.updateProfileSettings();
+
+            if (profile.saved) {
+              this.loading = false;
+              this.snackbarSuccess('Profile details saved');
+              this.$router.push('/profile');
+            }
           } else {
             this.snackbarError('Please correct the fields in red');
+            this.loading = false;
           }
         } catch (error) {
           this.snackbarError('something went wrong ');
+          this.loading = false;
         }
       },
     },

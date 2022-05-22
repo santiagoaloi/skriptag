@@ -30,7 +30,7 @@
   import { sync, get } from 'vuex-pathify';
 
   export default {
-    name: 'SkriptagEditRoleAddDialog',
+    name: 'UserRolesDialog',
     props: {
       value: {
         type: Boolean,

@@ -1,10 +1,5 @@
 <template>
   <div style="color: #ccc">
-    <div class="d-flex align-center">
-      <h2 class="mb-6 mt-3 cursor-pointer" @click="close()">Profile</h2>
-      <v-icon class="mt-n2" size="25" dark> mdi-chevron-right</v-icon>
-      <h2 class="mb-6 mt-3">Account settings</h2>
-    </div>
     <ValidationObserver ref="accountEdit" slim>
       <form class="d-flex flex-column" @submit.prevent="validatePasswords()">
         <v-row no-gutters>
@@ -126,7 +121,7 @@
                 <v-btn :block="!$vuetify.breakpoint.smAndUp" dark color="#de355f" @click="removeAccountDialog = true">
                   <v-icon :left="$vuetify.breakpoint.lgAndUp"> mdi-delete-outline</v-icon>
                   <span v-if="$vuetify.breakpoint.xs || (!$vuetify.breakpoint.md && !$vuetify.breakpoint.sm) || verified">
-                    Remove myaccount</span
+                    Remove account</span
                   >
                 </v-btn>
 
@@ -252,7 +247,7 @@
         try {
           const result = await this.deleteAccountByEmail(account.email);
 
-          if (result.deleted) {
+          if (result.removed) {
             this.logout();
             this.snackbarSuccess(`${account.email} removed.`);
             this.removeAccountLoader = false;
@@ -284,8 +279,8 @@
       },
 
       close() {
-        this.$emit('close');
-        document.getElementById('containerDiv').scrollTop = 0;
+        this.$router.push('/profile');
+        window.scrollTo(0, 0);
       },
     },
   };

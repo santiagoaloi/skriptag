@@ -15,9 +15,9 @@
             colored-border
             icon="mdi-chevron-up"
           >
-            To sign in with google or github,
+            To signup with google or github,
             <span class="cursor-pointer teal--text text--accent-4" @click="$router.push('login')"> go to the login page</span>. An
-            account will be created right away.
+            account will be created on your first login.
           </v-alert>
         </div>
 
