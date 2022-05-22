@@ -280,7 +280,6 @@ const actions = {
       const { user } = userCredential;
 
       store.set('authentication/user', user);
-      // store.set('authentication/uid', user.uid);
       await router.push('profile');
       store.set('loaders/authLoader', false);
     } catch ({ ...error }) {
@@ -381,7 +380,6 @@ const actions = {
 
       store.set('loaders/signupLoader', false);
     } catch ({ ...error }) {
-      // dispatch('errors/authMessagesSnackbar', error.code, { root: true });
       store.set('loaders/signupLoader', false);
     }
   },
@@ -542,9 +540,7 @@ const actions = {
       return {
         removed: true,
       };
-    } catch (error) {
-      // console.log(`failed to delete id(${docRef.id}): ${error.message}`);
-    }
+    } catch (error) {}
   },
 
   async getUsersSnapshot({ state }) {
@@ -631,12 +627,6 @@ const getters = {
       return `${name} ${lastName}`;
     }
   },
-
-  // isAuthMultiProvider: (state, getters) => {
-
-  //   if (getters.isLoggedIn) return  state.user.providerData.some((provider) => provider.uid !== 'uid') ? 'background: #303036' : '';
-
-  // },
 
   authProvider: (_state, _getters) => {
     if (_getters.isLoggedIn) return _state.user.providerData[0].providerId;

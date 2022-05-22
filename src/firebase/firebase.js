@@ -29,10 +29,10 @@ const getUserState = () => new Promise((resolve, reject) => onAuthStateChanged(a
 // If  useEmulators is true, run all the emulators
 // instead of production servers.
 if (useEmulators) {
-  // connectStorageEmulator(storage, 'localhost', 5001);
-  // connectFunctionsEmulator(functions, 'localhost', 5002);
-  // connectFirestoreEmulator(db, 'localhost', 5003);
-  // connectAuthEmulator(auth, 'http://localhost:5004', { disableWarnings: true });
+  connectStorageEmulator(storage, 'localhost', 5001);
+  connectFunctionsEmulator(functions, 'localhost', 5002);
+  connectFirestoreEmulator(db, 'localhost', 5003);
+  connectAuthEmulator(auth, 'http://localhost:5004', { disableWarnings: true });
 }
 
 export { db, storage, auth, functions, getUserState };

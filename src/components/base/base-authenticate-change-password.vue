@@ -131,10 +131,7 @@
         type: String,
         default: '',
       },
-      // loading: {
-      //   type: Boolean,
-      //   default: false,
-      // },
+
       payload: {
         type: [Boolean, String, Object, Array],
         default: null,
@@ -217,7 +214,6 @@
 
       close() {
         this.$emit('close');
-        // document.getElementById('containerDiv').scrollTop = 0;
       },
     },
   };

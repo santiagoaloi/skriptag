@@ -130,7 +130,6 @@
 
       close() {
         this.$emit('close');
-        // document.getElementById('containerDiv').scrollTop = 0;
       },
     },
   };

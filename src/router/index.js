@@ -25,7 +25,6 @@ router.beforeEach(async (to, _from, next) => {
   // wait for firebase init before route guards can be applied.
   // if a user is authenticated , the user object will be returned in isAuth.
   const isAuth = await getUserState();
-  // console.log(isAuth || 'no user is  authenticated in firebase.');
 
   const isLoginPageAndAuthenticated = to.matched.some((record) => record.name === 'login' && isAuth);
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);

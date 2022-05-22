@@ -52,15 +52,15 @@ Vue.directive('animation', {
       };
 
       if (longPress) {
-        const timeout = '0.6s';
+        const lpTimeout = '0.6s';
 
         el.onmouseout = () => {
           el.style.transform = 'scale(1)';
-          el.style.transition = timeout;
+          el.style.transition = lpTimeout;
         };
         el.onmouseup = () => {
           el.style.transform = 'scale(1)';
-          el.style.transition = timeout;
+          el.style.transition = lpTimeout;
         };
       }
     }
