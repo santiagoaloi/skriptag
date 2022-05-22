@@ -38,8 +38,6 @@
             <input ref="avatarInput" accept="image/*" style="display: none" type="file" @change="uploadProfilePhoto()" />
 
             <div :class="$vuetify.breakpoint.smAndUp ? 'ml-13' : 'justify-center'" class="d-flex align-center justify-start">
-              <!-- @click="!isAuthExternalProvider && triggerAvatarInput()" -->
-
               <v-badge
                 offset-x="40"
                 offset-y="34"
@@ -94,7 +92,6 @@
                   >
                     {{ fullName || profile.displayName }}
                   </span>
-                  <!-- </v-col> -->
                   <v-col cols="12">
                     <h5 class="mt-n2">
                       <span class="grey--text text--accent-1"> Previous login: {{ profile.metadata.lastSignInTime }} </span> • 44

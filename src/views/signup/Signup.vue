@@ -31,8 +31,6 @@
 </template>
 <script>
   import { call, sync, get } from 'vuex-pathify';
-  // import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-  // import { auth } from '@/firebase/firebase';
   import SignupWithEmail from './SignupWithEmail.vue';
 
   export default {

@@ -4,7 +4,6 @@
       <form class="d-flex flex-column" @submit.prevent="validate()">
         <v-row>
           <v-col cols="12" lg="12">
-            <!-- <BaseLink to="login">Already have an account? Login</BaseLink> -->
             <small class="ml-1">Email</small>
             <div class="pr-2">
               <Validation-provider

@@ -18,7 +18,6 @@
             class="transparent"
             :width="$vuetify.breakpoint.smAndDown ? '100%' : 350"
           >
-            <!-- <Base-button disabled class="my-3" block> <v-icon left> mdi-microsoft</v-icon> Sign-in with Microsoft</Base-button> -->
             <Base-button class="my-3" block @click="google()"> <v-icon left> mdi-google</v-icon> Sign-in with Google</Base-button>
             <Base-button disabled class="my-3" block> <v-icon left> mdi-github</v-icon> Sign-in with Github</Base-button>
 

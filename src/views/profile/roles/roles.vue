@@ -14,7 +14,6 @@
           />
           <Base-button small class="ml-2" large @click="roleDialog = true"> Add role</Base-button>
           <vs-tooltip shadow circle color="#ccc">
-            <!-- <Base-button small class="ml-2" large @click="listUsers()"> <v-icon> mdi-refresh</v-icon></Base-button> -->
             <template #tooltip> Reload </template>
           </vs-tooltip>
 
@@ -242,10 +241,6 @@
         this.snackbarError(`There was an error removing ${name}`);
         this.roleLoader = false;
       },
-
-      // isSelected(uid) {
-      //   return this.selected.some((user) => user.uid === uid) ? 'background: #303036' : '';
-      // },
     },
   };
 </script>

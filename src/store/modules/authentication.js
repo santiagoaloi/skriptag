@@ -607,27 +607,27 @@ const getters = {
     return progress;
   },
 
-  userId: (state, getters) => {
-    if (getters.isLoggedIn) return state.user?.uid;
+  userId: (_state, _getters) => {
+    if (_getters.isLoggedIn) return _state.user?.uid;
   },
 
-  isProfileLoaded: (state, getters) => {
-    if (getters.isLoggedIn) return !isEmpty(state.userProfile);
+  isProfileLoaded: (_state, _getters) => {
+    if (_getters.isLoggedIn) return !isEmpty(_state.userProfile);
   },
 
-  userEmail: (state, getters) => {
-    if (getters.isLoggedIn) return state.user?.email;
+  userEmail: (_state, _getters) => {
+    if (_getters.isLoggedIn) return _state.user?.email;
   },
 
-  verified: (state, getters) => {
-    if (getters.isLoggedIn) return state.userProfile?.verified || getters.isAuthExternalProvider;
+  verified: (_state, _getters) => {
+    if (_getters.isLoggedIn) return _state.userProfile?.verified || _getters.isAuthExternalProvider;
   },
 
   // Capitalize the first letter of every word.
-  fullName: (state) => {
-    if (state.userProfile && state.userProfile.name && state.userProfile.lastName) {
-      const name = startCase(capitalize(state.userProfile.name));
-      const lastName = startCase(capitalize(state.userProfile.lastName));
+  fullName: (_state) => {
+    if (_state.userProfile && _state.userProfile.name && _state.userProfile.lastName) {
+      const name = startCase(capitalize(_state.userProfile.name));
+      const lastName = startCase(capitalize(_state.userProfile.lastName));
       return `${name} ${lastName}`;
     }
   },
@@ -638,17 +638,17 @@ const getters = {
 
   // },
 
-  authProvider: (state, getters) => {
-    if (getters.isLoggedIn) return state.user.providerData[0].providerId;
+  authProvider: (_state, _getters) => {
+    if (_getters.isLoggedIn) return _state.user.providerData[0].providerId;
   },
 
-  isAuthExternalProvider: (state, getters) => {
-    if (getters.isLoggedIn) return state.user.providerData[0].providerId !== 'password';
+  isAuthExternalProvider: (_state, _getters) => {
+    if (_getters.isLoggedIn) return _state.user.providerData[0].providerId !== 'password';
   },
 
-  profile: (state, getters) => {
-    if (getters.isAuthExternalProvider) {
-      return { ...state.user?.providerData[0], metadata: state.user?.metadata, ...state.userProfile };
+  profile: (_state, _getters) => {
+    if (_getters.isAuthExternalProvider) {
+      return { ..._state.user?.providerData[0], metadata: _state.user?.metadata, ..._state.userProfile };
     }
 
     if (!getters.isAuthExternalProvider) {
@@ -657,18 +657,18 @@ const getters = {
   },
 
   // Shows first name and first letter of last name.
-  firstAndShortLast: (state) => {
-    if (state.userProfile && state.userProfile.name && state.userProfile.lastName) {
-      const name = startCase(capitalize(state.userProfile.name));
-      const lastName = startCase(capitalize(state.userProfile.lastName));
+  firstAndShortLast: (_state) => {
+    if (_state.userProfile && _state.userProfile.name && _state.userProfile.lastName) {
+      const name = startCase(capitalize(_state.userProfile.name));
+      const lastName = startCase(capitalize(_state.userProfile.lastName));
       return name && lastName ? `${name} ${lastName[0]}.` : `${name}`;
     }
   },
 
   // returns current user last login date/time.
-  allRoles: (state) => state.roles.flatMap((role) => role.name),
-  lastLogin: (state) => state.user?.metadata?.lastSignInTime,
-  allCapabilities: (state) => state.capabilities.flatMap((c) => c.name),
+  allRoles: (_state) => _state.roles.flatMap((role) => role.name),
+  lastLogin: (_state) => _state.user?.metadata?.lastSignInTime,
+  allCapabilities: (_state) => _state.capabilities.flatMap((c) => c.name),
 };
 
 export default {
