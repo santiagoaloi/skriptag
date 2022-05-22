@@ -4,8 +4,8 @@
 
     <article>
       <h2 class="font-weight-light">
-        Level up your <b>skills</b> and launch your career as a <b>developer</b> - Find learning content,
-        <b> mentoring</b> assistance or interact with other developers!
+        Level up your <strong>skills</strong> and launch your career as a <strong>developer</strong> - Find learning content,
+        <strong> mentoring</strong> assistance or interact with other developers!
       </h2>
     </article>
 
