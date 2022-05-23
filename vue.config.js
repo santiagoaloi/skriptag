@@ -19,9 +19,6 @@ module.exports = {
     config.plugins.delete('prefetch');
   },
 
-  devServer: {
-    disableHostCheck: true,
-  },
   lintOnSave: false,
   transpileDependencies: ['vuetify'],
 };
