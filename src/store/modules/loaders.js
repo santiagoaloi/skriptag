@@ -4,6 +4,7 @@ import { make } from 'vuex-pathify';
 const state = {
   authLoader: false,
   signupLoader: false,
+  signInWithGoogle: false,
   resendVerificationLoader: false,
   verificationInProgressLoader: false,
   removeAccountLoader: false,

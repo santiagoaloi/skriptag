@@ -18,7 +18,9 @@
             class="transparent"
             :width="$vuetify.breakpoint.smAndDown ? '100%' : 350"
           >
-            <Base-button class="my-3" block @click="google()"> <v-icon left> mdi-google</v-icon> Sign-in with Google</Base-button>
+            <Base-button :loading="loading" class="my-3" block @click="google()">
+              <v-icon left> mdi-google</v-icon> Sign-in with Google</Base-button
+            >
             <Base-button disabled class="my-3" block> <v-icon left> mdi-github</v-icon> Sign-in with Github</Base-button>
 
             <div class="d-flex align-center">
@@ -65,16 +67,16 @@
     },
 
     computed: {
-      loading: sync('loaders/authLoader'),
+      loading: sync('loaders/signInWithGoogle'),
       ...get('authentication', ['isLoggedIn']),
     },
 
     methods: {
-      ...call('authentication', ['login', 'accountRecoveryRequest', 'signupWithGoogle']),
+      ...call('authentication', ['login', 'accountRecoveryRequest', 'authenticateWithGoogle']),
       ...call('snackbar/*'),
 
       google() {
-        this.signupWithGoogle();
+        this.authenticateWithGoogle();
       },
 
       resetValidation() {

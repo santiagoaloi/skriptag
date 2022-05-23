@@ -65,10 +65,8 @@
             </v-col>
             <v-col v-if="mode === 'resetPassword'" cols="12" lg="10">
               <div class="ml-n1">
-                <Base-button dark color="grey darken-3" @click="$router.push('login')"> Cancel</Base-button>
-                <Base-button class="teal--text text--accent-3" type="submit" :loading="loading" dark color="grey darken-3" large>
-                  Change password</Base-button
-                >
+                <Base-button @click="$router.push('login')"> Cancel</Base-button>
+                <Base-button type="submit" :loading="loading"> Change password</Base-button>
               </div>
             </v-col>
           </v-row>

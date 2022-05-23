@@ -3,7 +3,6 @@
     v-animation:shrink="{ link: true, longPress: true }"
     v-bind="$attrs"
     dark
-    :large="!small"
     color="#2a3143"
     class="indigo--text text--lighten-5"
     :ripple="false"
@@ -19,11 +18,6 @@
   export default {
     name: 'BaseButton',
     props: {
-      small: {
-        type: Boolean,
-        default: false,
-      },
-
       block: {
         type: Boolean,
         default: false,

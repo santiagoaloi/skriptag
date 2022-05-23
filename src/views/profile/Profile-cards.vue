@@ -78,8 +78,8 @@
             img: 'https://media.skriptag.com/img/a5.svg',
             route: 'skriptag-edit',
             responsiveSize: 3,
-            disabled: !this.profile.roles.includes('root'),
-            visible: this.profile.roles.includes('root'),
+            disabled: !this.profile.roles?.includes('root'),
+            visible: this.profile.roles?.includes('root'),
           },
         ];
       },

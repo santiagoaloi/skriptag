@@ -37,7 +37,7 @@ import router from '@/router';
 
 const state = {
   user: {},
-  userProfile: {},
+  profile: {},
   roles: [],
   users: [],
   capabilities: [],
@@ -68,7 +68,6 @@ const actions = {
 
     if (result.data.verified) {
       dispatch('snackbar/snackbarSuccess', `Your account ${email} is now verified.`, { root: true });
-      dispatch('refreshProfile');
       store.set('loaders/verificationInProgressLoader', false);
     }
   },
@@ -121,15 +120,13 @@ const actions = {
     }
   },
 
-  async unlinkProfileImage({ getters, dispatch }) {
+  async unlinkProfileImage({ getters }) {
     try {
-      const userProfile = doc(db, 'users', getters.userId);
+      const profile = doc(db, 'users', getters.userId);
 
-      await updateDoc(userProfile, {
+      await updateDoc(profile, {
         photoURL: '',
       });
-
-      dispatch('refreshProfile');
 
       return {
         saved: true,
@@ -154,16 +151,6 @@ const actions = {
       }
     } catch ({ ...error }) {
       dispatch('errors/authMessagesSnackbar', error.code, { root: true });
-    }
-  },
-
-  // Get the user profile associated with the authenticated user.
-  async refreshProfile({ getters }) {
-    const docRef = doc(db, 'users', getters.userId);
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-      store.set('authentication/userProfile', docSnap.data());
     }
   },
 
@@ -208,7 +195,7 @@ const actions = {
       await sendPasswordResetEmail(auth, email);
       dispatch('snackbar/snackbarSuccess', 'Account recovery email sent.', { root: true });
 
-      await router.push('login');
+      // await router.push('login');
 
       store.set('loaders/authLoader', false);
     } catch ({ ...error }) {
@@ -254,10 +241,10 @@ const actions = {
   // Saves new user profile basic settings.
   async updateProfileSettings({ getters, state }) {
     try {
-      const userProfile = doc(db, 'users', getters.userId);
+      const profile = doc(db, 'users', getters.userId);
 
-      await updateDoc(userProfile, {
-        ...state.userProfile,
+      await updateDoc(profile, {
+        ...state.profile,
       });
 
       return {
@@ -292,7 +279,10 @@ const actions = {
   async logout() {
     await signOut(auth);
     store.set('authentication/user', {});
-    store.set('authentication/userProfile', {});
+    store.set('authentication/profile', {});
+
+    store.set('authentication/usersLoaded', false);
+
     router.push('/');
   },
 
@@ -313,9 +303,7 @@ const actions = {
 
       // Set user in Vuex and navigate to the new user profile.
       store.set('authentication/user', user);
-
       await router.push('profile');
-
       store.set('loaders/signupLoader', false);
     } catch ({ ...error }) {
       dispatch('errors/authMessagesSnackbar', error.code, { root: true });
@@ -351,41 +339,46 @@ const actions = {
 
   // Creates a new user account or login existing
   // using google credentials, and routes to profile page.
-  async signupWithGoogle({ dispatch }) {
-    store.set('loaders/signupLoader', true);
+  async authenticateWithGoogle({ dispatch }) {
+    store.set('loaders/signInWithGoogle', true);
 
     try {
       const provider = new GoogleAuthProvider();
 
       provider.setCustomParameters({
         prompt: 'consent',
+        display: 'popup',
       });
 
       const userCredential = await signInWithPopup(auth, provider);
       const { user } = userCredential;
 
-      // Don't re-create the user prfofile, if the the user
+      // Don't re-create the user profile, if the the user
       // already has a profile created.
       const docRef = doc(db, 'users', user.uid);
       const docSnap = await getDoc(docRef);
 
       if (!docSnap.exists()) {
-        dispatch('addUserToUsersCollectionGgoogle', { user });
+        const profile = await dispatch('addUserToUsersCollectionGgoogle', { user });
+        if (!profile.created) {
+          dispatch('snackbar/snackbarError', `Something went wrong while creating the account profile.`, { root: true });
+          return;
+        }
       }
 
       // Set user in Vuex and navigate to the new user profile.
       store.set('authentication/user', user);
 
-      router.push('profile');
+      await router.push('profile');
 
-      store.set('loaders/signupLoader', false);
+      store.set('loaders/signInWithGoogle', false);
     } catch ({ ...error }) {
-      store.set('loaders/signupLoader', false);
+      store.set('loaders/signInWithGoogle', false);
     }
   },
 
   // If the google account has not profile docuemnt, it creates it.
-  addUserToUsersCollectionGgoogle(_, { user }) {
+  async addUserToUsersCollectionGgoogle(_, { user }) {
     // Adds a document in a  firestore collection.
     // doc (Firestore instance, collection name, collection id).
     const userDocRef = doc(db, 'users', user.uid);
@@ -403,14 +396,26 @@ const actions = {
       name: names[0],
       // Rest of the names in the names array
       lastName: names.slice(1).join('').trim(),
-      verified: true,
       photoURL,
       coverAvatar: '',
+      disabled: false,
+      verified: true,
+      roles: [],
     };
 
     // SetDoc (Firestore, Payload)
     // creates the user profile in the db collection.
-    setDoc(userDocRef, userDocData);
+
+    try {
+      await setDoc(userDocRef, userDocData);
+      return {
+        created: true,
+      };
+    } catch (error) {
+      return {
+        created: false,
+      };
+    }
   },
 
   // Validates current user password, if validated
@@ -427,8 +432,8 @@ const actions = {
     try {
       const { uid, roles } = payload;
 
-      const userProfile = doc(db, 'users', uid);
-      await updateDoc(userProfile, {
+      const profile = doc(db, 'users', uid);
+      await updateDoc(profile, {
         roles,
       });
 
@@ -545,24 +550,26 @@ const actions = {
 
   async getUsersSnapshot({ state }) {
     if (!state.usersLoaded) {
-      // realtime collection data
-      // reacts to CRUD operations.
-      const colRefUsers = collection(db, 'users');
+      try {
+        const getAllUsers = httpsCallable(functions, 'listAllUsers');
+        const result = await getAllUsers();
+        const allUsers = Object.values(result.data);
 
-      // realtime collection data
-      // reacts to CRUD operations.
-      onSnapshot(colRefUsers, (snapshot) => {
-        const users = [];
+        // realtime collection data
+        // reacts to CRUD operations.
+        const colRefUsers = collection(db, 'users');
 
-        snapshot.docs.forEach((document) => {
-          // Add the hover key, for row hovering actions.
-          users.push({ ...document.data(), hover: false });
+        onSnapshot(colRefUsers, (snapshot) => {
+          const userMap = new Map(allUsers.map((u) => [u.uid, u]));
+          const users = snapshot.docs.map((document) => {
+            const profile = document.data();
+            return { ...profile, authUser: userMap.get(profile.uid), hover: false };
+          });
+          store.set('authentication/users', users);
         });
 
-        state.users = users;
-      });
-
-      state.usersLoaded = true;
+        store.set('authentication/usersLoaded', true);
+      } catch (error) {}
     }
   },
 };
@@ -570,7 +577,7 @@ const actions = {
 const getters = {
   // Checks if the user is authenticated.
 
-  isLoggedIn: (auth.onAuthStateChanged, (auth) => !isEmpty(auth.user)),
+  isLoggedIn: (auth.onAuthStateChanged, (authenticated) => !isEmpty(authenticated.user)),
 
   getPasswordComplexity: () => (value) => {
     let progress = 0;
@@ -608,7 +615,7 @@ const getters = {
   },
 
   isProfileLoaded: (_state, _getters) => {
-    if (_getters.isLoggedIn) return !isEmpty(_state.userProfile);
+    if (_getters.isLoggedIn) return !isEmpty(_state.profile);
   },
 
   userEmail: (_state, _getters) => {
@@ -616,20 +623,20 @@ const getters = {
   },
 
   verified: (_state, _getters) => {
-    if (_getters.isLoggedIn) return _state.userProfile?.verified || _getters.isAuthExternalProvider;
+    if (_getters.isLoggedIn) return _state.profile?.verified || _getters.isAuthExternalProvider;
   },
 
   // Capitalize the first letter of every word.
   fullName: (_state) => {
-    if (_state.userProfile && _state.userProfile.name && _state.userProfile.lastName) {
-      const name = startCase(capitalize(_state.userProfile.name));
-      const lastName = startCase(capitalize(_state.userProfile.lastName));
+    if (_state.profile && _state.profile.name && _state.profile.lastName) {
+      const name = startCase(capitalize(_state.profile.name));
+      const lastName = startCase(capitalize(_state.profile.lastName));
       return `${name} ${lastName}`;
     }
   },
 
-  authProvider: (_state, _getters) => {
-    if (_getters.isLoggedIn) return _state.user.providerData[0].providerId;
+  authProviders: (_state, _getters) => {
+    if (_getters.isLoggedIn) return _state.user.providerData.flatMap((profile) => profile.providerId);
   },
 
   isAuthExternalProvider: (_state, _getters) => {
@@ -638,19 +645,27 @@ const getters = {
 
   profile: (_state, _getters) => {
     if (_getters.isAuthExternalProvider) {
-      return { ..._state.user?.providerData[0], metadata: _state.user?.metadata, ..._state.userProfile };
+      return { ..._state.user?.providerData[0], metadata: _state.user?.metadata, ..._state.profile };
     }
 
-    if (!getters.isAuthExternalProvider) {
-      return { metadata: state.user?.metadata, ...state.userProfile };
+    if (!_getters.isAuthExternalProvider) {
+      return { metadata: _state.user?.metadata, ..._state.profile };
     }
+  },
+
+  profileRoles: (_state, _getters) => {
+    if (_getters.isLoggedIn) return [..._getters.profile?.roles];
+  },
+
+  isRoot: (_state, _getters) => {
+    if (_getters.isLoggedIn) return _getters.profileRoles.includes('root');
   },
 
   // Shows first name and first letter of last name.
   firstAndShortLast: (_state) => {
-    if (_state.userProfile && _state.userProfile.name && _state.userProfile.lastName) {
-      const name = startCase(capitalize(_state.userProfile.name));
-      const lastName = startCase(capitalize(_state.userProfile.lastName));
+    if (_state.profile && _state.profile.name && _state.profile.lastName) {
+      const name = startCase(capitalize(_state.profile.name));
+      const lastName = startCase(capitalize(_state.profile.lastName));
       return name && lastName ? `${name} ${lastName[0]}.` : `${name}`;
     }
   },

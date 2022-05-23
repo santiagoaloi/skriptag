@@ -5,7 +5,7 @@
     :fullscreen="$vuetify.breakpoint.smAndDown || isMaximized || fullscreen"
     :hide-overlay="noOverlay || fullscreen"
     :overlay-opacity="0.9"
-    overlay-color="rgba(91, 112, 131, 0.4)"
+    overlay-color="rgba(30, 30, 39, 0.7)"
     class="d-flex"
     persistent
     no-click-animation

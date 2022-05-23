@@ -48,7 +48,7 @@
 </template>
 
 <script>
-  import { call, get } from 'vuex-pathify';
+  import { call, get, sync } from 'vuex-pathify';
 
   export default {
     name: 'DefaultDrawer',

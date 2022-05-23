@@ -1,4 +1,4 @@
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '@/firebase/firebase';
 import { store } from '@/store';
 
@@ -12,11 +12,9 @@ export async function setUserAndProfile({ isAuth }) {
 
   if (isLoggedIn && !isProfileLoaded) {
     const docRef = doc(db, 'users', currentId);
-    const docSnap = await getDoc(docRef);
-
-    // Set the uuer profile, if the user profile exists in firebase.
-    if (docSnap.exists()) {
-      store.set('authentication/userProfile', docSnap.data());
-    }
+    onSnapshot(docRef, (docSnap) => {
+      const profileData = docSnap.data();
+      store.set('authentication/profile', profileData);
+    });
   }
 }

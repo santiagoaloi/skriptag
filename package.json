@@ -19,11 +19,12 @@
     "vue-burger": "^1.1.0",
     "vue-router": "^3.2.0",
     "vuesax": "^4.0.1-alpha.25",
-    "vuetify": "^2.6.0",
+    "vuetify": "^2.6.6",
     "vuex": "^3.4.0",
     "vuex-persist": "^3.1.3"
   },
   "devDependencies": {
+    "@mdi/font": "^6.7.96",
     "@vue/cli-plugin-babel": "~4.5.15",
     "@vue/cli-plugin-router": "~4.5.15",
     "@vue/cli-plugin-vuex": "~4.5.15",

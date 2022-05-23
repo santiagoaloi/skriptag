@@ -3,6 +3,18 @@ const functions = require('firebase-functions');
 
 admin.initializeApp();
 
+exports.listAllUsers = functions.https.onCall(async () => {
+  try {
+    const all = await admin.auth().listUsers(1000);
+
+    return {
+      ...all.users,
+    };
+  } catch (error) {
+    return { message: `Error listing users!  ${error}` };
+  }
+});
+
 exports.verifiyUserByEmail = functions.https.onCall(async (email) => {
   try {
     const user = await admin.auth().getUserByEmail(email);

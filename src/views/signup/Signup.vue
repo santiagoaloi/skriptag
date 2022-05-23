@@ -60,11 +60,11 @@
       ...get('authentication', ['getPasswordComplexity']),
     },
     methods: {
-      ...call('authentication', ['signup', 'signupWithGoogle']),
+      ...call('authentication', ['signup', 'authenticateWithGoogle']),
       ...call('snackbar/*'),
 
       google() {
-        this.signupWithGoogle();
+        this.authenticateWithGoogle();
       },
 
       resetValidation() {

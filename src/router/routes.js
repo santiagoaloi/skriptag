@@ -1,3 +1,5 @@
+import { store } from '@/store';
+
 export default [
   {
     path: '',
@@ -42,8 +44,17 @@ export default [
           requiresAuth: true,
           title: 'skriptag edit',
         },
-
         component: () => import(/* webpackChunkName: 'profile-skriptag-edit' */ '@/views/profile/Skriptag-edit'),
+
+        async beforeEnter(to, from, next) {
+          setTimeout(() => {
+            const isRoot = store.getters['authentication/isRoot'];
+            if (!isRoot) {
+              next('/profile');
+            }
+            next();
+          }, 400);
+        },
       },
       {
         path: '/Profile/profile-edit',

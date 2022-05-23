@@ -50,7 +50,7 @@
               >
                 <baseAvatarImg v-if="!profile.photoURL" class="hoverAvatar" :height="180" @click="triggerAvatarInput()" />
 
-                <v-avatar v-else v-ripple size="180">
+                <v-avatar v-else v-ripple class="elevation-10" size="180">
                   <v-img class="hoverAvatar" :src="profile.photoURL" flat @click="triggerAvatarInput()">
                     <template #placeholder>
                       <v-row class="fill-height ma-0" align="center" justify="center">
@@ -73,7 +73,7 @@
                         {{ verified ? 'Verified' : 'pending verification' }}
                       </span>
                     </v-chip>
-                    <v-chip v-if="profile.roles.includes('root')" class="mb-4 ml-3" small color="pink" text-color="white">
+                    <v-chip v-if="(profile.roles || []).includes('root')" class="mb-4 ml-3" small color="pink" text-color="white">
                       <v-avatar left>
                         <v-icon small>mdi-lock</v-icon>
                       </v-avatar>
@@ -111,7 +111,7 @@
 
         <v-fade-transition>
           <v-alert v-if="!verified" dark dense tile color="#212326" icon="mdi-information-outline">
-            Some profile settings will not be enabled until you verify your account.
+            Some profile settings will not be enabled until you verify your email account.
           </v-alert>
         </v-fade-transition>
 
@@ -123,10 +123,18 @@
 
     <!-- route to profile cards (childs of profile route) -->
     <v-card-text class="px-8">
-      <div v-if="$route.name !== 'profile'" class="d-flex align-center white--text">
-        <h2 class="mb-6 mt-3 cursor-pointer" @click="$router.push('/profile')">Profile</h2>
-        <v-icon class="mt-n2" size="25" dark> mdi-chevron-right</v-icon>
-        <h2 class="mb-6 mt-3">{{ $route.meta.title }}</h2>
+      <div class="d-flex justify-space-between mr-5 align-center">
+        <div v-if="$route.name !== 'profile'" class="d-flex align-center white--text">
+          <h2 class="mb-6 mt-3 cursor-pointer" @click="$router.push('/profile')">Profile</h2>
+          <v-icon class="mt-n2" size="25" dark> mdi-chevron-right</v-icon>
+          <h2 class="mb-6 mt-3">{{ $route.meta.title }}</h2>
+        </div>
+
+        <div>
+          <v-btn class="mx-2" color="grey">Activity logs</v-btn>
+          <v-btn class="mx-2" color="grey">Firebase console</v-btn>
+          <v-btn class="mx-2" color="grey">Insigts</v-btn>
+        </div>
       </div>
 
       <router-view />
@@ -162,9 +170,9 @@
     },
 
     computed: {
-      ...get('authentication', ['profile', 'fullName', 'verified', 'isLoggedIn', 'isAuthExternalProvider']),
+      ...get('authentication', ['fullName', 'verified', 'isLoggedIn', 'isAuthExternalProvider', 'profile']),
       ...sync('loaders', ['verificationInProgressLoader']),
-      ...sync('authentication', ['userProfile']),
+      editableProfile: sync('authentication/profile'),
     },
 
     mounted() {
@@ -206,7 +214,7 @@
           },
           () => {
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-              this.userProfile.photoURL = downloadURL;
+              this.editableProfile.photoURL = downloadURL;
               this.updateProfileSettings();
               setTimeout(() => {
                 this.progress = 0;
@@ -237,7 +245,7 @@
           },
           () => {
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-              this.userProfile.coverAvatar = downloadURL;
+              this.editableProfile.coverAvatar = downloadURL;
               this.updateProfileSettings();
               this.getSrc();
               setTimeout(() => {

@@ -15,7 +15,7 @@
                     :rules="{ required: true, alpha_spaces: true }"
                   >
                     <vs-input
-                      v-model="userProfile.name"
+                      v-model="profile.name"
                       :danger="failed"
                       maxlength="20"
                       block
@@ -43,7 +43,7 @@
                     :rules="{ required: true, alpha_spaces: true }"
                   >
                     <vs-input
-                      v-model="userProfile.lastName"
+                      v-model="profile.lastName"
                       :danger="failed"
                       maxlength="20"
                       block
@@ -111,8 +111,8 @@
     },
 
     computed: {
-      ...sync('authentication', ['userProfile']),
       ...get('authentication', ['isAuthExternalProvider']),
+      ...sync('authentication', ['profile']),
     },
 
     mounted() {
@@ -130,7 +130,7 @@
       },
 
       cloneProfile() {
-        this.originProfile = cloneDeep(this.userProfile);
+        this.originProfile = cloneDeep(this.profile);
       },
 
       rollBack() {
@@ -140,14 +140,14 @@
         // regardless of cancelling the profile edit.
 
         if (!this.isAuthExternalProvider) {
-          const profileMedia = { photoURL: this.userProfile.photoURL, coverAvatar: this.userProfile.coverAvatar };
-          this.userProfile = merge(originProfile, profileMedia);
+          const profileMedia = { photoURL: this.profile.photoURL, coverAvatar: this.profile.coverAvatar };
+          this.profile = merge(originProfile, profileMedia);
           return;
         }
 
         if (this.isAuthExternalProvider) {
-          const profileMedia = { coverAvatar: this.userProfile.coverAvatar };
-          this.userProfile = merge(originProfile, profileMedia);
+          const profileMedia = { coverAvatar: this.profile.coverAvatar };
+          this.profile = merge(originProfile, profileMedia);
         }
 
         // Merge possible new image changes and rollback.
@@ -168,8 +168,8 @@
               this.loading = false;
               this.snackbarSuccess('Profile details saved');
               this.$router.push('/profile');
+              return;
             }
-          } else {
             this.snackbarError('Please correct the fields in red');
             this.loading = false;
           }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-container :fluid="$vuetify.breakpoint.lgAndDown" class="pa-10">
+    <v-container :fluid="$vuetify.breakpoint.lgAndDown">
       <v-card ref="content" class="mx-auto transparent" flat min-height="35vh">
         <v-card-actions v-if="$vuetify.breakpoint.smAndUp">
           <v-text-field
@@ -11,7 +11,10 @@
             hide-details
             dense
             solo
+            autofocus
           />
+          <Base-button small class="ml-2" large> Filters</Base-button>
+
           <Base-button small class="ml-2" large> Add user</Base-button>
           <vs-tooltip shadow circle color="#ccc">
             <Base-button small class="ml-2" large @click="getUsersSnapshot()"> <v-icon> mdi-refresh</v-icon></Base-button>
@@ -20,9 +23,9 @@
 
           <Base-button small class="ml-2" large> <v-icon> mdi-dots-vertical</v-icon></Base-button>
         </v-card-actions>
-        <v-fade-transition>
+        <v-fade-transition hide-on-leave>
           <v-data-table
-            v-if="!loading"
+            v-if="!loading && filteredUsers.length"
             v-model="selected"
             show-select
             tile
@@ -34,10 +37,10 @@
             item-key="uid"
           >
             <template #body="{}">
-              <tbody>
+              <tbody is="transition-group" hide-on-leave name="slide-y-transition">
                 <tr
-                  v-for="user in filteredUsers"
-                  :key="user.uid"
+                  v-for="(user, i) in filteredUsers"
+                  :key="i"
                   class="selectable"
                   :style="isSelected(user.uid)"
                   @mouseleave="user.hover = false"
@@ -49,7 +52,7 @@
                   <td class="py-4">
                     <vs-tooltip :not-hover="!user.verified && !user.disabled" shadow circle color="#ccc">
                       <v-badge :color="getStatusColor(user)" :icon="getStatusIcon(user)" overlap>
-                        <baseAvatarImg v-if="!user.photoURL" class="hoverAvatar" :height="35" @click="triggerAvatarInput()" />
+                        <baseAvatarImg v-if="!user.photoURL" class="hoverAvatar" :height="35" />
                         <v-avatar v-else size="35">
                           <v-img :src="user.photoURL" flat>
                             <template #placeholder>
@@ -69,6 +72,30 @@
                     {{ user.name }} {{ user.lastName }}
                   </td>
                   <td>{{ user.uid }}</td>
+
+                  <td>
+                    <div class="d-flex flex-wrap justify-center align-center">
+                      <div
+                        v-for="provider in user.authUser.providerData.flatMap((profile) => profile.providerId)"
+                        :key="provider"
+                      >
+                        <template v-if="provider === 'google.com'">
+                          <vs-tooltip top shadow circle color="#ccc">
+                            <v-icon class="mx-1" small> mdi-google</v-icon>
+                            <template #tooltip> Google</template>
+                          </vs-tooltip>
+                        </template>
+
+                        <template v-if="provider === 'password'">
+                          <vs-tooltip top shadow circle color="#ccc">
+                            <v-icon class="mx-1" small> mdi-email</v-icon>
+                            <template #tooltip> Password</template>
+                          </vs-tooltip>
+                        </template>
+                      </div>
+                    </div>
+                  </td>
+
                   <td>
                     <div class="d-flex flex-wrap justify-center align-center">
                       <div v-for="role in user.roles" :key="role">
@@ -121,6 +148,18 @@
             </template>
           </v-data-table>
         </v-fade-transition>
+
+        <v-container v-if="!filteredUsers.length">
+          <v-banner dark outlined rounded="">
+            <v-avatar slot="icon" color="indigo" size="40">
+              <v-icon icon="mdi-lock" color="white"> mdi-lock </v-icon>
+            </v-avatar>
+
+            <h4 style="color: #adbac7">
+              We couldn't find an account for "jjjhdddd" Make sure the email or user UID is spelled correctly.
+            </h4>
+          </v-banner>
+        </v-container>
       </v-card>
     </v-container>
 
@@ -201,10 +240,11 @@
         loading: false,
         headers: [
           { text: 'Avatar', value: 'avatar', width: '100px' },
-          { text: 'Identifier', value: 'email' },
-          { text: 'User ID', value: 'uid' },
-          { text: 'Roles', align: 'center', value: 'roles', width: '250px', sortable: false },
-          { text: '', align: 'center', value: 'actions', width: '200px', sortable: false },
+          { text: 'Identifier', value: 'email', width: '200' },
+          { text: 'User ID', value: 'uid', align: 'start', sortable: false },
+          { text: 'Providers', align: 'center', value: 'providers', width: '159', sortable: false },
+          { text: 'Roles', align: 'center', value: 'roles', sortable: false },
+          { text: 'Actions', align: 'center', value: 'actions', width: '200px', sortable: false },
         ],
         selectedItem: false,
         selected: [],
@@ -278,6 +318,7 @@
             disabled: user.uid === this.userId,
           },
           { name: 'Remove account', method: 'removeAccountTrigger', disabled: user.uid === this.userId },
+          { name: 'Inspect', method: '', disabled: false },
         ];
       },
 
@@ -490,5 +531,22 @@
 
   ::v-deep .vs-loading {
     --vs-background: transparent !important;
+  }
+
+  .fruit-table-item {
+    transition: all 1s;
+  }
+  .fruit-table-item > * {
+    transition: all 1s;
+    overflow: hidden;
+  }
+  .fruit-table-enter,
+  .fruit-table-leave-to {
+    line-height: 0;
+  }
+  .fruit-table-enter > *,
+  .fruit-table-leave-to > * {
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
   }
 </style>
