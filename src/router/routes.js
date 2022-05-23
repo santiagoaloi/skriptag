@@ -46,7 +46,7 @@ export default [
         },
         component: () => import(/* webpackChunkName: 'profile-skriptag-edit' */ '@/views/profile/Skriptag-edit'),
 
-        async beforeEnter(to, from, next) {
+        async beforeEnter(_to, _from, next) {
           setTimeout(() => {
             const isRoot = store.getters['authentication/isRoot'];
             if (!isRoot) {

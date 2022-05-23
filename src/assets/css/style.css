@@ -138,6 +138,8 @@ h1 {
 }
 
 .v-tab {
+  font-size: 0.8rem !important;
+  font-weight: 400 !important;
   text-transform: unset !important;
 }
 
@@ -264,12 +266,6 @@ h1 {
 
 .vs-sidebar-content {
   z-index: 3 !important;
-}
-
-.v-tab {
-  font-size: 0.8rem !important;
-  font-weight: 400 !important;
-  text-transform: uppercase !important;
 }
 
 .v-tab:before {
