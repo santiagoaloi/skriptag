@@ -13,8 +13,6 @@
       Learn coding , download free and premium application templates, access JS/VueJS training material, participate in Skriptag's
       blogs and product reviews.
     </p>
-
-    <v-btn color="success" @click="testListAllUsers()">Test list users</v-btn>
   </base-split-2>
 </template>
 <script>
@@ -41,7 +39,6 @@
 
     methods: {
       ...call('app', ['sleep']),
-      ...call('authentication', ['testListAllUsers']),
     },
   };
 </script>
