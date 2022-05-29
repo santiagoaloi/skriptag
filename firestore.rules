@@ -1,20 +1,20 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-  
-  	//Roots can do anything.
-      match /{document=**} {
-      allow read, write: if
-         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.roles.hasAny(['root'])
-    }
-    
-    //   - Authenticated user can read its own data.
-    //   - Authenticated user can read its own data.
-    //   - Updates are allowed if no fields are added.
-    match /users/{uid} {
-    allow read, create: if request.auth.uid == uid; 
-    allow update:  if request.auth.uid == uid
-      && (request.resource.data.keys() == resource.data.keys()) 
-    }
+
+  //Roots can do anything.
+  match /{document=**} {
+  allow read, write: if
+  get(/databases/$(database)/documents/users/$(request.auth.uid)).data.roles.hasAny(['root'])
+  }
+
+  //   - Authenticated user can read its own data.
+  //   - Authenticated user can read its own data.
+  //   - Updates are allowed if no fields are added.
+  match /users/{uid} {
+  allow read, create: if request.auth.uid == uid; 
+  allow update:  if request.auth.uid == uid
+  && (request.resource.data.keys() == resource.data.keys()) 
+  }
 
 }}

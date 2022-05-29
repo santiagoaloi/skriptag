@@ -56,6 +56,7 @@ export default [
             const isRoot = store.getters['authentication/isRoot'];
             if (!isRoot) {
               next('/profile');
+              return;
             }
             next();
           }, 400);

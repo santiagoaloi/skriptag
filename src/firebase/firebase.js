@@ -25,7 +25,7 @@ const auth = getAuth(app);
 const getUserState = () => new Promise((resolve, reject) => onAuthStateChanged(auth, resolve, reject));
 
 // Enable emulators.
-const usingEmulators = true;
+const usingEmulators = false;
 
 const emulate = {
   storage: false,

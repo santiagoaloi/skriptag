@@ -553,24 +553,26 @@ const actions = {
     } catch (error) {}
   },
 
-  async testListAllUsers({ getters }) {
-    try {
-      const getAllUsers = httpsCallable(functions, 'listAllUsers');
-      const result = await getAllUsers({
-        allowed: getters.isRoot,
-      });
+  // async testListAllUsers({ getters }) {
+  //   try {
+  //     const getAllUsers = httpsCallable(functions, 'listAllUsers');
+  //     const result = await getAllUsers({
+  //       allowed: getters.isRoot,
+  //     });
 
-      const allUsers = Object.values(result.data) || [];
+  //     const allUsers = Object.values(result.data) || [];
 
-      // console.log(allUsers);
-    } catch (error) {}
-  },
+  //     // console.log(allUsers);
+  //   } catch (error) {}
+  // },
 
-  async getUsersSnapshot({ state }) {
+  async getUsersSnapshot({ state, getters }) {
     if (!state.usersLoaded) {
       try {
         const getAllUsers = httpsCallable(functions, 'listAllUsers');
-        const result = await getAllUsers();
+        const result = await getAllUsers({
+          allowed: getters.isRoot,
+        });
         const allUsers = Object.values(result.data) || [];
 
         // realtime collection data
