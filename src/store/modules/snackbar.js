@@ -32,7 +32,9 @@ const actions = {
     store.set('snackbar/data', payload);
   },
 };
-const getters = {};
+const getters = {
+  isActive: (_state) => _state.data.value,
+};
 
 export default {
   namespaced: true,

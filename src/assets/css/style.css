@@ -271,3 +271,7 @@ h1 {
 .v-tab:before {
   background-color: unset !important;
 }
+
+.underlineHover:hover {
+  text-decoration: underline;
+}

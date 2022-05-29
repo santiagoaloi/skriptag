@@ -6,9 +6,8 @@
 <script>
   export default {
     name: 'Homepage',
-
     components: {
-      introSlide: () => import(/* webpackChunkName: 'intro-page' */ './sliderViews/Intro'),
+      introSlide: () => import(/* webpackChunkName: 'intro-page' */ './sections/landing'),
     },
   };
 </script>

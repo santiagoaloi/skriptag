@@ -30,6 +30,8 @@ import {
   checkActionCode,
   signInWithPopup,
   GoogleAuthProvider,
+  setPersistence,
+  browserSessionPersistence,
 } from '@firebase/auth';
 import { auth, db, functions } from '@/firebase/firebase';
 import { store } from '@/store';
@@ -44,6 +46,7 @@ const state = {
   showresendEmailVerification: false,
   response: '',
   usersLoaded: false,
+  isSessionPersisted: true,
 };
 
 const mutations = make.mutations(state);
@@ -195,8 +198,6 @@ const actions = {
       await sendPasswordResetEmail(auth, email);
       dispatch('snackbar/snackbarSuccess', 'Account recovery email sent.', { root: true });
 
-      // await router.push('login');
-
       store.set('loaders/authLoader', false);
     } catch ({ ...error }) {
       dispatch('errors/authMessagesSnackbar', error.code, { root: true });
@@ -258,15 +259,21 @@ const actions = {
   },
 
   // Login user account, load user profile object and route to profile page.
-  async login({ dispatch }, loginForm) {
+  async login({ dispatch, state }, loginForm) {
     store.set('loaders/authLoader', true);
     const { email, password } = loginForm;
+
     try {
+      // Do not persist the user session if the tab or browser is closed.
+      if (!state.isSessionPersisted) {
+        await setPersistence(auth, browserSessionPersistence);
+      }
+
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
 
       const { user } = userCredential;
 
-      store.set('authentication/user', user);
+      // store.set('authentication/user', user);
       await router.push('profile');
       store.set('loaders/authLoader', false);
     } catch ({ ...error }) {
@@ -280,7 +287,6 @@ const actions = {
     await signOut(auth);
     store.set('authentication/user', {});
     store.set('authentication/profile', {});
-
     store.set('authentication/usersLoaded', false);
 
     router.push('/');
@@ -337,8 +343,8 @@ const actions = {
     setDoc(userDocRef, userDocData);
   },
 
-  // Creates a new user account or login existing
-  // using google credentials, and routes to profile page.
+  // Creates a new user account on first login or else login
+  // the existing account, route to user profile on succesful login.
   async authenticateWithGoogle({ dispatch }) {
     store.set('loaders/signInWithGoogle', true);
 
@@ -369,8 +375,7 @@ const actions = {
       // Set user in Vuex and navigate to the new user profile.
       store.set('authentication/user', user);
 
-      await router.push('profile');
-
+      router.push('/profile');
       store.set('loaders/signInWithGoogle', false);
     } catch ({ ...error }) {
       store.set('loaders/signInWithGoogle', false);
@@ -548,12 +553,25 @@ const actions = {
     } catch (error) {}
   },
 
+  async testListAllUsers({ getters }) {
+    try {
+      const getAllUsers = httpsCallable(functions, 'listAllUsers');
+      const result = await getAllUsers({
+        allowed: getters.isRoot,
+      });
+
+      const allUsers = Object.values(result.data) || [];
+
+      // console.log(allUsers);
+    } catch (error) {}
+  },
+
   async getUsersSnapshot({ state }) {
     if (!state.usersLoaded) {
       try {
         const getAllUsers = httpsCallable(functions, 'listAllUsers');
         const result = await getAllUsers();
-        const allUsers = Object.values(result.data);
+        const allUsers = Object.values(result.data) || [];
 
         // realtime collection data
         // reacts to CRUD operations.
@@ -563,7 +581,7 @@ const actions = {
           const userMap = new Map(allUsers.map((u) => [u.uid, u]));
           const users = snapshot.docs.map((document) => {
             const profile = document.data();
-            return { ...profile, authUser: userMap.get(profile.uid), hover: false };
+            return { ...profile, authUser: userMap.get(profile.uid) || {}, hover: false };
           });
           store.set('authentication/users', users);
         });
@@ -577,7 +595,7 @@ const actions = {
 const getters = {
   // Checks if the user is authenticated.
 
-  isLoggedIn: (auth.onAuthStateChanged, (authenticated) => !isEmpty(authenticated.user)),
+  isLoggedIn: (_state) => !isEmpty(_state.user),
 
   getPasswordComplexity: () => (value) => {
     let progress = 0;
@@ -644,17 +662,19 @@ const getters = {
   },
 
   profile: (_state, _getters) => {
-    if (_getters.isAuthExternalProvider) {
-      return { ..._state.user?.providerData[0], metadata: _state.user?.metadata, ..._state.profile };
-    }
+    if (_getters.isLoggedIn) {
+      if (_getters.isAuthExternalProvider) {
+        return { ..._state.user?.providerData[0], metadata: _state.user?.metadata, ..._state.profile };
+      }
 
-    if (!_getters.isAuthExternalProvider) {
-      return { metadata: _state.user?.metadata, ..._state.profile };
+      if (!_getters.isAuthExternalProvider) {
+        return { metadata: _state.user?.metadata, ..._state.profile };
+      }
     }
   },
 
   profileRoles: (_state, _getters) => {
-    if (_getters.isLoggedIn) return [..._getters.profile?.roles];
+    if (_getters.isLoggedIn && _getters.profile) return [..._getters.profile?.roles];
   },
 
   isRoot: (_state, _getters) => {

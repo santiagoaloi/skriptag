@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-container :fluid="$vuetify.breakpoint.lgAndDown" class="pa-10">
+    <v-container :fluid="$vuetify.breakpoint.lgAndDown">
       <v-card ref="content" class="mx-auto transparent" flat min-height="35vh">
         <v-card-actions v-if="$vuetify.breakpoint.smAndUp">
           <v-text-field
@@ -136,8 +136,12 @@
       ...sync('authentication', ['roles']),
     },
 
+    mounted() {
+      this.getRolesSnaphot();
+    },
+
     methods: {
-      ...call('authentication', ['addRole', 'removeRole', 'editRole']),
+      ...call('authentication', ['addRole', 'removeRole', 'editRole', 'getRolesSnaphot']),
       ...call('snackbar/*'),
 
       closeOptionsDialog() {

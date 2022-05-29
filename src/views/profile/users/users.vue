@@ -15,7 +15,7 @@
           />
           <Base-button small class="ml-2" large> Filters</Base-button>
 
-          <Base-button small class="ml-2" large> Add user</Base-button>
+          <Base-button small class="ml-2" large> Invite user</Base-button>
           <vs-tooltip shadow circle color="#ccc">
             <Base-button small class="ml-2" large @click="getUsersSnapshot()"> <v-icon> mdi-refresh</v-icon></Base-button>
             <template #tooltip> Reload </template>
@@ -149,7 +149,7 @@
           </v-data-table>
         </v-fade-transition>
 
-        <v-container v-if="!filteredUsers.length">
+        <v-container v-if="!filteredUsers.length && !loading" fluid>
           <v-banner dark outlined rounded="">
             <v-avatar slot="icon" color="indigo" size="40">
               <v-icon icon="mdi-lock" color="white"> mdi-lock </v-icon>
@@ -273,8 +273,6 @@
 
     mounted() {
       this.getUsersSnapshot();
-      this.getRolesSnaphot();
-      this.getCapabilitiesSnaphot();
     },
 
     methods: {

@@ -1,9 +1,8 @@
 <template>
-  <v-responsive style="color: #ccc" min-width="100" v-on="$listeners">
+  <v-responsive style="color: #ccc" min-width="200" v-on="$listeners">
     <component
       :is="size"
       v-animation:shrink="{ link: link, longPress: true }"
-      class="cursor-pointer"
       data-aos="fade"
       data-aos-delay="300"
       data-aos-once="true"
@@ -12,7 +11,7 @@
         data-aos="fade"
         data-aos-delay="600"
         data-aos-once="true"
-        :class="small ? 'ml-n8' : large ? 'ml-n16' : 'ml-n11'"
+        :class="small ? 'ml-n10' : large ? 'ml-n16' : 'ml-n10'"
         class="primary-font-color"
         data-aos-duration="800"
         >ˆ

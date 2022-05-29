@@ -1,8 +1,7 @@
 <template>
-  <v-main id="containerDiv">
+  <v-main>
     <MobileMenuView v-if="mobileMenu && $vuetify.breakpoint.smAndDown" />
-
-    <v-fade-transition hide-on-leave mode="out-in">
+    <v-fade-transition hide-on-leave>
       <router-view v-if="!mobileMenu || !$vuetify.breakpoint.smAndDown"></router-view>
     </v-fade-transition>
   </v-main>

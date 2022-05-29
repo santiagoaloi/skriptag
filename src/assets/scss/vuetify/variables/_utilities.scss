@@ -63,5 +63,10 @@ $utilities: (
     property: cursor,
     class: cursor,
     values: auto default pointer wait text move not-allowed
+  ),
+  "overflow": (
+    property: overflow,
+    class: overflow,
+    values: visible hidden scroll auto clip visible
   )
 );

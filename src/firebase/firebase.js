@@ -4,9 +4,7 @@ import { connectStorageEmulator, getStorage } from 'firebase/storage';
 import { connectFunctionsEmulator, getFunctions } from 'firebase/functions';
 import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore';
 import { connectAuthEmulator, getAuth, onAuthStateChanged } from 'firebase/auth';
-
-// Activate Emulatorsgi
-const useEmulators = false;
+import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
 
 const firebaseConfig = {
   apiKey: process.env.VUE_APP_SKRIPTAG_FIREBASE_API_KEY,
@@ -15,24 +13,60 @@ const firebaseConfig = {
   storageBucket: process.env.VUE_APP_SKRIPTAG_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.VUE_APP_SKRIPTAG_FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.VUE_APP_SKRIPTAG_FIREBASE_APP_ID,
-  measurementId: process.env.NVUE_APP_SKRIPTAG_FIREBASE_MEASUREMENT_ID,
+  measurementId: process.env.VUE_APP_SKRIPTAG_FIREBASE_MEASUREMENT_ID,
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const storage = getStorage();
+const storage = getStorage(app);
 const functions = getFunctions(app);
 const db = getFirestore(app);
 const auth = getAuth(app);
 const getUserState = () => new Promise((resolve, reject) => onAuthStateChanged(auth, resolve, reject));
 
-// If  useEmulators is true, run all the emulators
+// Enable emulators.
+const usingEmulators = true;
+
+const emulate = {
+  storage: false,
+  functions: true,
+  firestore: false,
+  auth: false,
+};
+
+// If  usingEmulators run all the emulators
 // instead of production servers.
-if (useEmulators) {
-  connectStorageEmulator(storage, 'localhost', 5001);
-  connectFunctionsEmulator(functions, 'localhost', 5002);
-  connectFirestoreEmulator(db, 'localhost', 5003);
-  connectAuthEmulator(auth, 'http://localhost:5004', { disableWarnings: true });
+
+if (usingEmulators) {
+  if (emulate.storage) {
+    connectStorageEmulator(storage, 'localhost', 5001);
+  }
+
+  if (emulate.functions) {
+    connectFunctionsEmulator(functions, 'localhost', 5002);
+  }
+
+  if (emulate.firestore) {
+    connectFirestoreEmulator(db, 'localhost', 5003);
+  }
+
+  if (emulate.auth) {
+    connectAuthEmulator(auth, 'http://localhost:5004', { disableWarnings: true });
+  }
+}
+
+// appCheck debug token for development.
+self.FIREBASE_APPCHECK_DEBUG_TOKEN = process.env.VUE_APP_SKRIPTAG_FIREBASE_APP_CHECK_DEBUG_TOKEN_FROM_CI;
+
+initializeAppCheck(app, {
+  provider: new ReCaptchaV3Provider(process.env.VUE_APP_SKRIPTAG_FIREBASE_RECAPTCHA_PROVIDER_TOKEN),
+  isTokenAutoRefreshEnabled: true,
+});
+
+// Set the default region for admin SDK functions.
+// except when emulators are enabled.
+if (!usingEmulators) {
+  functions.region = 'europe-west1';
 }
 
 export { db, storage, auth, functions, getUserState };

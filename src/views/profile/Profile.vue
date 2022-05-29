@@ -64,7 +64,24 @@
               <div v-if="$vuetify.breakpoint.smAndUp" class="ml-13">
                 <v-row no-gutters>
                   <v-col cols="12">
-                    <v-chip class="mb-4" small :color="verified ? 'indigo darken-2' : 'orange darken-1'" text-color="white">
+                    <v-chip
+                      v-if="(profile.roles || []).includes('root')"
+                      class="mb-4 mr-3 elevation-6"
+                      small
+                      color="brown"
+                      text-color="white"
+                    >
+                      <v-avatar left>
+                        <v-icon small>mdi-lock</v-icon>
+                      </v-avatar>
+                      Root
+                    </v-chip>
+                    <v-chip
+                      class="mb-4 elevation-6"
+                      small
+                      :color="verified ? 'indigo darken-2' : 'orange darken-1'"
+                      text-color="white"
+                    >
                       <v-avatar left>
                         <v-icon small> {{ verificationInProgressLoader ? 'mdi-circle-slice-2' : 'mdi-account-star' }}</v-icon>
                       </v-avatar>
@@ -73,12 +90,7 @@
                         {{ verified ? 'Verified' : 'pending verification' }}
                       </span>
                     </v-chip>
-                    <v-chip v-if="(profile.roles || []).includes('root')" class="mb-4 ml-3" small color="pink" text-color="white">
-                      <v-avatar left>
-                        <v-icon small>mdi-lock</v-icon>
-                      </v-avatar>
-                      Root
-                    </v-chip>
+
                     <p class="mb-n2">{{ profile.email }}</p>
                   </v-col>
                   <v-col cols="12">
@@ -125,15 +137,9 @@
     <v-card-text class="px-8">
       <div class="d-flex justify-space-between mr-5 align-center">
         <div v-if="$route.name !== 'profile'" class="d-flex align-center white--text">
-          <h2 class="mb-6 mt-3 cursor-pointer" @click="$router.push('/profile')">Profile</h2>
+          <h2 class="mb-6 mt-3 cursor-pointer underlineHover" @click="$router.push('/profile')">Profile</h2>
           <v-icon class="mt-n2" size="25" dark> mdi-chevron-right</v-icon>
-          <h2 class="mb-6 mt-3">{{ $route.meta.title }}</h2>
-        </div>
-
-        <div>
-          <v-btn class="mx-2" color="grey">Activity logs</v-btn>
-          <v-btn class="mx-2" color="grey">Firebase console</v-btn>
-          <v-btn class="mx-2" color="grey">Insigts</v-btn>
+          <h2 class="mb-6 mt-3 underlineHover">{{ $route.meta.title }}</h2>
         </div>
       </div>
 

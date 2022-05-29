@@ -2,7 +2,7 @@
   <BaseDialog v-model="internalValue" no-toolbar dense close-only no-actions width="500" @close="close()">
     <v-card-title class="text-h5"> {{ title }}</v-card-title>
     <v-card-text>{{ text }}</v-card-text>
-    <v-card-subtitle class="mt-n3"> Enter your password to allow this.</v-card-subtitle>
+    <v-card-subtitle class="mt-n9"> Enter your password to allow this.</v-card-subtitle>
     <ValidationObserver ref="passwordField" slim>
       <form class="d-flex flex-column" @submit.prevent="validatePassword()">
         <v-card-text class="mt-n6">

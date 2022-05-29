@@ -1,14 +1,12 @@
 <template>
-  <vs-navbar v-model="active" style="position: relative" fixed shadow square>
-    <template #left>
-      <div>
-        <v-container>
-          <skriptag-title :class="{ 'ml-12 ': !$vuetify.breakpoint.smAndDown }" link small @click="$router.push('/')" />
-        </v-container>
-      </div>
-    </template>
+  <v-app-bar class="elevation-1" color="#24272c" dark absolute app>
+    <v-app-bar-title @click.native="$router.push('/')">
+      <skriptag-title class="overflow-visible cursor-pointer" :class="{ 'ml-2 ': !$vuetify.breakpoint.smAndDown }" link small />
+    </v-app-bar-title>
 
-    <template v-if="!$vuetify.breakpoint.smAndDown">
+    <v-spacer></v-spacer>
+
+    <!-- <template v-if="!$vuetify.breakpoint.smAndDown">
       <vs-navbar-group>
         Downloads
         <template #items>
@@ -28,46 +26,41 @@
         </template>
       </vs-navbar-group>
       <vs-navbar-item id="blog" :active="active == 'blog'"> Blog </vs-navbar-item>
+    </template> -->
+
+    <template v-if="!isLoggedIn && !$vuetify.breakpoint.smAndDown">
+      <BaseButton
+        v-for="button in [
+          { link: 'login', name: 'Login', icon: 'account-arrow-right' },
+          { link: 'signup', name: 'Sign up', icon: 'account-plus' },
+        ]"
+        v-show="$route.name !== button.link"
+        :key="button.name"
+        dark
+        color="grey darken-3"
+        class="ml-3"
+        @click="!$router.push(`${button.link}`)"
+      >
+        <v-icon left> mdi-{{ button.icon }}</v-icon
+        >{{ button.name }}
+      </BaseButton>
     </template>
 
-    <template #right>
-      <v-scale-transition hide-on-leave group>
-        <template v-if="!isLoggedIn && !$vuetify.breakpoint.smAndDown">
-          <BaseButton
-            v-for="button in [
-              { link: 'login', name: 'Login', icon: 'account-arrow-right' },
-              { link: 'signup', name: 'Sign up', icon: 'account-plus' },
-            ]"
-            :key="button.name"
-            dark
-            color="grey darken-3"
-            class="ml-3"
-            @click="$router.push(`${button.link}`)"
-          >
-            <v-icon left> mdi-{{ button.icon }}</v-icon
-            >{{ button.name }}
-          </BaseButton>
-        </template>
-      </v-scale-transition>
-
-      <v-scale-transition hide-on-leave>
-        <BaseButton v-if="isLoggedIn && !$vuetify.breakpoint.smAndDown" @click="logout">
-          {{ `Logout ${firstAndShortLast || ''}` }}
-        </BaseButton>
-      </v-scale-transition>
-      <v-burger v-if="$vuetify.breakpoint.smAndDown" :active="mobileMenu" type="spring" @updated="mobileMenu = !mobileMenu" />
-    </template>
-  </vs-navbar>
+    <v-scale-transition hide-on-leave>
+      <BaseButton v-if="isLoggedIn && !$vuetify.breakpoint.smAndDown" @click="logout">
+        {{ `Logout ${firstAndShortLast || ''}` }}
+      </BaseButton>
+    </v-scale-transition>
+    <v-burger v-if="$vuetify.breakpoint.smAndDown" :active="mobileMenu" type="spring" @updated="mobileMenu = !mobileMenu" />
+  </v-app-bar>
 </template>
 
 <script>
   import { sync, get, call } from 'vuex-pathify';
-  import baseButton from '@/components/base/baseButton.vue';
   // Utilities
 
   export default {
     name: 'DefaultAppBar',
-    components: { baseButton },
     data() {
       return {
         dropdown: [],

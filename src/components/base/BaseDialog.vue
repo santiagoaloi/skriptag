@@ -5,7 +5,7 @@
     :fullscreen="$vuetify.breakpoint.smAndDown || isMaximized || fullscreen"
     :hide-overlay="noOverlay || fullscreen"
     :overlay-opacity="0.9"
-    overlay-color="rgba(30, 30, 39, 0.7)"
+    overlay-color="rgba(30, 30, 39, 0.9)"
     class="d-flex"
     persistent
     no-click-animation
@@ -69,7 +69,7 @@
 
       <slot name="top"> </slot>
 
-      <v-card style="color: #ccc; overflow: hidden" color="#25272c" width="100%" :class="{ 'pa-2': !noGutters }" flat tile>
+      <v-card color="#282530" dark style="color: #ccc; overflow: hidden" width="100%" :class="{ 'pa-2': !noGutters }" flat tile>
         <v-container v-if="!noContainer" :fluid="fluid" :class="{ 'fill-height': filled }">
           <slot />
         </v-container>

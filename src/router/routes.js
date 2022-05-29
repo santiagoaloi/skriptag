@@ -8,6 +8,11 @@ export default [
   },
 
   {
+    path: '/logout',
+    name: 'logout',
+  },
+
+  {
     path: '/Login',
     name: 'login',
 
@@ -55,13 +60,47 @@ export default [
             next();
           }, 400);
         },
+        children: [
+          {
+            path: '/Profile/skriptag-edit/users',
+            name: 'skriptag-edit-users',
+            meta: {
+              requiresAuth: true,
+              title: 'Users',
+            },
+            component: () => import(/* webpackChunkName: 'profile-skriptag-edit-users' */ '@/views/profile/users/users.vue'),
+          },
+
+          {
+            path: '/Profile/skriptag-edit/roles',
+            name: 'skriptag-edit-roles',
+            meta: {
+              requiresAuth: true,
+              title: 'Roles',
+            },
+            component: () => import(/* webpackChunkName: 'profile-skriptag-edit-roles' */ '@/views/profile/roles/roles.vue'),
+          },
+
+          {
+            path: '/Profile/skriptag-edit/capabilities',
+            name: 'skriptag-edit-capabilities',
+            meta: {
+              requiresAuth: true,
+              title: 'Capabilities',
+            },
+            component: () =>
+              import(
+                /* webpackChunkName: 'profile-skriptag-edit-capabilities' */ '@/views/profile/capabilities/capabilities.vue'
+              ),
+          },
+        ],
       },
       {
         path: '/Profile/profile-edit',
         name: 'profile-edit',
         meta: {
           requiresAuth: true,
-          title: 'profile edit',
+          title: 'basic profile information',
         },
 
         component: () => import(/* webpackChunkName: 'profile-profile-edit' */ '@/views/profile/Profile-edit'),
@@ -71,7 +110,7 @@ export default [
         name: 'account-edit',
         meta: {
           requiresAuth: true,
-          title: 'account edit',
+          title: 'account details',
         },
 
         component: () => import(/* webpackChunkName: 'profile-account-edit' */ '@/views/profile/Account-edit'),

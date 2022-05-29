@@ -60,8 +60,15 @@
             </Validation-provider>
           </div>
         </v-col>
+        <v-col v-if="!recoveryMode" cols="12">
+          <div class="center">
+            <vs-checkbox v-model="isSessionPersisted" color="#000" class="ml-1">
+              {{ option2 }} Persist my session afer closing the browser or tab.
+            </vs-checkbox>
+          </div>
+        </v-col>
         <v-col cols="12">
-          <div class="ml-n1 mt-2">
+          <div class="mt-2">
             <template v-if="!recoveryMode">
               <Base-button :disabled="loading" class="mr-sm-3" @click="$emit('goBack')"> Other sign-in options</Base-button>
               <Base-button type="submit" :loading="loading"> Login</Base-button>
@@ -99,6 +106,7 @@
 
     computed: {
       loading: sync('loaders/authLoader'),
+      ...sync('authentication', ['isSessionPersisted']),
       ...get('authentication', ['isLoggedIn']),
     },
 

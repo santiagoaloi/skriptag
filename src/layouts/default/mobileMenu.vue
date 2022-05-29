@@ -1,5 +1,5 @@
 <template>
-  <v-list class="pa-0 mt-4" dark color="#24272c">
+  <v-list class="pa-0" dark color="#24272c">
     <template v-if="!isLoggedIn">
       <v-list-item
         @click="

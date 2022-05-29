@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-container :fluid="$vuetify.breakpoint.lgAndDown" class="pa-10">
+    <v-container :fluid="$vuetify.breakpoint.lgAndDown">
       <v-card ref="content" class="mx-auto transparent" flat min-height="35vh">
         <v-card-actions v-if="$vuetify.breakpoint.smAndUp">
           <v-text-field
@@ -123,9 +123,11 @@
     computed: {
       ...sync('authentication', ['capabilities']),
     },
-
+    mounted() {
+      this.getCapabilitiesSnaphot();
+    },
     methods: {
-      ...call('authentication', ['addCapability', 'removeCapability']),
+      ...call('authentication', ['addCapability', 'removeCapability', 'getCapabilitiesSnaphot']),
       ...call('snackbar/*'),
 
       triggerFn(fn, params) {

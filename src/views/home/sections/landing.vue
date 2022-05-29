@@ -1,7 +1,7 @@
 <template>
   <base-split-2 src="https://media.skriptag.com/img/2.svg" v-bind="$attrs">
+    <v-chip color="pink" dark small>Beta 1.1.4</v-chip>
     <skriptag-title large class="mb-4" />
-
     <article>
       <h2 class="font-weight-light">
         Level up your <strong>skills</strong> and launch your career as a <strong>developer</strong> - Find learning content,
@@ -13,6 +13,8 @@
       Learn coding , download free and premium application templates, access JS/VueJS training material, participate in Skriptag's
       blogs and product reviews.
     </p>
+
+    <v-btn color="success" @click="testListAllUsers()">Test list users</v-btn>
   </base-split-2>
 </template>
 <script>
@@ -20,7 +22,7 @@
   import baseSplit2 from '@/components/base/baseSplit-2.vue';
 
   export default {
-    name: 'LoginSlide',
+    name: 'LandingPage',
     components: { baseSplit2 },
     props: {
       index: {
@@ -39,6 +41,7 @@
 
     methods: {
       ...call('app', ['sleep']),
+      ...call('authentication', ['testListAllUsers']),
     },
   };
 </script>

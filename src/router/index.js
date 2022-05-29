@@ -3,6 +3,7 @@ import Router from 'vue-router';
 import { getUserState } from '@/firebase/firebase';
 import { setUserAndProfile } from '@/utils/user-profile.js';
 import allRoutes from './routes';
+import { store } from '@/store';
 
 const routes = [
   {
@@ -26,6 +27,7 @@ router.beforeEach(async (to, _from, next) => {
   // if a user is authenticated , the user object will be returned in isAuth.
   const isAuth = await getUserState();
 
+  const isLogoutRoute = to.matched.some((record) => record.name === 'logout');
   const isLoginPageAndAuthenticated = to.matched.some((record) => record.name === 'login' && isAuth);
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
 
@@ -40,6 +42,12 @@ router.beforeEach(async (to, _from, next) => {
   // route to the login page.
   if (requiresAuth && !isAuth) {
     next('/login');
+    return;
+  }
+
+  if (isLogoutRoute) {
+    await store.dispatch('authentication/logout');
+    next('/');
     return;
   }
 
