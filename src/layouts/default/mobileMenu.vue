@@ -111,7 +111,6 @@
     data() {
       return {
         downloads: [
-          ['Templates', '$mdiApplicationBracketsOnline'],
           ['Freebies', '$mdiCurrencyUsdOff'],
           ['Courses', '$mdiBookOpenPageVariantOutline'],
         ],

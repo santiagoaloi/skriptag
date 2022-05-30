@@ -7,7 +7,7 @@
           flat
           height="240"
           class="d-flex align-center elevation-14"
-          :transition="false"
+          transition="fade-transition"
           style="color: #ccc"
           gradient="to top right, rgba(0,0,0,.73), rgba(50,50,50,.7)"
           @load="imgBannerLoaded = true"
@@ -36,7 +36,11 @@
           <input ref="coverInput" accept="image/*" style="display: none" type="file" @change="uploadCoverPhoto()" />
           <input ref="avatarInput" accept="image/*" style="display: none" type="file" @change="uploadProfilePhoto()" />
 
-          <div :class="$vuetify.breakpoint.smAndUp ? 'ml-13' : 'justify-center'" class="d-flex align-center justify-start">
+          <div
+            v-if="profile"
+            :class="$vuetify.breakpoint.smAndUp ? 'ml-13' : 'justify-center'"
+            class="d-flex align-center justify-start"
+          >
             <v-badge
               offset-x="40"
               offset-y="34"

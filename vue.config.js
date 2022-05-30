@@ -1,7 +1,13 @@
 module.exports = {
   // https://cli.vuejs.org/config/#css-extract
+
+  configureWebpack: {
+    devtool: 'source-map',
+  },
+
   css: {
-    extract: { ignoreOrder: true },
+    extract: process.env.NODE_ENV === 'production' && { ignoreOrder: true },
+    sourceMap: process.env.NODE_ENV === 'production',
     loaderOptions: {
       sass: {
         additionalData: "@import '~@/assets/scss/vuetify/variables'",

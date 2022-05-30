@@ -670,13 +670,7 @@ const getters = {
 
   profile: (_state, _getters) => {
     if (_getters.isLoggedIn) {
-      if (_getters.isAuthExternalProvider) {
-        return { ..._state.user?.providerData[0], metadata: _state.user?.metadata, ..._state.profile };
-      }
-
-      if (!_getters.isAuthExternalProvider) {
-        return { metadata: _state.user?.metadata, ..._state.profile };
-      }
+      return { metadata: _state.user?.metadata, ..._state.profile };
     }
   },
 

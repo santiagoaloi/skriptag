@@ -1,6 +1,6 @@
 <template>
   <v-responsive style="color: #ccc" min-width="200" v-on="$listeners">
-    <component
+    <!-- <component
       :is="size"
       v-animation:shrink="{ link: link, longPress: true }"
       data-aos="fade"
@@ -16,6 +16,11 @@
         data-aos-duration="800"
         >ˆ
       </span>
+    </component> -->
+
+    <component :is="size" v-animation:shrink="{ link: link, longPress: true }"
+      >Skriptag
+      <span :class="small ? 'ml-n10' : large ? 'ml-n16' : 'ml-n10'" class="primary-font-color">ˆ </span>
     </component>
   </v-responsive>
 </template>

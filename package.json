@@ -16,6 +16,7 @@
     "core-js": "^3.6.5",
     "firebase": "^9.6.9",
     "localforage": "^1.10.0",
+    "minify-css-string": "^1.0.0",
     "vee-validate": "3.4.5",
     "vue": "^2.6.11",
     "vue-burger": "^1.1.0",
