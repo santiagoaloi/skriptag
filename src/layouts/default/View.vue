@@ -1,9 +1,9 @@
 <template>
   <v-main>
     <MobileMenuView v-if="mobileMenu && $vuetify.breakpoint.smAndDown" />
-    <v-fade-transition hide-on-leave>
-      <router-view v-if="!mobileMenu || !$vuetify.breakpoint.smAndDown"></router-view>
-    </v-fade-transition>
+    <keep-alive>
+      <router-view v-if="!mobileMenu || !$vuetify.breakpoint.smAndDown" :key="$route.fullPath"></router-view>
+    </keep-alive>
   </v-main>
 </template>
 

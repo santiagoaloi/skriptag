@@ -24,6 +24,8 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 const getUserState = () => new Promise((resolve, reject) => onAuthStateChanged(auth, resolve, reject));
 
+const development = process.env.NODE_ENV === 'development';
+
 // Enable emulators.
 const usingEmulators = false;
 
@@ -37,7 +39,7 @@ const emulate = {
 // If  usingEmulators run all the emulators
 // instead of production servers.
 
-if (usingEmulators) {
+if (usingEmulators && development) {
   if (emulate.storage) {
     connectStorageEmulator(storage, 'localhost', 5001);
   }
@@ -55,8 +57,10 @@ if (usingEmulators) {
   }
 }
 
-// appCheck debug token for development.
-self.FIREBASE_APPCHECK_DEBUG_TOKEN = process.env.VUE_APP_SKRIPTAG_FIREBASE_APP_CHECK_DEBUG_TOKEN_FROM_CI;
+if (development) {
+  // appCheck debug token for development.
+  self.FIREBASE_APPCHECK_DEBUG_TOKEN = process.env.VUE_APP_SKRIPTAG_FIREBASE_APP_CHECK_DEBUG_TOKEN_FROM_CI;
+}
 
 initializeAppCheck(app, {
   provider: new ReCaptchaV3Provider(process.env.VUE_APP_SKRIPTAG_FIREBASE_RECAPTCHA_PROVIDER_TOKEN),

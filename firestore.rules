@@ -9,7 +9,7 @@ service cloud.firestore {
   }
 
   //   - Authenticated user can read its own data.
-  //   - Authenticated user can read its own data.
+  //   - Authenticated user can create its own data.
   //   - Updates are allowed if no fields are added.
   match /users/{uid} {
   allow read, create: if request.auth.uid == uid; 

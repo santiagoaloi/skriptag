@@ -31,13 +31,13 @@
           @click="$router.push(`/profile/${card.route}`)"
         >
           <v-card
-            :ripple="{ class: 'rounded-xl, ripple-opacity' }"
+            :ripple="{ class: 'rounded-lg, ripple-opacity' }"
             height="100%"
-            class="transparent hoverCard rounded-xl cursor-pointer"
+            class="transparent hoverCard rounded-lg cursor-pointer"
             dark
             :disabled="card.disabled"
           >
-            <v-img class="rounded-t-xl" :src="card.img" v-bind="imageOptions()"> </v-img>
+            <v-img class="rounded-t-lg" :src="card.img" v-bind="imageOptions()"> </v-img>
             <v-container>
               <div class="pa-3" style="color: #ccc">
                 <h4>{{ card.title }}</h4>

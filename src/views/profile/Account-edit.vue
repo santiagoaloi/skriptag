@@ -27,10 +27,10 @@
                     @focus="resetValidation()"
                   >
                     <template #icon>
-                      <v-icon dark>mdi-account</v-icon>
+                      <v-icon dark>$mdiAccount</v-icon>
                     </template>
                     <template #message-danger>
-                      <v-icon v-if="failed" color="pink" style="margin-top: -1px" x-small dark>mdi-alert-circle-outline</v-icon>
+                      <v-icon v-if="failed" color="pink" style="margin-top: -1px" x-small dark>$mdiAlertCircle</v-icon>
                       {{ errors[0] }}
                     </template>
                   </vs-input>
@@ -55,10 +55,10 @@
                     @focus="resetValidation()"
                   >
                     <template #icon>
-                      <v-icon dark>mdi-lock</v-icon>
+                      <v-icon dark>$mdiLock</v-icon>
                     </template>
                     <template #message-danger>
-                      <v-icon v-if="failed" color="pink" style="margin-top: -1px" x-small dark>mdi-alert-circle-outline</v-icon>
+                      <v-icon v-if="failed" color="pink" style="margin-top: -1px" x-small dark>$mdiAlertCircle</v-icon>
                       {{ errors[0] }}
                     </template>
                   </vs-input>
@@ -83,10 +83,10 @@
                     @focus="resetValidation()"
                   >
                     <template #icon>
-                      <v-icon dark>mdi-lock</v-icon>
+                      <v-icon dark>$mdiLock</v-icon>
                     </template>
                     <template #message-danger>
-                      <v-icon v-if="failed" color="pink" style="margin-top: -1px" x-small dark>mdi-alert-circle-outline</v-icon>
+                      <v-icon v-if="failed" color="pink" style="margin-top: -1px" x-small dark>$mdiAlertCircle</v-icon>
                       {{ errors[0] }}
                     </template>
                   </vs-input>
@@ -101,7 +101,7 @@
                     type="submit"
                     dark
                     color="#2a3143"
-                    ><v-icon left> mdi-refresh</v-icon><span>Update password </span></v-btn
+                    ><v-icon left> $mdiRefresh</v-icon><span>Update password </span></v-btn
                   >
                 </div>
               </v-col>
@@ -110,7 +110,7 @@
                 <div class="mt-4">
                   <h3 class="mb-2">Remove account</h3>
                   <p>
-                    <v-icon small style="color: #ccc">mdi-help-circle-outline</v-icon>
+                    <v-icon small style="color: #ccc">$mdiHelpCircleOutline</v-icon>
                     Removing your account will also remove everything related to it, like blog posts, comments, downloadable
                     content and so on. This action cannot be undone.
                   </p>
@@ -119,7 +119,7 @@
 
               <v-col cols="12">
                 <v-btn :block="!$vuetify.breakpoint.smAndUp" dark color="#de355f" @click="removeAccountDialog = true">
-                  <v-icon :left="$vuetify.breakpoint.lgAndUp"> mdi-delete-outline</v-icon>
+                  <v-icon :left="$vuetify.breakpoint.lgAndUp"> $mdiDeleteOutline</v-icon>
                   <span v-if="$vuetify.breakpoint.xs || (!$vuetify.breakpoint.md && !$vuetify.breakpoint.sm) || verified">
                     Remove account</span
                   >
@@ -133,13 +133,13 @@
                   :class="{ 'ml-3': $vuetify.breakpoint.smAndUp, 'mt-3': !$vuetify.breakpoint.smAndUp }"
                   @click="verifyAccountDialog = true"
                 >
-                  <v-icon left> mdi-email-seal</v-icon>Resend verification email</v-btn
+                  <v-icon left> $mdiEmailSeal</v-icon>Resend verification email</v-btn
                 >
               </v-col>
               <v-col cols="12">
                 <v-divider class="my-4" style="background: #404040"></v-divider>
                 <v-btn :ripple="false" class="mr-2 my-2" dark color="#1b1e25" @click="close()"
-                  ><v-icon left>mdi-close</v-icon>Close</v-btn
+                  ><v-icon left>$mdiClose</v-icon>Close</v-btn
                 >
               </v-col>
             </v-row>

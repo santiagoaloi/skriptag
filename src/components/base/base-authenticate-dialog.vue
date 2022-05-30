@@ -24,10 +24,10 @@
                 @focus="resetValidation()"
               >
                 <template #icon>
-                  <v-icon dark>mdi-lock</v-icon>
+                  <v-icon dark>$mdiLock </v-icon>
                 </template>
                 <template #message-danger>
-                  <v-icon v-if="failed" color="pink" style="margin-top: -1px" x-small dark>mdi-alert-circle-outline</v-icon>
+                  <v-icon v-if="failed" color="pink" style="margin-top: -1px" x-small dark> $mdiAlertCircleOutline </v-icon>
                   {{ errors[0] }}
                 </template>
               </vs-input>

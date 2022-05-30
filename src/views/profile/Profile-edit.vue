@@ -23,10 +23,10 @@
                       @focus="resetValidation()"
                     >
                       <template #icon>
-                        <v-icon dark>mdi-account</v-icon>
+                        <v-icon dark>$mdiAccount</v-icon>
                       </template>
                       <template #message-danger>
-                        <v-icon v-if="failed" color="pink" style="margin-top: -1px" x-small dark>mdi-alert-circle-outline</v-icon>
+                        <v-icon v-if="failed" color="pink" style="margin-top: -1px" x-small dark>$mdiAlertCircleOutline</v-icon>
                         {{ errors[0] }}
                       </template>
                     </vs-input>
@@ -51,10 +51,10 @@
                       @focus="resetValidation()"
                     >
                       <template #icon>
-                        <v-icon dark>mdi-account</v-icon>
+                        <v-icon dark>$mdiAccount</v-icon>
                       </template>
                       <template #message-danger>
-                        <v-icon v-if="failed" color="pink" style="margin-top: -1px" x-small dark>mdi-alert-circle-outline</v-icon>
+                        <v-icon v-if="failed" color="pink" style="margin-top: -1px" x-small dark>$mdiAlertCircleOutline</v-icon>
                         {{ errors[0] }}
                       </template>
                     </vs-input>
@@ -73,7 +73,7 @@
                 dark
                 color="#1b1e25"
                 @click="close()"
-                ><v-icon left>mdi-close</v-icon>Close</v-btn
+                ><v-icon left>$mdiClose</v-icon>Close</v-btn
               >
               <v-btn
                 :ripple="false"
@@ -83,7 +83,7 @@
                 dark
                 color="#2a3143"
                 :loading="loading"
-                ><v-icon left> mdi-check-bold</v-icon>Save</v-btn
+                ><v-icon left> $mdiCheck-bold</v-icon>Save</v-btn
               >
             </div>
           </v-col>

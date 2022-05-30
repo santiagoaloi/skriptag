@@ -8,7 +8,7 @@
     </div>
     <ValidationObserver ref="loginForm" slim>
       <form class="d-flex flex-column" @submit.prevent="validateLoginForm()">
-        <BaseLink v-if="!recoveryMode" icon="mdi-lock" @click="recoveryMode = true">Recover my password</BaseLink>
+        <BaseLink v-if="!recoveryMode" icon="$mdiLock" @click="recoveryMode = true">Recover my password</BaseLink>
         <v-row>
           <v-col cols="12" lg="10">
             <small class="pl-1">Email</small>
@@ -28,10 +28,10 @@
                   @focus="resetValidation()"
                 >
                   <template #icon>
-                    <v-icon dark>mdi-account</v-icon>
+                    <v-icon dark>$mdiAccount</v-icon>
                   </template>
                   <template #message-danger>
-                    <v-icon v-if="failed" color="pink" style="margin-top: -1px" x-small dark>mdi-alert-circle-outline</v-icon>
+                    <v-icon v-if="failed" color="pink" style="margin-top: -1px" x-small dark>$mdiAlertCircleOutline</v-icon>
                     {{ errors[0] }}
                   </template>
                 </vs-input>
@@ -57,10 +57,10 @@
                   @focus="resetValidation()"
                 >
                   <template #icon>
-                    <v-icon dark>mdi-lock</v-icon>
+                    <v-icon dark>$mdiLock</v-icon>
                   </template>
                   <template #message-danger>
-                    <v-icon v-if="failed" color="pink" style="margin-top: -1px" x-small dark>mdi-alert-circle-outline</v-icon>
+                    <v-icon v-if="failed" color="pink" style="margin-top: -1px" x-small dark>$mdiAlertCircleOutline</v-icon>
                     {{ errors[0] }}
                   </template>
                 </vs-input>

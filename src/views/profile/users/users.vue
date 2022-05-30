@@ -17,11 +17,11 @@
 
           <Base-button small class="ml-2" large> Invite user</Base-button>
           <vs-tooltip shadow circle color="#ccc">
-            <Base-button small class="ml-2" large @click="getUsersSnapshot()"> <v-icon> mdi-refresh</v-icon></Base-button>
+            <Base-button small class="ml-2" large @click="getUsersSnapshot()"> <v-icon> $mdiRefresh</v-icon></Base-button>
             <template #tooltip> Reload </template>
           </vs-tooltip>
 
-          <Base-button small class="ml-2" large> <v-icon> mdi-dots-vertical</v-icon></Base-button>
+          <Base-button small class="ml-2" large> <v-icon> $mdiDotsVertical</v-icon></Base-button>
         </v-card-actions>
         <v-fade-transition hide-on-leave>
           <v-data-table
@@ -81,14 +81,14 @@
                       >
                         <template v-if="provider === 'google.com'">
                           <vs-tooltip top shadow circle color="#ccc">
-                            <v-icon class="mx-1" small> mdi-google</v-icon>
+                            <v-icon class="mx-1" small> $mdiGoogle</v-icon>
                             <template #tooltip> Google</template>
                           </vs-tooltip>
                         </template>
 
                         <template v-if="provider === 'password'">
                           <vs-tooltip top shadow circle color="#ccc">
-                            <v-icon class="mx-1" small> mdi-email</v-icon>
+                            <v-icon class="mx-1" small> $mdiEmail</v-icon>
                             <template #tooltip> Password</template>
                           </vs-tooltip>
                         </template>
@@ -111,7 +111,7 @@
                     <div class="d-flex justify-center">
                       <vs-tooltip shadow circle color="#ccc">
                         <v-fade-transition>
-                          <v-icon v-if="user.hover" class="cursor-pointer">mdi-content-copy</v-icon>
+                          <v-icon v-if="user.hover" class="cursor-pointer">$mdiContentCopy</v-icon>
                         </v-fade-transition>
                         <template #tooltip> Copy UID </template>
                       </vs-tooltip>
@@ -121,7 +121,7 @@
                           <template #activator="{ on }">
                             <v-fade-transition>
                               <div v-if="user.hover">
-                                <v-icon class="cursor-pointer ml-3" v-on="on">mdi-dots-vertical</v-icon>
+                                <v-icon class="cursor-pointer ml-3" v-on="on">$mdiDotsVertical</v-icon>
                               </div>
                             </v-fade-transition>
                           </template>
@@ -149,10 +149,10 @@
           </v-data-table>
         </v-fade-transition>
 
-        <v-container v-if="!filteredUsers.length && !loading" fluid>
+        <v-container v-if="!filteredUsers.length && !loading && usersSnapshot" fluid>
           <v-banner dark outlined rounded="">
             <v-avatar slot="icon" color="indigo" size="40">
-              <v-icon icon="mdi-lock" color="white"> mdi-lock </v-icon>
+              <v-icon icon="$mdiLock" color="white"> $mdiLock </v-icon>
             </v-avatar>
 
             <h4 style="color: #adbac7">
@@ -261,7 +261,7 @@
     },
     computed: {
       ...get('authentication', ['userId', 'fullName']),
-      ...sync('authentication', ['users', 'roles', 'capabilities']),
+      ...sync('authentication', ['users', 'roles', 'capabilities', 'isBooted@usersSnapshot']),
 
       filteredUsers() {
         const search = this.search.toString().toLowerCase();
@@ -461,11 +461,11 @@
 
       getStatusIcon(user) {
         if (user.disabled) {
-          return 'mdi-close-octagon';
+          return '$mdiClose-octagon';
         }
 
         if (user.verified) {
-          return 'mdi-check';
+          return '$mdiCheck';
         }
 
         if (!user.verified) {

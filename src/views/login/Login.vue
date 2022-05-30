@@ -19,16 +19,16 @@
             :width="$vuetify.breakpoint.smAndDown ? '100%' : 350"
           >
             <Base-button :loading="loading" class="my-3" block @click="google()">
-              <v-icon left> mdi-google</v-icon> Sign-in with Google</Base-button
+              <v-icon left> $mdiGoogle</v-icon> Sign-in with Google</Base-button
             >
-            <Base-button disabled class="my-3" block> <v-icon left> mdi-github</v-icon> Sign-in with Github</Base-button>
+            <Base-button disabled class="my-3" block> <v-icon left> $mdiGithub</v-icon> Sign-in with Github</Base-button>
 
             <div class="d-flex align-center">
               <v-divider class="grey darken-3" /> <span class="mx-3" style="color: #ccc"> or </span>
               <v-divider class="grey darken-3" />
             </div>
             <Base-button class="mt-2" block @click="mode = 'email'">
-              <v-icon left> mdi-mail</v-icon> Sign-in with Email</Base-button
+              <v-icon left> $mdiEmail</v-icon> Sign-in with Email</Base-button
             >
           </v-sheet>
         </v-fade-transition>

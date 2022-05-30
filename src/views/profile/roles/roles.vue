@@ -17,7 +17,7 @@
             <template #tooltip> Reload </template>
           </vs-tooltip>
 
-          <Base-button small class="ml-2" large> <v-icon> mdi-dots-vertical</v-icon></Base-button>
+          <Base-button small class="ml-2" large> <v-icon> $mdiDotsVertical</v-icon></Base-button>
         </v-card-actions>
         <v-fade-transition>
           <v-data-table
@@ -49,7 +49,7 @@
                           <template #activator="{ on }">
                             <v-fade-transition>
                               <div v-if="role.hover">
-                                <v-icon class="cursor-pointer ml-3" v-on="on">mdi-dots-vertical</v-icon>
+                                <v-icon class="cursor-pointer ml-3" v-on="on">$mdiDotsVertical</v-icon>
                               </div>
                             </v-fade-transition>
                           </template>

@@ -1,19 +1,17 @@
 import Vue from 'vue';
-import Vuetify from 'vuetify/lib';
+import Vuetify from 'vuetify/lib/framework';
 import colors from 'vuetify/lib/util/colors';
-import '@mdi/font/css/materialdesignicons.css'; // Ensure you are using css-loader
+import { icons } from './icons';
 
 Vue.use(Vuetify);
 
 export default new Vuetify({
+  icons,
   theme: {
     themes: {
       light: {
         primary: colors.teal.base,
       },
     },
-  },
-  icons: {
-    iconfont: 'mdi', // default - only for display purposes
   },
 });

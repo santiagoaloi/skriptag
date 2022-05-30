@@ -15,21 +15,18 @@ export default [
   {
     path: '/Login',
     name: 'login',
-
     component: () => import(/* webpackChunkName: 'login-page' */ '@/views/login'),
   },
 
   {
     path: '/Signup',
     name: 'signup',
-
     component: () => import(/* webpackChunkName: 'signup-page' */ '@/views/signup'),
   },
 
   {
     path: '/AccountMgmt',
     name: 'accountMgmt',
-
     component: () => import(/* webpackChunkName: 'account-mgmt' */ '@/views/account-mgmt'),
   },
 

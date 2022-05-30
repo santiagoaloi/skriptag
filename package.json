@@ -2,6 +2,7 @@
   "name": "skriptag",
   "version": "0.1.0",
   "private": true,
+  "author": "Santiago Aloi",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -10,6 +11,7 @@
     "deploy-functions": "firebase deploy --only functions"
   },
   "dependencies": {
+    "@mdi/js": "^6.7.96",
     "aos": "^2.3.4",
     "core-js": "^3.6.5",
     "firebase": "^9.6.9",
@@ -24,7 +26,6 @@
     "vuex-persist": "^3.1.3"
   },
   "devDependencies": {
-    "@mdi/font": "^6.7.96",
     "@vue/cli-plugin-babel": "^5.0.4",
     "@vue/cli-plugin-router": "^5.0.4",
     "@vue/cli-plugin-vuex": "^5.0.4",
@@ -43,7 +44,6 @@
     "vue-cli-plugin-vuetify": "latest",
     "vue-template-compiler": "^2.6.11",
     "vuetify-loader": "^1.7.0",
-    "vuex-pathify": "^1.4.5",
-    "webfontloader": "^1.6.28"
+    "vuex-pathify": "^1.4.5"
   }
 }

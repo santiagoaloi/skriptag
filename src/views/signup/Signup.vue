@@ -13,7 +13,7 @@
             border="left"
             elevation="6"
             colored-border
-            icon="mdi-chevron-up"
+            icon="$mdiChevronUp"
           >
             To signup with google or github,
             <span class="cursor-pointer teal--text text--accent-4" @click="$router.push('login')"> go to the login page</span>. An

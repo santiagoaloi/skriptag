@@ -47,6 +47,9 @@ const state = {
   response: '',
   usersLoaded: false,
   isSessionPersisted: true,
+  isBooted: {
+    usersSnapshot: false,
+  },
 };
 
 const mutations = make.mutations(state);
@@ -378,6 +381,7 @@ const actions = {
       router.push('/profile');
       store.set('loaders/signInWithGoogle', false);
     } catch ({ ...error }) {
+      console.log(error.code);
       store.set('loaders/signInWithGoogle', false);
     }
   },
@@ -585,6 +589,7 @@ const actions = {
             const profile = document.data();
             return { ...profile, authUser: userMap.get(profile.uid) || {}, hover: false };
           });
+          state.isBooted.usersSnapshot = true;
           store.set('authentication/users', users);
         });
 

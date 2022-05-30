@@ -46,6 +46,7 @@
   /* Gradient color font styling */
   article {
     background: linear-gradient(to right, rgb(255, 255, 255), rgb(134, 195, 195));
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }

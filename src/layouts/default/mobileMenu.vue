@@ -16,7 +16,7 @@
 
       <v-list-item @click="$router.push('signup'), (mobileMenu = false)">
         <v-list-item-icon>
-          <v-icon>mdi-home</v-icon>
+          <v-icon>$mdiHome</v-icon>
         </v-list-item-icon>
 
         <v-list-item-title>Signup</v-list-item-title>
@@ -49,7 +49,7 @@
 
     <v-list-item @click="">
       <v-list-item-icon>
-        <v-icon>mdi-book-open-page-variant-outline</v-icon>
+        <v-icon>$mdiBookOpenPageVariantOutline</v-icon>
       </v-list-item-icon>
       <v-list-item-title>Blog</v-list-item-title>
     </v-list-item>
@@ -94,7 +94,7 @@
       "
     >
       <v-list-item-icon>
-        <v-icon>mdi-logout-variant</v-icon>
+        <v-icon>$mdiLogoutVariant</v-icon>
       </v-list-item-icon>
 
       <v-list-item-title>logout</v-list-item-title>
@@ -111,15 +111,15 @@
     data() {
       return {
         downloads: [
-          ['Templates', 'mdi-application-brackets-outline'],
-          ['Freebies', 'mdi-currency-usd-off'],
-          ['Courses', 'mdi-book-open-page-variant-outline'],
+          ['Templates', '$mdiApplicationBracketsOnline'],
+          ['Freebies', '$mdiCurrencyUsdOff'],
+          ['Courses', '$mdiBookOpenPageVariantOutline'],
         ],
         training: [
-          ['Firebase', 'mdi-firebase'],
-          ['VueJS', 'mdi-vuejs'],
-          ['Vuetify', 'mdi-vuetify'],
-          ['Javascript', 'mdi-language-javascript'],
+          ['Firebase', '$mdiFirebase'],
+          ['VueJS', '$mdiVuejs'],
+          ['Vuetify', '$mdiVuetify'],
+          ['Javascript', '$mdiLanguageJavascript'],
         ],
       };
     },

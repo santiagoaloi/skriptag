@@ -4,10 +4,10 @@
 
     <v-list nav dense>
       <v-menu dark offset-y offset-x :nudge-left="-10">
-        <template #activator="{ on, attrs }">
+        <template #activator="{ on }">
           <v-list-item link v-on="on">
             <v-list-item-icon>
-              <v-icon>mdi-folder</v-icon>
+              <v-icon>$mdiFolder</v-icon>
             </v-list-item-icon>
             <v-list-item-title>My Files</v-list-item-title>
           </v-list-item>

@@ -29,25 +29,25 @@
 
         <template v-if="closeOnly || !noActions">
           <v-btn x-small color="white" outlined text fab icon dark @click.stop="close">
-            <v-icon>{{ fullscreen ? 'mdi-chevron-down' : 'mdi-close' }}</v-icon>
+            <v-icon>{{ fullscreen ? '$mdiChevronDown' : '$mdiClose' }}</v-icon>
           </v-btn>
         </template>
 
         <template v-if="saveOnly">
           <v-btn v-if="!closeOnly" x-small color="white" outlined text fab :loading="loading" @click.stop="save">
-            <v-icon color="green lighten-2"> mdi-check </v-icon>
+            <v-icon color="green lighten-2"> $mdiCheck </v-icon>
           </v-btn>
         </template>
 
         <template v-if="showRemove">
           <v-btn x-small color="white" outlined text fab class="mx-1" icon dark :loading="loading" @click.stop="remove">
-            <v-icon color="#00B985"> mdi-delete-empty-outline </v-icon>
+            <v-icon color="#00B985"> $mdiDeleteEmptyOutline </v-icon>
           </v-btn>
         </template>
 
         <template v-if="!noActions && !saveOnly">
           <v-btn v-if="!closeOnly" x-small color="white" outlined text fab class="mx-1" :loading="loading" @click.stop="save">
-            <v-icon color="green lighten-2"> mdi-check </v-icon>
+            <v-icon color="green lighten-2"> $mdiCheck </v-icon>
           </v-btn>
 
           <v-btn
@@ -62,7 +62,7 @@
             class="ml-2"
             @click.stop="close"
           >
-            <v-icon>{{ fullscreen ? 'mdi-chevron-down' : 'mdi-close' }}</v-icon>
+            <v-icon>{{ fullscreen ? '$mdiChevronDown' : '$mdiClose' }}</v-icon>
           </v-btn>
         </template>
       </v-toolbar>

@@ -31,8 +31,8 @@
     <template v-if="!isLoggedIn && !$vuetify.breakpoint.smAndDown">
       <BaseButton
         v-for="button in [
-          { link: 'login', name: 'Login', icon: 'account-arrow-right' },
-          { link: 'signup', name: 'Sign up', icon: 'account-plus' },
+          { link: 'login', name: 'Login', icon: '$mdiAccountArrowRight' },
+          { link: 'signup', name: 'Sign up', icon: '$mdiAccountPlus' },
         ]"
         v-show="$route.name !== button.link"
         :key="button.name"
@@ -41,7 +41,7 @@
         class="ml-3"
         @click="!$router.push(`${button.link}`)"
       >
-        <v-icon left> mdi-{{ button.icon }}</v-icon
+        <v-icon left> {{ button.icon }}</v-icon
         >{{ button.name }}
       </BaseButton>
     </template>
@@ -57,10 +57,12 @@
 
 <script>
   import { sync, get, call } from 'vuex-pathify';
+
   // Utilities
 
   export default {
     name: 'DefaultAppBar',
+
     data() {
       return {
         dropdown: [],

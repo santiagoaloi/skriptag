@@ -14,7 +14,7 @@
     </div>
     <template #action="{ attrs }">
       <v-btn dark text fab x-small v-bind="attrs" @click="snackbar.data.value = false">
-        <v-icon>mdi-close</v-icon>
+        <v-icon>$mdiClose</v-icon>
       </v-btn>
     </template>
   </v-snackbar>

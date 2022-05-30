@@ -30,7 +30,7 @@
                     :progress="getPasswordComplexity(newPassword)"
                   >
                     <template #icon>
-                      <v-icon dark>mdi-lock</v-icon>
+                      <v-icon dark>$mdiLock</v-icon>
                     </template>
                     <template v-if="!newPassword" #message-danger> {{ errors[0] }} </template>
                   </vs-input>
@@ -56,7 +56,7 @@
                     placeholder="New password"
                   >
                     <template #icon>
-                      <v-icon dark>mdi-lock</v-icon>
+                      <v-icon dark>$mdiLock</v-icon>
                     </template>
                     <template #message-danger> {{ errors[0] }} </template>
                   </vs-input>
