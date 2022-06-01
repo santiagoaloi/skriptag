@@ -31,7 +31,7 @@ const usingEmulators = false;
 
 const emulate = {
   storage: false,
-  functions: true,
+  functions: false,
   firestore: false,
   auth: false,
 };
@@ -68,9 +68,8 @@ initializeAppCheck(app, {
 });
 
 // Set the default region for admin SDK functions.
-// except when emulators are enabled.
-if (!usingEmulators) {
-  functions.region = 'europe-west1';
-}
+// The region has to match the CF region.
+// Otherwise CORS errors will happen.
+functions.region = 'europe-west1';
 
 export { db, storage, auth, functions, getUserState };

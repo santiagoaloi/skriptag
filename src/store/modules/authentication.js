@@ -47,9 +47,6 @@ const state = {
   response: '',
   usersLoaded: false,
   isSessionPersisted: true,
-  isBooted: {
-    usersSnapshot: false,
-  },
 };
 
 const mutations = make.mutations(state);
@@ -72,10 +69,10 @@ const actions = {
     const veriyUser = httpsCallable(functions, 'verifiyUserByEmail');
     const result = await veriyUser(email);
 
-    if (result.data.verified) {
-      dispatch('snackbar/snackbarSuccess', `Your account ${email} is now verified.`, { root: true });
-      store.set('loaders/verificationInProgressLoader', false);
-    }
+    if (!result.data.verified) return;
+
+    dispatch('snackbar/snackbarSuccess', `Your account ${email} is now verified.`, { root: true });
+    store.set('loaders/verificationInProgressLoader', false);
   },
 
   // Admin SDK, disable any account matching the email.
@@ -84,11 +81,11 @@ const actions = {
       const disableAccount = httpsCallable(functions, 'disableUserByEmail');
       const result = await disableAccount(email);
 
-      if (result.data.disabled) {
-        return {
-          disabled: true,
-        };
-      }
+      if (!result.data.disabled) return;
+
+      return {
+        disabled: true,
+      };
     } catch ({ ...error }) {
       dispatch('errors/authMessagesSnackbar', error.code, { root: true });
     }
@@ -100,11 +97,11 @@ const actions = {
       const enableAccount = httpsCallable(functions, 'enableUserByEmail');
       const result = await enableAccount(email);
 
-      if (result.data.enabled) {
-        return {
-          enabled: true,
-        };
-      }
+      if (!result.data.enabled) return;
+
+      return {
+        enabled: true,
+      };
     } catch ({ ...error }) {
       dispatch('errors/authMessagesSnackbar', error.code, { root: true });
     }
@@ -116,11 +113,10 @@ const actions = {
       const deleteAccount = httpsCallable(functions, 'deleteUserByEmail');
       const result = await deleteAccount(email);
 
-      if (result.data.removed) {
-        return {
-          removed: true,
-        };
-      }
+      if (!result.data.removed) return;
+      return {
+        removed: true,
+      };
     } catch ({ ...error }) {
       dispatch('errors/authMessagesSnackbar', error.code, { root: true });
     }
@@ -150,11 +146,11 @@ const actions = {
       const changePassword = httpsCallable(functions, 'chageUserPasswordByEmail');
       const result = await changePassword({ payload });
 
-      if (result.data.changed) {
-        return {
-          changed: true,
-        };
-      }
+      if (!result.data.changed) return;
+
+      return {
+        changed: true,
+      };
     } catch ({ ...error }) {
       dispatch('errors/authMessagesSnackbar', error.code, { root: true });
     }
@@ -186,6 +182,7 @@ const actions = {
       dispatch('snackbar/snackbarSuccess', 'Your account is already verified.', {
         root: true,
       });
+
       store.set('loaders/verificationInProgressLoader', false);
     } catch ({ ...error }) {
       await router.push('login');
@@ -216,6 +213,7 @@ const actions = {
     try {
       await confirmPasswordReset(auth, oobCode, newPassword);
       dispatch('snackbar/snackbarSuccess', 'Account password changed.', { root: true });
+
       await router.push('login');
       store.set('loaders/authLoader', false);
     } catch ({ ...error }) {
@@ -272,12 +270,9 @@ const actions = {
         await setPersistence(auth, browserSessionPersistence);
       }
 
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-
-      const { user } = userCredential;
-
-      // store.set('authentication/user', user);
+      await signInWithEmailAndPassword(auth, email, password);
       await router.push('profile');
+
       store.set('loaders/authLoader', false);
     } catch ({ ...error }) {
       dispatch('errors/authMessagesSnackbar', error.code, { root: true });
@@ -557,44 +552,35 @@ const actions = {
     } catch (error) {}
   },
 
-  // async testListAllUsers({ getters }) {
-  //   try {
-  //     const getAllUsers = httpsCallable(functions, 'listAllUsers');
-  //     const result = await getAllUsers({
-  //       allowed: getters.isRoot,
-  //     });
-
-  //     const allUsers = Object.values(result.data) || [];
-
-  //     // console.log(allUsers);
-  //   } catch (error) {}
-  // },
-
   async getUsersSnapshot({ state, getters }) {
     if (!state.usersLoaded) {
       try {
         const getAllUsers = httpsCallable(functions, 'listAllUsers');
-        const result = await getAllUsers({
+        const accounts = await getAllUsers({
           allowed: getters.isRoot,
         });
-        const allUsers = Object.values(result.data) || [];
+        const allUsers = Object.values(accounts.data) || [];
 
-        // realtime collection data
-        // reacts to CRUD operations.
-        const colRefUsers = collection(db, 'users');
+        const dicRef = collection(db, 'users');
+        const q = query(dicRef);
 
-        onSnapshot(colRefUsers, (snapshot) => {
+        const users = [];
+        const unsubscribe = onSnapshot(q, (querySnap) => {
           const userMap = new Map(allUsers.map((u) => [u.uid, u]));
-          const users = snapshot.docs.map((document) => {
-            const profile = document.data();
-            return { ...profile, authUser: userMap.get(profile.uid) || {}, hover: false };
+
+          querySnap.forEach((docSnap) => {
+            const profile = docSnap.data();
+            users.push({ ...profile, authUser: userMap.get(profile.uid) || {}, hover: false });
           });
-          state.isBooted.usersSnapshot = true;
-          store.set('authentication/users', users);
         });
 
         store.set('authentication/usersLoaded', true);
-      } catch (error) {}
+        store.set('authentication/users', users);
+
+        return unsubscribe;
+      } catch (error) {
+        console.log(error.code);
+      }
     }
   },
 };
@@ -603,6 +589,11 @@ const getters = {
   // Checks if the user is authenticated.
 
   isLoggedIn: (_state) => !isEmpty(_state.user),
+
+  isAccountDisabled: (_, _getters) => {
+    if (!_getters.isLoggedIn && !_getters.profile) return;
+    return _getters.profile?.disabled;
+  },
 
   getPasswordComplexity: () => (value) => {
     let progress = 0;
@@ -636,59 +627,67 @@ const getters = {
   },
 
   userId: (_state, _getters) => {
-    if (_getters.isLoggedIn) return _state.user?.uid;
+    if (!_getters.isLoggedIn) return;
+    return _state.user?.uid;
   },
 
-  isProfileLoaded: (_state, _getters) => {
-    if (_getters.isLoggedIn) return !isEmpty(_state.profile);
+  isProfileLoaded: (_, _getters) => {
+    if (!_getters.isLoggedIn) return;
+    return !isEmpty(_getters.profile);
   },
 
-  userEmail: (_state, _getters) => {
-    if (_getters.isLoggedIn) return _state.user?.email;
+  isAuthLoaded: (_state) => !isEmpty(_state.user),
+
+  userEmail: (_, _getters) => {
+    if (!_getters.isLoggedIn) return;
+    return _getters.profile?.email;
   },
 
-  verified: (_state, _getters) => {
-    if (_getters.isLoggedIn) return _state.profile?.verified || _getters.isAuthExternalProvider;
-  },
-
-  // Capitalize the first letter of every word.
-  fullName: (_state) => {
-    if (_state.profile && _state.profile.name && _state.profile.lastName) {
-      const name = startCase(capitalize(_state.profile.name));
-      const lastName = startCase(capitalize(_state.profile.lastName));
-      return `${name} ${lastName}`;
-    }
+  verified: (_, _getters) => {
+    if (!_getters.isLoggedIn) return;
+    return _getters.profile?.verified || _getters.isAuthExternalProvider;
   },
 
   authProviders: (_state, _getters) => {
-    if (_getters.isLoggedIn) return _state.user.providerData.flatMap((profile) => profile.providerId);
+    if (!_getters.isLoggedIn) return;
+    return _state.user.providerData.flatMap((profile) => profile.providerId);
   },
 
   isAuthExternalProvider: (_state, _getters) => {
     if (_getters.isLoggedIn) return _state.user.providerData[0].providerId !== 'password';
   },
 
-  profile: (_state, _getters) => {
-    if (_getters.isLoggedIn) {
-      return { metadata: _state.user?.metadata, ..._state.profile };
-    }
+  profile: (_state) => {
+    if (isEmpty(_state.profile)) return;
+    return { metadata: _state.user?.metadata, ..._state.profile };
   },
 
-  profileRoles: (_state, _getters) => {
-    if (_getters.isLoggedIn && _getters.profile) return [..._getters.profile?.roles];
+  profileRoles: (_, _getters) => {
+    if (!_getters.isLoggedIn && !_getters.profile) return;
+    return [..._getters.profile?.roles];
   },
 
-  isRoot: (_state, _getters) => {
-    if (_getters.isLoggedIn) return _getters.profileRoles.includes('root');
+  isRoot: (_, _getters) => {
+    if (!_getters.isLoggedIn) return;
+    return _getters.profileRoles.includes('root');
   },
 
   // Shows first name and first letter of last name.
-  firstAndShortLast: (_state) => {
-    if (_state.profile && _state.profile.name && _state.profile.lastName) {
-      const name = startCase(capitalize(_state.profile.name));
-      const lastName = startCase(capitalize(_state.profile.lastName));
-      return name && lastName ? `${name} ${lastName[0]}.` : `${name}`;
-    }
+  firstAndShortLast: (_, _getters) => {
+    if (!_getters.profile?.name && !_getters.profile?.lastName) return;
+
+    const name = startCase(capitalize(_getters.profile.name));
+    const lastName = startCase(capitalize(_getters.profile.lastName));
+    return name && lastName ? `${name} ${lastName[0]}.` : `${name}`;
+  },
+
+  // Capitalize the first letter of every word.
+  fullName: (_, _getters) => {
+    if (!_getters.profile?.name && !_getters.profile?.lastName) return;
+
+    const name = startCase(capitalize(_getters.profile.name));
+    const lastName = startCase(capitalize(_getters.profile.lastName));
+    return `${name} ${lastName}`;
   },
 
   // returns current user last login date/time.

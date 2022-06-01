@@ -81,21 +81,21 @@
       ...get('authentication', ['isRoot']),
     },
 
-    watch: {
-      isRoot: {
-        handler(newVal) {
-          if (!newVal) {
-            this.$router.push('/profile');
-            return;
-          }
-          if (this.$route.name === 'skriptag-edit') {
-            this.$router.push(this.tabs[0].route);
-          }
-        },
-        deep: true,
-        immediate: true,
-      },
-    },
+    // watch: {
+    //   isRoot: {
+    //     handler(newVal) {
+    //       if (!newVal) {
+    //         this.$router.push('/profile');
+    //         return;
+    //       }
+    //       if (this.$route.name === 'skriptag-edit') {
+    //         this.$router.push(this.tabs[0].route);
+    //       }
+    //     },
+    //     deep: true,
+    //     immediate: true,
+    //   },
+    // },
   };
 </script>
 

@@ -1,10 +1,10 @@
 <template>
   <v-main>
-    <MobileMenuView v-if="mobileMenu && $vuetify.breakpoint.smAndDown" />
     <keep-alive>
-      <router-view v-if="!mobileMenu || !$vuetify.breakpoint.smAndDown" :key="$route.fullPath"></router-view>
+      <router-view v-show="!mobileMenu || !$vuetify.breakpoint.smAndDown"></router-view>
     </keep-alive>
   </v-main>
+  <!-- <MobileMenuView v-show="mobileMenu && $vuetify.breakpoint.smAndDown" /> -->
 </template>
 
 <script>
@@ -23,8 +23,7 @@
 
     watch: {
       '$vuetify.breakpoint.mdAndUp': {
-        immediate: true,
-        deep: true,
+        immediate: false,
         handler(newValue) {
           if (newValue) {
             this.mobileMenu = false;

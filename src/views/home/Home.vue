@@ -1,13 +1,13 @@
 <template>
   <div class="fill-height">
-    <intro-slide right />
+    <intro-landing right />
   </div>
 </template>
 <script>
   export default {
     name: 'Homepage',
     components: {
-      introSlide: () => import(/* webpackChunkName: 'intro-page' */ './sections/landing'),
+      introLanding: () => import(/* webpackChunkName:  'layout-bundle'  */ './sections/landing'),
     },
   };
 </script>

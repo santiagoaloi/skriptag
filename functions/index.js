@@ -4,38 +4,27 @@ const functions = require('firebase-functions');
 admin.initializeApp();
 
 // Appcheck protected / reCAPTCHA authorices only skriptag.com domain.
-exports.listAllUsers = functions
-  .region('europe-west1')
-  .runWith({
-    memory: '128MB',
-  })
-  .https.onCall(async (data, context) => {
-    //  will be allowed if the client verifies allowed roles first.
-    const { allowed } = data;
+exports.listAllUsers = functions.region('europe-west1').https.onCall(async (data, context) => {
+  // If appCheck fails, terminate the funciton.
+  if (context.app === undefined) {
+    throw new functions.https.HttpsError('failed-precondition', 'The function must be called from an App Check verified app.');
+  }
 
-    // If appCheck fails, terminate the funciton.
-    if (context.app === undefined) {
-      throw new functions.https.HttpsError('failed-precondition', 'The function must be called from an App Check verified app.');
-    }
+  // If the user is not authenticated, terminate the function.
+  if (!context.auth) {
+    throw new functions.https.HttpsError('unauthenticated', 'The function must be called while authenticated');
+  }
 
-    if (!context.auth) {
-      throw new functions.https.HttpsError('unauthenticated', 'The function must be called while authenticated');
-    }
+  try {
+    const all = await admin.auth().listUsers();
 
-    if (!allowed) {
-      throw new functions.https.HttpsError('Insufficient permissions', 'The function required a higher permission level.');
-    }
-
-    try {
-      const all = await admin.auth().listUsers();
-
-      return {
-        ...all.users,
-      };
-    } catch (error) {
-      return { message: `Error listing users!  ${error}` };
-    }
-  });
+    return {
+      ...all.users,
+    };
+  } catch (error) {
+    return { message: `Error listing users!  ${error}` };
+  }
+});
 
 exports.verifiyUserByEmail = functions.region('europe-west1').https.onCall(async (email) => {
   try {
@@ -51,16 +40,33 @@ exports.verifiyUserByEmail = functions.region('europe-west1').https.onCall(async
   }
 });
 
-exports.disableUserByEmail = functions.region('europe-west1').https.onCall(async (email) => {
-  try {
-    const user = await admin.auth().getUserByEmail(email);
+exports.disableUserByEmail = functions.region('europe-west1').https.onCall(async (email, context) => {
+  // If appCheck fails, terminate the funciton.
+  if (context.app === undefined) {
+    throw new functions.https.HttpsError('failed-precondition', 'The function must be called from an App Check verified app.');
+  }
 
+  // If the user is not authenticated, terminate the function.
+  if (!context.auth) {
+    throw new functions.https.HttpsError('unauthenticated', 'The function must be called while authenticated');
+  }
+
+  const profile = admin.firestore().collection('users').doc(context.auth.uid);
+
+  console.log(profile);
+
+  try {
+    // Sets the disabled flag in the user account.
+    const user = await admin.auth().getUserByEmail(email);
     await admin.auth().updateUser(user.uid, {
       disabled: true,
     });
 
-    // Send an email notifying the user.
-    // Trigger Email extension.
+    // Sets the disabled flag in the user profile document.
+    const docRef = admin.firestore().collection('users').doc(user.uid);
+    await docRef.update({ disabled: true });
+
+    // Send an email notifying the usser of thi acttion.
     admin
       .firestore()
       .collection('mail')
@@ -86,10 +92,6 @@ exports.disableUserByEmail = functions.region('europe-west1').https.onCall(async
          </table>`,
         },
       });
-
-    const docRef = admin.firestore().collection('users').doc(user.uid);
-
-    await docRef.update({ disabled: true });
 
     return {
       disabled: true,

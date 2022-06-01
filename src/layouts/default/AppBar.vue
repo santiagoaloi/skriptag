@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar class="elevation-1" color="#24272c" dark absolute app>
+  <v-app-bar class="elevation-1" color="#24272c" dark app>
     <v-app-bar-title @click.native="$router.push('/')">
       <skriptag-title class="overflow-visible cursor-pointer" :class="{ 'ml-2 ': !$vuetify.breakpoint.smAndDown }" link small />
     </v-app-bar-title>
@@ -46,19 +46,21 @@
       </BaseButton>
     </template>
 
-    <v-scale-transition hide-on-leave>
-      <BaseButton v-if="isLoggedIn && !$vuetify.breakpoint.smAndDown" @click="logout">
+    <template v-if="profile">
+      <BaseButton v-if="isLoggedIn && !$vuetify.breakpoint.smAndDown" key="btn1" @click="logout">
         {{ `Logout ${firstAndShortLast || ''}` }}
       </BaseButton>
-    </v-scale-transition>
+      <BaseButton v-if="isLoggedIn && !$vuetify.breakpoint.smAndDown" key="btn2" class="ml-3" @click="$router.push('/profile')">
+        Console
+      </BaseButton>
+    </template>
+
     <v-burger v-if="$vuetify.breakpoint.smAndDown" :active="mobileMenu" type="spring" @updated="mobileMenu = !mobileMenu" />
   </v-app-bar>
 </template>
 
 <script>
   import { sync, get, call } from 'vuex-pathify';
-
-  // Utilities
 
   export default {
     name: 'DefaultAppBar',
@@ -81,18 +83,7 @@
     },
   };
 </script>
-<style>
-  ::v-deep .vs-select__input:hover {
-    box-shadow: unset;
-    -webkit-transform: unset;
-    transform: unset;
-  }
-
-  ::v-deep .vs-select.activeOptions .vs-select__input {
-    -webkit-transform: unset;
-    transform: unset;
-  }
-
+<style scoped>
   .hamburger-inner,
   .hamburger-inner::before,
   .hamburger-inner::after {

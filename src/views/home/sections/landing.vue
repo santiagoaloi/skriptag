@@ -16,30 +16,8 @@
   </base-split-2>
 </template>
 <script>
-  import { call } from 'vuex-pathify';
-  import baseSplit2 from '@/components/base/baseSplit-2.vue';
-
   export default {
     name: 'LandingPage',
-    components: { baseSplit2 },
-    props: {
-      index: {
-        type: Number,
-        default: 0,
-      },
-    },
-
-    data() {
-      return {
-        options: {
-          offset: 60,
-        },
-      };
-    },
-
-    methods: {
-      ...call('app', ['sleep']),
-    },
   };
 </script>
 <style>

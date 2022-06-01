@@ -3,6 +3,11 @@ body {
   overflow-y: overlay !important;
   background: #24272c !important;
 }
+
+body {
+  filter: brightness(85%) hue-rotate(15deg);
+}
+
 .v-application--wrap {
   background: #24272c !important;
   height: 0vh !important;
@@ -66,8 +71,8 @@ html {
 
 /* Apply  scrollbar styles */
 ::-webkit-scrollbar {
-  width: 16px !important;
-  height: 6px !important;
+  width: 9px !important;
+  height: 9px !important;
 }
 ::-webkit-scrollbar-thumb {
   background-color: #383f43;

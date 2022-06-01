@@ -1,14 +1,13 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import { getUserState } from '@/firebase/firebase';
-import { setUserAndProfile } from '@/utils/user-profile.js';
 import allRoutes from './routes';
 import { store } from '@/store';
 
 const routes = [
   {
     path: '/',
-    component: () => import('@/layouts/default'),
+    component: () => import(/* webpackChunkName: 'layout-bundle' */ '@/layouts/default'),
     children: [...allRoutes],
   },
 ];
@@ -49,10 +48,6 @@ router.beforeEach(async (to, _from, next) => {
     await store.dispatch('authentication/logout');
     next('/');
     return;
-  }
-
-  if (isAuth) {
-    await setUserAndProfile({ isAuth });
   }
 
   next();

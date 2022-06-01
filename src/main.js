@@ -1,12 +1,13 @@
 import Vue from 'vue';
 import Vuesax from 'vuesax';
 import AOS from 'aos';
+import { doc, onSnapshot, query } from 'firebase/firestore';
+import { auth, db } from '@/firebase/firebase';
 import App from './App.vue';
 import router from './router';
 import { store } from '@/store';
 import vuetify from './plugins/vuetify';
 import './plugins';
-
 // Styles amd Animations
 import 'aos/dist/aos.css';
 import 'vuesax/dist/vuesax.css';
@@ -62,12 +63,26 @@ Vue.directive('animation', {
   },
 });
 
+auth.onAuthStateChanged((user) => {
+  if (user) {
+    store.set('authentication/user', user ?? {});
+    let profile = {};
+    const docRef = doc(db, 'users', user.uid);
+    const q = query(docRef);
+    const unsubscribe = onSnapshot(q, (querySnap) => {
+      profile = querySnap.data();
+      store.set('authentication/profile', profile);
+    });
+    return unsubscribe;
+  }
+});
+
 new Vue({
   created() {
     AOS.init();
   },
+  vuetify,
   store,
   router,
-  vuetify,
   render: (h) => h(App),
 }).$mount('#app');

@@ -1,5 +1,5 @@
 <template>
-  <v-row style="color: #ccc" class="pattern-bg" :class="rowClass()" no-gutters>
+  <v-row style="color: #ccc" :class="rowClass()" no-gutters>
     <v-col :order="colOrder()" :sm="remainingCols" cols="12">
       <v-img :class="imageClass()" v-bind="imageOptions()" @load="imageLoaded = true">
         <template #placeholder>
@@ -70,7 +70,7 @@
       },
 
       rowClass() {
-        return 'fill-height';
+        return 'fill-height pattern-bg';
       },
 
       colOrder() {

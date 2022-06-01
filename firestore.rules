@@ -2,19 +2,25 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+//Keep database locked down by default.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
   //Roots can do anything.
   match /{document=**} {
-  allow read, write: if
-  get(/databases/$(database)/documents/users/$(request.auth.uid)).data.roles.hasAny(['root'])
+    allow read, write: if
+    get(/databases/$(database)/documents/users/$(request.auth.uid)).data.roles.hasAny(['root'])
   }
 
-  //   - Authenticated user can read its own data.
-  //   - Authenticated user can create its own data.
-  //   - Updates are allowed if no fields are added.
-  match /users/{uid} {
-  allow read, create: if request.auth.uid == uid; 
-  allow update:  if request.auth.uid == uid
-  && (request.resource.data.keys() == resource.data.keys()) 
+  // Grants a user access to a node matching their user ID
+  // writes are allowed if no new fields are added.
+  // Files look like: "user/<UID>/path/to/file.txt"
+  
+  match /users/{uid}/{allPaths=**}  {
+    allow read: if request.auth.uid == uid; 
+    allow write:  if request.auth.uid == uid
+    && (request.resource.data.keys() == resource.data.keys()) 
   }
 
 }}

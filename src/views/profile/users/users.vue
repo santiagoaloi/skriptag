@@ -17,7 +17,7 @@
 
           <Base-button small class="ml-2" large> Invite user</Base-button>
           <vs-tooltip shadow circle color="#ccc">
-            <Base-button small class="ml-2" large @click="getUsersSnapshot()"> <v-icon> $mdiRefresh</v-icon></Base-button>
+            <Base-button small class="ml-2" large> <v-icon> $mdiRefresh</v-icon></Base-button>
             <template #tooltip> Reload </template>
           </vs-tooltip>
 
@@ -149,7 +149,7 @@
           </v-data-table>
         </v-fade-transition>
 
-        <v-container v-if="!filteredUsers.length && !loading && usersSnapshot" fluid>
+        <v-container v-if="!filteredUsers.length && !loading" fluid>
           <v-banner dark outlined rounded="">
             <v-avatar slot="icon" color="indigo" size="40">
               <v-icon icon="$mdiLock" color="white"> $mdiLock </v-icon>
@@ -261,9 +261,10 @@
     },
     computed: {
       ...get('authentication', ['userId', 'fullName']),
-      ...sync('authentication', ['users', 'roles', 'capabilities', 'isBooted@usersSnapshot']),
+      ...sync('authentication', ['users', 'roles', 'capabilities']),
 
       filteredUsers() {
+        if (!this.users) return;
         const search = this.search.toString().toLowerCase();
         return this.users.filter((user) =>
           ['uid', 'email'].some((key) => user[key].toLowerCase().includes(search) && !user.removed),

@@ -32,8 +32,9 @@
         >
           <v-card
             :ripple="{ class: 'rounded-lg, ripple-opacity' }"
+            color="#1c2124"
             height="100%"
-            class="transparent hoverCard rounded-lg cursor-pointer"
+            class="hoverCard rounded-lg cursor-pointer"
             dark
             :disabled="card.disabled"
           >

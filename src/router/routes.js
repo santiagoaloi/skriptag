@@ -1,5 +1,3 @@
-import { store } from '@/store';
-
 export default [
   {
     path: '',
@@ -36,8 +34,8 @@ export default [
     meta: {
       requiresAuth: true,
     },
-
     component: () => import(/* webpackChunkName: 'profile-page' */ '@/views/profile'),
+
     children: [
       {
         path: '/Profile/skriptag-edit',
@@ -46,21 +44,12 @@ export default [
           requiresAuth: true,
           title: 'skriptag edit',
         },
+        redirect: { name: 'skriptag-edit-users' },
         component: () => import(/* webpackChunkName: 'profile-skriptag-edit' */ '@/views/profile/Skriptag-edit'),
 
-        async beforeEnter(_to, _from, next) {
-          setTimeout(() => {
-            const isRoot = store.getters['authentication/isRoot'];
-            if (!isRoot) {
-              next('/profile');
-              return;
-            }
-            next();
-          }, 400);
-        },
         children: [
           {
-            path: '/Profile/skriptag-edit/users',
+            path: 'users',
             name: 'skriptag-edit-users',
             meta: {
               requiresAuth: true,
@@ -70,7 +59,7 @@ export default [
           },
 
           {
-            path: '/Profile/skriptag-edit/roles',
+            path: 'roles',
             name: 'skriptag-edit-roles',
             meta: {
               requiresAuth: true,
@@ -80,7 +69,7 @@ export default [
           },
 
           {
-            path: '/Profile/skriptag-edit/capabilities',
+            path: 'capabilities',
             name: 'skriptag-edit-capabilities',
             meta: {
               requiresAuth: true,
