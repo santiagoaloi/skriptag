@@ -15,7 +15,7 @@
                     :rules="{ required: true, alpha_spaces: true }"
                   >
                     <vs-input
-                      v-model="profile.name"
+                      v-model="editableProfile.name"
                       :danger="failed"
                       maxlength="20"
                       block
@@ -43,7 +43,7 @@
                     :rules="{ required: true, alpha_spaces: true }"
                   >
                     <vs-input
-                      v-model="profile.lastName"
+                      v-model="editableProfile.lastName"
                       :danger="failed"
                       maxlength="20"
                       block
@@ -112,7 +112,7 @@
 
     computed: {
       ...get('authentication', ['isAuthExternalProvider']),
-      ...sync('authentication', ['profile']),
+      editableProfile: sync('authentication/profile'),
     },
 
     mounted() {
@@ -130,25 +130,20 @@
       },
 
       cloneProfile() {
-        this.originProfile = cloneDeep(this.profile);
+        this.originProfile = cloneDeep(this.editableProfile);
       },
 
       rollBack() {
-        const originProfile = cloneDeep(this.originProfile);
-
         // If the user changes the profile or cover image, it will remain
         // regardless of cancelling the profile edit.
 
-        if (!this.isAuthExternalProvider) {
-          const profileMedia = { photoURL: this.profile.photoURL, coverAvatar: this.profile.coverAvatar };
-          this.profile = merge(originProfile, profileMedia);
-          return;
-        }
+        // const profileMedia = { photoURL: this.profile.photoURL, coverAvatar: this.profile.coverAvatar };
+        this.editableProfile = this.originProfile;
 
-        if (this.isAuthExternalProvider) {
-          const profileMedia = { coverAvatar: this.profile.coverAvatar };
-          this.profile = merge(originProfile, profileMedia);
-        }
+        // if (this.isAuthExternalProvider) {
+        //   const profileMedia = { coverAvatar: this.profile.coverAvatar };
+        //   this.profile = merge(originProfile, profileMedia);
+        // }
 
         // Merge possible new image changes and rollback.
       },

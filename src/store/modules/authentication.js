@@ -15,6 +15,7 @@ import {
   query,
   where,
   onSnapshot,
+  documentId,
 } from 'firebase/firestore';
 import {
   EmailAuthProvider,
@@ -301,13 +302,12 @@ const actions = {
 
       const { user } = userCredential;
 
+      await sendEmailVerification(user);
       dispatch('addUserToUsersCollection', { user, signupForm });
 
-      await sendEmailVerification(userCredential.user);
-
       // Set user in Vuex and navigate to the new user profile.
-      store.set('authentication/user', user);
-      await router.push('profile');
+      // store.set('authentication/user', user);
+      router.push('profile');
       store.set('loaders/signupLoader', false);
     } catch ({ ...error }) {
       dispatch('errors/authMessagesSnackbar', error.code, { root: true });
@@ -316,7 +316,7 @@ const actions = {
   },
 
   // Creates user profile.
-  addUserToUsersCollection(_, { user, signupForm }) {
+  async addUserToUsersCollection(_, { user, signupForm }) {
     const { email } = signupForm;
 
     // Adds a document in a  firestore collection.
@@ -338,7 +338,7 @@ const actions = {
 
     // SetDoc (Firestore, Payload)
     // creates the user profile in the db collection.
-    setDoc(userDocRef, userDocData);
+    await setDoc(userDocRef, userDocData);
   },
 
   // Creates a new user account on first login or else login
@@ -552,35 +552,41 @@ const actions = {
     } catch (error) {}
   },
 
-  async getUsersSnapshot({ state, getters }) {
-    if (!state.usersLoaded) {
-      try {
-        const getAllUsers = httpsCallable(functions, 'listAllUsers');
-        const accounts = await getAllUsers({
-          allowed: getters.isRoot,
+  async getUsersSnapshot({ getters }) {
+    try {
+      const getAllUsers = httpsCallable(functions, 'listAllUsers');
+      const accounts = await getAllUsers({
+        allowed: getters.isRoot,
+      });
+      const allUsers = Object.values(accounts.data) || [];
+
+      const colRefUsers = collection(db, 'users');
+
+      const users = [];
+      onSnapshot(colRefUsers, { includeMetadataChanges: true }, (snap) => {
+        const userMap = new Map(allUsers.map((u) => [u.uid, u]));
+
+        snap.docChanges().forEach(({ doc, type }) => {
+          const profile = doc.data();
+
+          const profileCombined = { ...profile, authUser: userMap.get(profile.uid) || {}, hover: false };
+
+          if (type === 'modified') {
+            const index = users.findIndex((user) => user.uid === doc.id);
+            store.set(`authentication/users@${index}`, profileCombined);
+            return;
+          }
+
+          if (type === 'added') {
+            users.push(profileCombined);
+          }
         });
-        const allUsers = Object.values(accounts.data) || [];
+      });
 
-        const dicRef = collection(db, 'users');
-        const q = query(dicRef);
-
-        const users = [];
-        const unsubscribe = onSnapshot(q, (querySnap) => {
-          const userMap = new Map(allUsers.map((u) => [u.uid, u]));
-
-          querySnap.forEach((docSnap) => {
-            const profile = docSnap.data();
-            users.push({ ...profile, authUser: userMap.get(profile.uid) || {}, hover: false });
-          });
-        });
-
-        store.set('authentication/usersLoaded', true);
-        store.set('authentication/users', users);
-
-        return unsubscribe;
-      } catch (error) {
-        console.log(error.code);
-      }
+      store.set('authentication/usersLoaded', true);
+      store.set('authentication/users', users);
+    } catch (error) {
+      // console.log(error.code);
     }
   },
 };

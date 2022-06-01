@@ -63,16 +63,21 @@ Vue.directive('animation', {
   },
 });
 
+// Sets the authenticated user object
+// Fetches and set the user profile,
 auth.onAuthStateChanged((user) => {
   if (user) {
     store.set('authentication/user', user ?? {});
-    let profile = {};
+    let userProfile = {};
+
     const docRef = doc(db, 'users', user.uid);
     const q = query(docRef);
+
     const unsubscribe = onSnapshot(q, (querySnap) => {
-      profile = querySnap.data();
-      store.set('authentication/profile', profile);
+      userProfile = querySnap.data();
+      store.set('authentication/profile', userProfile);
     });
+
     return unsubscribe;
   }
 });

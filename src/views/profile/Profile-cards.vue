@@ -1,26 +1,6 @@
 <template>
   <base-no-split>
     <template #left>
-      <!-- <v-row>
-        <v-col v-for="(card, i) in allCardsFiltered" :key="i" cols="12" sm="6" :md="card.responsiveSize">
-          <vs-card
-            :class="{ 'disabled-card': card.disabled }"
-            :disabled="card.disabled"
-            class="my-card"
-            @click="$router.push(`/profile/${card.route}`)"
-          >
-            <template #title>
-              <h3>{{ card.title }}</h3>
-            </template>
-            <template #img>
-              <v-img v-ripple :src="card.img" v-bind="imageOptions()" />
-            </template>
-            <template #text>
-              <p>{{ card.text }}</p>
-            </template>
-          </vs-card>
-        </v-col>
-      </v-row> -->
       <v-row>
         <v-col
           v-for="(card, i) in allCardsFiltered"
@@ -38,7 +18,7 @@
             dark
             :disabled="card.disabled"
           >
-            <v-img class="rounded-t-lg" :src="card.img" v-bind="imageOptions()"> </v-img>
+            <v-img :transition="false" class="rounded-t-lg" :src="card.img" v-bind="imageOptions()" />
             <v-container>
               <div class="pa-3" style="color: #ccc">
                 <h4>{{ card.title }}</h4>

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="profile">
+  <section v-if="profile">
     <v-hover v-slot="{ hover }">
       <v-img
         :src="src"
@@ -8,7 +8,7 @@
         class="d-flex align-center elevation-14"
         transition="fade-transition"
         style="color: #ccc"
-        gradient="to top right, rgba(0,0,0,.73), rgba(50,50,50,.7)"
+        :gradient="gradientOptions()"
         @load="imgBannerLoaded = true"
       >
         <v-fade-transition>
@@ -35,7 +35,7 @@
         <input ref="coverInput" accept="image/*" style="display: none" type="file" @change="uploadCoverPhoto()" />
         <input ref="avatarInput" accept="image/*" style="display: none" type="file" @change="uploadProfilePhoto()" />
 
-        <div :class="$vuetify.breakpoint.smAndUp ? 'ml-13' : 'justify-center'" class="media d-flex align-center justify-start">
+        <div :class="$vuetify.breakpoint.smAndUp ? 'mx-13' : 'justify-center'" class="media d-flex align-center justify-start">
           <v-badge
             offset-x="40"
             offset-y="34"
@@ -47,20 +47,20 @@
             class="cursor-pointer"
           >
             <baseAvatarImg v-if="!profile.photoURL" class="hoverAvatar" :height="180" @click="triggerAvatarInput()" />
-
-            <v-avatar v-else v-ripple class="elevation-10" size="180">
+            <v-avatar v-else v-ripple style="background: rgba(8, 29, 86, 0.3)" class="elevation-13" size="180">
               <v-img class="hoverAvatar" :src="profile.photoURL" flat @click="triggerAvatarInput()">
                 <template #placeholder>
                   <v-row class="fill-height ma-0" align="center" justify="center">
-                    <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+                    <v-icon dark size="40">$mdiCamera</v-icon>
+                    <!-- <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular> -->
                   </v-row>
                 </template>
               </v-img>
             </v-avatar>
           </v-badge>
 
-          <div v-if="$vuetify.breakpoint.smAndUp" class="ml-13">
-            <v-row no-gutters>
+          <div v-if="$vuetify.breakpoint.smAndUp" class="px-13">
+            <v-row no-gutters align="center">
               <v-col cols="12">
                 <v-chip
                   v-if="(profile.roles || []).includes('root')"
@@ -120,7 +120,7 @@
 
     <v-progress-linear v-if="progress > 0" v-model="progress" color="indigo" style="position: absolute"></v-progress-linear>
 
-    <profile-cards v-if="$route.name === 'profile'" />
+    <profile-cards v-show="$route.name === 'profile'" />
 
     <!-- route to profile cards (childs of profile route) -->
     <v-card-text class="px-8">
@@ -136,7 +136,7 @@
         <router-view />
       </keep-alive>
     </v-card-text>
-  </div>
+  </section>
 </template>
 <script>
   import { isEmpty } from 'lodash';
@@ -162,7 +162,6 @@
         progress: 0,
         imgBannerLoaded: false,
         showProfileItems: false,
-        // loadingProfile: this.$vs.loading(),
       };
     },
 
@@ -181,6 +180,17 @@
       ...call('app', ['sleep']),
       ...call('authentication', ['updateProfileSettings', 'unlinkProfileImage']),
       ...call('snackbar/*'),
+
+      gradientOptions() {
+        const { imgBannerLoaded } = this;
+        if (!imgBannerLoaded) return;
+
+        const direction = 'to top right';
+        const fromColor = 'rgba(10,10,52,.7)';
+        const toColor = 'rgba(20,50,50,.65)';
+
+        return `${direction}, ${fromColor}, ${toColor}`;
+      },
 
       isEmpty_(v) {
         return isEmpty(v);
@@ -219,7 +229,7 @@
               this.updateProfileSettings();
               setTimeout(() => {
                 this.progress = 0;
-              }, 500);
+              }, 200);
             });
           },
         );
@@ -250,7 +260,7 @@
               this.updateProfileSettings();
               setTimeout(() => {
                 this.progress = 0;
-              }, 500);
+              }, 200);
             });
           },
         );

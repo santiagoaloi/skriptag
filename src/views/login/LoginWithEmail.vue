@@ -63,7 +63,7 @@
         <v-col v-if="!recoveryMode" cols="12">
           <div class="center">
             <vs-checkbox v-model="isSessionPersisted" color="#000" class="ml-1">
-              {{ option2 }} Persist my session afer closing the browser or tab.
+              Persist my session afer closing the browser or tab.
             </vs-checkbox>
           </div>
         </v-col>

@@ -6,28 +6,6 @@
 
     <v-spacer></v-spacer>
 
-    <!-- <template v-if="!$vuetify.breakpoint.smAndDown">
-      <vs-navbar-group>
-        Downloads
-        <template #items>
-          <vs-navbar-item id="guide"> Templates </vs-navbar-item>
-          <vs-navbar-item id="docs"> Freebies </vs-navbar-item>
-          <vs-navbar-item id="components"> Courses </vs-navbar-item>
-        </template>
-      </vs-navbar-group>
-
-      <vs-navbar-group>
-        Training
-        <template #items>
-          <vs-navbar-item id="Github"> Firebase </vs-navbar-item>
-          <vs-navbar-item id="Discord"> VueJS </vs-navbar-item>
-          <vs-navbar-item id="Twitter"> Vuetify </vs-navbar-item>
-          <vs-navbar-item id="Medium"> Javascript </vs-navbar-item>
-        </template>
-      </vs-navbar-group>
-      <vs-navbar-item id="blog" :active="active == 'blog'"> Blog </vs-navbar-item>
-    </template> -->
-
     <template v-if="!isLoggedIn && !$vuetify.breakpoint.smAndDown">
       <BaseButton
         v-for="button in [
@@ -50,7 +28,12 @@
       <BaseButton v-if="isLoggedIn && !$vuetify.breakpoint.smAndDown" key="btn1" @click="logout">
         {{ `Logout ${firstAndShortLast || ''}` }}
       </BaseButton>
-      <BaseButton v-if="isLoggedIn && !$vuetify.breakpoint.smAndDown" key="btn2" class="ml-3" @click="$router.push('/profile')">
+      <BaseButton
+        v-if="isLoggedIn && !$vuetify.breakpoint.smAndDown && $route.name !== 'profile'"
+        key="btn2"
+        class="ml-3"
+        @click="$router.push('/profile')"
+      >
         Console
       </BaseButton>
     </template>
@@ -83,7 +66,7 @@
     },
   };
 </script>
-<style scoped>
+<style>
   .hamburger-inner,
   .hamburger-inner::before,
   .hamburger-inner::after {
