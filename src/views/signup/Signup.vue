@@ -1,29 +1,17 @@
 <template>
-  <base-split-2 col="6" src="https://media.skriptag.com/img/3.svg" v-bind="$attrs">
+  <base-split-2 col="7" src="https://media.skriptag.com/img/3.svg" v-bind="$attrs">
     <v-container>
       <div class="d-flex flex-wrap flex-column">
         <h2 class="mb-5">Signup with email</h2>
         <div>
-          <v-alert
-            style="color: #ccc"
-            dense
-            text
-            dark
-            color="teal accent-4"
-            border="left"
-            elevation="6"
-            colored-border
-            icon="$mdiChevronUp"
-          >
+          <v-alert style="color: #ccc" dense text dark color="#22272d" border="left" icon="$mdiChevronUp">
             To signup with google or github,
             <span class="cursor-pointer teal--text text--accent-4" @click="$router.push('login')"> go to the login page</span>. An
             account will be created on your first login.
           </v-alert>
         </div>
 
-        <h5></h5>
         <BaseLink to="login">Already have an account? Login</BaseLink>
-
         <SignupWithEmail />
       </div>
     </v-container>

@@ -124,7 +124,7 @@
       ...sync('authentication', ['capabilities']),
     },
     mounted() {
-      this.getCapabilitiesSnaphot();
+      // this.getCapabilitiesSnaphot();
     },
     methods: {
       ...call('authentication', ['addCapability', 'removeCapability', 'getCapabilitiesSnaphot']),

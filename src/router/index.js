@@ -6,7 +6,7 @@ import { store } from '@/store';
 
 const routes = [
   {
-    path: '/',
+    path: '',
     component: () => import(/* webpackChunkName: 'layout-bundle' */ '@/layouts/default'),
     children: [...allRoutes],
   },
@@ -21,11 +21,10 @@ const router = new Router({
 });
 
 // Router guards to deny access to protected routes.
-router.beforeEach(async (to, _from, next) => {
+router.beforeEach(async (to, from, next) => {
   // wait for firebase init before route guards can be applied.
   // if a user is authenticated , the user object will be returned in isAuth.
   const isAuth = await getUserState();
-
   const isLogoutRoute = to.matched.some((record) => record.name === 'logout');
   const isLoginPageAndAuthenticated = to.matched.some((record) => record.name === 'login' && isAuth);
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
@@ -40,17 +39,16 @@ router.beforeEach(async (to, _from, next) => {
   // If the route requires the user to be authenticated and it is not,
   // route to the login page.
   if (requiresAuth && !isAuth) {
-    next('/login');
+    next({ name: 'login' });
     return;
   }
 
   if (isLogoutRoute) {
-    await store.dispatch('authentication/logout');
-    next('/');
+    store.dispatch('authentication/logout');
     return;
   }
 
-  next(true);
+  next();
 });
 
 export default router;

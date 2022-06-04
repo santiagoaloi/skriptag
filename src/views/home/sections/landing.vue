@@ -1,5 +1,5 @@
 <template>
-  <base-split-2 src="https://media.skriptag.com/img/2.svg" v-bind="$attrs">
+  <base-split-2 col="6" src="https://media.skriptag.com/img/2.svg" v-bind="$attrs">
     <v-chip color="pink" dark small>Beta 1.1.4</v-chip>
     <skriptag-title large class="mb-4" />
     <article>

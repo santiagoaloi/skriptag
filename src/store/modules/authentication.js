@@ -2,7 +2,6 @@
 import { make } from 'vuex-pathify';
 import { isEmpty, capitalize, startCase } from 'lodash';
 import { httpsCallable } from 'firebase/functions';
-
 import {
   doc,
   getDoc,
@@ -15,7 +14,6 @@ import {
   query,
   where,
   onSnapshot,
-  documentId,
 } from 'firebase/firestore';
 import {
   EmailAuthProvider,
@@ -34,6 +32,7 @@ import {
   setPersistence,
   browserSessionPersistence,
 } from '@firebase/auth';
+import { route } from '@/utils/route';
 import { auth, db, functions } from '@/firebase/firebase';
 import { store } from '@/store';
 import router from '@/router';
@@ -46,8 +45,8 @@ const state = {
   capabilities: [],
   showresendEmailVerification: false,
   response: '',
-  usersLoaded: false,
   isSessionPersisted: true,
+  unSubscriveProfile: undefined,
 };
 
 const mutations = make.mutations(state);
@@ -282,13 +281,14 @@ const actions = {
   },
 
   // Logout and clear user data objects in Vuex.
-  async logout() {
+  async logout({ state }) {
     await signOut(auth);
-    store.set('authentication/user', {});
-    store.set('authentication/profile', {});
-    store.set('authentication/usersLoaded', false);
 
-    router.push('/');
+    // Terminate the user profile listener.
+    // No more real-time updates after logout.
+    state.unSubscriveProfile();
+
+    route('/');
   },
 
   // Creates a new user account and routes to profile page.
@@ -302,7 +302,7 @@ const actions = {
 
       const { user } = userCredential;
 
-      await sendEmailVerification(user);
+      await sendEmailVerification(userCredential.user);
       dispatch('addUserToUsersCollection', { user, signupForm });
 
       // Set user in Vuex and navigate to the new user profile.
@@ -346,6 +346,11 @@ const actions = {
   async authenticateWithGoogle({ dispatch }) {
     store.set('loaders/signInWithGoogle', true);
 
+    // User chooses not to persist the sessio on tab or browser exit..
+    if (!state.isSessionPersisted) {
+      await setPersistence(auth, browserSessionPersistence);
+    }
+
     try {
       const provider = new GoogleAuthProvider();
 
@@ -376,7 +381,7 @@ const actions = {
       router.push('/profile');
       store.set('loaders/signInWithGoogle', false);
     } catch ({ ...error }) {
-      console.log(error.code);
+      // console.log(error.code);
       store.set('loaders/signInWithGoogle', false);
     }
   },
@@ -563,7 +568,7 @@ const actions = {
       const colRefUsers = collection(db, 'users');
 
       const users = [];
-      onSnapshot(colRefUsers, { includeMetadataChanges: true }, (snap) => {
+      const u = onSnapshot(colRefUsers, { includeMetadataChanges: true }, (snap) => {
         const userMap = new Map(allUsers.map((u) => [u.uid, u]));
 
         snap.docChanges().forEach(({ doc, type }) => {
@@ -583,8 +588,8 @@ const actions = {
         });
       });
 
-      store.set('authentication/usersLoaded', true);
       store.set('authentication/users', users);
+      return u;
     } catch (error) {
       // console.log(error.code);
     }

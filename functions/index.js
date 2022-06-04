@@ -53,7 +53,7 @@ exports.disableUserByEmail = functions.region('europe-west1').https.onCall(async
 
   const profile = admin.firestore().collection('users').doc(context.auth.uid);
 
-  console.log(profile);
+  // console.log(profile);
 
   try {
     // Sets the disabled flag in the user account.

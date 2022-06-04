@@ -3,7 +3,7 @@
     <form class="d-flex flex-column" @submit.prevent="validateLoginForm()">
       <BaseLink v-if="!recoveryMode" icon="$mdiLock" @click="recoveryMode = true">Recover my password</BaseLink>
       <v-row>
-        <v-col cols="12" lg="10">
+        <v-col cols="12">
           <small class="pl-1">Email</small>
           <div class="pr-2">
             <Validation-provider
@@ -31,7 +31,7 @@
             </Validation-provider>
           </div>
         </v-col>
-        <v-col v-if="!recoveryMode" cols="12" lg="10">
+        <v-col v-if="!recoveryMode" cols="12">
           <small class="pl-1">Password</small>
           <div class="pr-2">
             <Validation-provider

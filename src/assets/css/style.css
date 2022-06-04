@@ -1,20 +1,16 @@
 body {
   overflow-x: hidden !important;
   overflow-y: overlay !important;
-  background: #24272c !important;
-}
-
-body {
-  filter: brightness(85%) hue-rotate(15deg);
+  background: #22272e !important;
 }
 
 .v-application--wrap {
-  background: #24272c !important;
+  background: #22272e !important;
   height: 0vh !important;
 }
 
 .v-main {
-  background: #24272c !important;
+  background: #22272e !important;
 }
 
 /* Removes the possibility of selecting text  */
@@ -54,7 +50,7 @@ body {
 }
 
 html {
-  background: #24272c !important;
+  background: #22272e !important;
   overflow: overlay !important;
 }
 
@@ -116,20 +112,18 @@ html {
   top: 43px;
 }
 
-.v-application a {
+/* .v-application a {
   color: #6ee6b9 !important;
-}
+} */
 
-.pattern-bg {
-  background-color: #25272c;
+/* .pattern-bg {
   opacity: 1;
   background-image: linear-gradient(135deg, #24262a 25%, transparent 25%), linear-gradient(225deg, #24262a 25%, transparent 25%),
-    linear-gradient(45deg, #24262a 25%, transparent 25%), linear-gradient(315deg, #24262a 25%, #25272c 25%);
+    linear-gradient(45deg, #24262a 25%, transparent 25%), linear-gradient(315deg, #24262a 25%, #22272e 25%);
   background-position: 65px 0, 65px 0, 0 0, 0 0;
   background-size: 130px 130px;
   background-repeat: repeat;
-}
-
+} */
 .v-navigation-drawer--absolute {
   z-index: 99 !important;
 }

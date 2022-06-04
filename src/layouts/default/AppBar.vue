@@ -1,8 +1,12 @@
 <template>
-  <v-app-bar class="elevation-1" color="#24272c" dark app>
-    <v-app-bar-title @click.native="$router.push('/')">
-      <skriptag-title class="overflow-visible cursor-pointer" :class="{ 'ml-2 ': !$vuetify.breakpoint.smAndDown }" link small />
-    </v-app-bar-title>
+  <v-app-bar class="border-bottom" absolute height="50" flat color="transparent" dark app>
+    <skriptag-title
+      class="overflow-visible cursor-pointer"
+      :class="{ 'ml-2 ': !$vuetify.breakpoint.smAndDown }"
+      link
+      small
+      @click.native="$router.push('/')"
+    />
 
     <v-spacer></v-spacer>
 
@@ -15,7 +19,6 @@
         v-show="$route.name !== button.link"
         :key="button.name"
         dark
-        color="grey darken-3"
         class="ml-3"
         @click="!$router.push(`${button.link}`)"
       >
@@ -25,11 +28,11 @@
     </template>
 
     <template v-if="profile">
-      <BaseButton v-if="isLoggedIn && !$vuetify.breakpoint.smAndDown" key="btn1" @click="logout">
+      <BaseButton v-if="!$vuetify.breakpoint.smAndDown" key="btn1" @click="logout">
         {{ `Logout ${firstAndShortLast || ''}` }}
       </BaseButton>
       <BaseButton
-        v-if="isLoggedIn && !$vuetify.breakpoint.smAndDown && $route.name !== 'profile'"
+        v-if="!$vuetify.breakpoint.smAndDown && $route.name !== 'profile'"
         key="btn2"
         class="ml-3"
         @click="$router.push('/profile')"
@@ -66,7 +69,7 @@
     },
   };
 </script>
-<style>
+<style scoped>
   .hamburger-inner,
   .hamburger-inner::before,
   .hamburger-inner::after {
@@ -77,5 +80,9 @@
   .hamburger.is-active .hamburger-inner::before,
   .hamburger.is-active .hamburger-inner::after {
     background-color: white;
+  }
+
+  .border-bottom {
+    border-bottom: solid 1px #444c56 !important;
   }
 </style>

@@ -137,11 +137,11 @@
     },
 
     mounted() {
-      this.getRolesSnaphot();
+      // this.getRolesSnaphot();
     },
 
     methods: {
-      ...call('authentication', ['addRole', 'removeRole', 'editRole', 'getRolesSnaphot']),
+      ...call('authentication', ['addRole', 'removeRole', 'editRole']),
       ...call('snackbar/*'),
 
       closeOptionsDialog() {

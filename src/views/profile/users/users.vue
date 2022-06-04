@@ -7,21 +7,23 @@
             v-model="search"
             placeholder="Search by email adrress, or user ID"
             dark
-            background-color="#1c1e24"
+            background-color="#2d333b"
             hide-details
             dense
             solo
             autofocus
+            flat
+            class="elevation-1"
           />
-          <Base-button small class="ml-2" large> Filters</Base-button>
+          <Base-button class="ml-2"> Filters</Base-button>
 
-          <Base-button small class="ml-2" large> Invite user</Base-button>
+          <Base-button class="ml-2"> Invite user</Base-button>
           <vs-tooltip shadow circle color="#ccc">
-            <Base-button small class="ml-2" large> <v-icon> $mdiRefresh</v-icon></Base-button>
+            <Base-button class="ml-2"> <v-icon> $mdiRefresh</v-icon></Base-button>
             <template #tooltip> Reload </template>
           </vs-tooltip>
 
-          <Base-button small class="ml-2" large> <v-icon> $mdiDotsVertical</v-icon></Base-button>
+          <Base-button class="ml-2"> <v-icon> $mdiDotsVertical</v-icon></Base-button>
         </v-card-actions>
         <v-fade-transition hide-on-leave>
           <v-data-table
@@ -54,13 +56,7 @@
                       <v-badge :color="getStatusColor(user)" :icon="getStatusIcon(user)" overlap>
                         <baseAvatarImg v-if="!user.photoURL" class="hoverAvatar" :height="35" />
                         <v-avatar v-else size="35">
-                          <v-img :src="user.photoURL" flat>
-                            <template #placeholder>
-                              <v-row class="fill-height ma-0" align="center" justify="center">
-                                <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
-                              </v-row>
-                            </template>
-                          </v-img>
+                          <v-img style="background: #2d333b" :src="user.photoURL" flat> </v-img>
                         </v-avatar>
                       </v-badge>
                       <template #tooltip> {{ getTooltipMessage(user) }} </template>
@@ -71,7 +67,7 @@
                     {{ user.email }} <br />
                     {{ user.name }} {{ user.lastName }}
                   </td>
-                  <td>{{ user.uid }}</td>
+                  <!-- <td>{{ user.uid }}</td> -->
 
                   <td>
                     <div class="d-flex flex-wrap justify-center align-center">
@@ -241,7 +237,7 @@
         headers: [
           { text: 'Avatar', value: 'avatar', width: '100px' },
           { text: 'Identifier', value: 'email', width: '200' },
-          { text: 'User ID', value: 'uid', align: 'start', sortable: false },
+          // { text: 'User ID', value: 'uid', align: 'start', sortable: false },
           { text: 'Providers', align: 'center', value: 'providers', width: '159', sortable: false },
           { text: 'Roles', align: 'center', value: 'roles', sortable: false },
           { text: 'Actions', align: 'center', value: 'actions', width: '200px', sortable: false },
@@ -492,31 +488,31 @@
         return this.selected.some((user) => user.uid === uid) ? 'background: #303036' : '';
       },
 
-      getCapabilitiesSnaphot() {
-        onSnapshot(colRefCapabilities, (snapshot) => {
-          const capabilities = [];
-          snapshot.docs.forEach((doc) => {
-            capabilities.push({ ...doc.data(), hover: false });
-          });
-          this.capabilities = capabilities;
-        });
-      },
+      // getCapabilitiesSnaphot() {
+      //   onSnapshot(colRefCapabilities, (snapshot) => {
+      //     const capabilities = [];
+      //     snapshot.docs.forEach((doc) => {
+      //       capabilities.push({ ...doc.data(), hover: false });
+      //     });
+      //     this.capabilities = capabilities;
+      //   });
+      // },
 
-      getRolesSnaphot() {
-        onSnapshot(colRefRoles, (snapshot) => {
-          const roles = [];
-          snapshot.docs.forEach((doc) => {
-            roles.push({ ...doc.data(), hover: false });
-          });
-          this.roles = roles;
-        });
-      },
+      // getRolesSnaphot() {
+      //   onSnapshot(colRefRoles, (snapshot) => {
+      //     const roles = [];
+      //     snapshot.docs.forEach((doc) => {
+      //       roles.push({ ...doc.data(), hover: false });
+      //     });
+      //     this.roles = roles;
+      //   });
+      // },
     },
   };
 </script>
 <style scoped>
   .theme--dark.v-data-table.solidBackground {
-    background-color: #25272c !important;
+    background-color: #22272e !important;
     color: #ccc;
   }
 

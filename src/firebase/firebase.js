@@ -22,7 +22,10 @@ const storage = getStorage(app);
 const functions = getFunctions(app);
 const db = getFirestore(app);
 const auth = getAuth(app);
-const getUserState = () => new Promise((resolve, reject) => onAuthStateChanged(auth, resolve, reject));
+const getUserState = () =>
+  new Promise((resolve, reject) => {
+    onAuthStateChanged(auth, resolve, reject);
+  });
 
 const development = process.env.NODE_ENV === 'development';
 

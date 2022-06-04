@@ -1,10 +1,8 @@
 <template>
-  <v-responsive style="color: #ccc" min-width="200" v-on="$listeners">
-    <component :is="size" v-animation:shrink="{ link: link, longPress: true }"
-      >Skriptag
-      <span :class="small ? 'ml-n10' : large ? 'ml-n16' : 'ml-n10'" class="primary-font-color">ˆ </span>
-    </component>
-  </v-responsive>
+  <component :is="size" v-animation:shrink="{ link: link, longPress: true }" style="color: #ccc" v-on="$listeners">
+    <slot name="text" /> Skriptag
+    <span :class="small ? 'ml-n8' : large ? 'ml-n16' : 'ml-n10'" class="primary-font-color">ˆ </span>
+  </component>
 </template>
 
 <script>

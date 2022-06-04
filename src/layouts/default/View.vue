@@ -1,5 +1,5 @@
 <template>
-  <v-main tag="main">
+  <v-main>
     <keep-alive>
       <router-view v-show="!mobileMenu || !$vuetify.breakpoint.smAndDown"></router-view>
     </keep-alive>
@@ -9,13 +9,13 @@
 
 <script>
   import { sync } from 'vuex-pathify';
-  import MobileMenuView from './mobileMenu.vue';
+  // import MobileMenuView from './mobileMenu.vue';
 
   export default {
     name: 'DefaultView',
 
     components: {
-      MobileMenuView,
+      // MobileMenuView,
     },
     computed: {
       ...sync('app', ['mobileMenu']),

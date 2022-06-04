@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Vuesax from 'vuesax';
-import AOS from 'aos';
 import { doc, onSnapshot, query } from 'firebase/firestore';
+import { isEmpty } from 'lodash';
 import { auth, db } from '@/firebase/firebase';
 import App from './App.vue';
 import router from './router';
@@ -9,9 +9,9 @@ import { store } from '@/store';
 import vuetify from './plugins/vuetify';
 import './plugins';
 // Styles amd Animations
-import 'aos/dist/aos.css';
-import 'vuesax/dist/vuesax.css';
+// import 'aos/dist/aos.css';
 import './assets/css/style.css';
+import 'vuesax/dist/vuesax.css';
 
 Vue.config.productionTip = false;
 
@@ -25,8 +25,6 @@ Vue.use(Vuesax, {
     background: '#23272d',
   },
 });
-
-Vue.config.productionTip = false;
 
 Vue.directive('animation', {
   bind(el, binding) {
@@ -63,31 +61,57 @@ Vue.directive('animation', {
   },
 });
 
-// Sets the authenticated user object
-// Fetches and set the user profile,
-auth.onAuthStateChanged((user) => {
-  if (user) {
-    store.set('authentication/user', user ?? {});
-    let userProfile = {};
+let app;
+// Call this function to instanciate Vue.
+function mountVue() {
+  app = new Vue({
+    vuetify,
+    store,
+    router,
+    render: (h) => h(App),
+  }).$mount('#app');
+}
 
-    const docRef = doc(db, 'users', user.uid);
+// real-time authentication state.
+// real-time profile snapShots.
+// auto-closing listener on signOut.
+auth.onAuthStateChanged(async (currentUser) => {
+  // mounts Vue excluding authentication features.
+  // Stop the function right here.
+  if (!app && !currentUser) {
+    mountVue();
+    return;
+  }
+
+  let userProfile;
+  let killListener;
+
+  //  If a persisted session exists.
+  // Set the user and profile object to Vuex,
+  //  Create real-time profile updates through a listener.
+  if (currentUser) {
+    store.set('authentication/user', currentUser ?? {});
+
+    const { uid } = currentUser;
+    const docRef = doc(db, 'users', uid);
     const q = query(docRef);
 
-    const unsubscribe = onSnapshot(q, (querySnap) => {
+    // create the listener, calling killListener() will destroy it,
+    killListener = onSnapshot(q, (querySnap) => {
       userProfile = querySnap.data();
       store.set('authentication/profile', userProfile);
     });
 
-    return unsubscribe;
+    store.set('authentication/unSubscriveProfile', killListener);
   }
-});
 
-new Vue({
-  created() {
-    AOS.init();
-  },
-  vuetify,
-  store,
-  router,
-  render: (h) => h(App),
-}).$mount('#app');
+  // Instanciate Vue only if the user and profile objects are set.
+  store.watch(
+    (state) => state.authentication.profile,
+    (newProfile) => {
+      if (!isEmpty(newProfile) && !app) {
+        mountVue();
+      }
+    },
+  );
+});

@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer dark mini-variant app>
+  <v-navigation-drawer v-if="$vuetify.breakpoint.mdAndUp" color="#22272d" width="220" dark app>
     <v-divider></v-divider>
 
     <v-list nav dense>

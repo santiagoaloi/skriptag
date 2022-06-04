@@ -12,9 +12,9 @@
         >
           <v-card
             :ripple="{ class: 'rounded-lg, ripple-opacity' }"
-            color="#1c2124"
+            color="#22272d"
             height="100%"
-            class="hoverCard rounded-lg cursor-pointer"
+            class="hoverCard rounded-lg cursor-pointer elevation-16"
             dark
             :disabled="card.disabled"
           >
@@ -117,14 +117,8 @@
 <style>
   .hoverCard:hover {
     -webkit-transform: translate(0, 5px);
-    transform: translate(0, 5px);
-    transition: all 0.25s ease;
-    transition-property: all;
-    transition-duration: 0.25s;
-    transition-timing-function: ease;
-    transition-delay: 0s;
     -webkit-box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, 0) !important;
-    box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, 0) !important;
+    box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0) !important;
   }
 
   .hoverCard {

@@ -1,15 +1,15 @@
 <template>
-  <section v-if="profile">
+  <div>
     <v-hover v-slot="{ hover }">
       <v-img
         :src="src"
         flat
-        height="240"
-        class="d-flex align-center elevation-14"
+        height="180"
+        class="d-flex align-center elevation-3 decreaseColor"
         transition="fade-transition"
         style="color: #ccc"
         :gradient="gradientOptions()"
-        @load="imgBannerLoaded = true"
+        @load="imgCounter++"
       >
         <v-fade-transition>
           <v-btn
@@ -43,16 +43,15 @@
             bordered
             color="black"
             :icon="profile.photoURL ? '$mdiTrashCanOutline' : '$mdiPlus'"
-            overlap
+            overlapa
             class="cursor-pointer"
           >
             <baseAvatarImg v-if="!profile.photoURL" class="hoverAvatar" :height="180" @click="triggerAvatarInput()" />
             <v-avatar v-else v-ripple style="background: rgba(8, 29, 86, 0.3)" class="elevation-13" size="180">
-              <v-img class="hoverAvatar" :src="profile.photoURL" flat @click="triggerAvatarInput()">
+              <v-img transition="fade-transition" class="hoverAvatar" :src="profile.photoURL" flat @click="triggerAvatarInput()">
                 <template #placeholder>
                   <v-row class="fill-height ma-0" align="center" justify="center">
                     <v-icon dark size="40">$mdiCamera</v-icon>
-                    <!-- <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular> -->
                   </v-row>
                 </template>
               </v-img>
@@ -125,10 +124,10 @@
     <!-- route to profile cards (childs of profile route) -->
     <v-card-text class="px-8">
       <div class="d-flex justify-space-between mr-5 align-center">
-        <div v-if="$route.name !== 'profile'" class="d-flex align-center white--text">
-          <h2 class="mb-6 mt-3 cursor-pointer underlineHover" @click="$router.push('/profile')">Profile</h2>
-          <v-icon class="mt-n2" size="25" dark> $mdiChevronRight</v-icon>
-          <h2 class="mb-6 mt-3 underlineHover">{{ $route.meta.title }}</h2>
+        <div v-if="$route.name !== 'profile'" class="d-flex align-center linkColor">
+          <span class="mb-6 mt-3 cursor-pointer underlineHover bread" @click="$router.push('/profile')">Profile</span>
+          <v-icon class="mt-n2 grey--text text--darken-1 mt-n3" size="18 " dark> $mdiSlashForward</v-icon>
+          <span class="mb-6 mt-3 underlineHover bread">{{ $route.meta.title }}</span>
         </div>
       </div>
 
@@ -136,7 +135,7 @@
         <router-view />
       </keep-alive>
     </v-card-text>
-  </section>
+  </div>
 </template>
 <script>
   import { isEmpty } from 'lodash';
@@ -159,6 +158,7 @@
     },
     data() {
       return {
+        imgCounter: 0,
         progress: 0,
         imgBannerLoaded: false,
         showProfileItems: false,
@@ -166,7 +166,7 @@
     },
 
     computed: {
-      ...get('authentication', ['fullName', 'verified', 'isLoggedIn', 'isAuthExternalProvider', 'profile']),
+      ...get('authentication', ['fullName', 'verified', 'isLoggedIn', 'isAuthExternalProvider', 'profile', 'isProfileLoaded']),
       ...sync('loaders', ['verificationInProgressLoader']),
 
       src() {
@@ -182,12 +182,9 @@
       ...call('snackbar/*'),
 
       gradientOptions() {
-        const { imgBannerLoaded } = this;
-        if (!imgBannerLoaded) return;
-
         const direction = 'to top right';
-        const fromColor = 'rgba(10,10,52,.7)';
-        const toColor = 'rgba(20,50,50,.65)';
+        const fromColor = 'rgba(10,10,10,.7)';
+        const toColor = 'rgba(10,10,10,.65)';
 
         return `${direction}, ${fromColor}, ${toColor}`;
       },
@@ -221,7 +218,7 @@
             this.progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           },
           (error) => {
-            console.log(error);
+            // console.log(error);
           },
           () => {
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
@@ -314,5 +311,22 @@
     cursor: pointer;
     transform: scale(0.98);
     transition: 0.4s;
+  }
+
+  .linkColor {
+    color: #539bf5;
+  }
+
+  .slashcolor {
+    color: #768390;
+  }
+
+  .bread {
+    font-weight: 400 !important;
+    font-size: 15px;
+  }
+
+  .decreaseColor {
+    filter: grayscale(0.5);
   }
 </style>

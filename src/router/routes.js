@@ -1,7 +1,10 @@
+import { isEmpty } from 'lodash';
+import { store } from '@/store';
+
 export default [
   {
     path: '',
-    name: 'Default',
+    name: '/',
     component: () => import(/* webpackChunkName: 'home-page' */ '@/views/home'),
   },
 
@@ -34,6 +37,7 @@ export default [
     meta: {
       requiresAuth: true,
     },
+
     component: () => import(/* webpackChunkName: 'profile-page' */ '@/views/profile'),
 
     children: [
@@ -108,6 +112,6 @@ export default [
   {
     path: '/:catchAll(.*)*',
     name: '404',
-    component: () => import(/* webpackChunkName: '404-page' */ '@/views/four'),
+    component: () => import(/* webpackChunkName: 'home-page' */ '@/views/home'),
   },
 ];

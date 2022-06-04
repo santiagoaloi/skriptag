@@ -1,10 +1,11 @@
 <template>
-  <base-split-2 cols="6" right src="https://media.skriptag.com/img/11.svg" v-bind="$attrs">
+  <base-split-2 col="6" right src="https://media.skriptag.com/img/3.svg" v-bind="$attrs">
     <v-container>
-      <div class="d-flex flex-wrap flex-column pl-1">
+      <div class="d-flex flex-wrap flex-column">
         <template v-if="!recoveryMode">
-          <h1>Login</h1>
-          <p>Time to get stuff done!</p>
+          <skriptag-title class="mb-n3" small>
+            <template #text> Sign In to </template>
+          </skriptag-title>
         </template>
 
         <template v-if="recoveryMode">
@@ -13,11 +14,7 @@
         </template>
 
         <v-fade-transition hide-on-leave>
-          <v-sheet
-            v-if="!recoveryMode && mode !== 'email'"
-            class="transparent"
-            :width="$vuetify.breakpoint.smAndDown ? '100%' : 350"
-          >
+          <div v-if="!recoveryMode && mode !== 'email'" class="transparent" :width="$vuetify.breakpoint.smAndDown ? '100%' : 350">
             <Base-button :loading="loading" class="my-3" block @click="google()">
               <v-icon left> $mdiGoogle</v-icon> Sign-in with Google</Base-button
             >
@@ -30,7 +27,7 @@
             <Base-button class="mt-2" block @click="mode = 'email'">
               <v-icon left> $mdiEmail</v-icon> Sign-in with Email</Base-button
             >
-          </v-sheet>
+          </div>
         </v-fade-transition>
 
         <v-fade-transition hide-on-leave>

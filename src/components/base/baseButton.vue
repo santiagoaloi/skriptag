@@ -1,13 +1,13 @@
 <template>
   <v-btn
-    v-animation:shrink="{ link: true, longPress: true }"
     v-bind="$attrs"
     dark
-    color="#2a3143"
-    class="indigo--text text--lighten-5"
+    outlined
+    style="border-color: #cdd9e51a !important; border: 1px solid! !important; background: #373e47 !important; color: #adbac7"
     :ripple="false"
     :block="$vuetify.breakpoint.xs || block"
     :class="$vuetify.breakpoint.smAndUp ? 'ml-0' : 'mt-3'"
+    depressed
     v-on="$listeners"
   >
     <slot> </slot>

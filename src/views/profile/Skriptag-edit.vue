@@ -1,13 +1,13 @@
 <template>
   <div style="color: #ccc">
     <v-tabs v-model="selectedTab" background-color="transparent">
-      <v-tabs-slider color="#3a3f50"></v-tabs-slider>
+      <v-tabs-slider color="#f47067"></v-tabs-slider>
       <v-tab v-for="tab in tabs" :key="tab.route" :to="tab.route" active-class="active" :disabled="tab.disabled" :ripple="false">
         {{ tab.name }}
       </v-tab>
     </v-tabs>
 
-    <v-divider style="background: #384545"></v-divider>
+    <v-divider style="background: #444c56"></v-divider>
 
     <v-row>
       <v-col sm="10">
@@ -99,12 +99,12 @@
   };
 </script>
 
-<style scoped>
+<style>
   .active {
     color: #b2b6c3 !important;
   }
 
   .border {
-    border-left: solid 1px #384545;
+    border-left: solid 1px #444c56;
   }
 </style>
