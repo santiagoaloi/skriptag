@@ -62,6 +62,7 @@ Vue.directive('animation', {
 });
 
 let app;
+
 // Call this function to instanciate Vue.
 function mountVue() {
   app = new Vue({
@@ -87,11 +88,13 @@ auth.onAuthStateChanged(async (currentUser) => {
   let killListener;
 
   //  If a persisted session exists.
-  // Set the user and profile object to Vuex,
+  // Set the user and profile state.
   //  Create real-time profile updates through a listener.
   if (currentUser) {
+    // Set active session user state.
     store.set('authentication/user', currentUser ?? {});
 
+    // fetch the user profile,
     const { uid } = currentUser;
     const docRef = doc(db, 'users', uid);
     const q = query(docRef);
@@ -102,10 +105,12 @@ auth.onAuthStateChanged(async (currentUser) => {
       store.set('authentication/profile', userProfile);
     });
 
+    // Store the listnener in state, can be called on signOut.
     store.set('authentication/unSubscriveProfile', killListener);
   }
 
   // Instanciate Vue only if the user and profile objects are set.
+  // The wather here is acting like a computed prop.
   store.watch(
     (state) => state.authentication.profile,
     (newProfile) => {
