@@ -1,7 +1,7 @@
 <template>
   <h5 v-bind="$attrs" :class="{ 'py-4': !noGutters }" class="ml-1 basic-link" v-on="$listeners" @click="to && $router.push(to)">
     <v-icon v-if="icon" left small dark>{{ icon }}</v-icon>
-    <slot> </slot>
+    <slot />
   </h5>
 </template>
 

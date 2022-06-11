@@ -4,7 +4,7 @@ const functions = require('firebase-functions');
 admin.initializeApp();
 
 // Appcheck protected / reCAPTCHA authorices only skriptag.com domain.
-exports.listAllUsers = functions.region('europe-west1').https.onCall(async (data, context) => {
+exports.listAllUsers = functions.region('us-central1').https.onCall(async (data, context) => {
   // If appCheck fails, terminate the funciton.
   if (context.app === undefined) {
     throw new functions.https.HttpsError('failed-precondition', 'The function must be called from an App Check verified app.');
@@ -26,7 +26,7 @@ exports.listAllUsers = functions.region('europe-west1').https.onCall(async (data
   }
 });
 
-exports.verifiyUserByEmail = functions.region('europe-west1').https.onCall(async (email) => {
+exports.verifiyUserByEmail = functions.region('us-central1').https.onCall(async (email) => {
   try {
     const user = await admin.auth().getUserByEmail(email);
     const docRef = admin.firestore().collection('users').doc(user.uid);
@@ -40,7 +40,7 @@ exports.verifiyUserByEmail = functions.region('europe-west1').https.onCall(async
   }
 });
 
-exports.disableUserByEmail = functions.region('europe-west1').https.onCall(async (email, context) => {
+exports.disableUserByEmail = functions.region('us-central1').https.onCall(async (email, context) => {
   // If appCheck fails, terminate the funciton.
   if (context.app === undefined) {
     throw new functions.https.HttpsError('failed-precondition', 'The function must be called from an App Check verified app.');
@@ -50,10 +50,6 @@ exports.disableUserByEmail = functions.region('europe-west1').https.onCall(async
   if (!context.auth) {
     throw new functions.https.HttpsError('unauthenticated', 'The function must be called while authenticated');
   }
-
-  const profile = admin.firestore().collection('users').doc(context.auth.uid);
-
-  // console.log(profile);
 
   try {
     // Sets the disabled flag in the user account.
@@ -101,7 +97,7 @@ exports.disableUserByEmail = functions.region('europe-west1').https.onCall(async
   }
 });
 
-exports.enableUserByEmail = functions.region('europe-west1').https.onCall(async (email) => {
+exports.enableUserByEmail = functions.region('us-central1').https.onCall(async (email) => {
   try {
     const user = await admin.auth().getUserByEmail(email);
     const id = user.uid;
@@ -144,7 +140,7 @@ exports.enableUserByEmail = functions.region('europe-west1').https.onCall(async 
   }
 });
 
-exports.deleteUserByEmail = functions.region('europe-west1').https.onCall(async (email) => {
+exports.deleteUserByEmail = functions.region('us-central1').https.onCall(async (email) => {
   try {
     const user = await admin.auth().getUserByEmail(email);
     const id = user.uid;
@@ -189,7 +185,7 @@ exports.deleteUserByEmail = functions.region('europe-west1').https.onCall(async 
   }
 });
 
-exports.chageUserPasswordByEmail = functions.region('europe-west1').https.onCall(async ({ payload }) => {
+exports.chageUserPasswordByEmail = functions.region('us-central1').https.onCall(async ({ payload }) => {
   try {
     const { email, password } = payload;
     const user = await admin.auth().getUserByEmail(email);

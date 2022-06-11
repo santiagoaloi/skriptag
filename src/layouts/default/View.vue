@@ -1,5 +1,5 @@
 <template>
-  <v-main>
+  <v-main class="bgs">
     <keep-alive>
       <router-view v-show="!mobileMenu || !$vuetify.breakpoint.smAndDown"></router-view>
     </keep-alive>

@@ -30,7 +30,7 @@ const getUserState = () =>
 const development = process.env.NODE_ENV === 'development';
 
 // Enable emulators.
-const usingEmulators = false;
+const usingEmulators = true;
 
 const emulate = {
   storage: false,
@@ -42,7 +42,7 @@ const emulate = {
 // If  usingEmulators run all the emulators
 // instead of production servers.
 
-if (usingEmulators && development) {
+if (usingEmulators) {
   if (emulate.storage) {
     connectStorageEmulator(storage, 'localhost', 5001);
   }
@@ -73,6 +73,6 @@ initializeAppCheck(app, {
 // Set the default region for admin SDK functions.
 // The region has to match the CF region.
 // Otherwise CORS errors will happen.
-functions.region = 'europe-west1';
+// functions.region = 'europe-west1';
 
 export { db, storage, auth, functions, getUserState };

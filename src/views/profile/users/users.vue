@@ -18,7 +18,7 @@
           <Base-button class="ml-2"> Filters</Base-button>
 
           <Base-button class="ml-2"> Invite user</Base-button>
-          <vs-tooltip shadow circle color="#ccc">
+          <vs-tooltip shadow circle>
             <Base-button class="ml-2"> <v-icon> $mdiRefresh</v-icon></Base-button>
             <template #tooltip> Reload </template>
           </vs-tooltip>
@@ -52,7 +52,7 @@
                     <v-checkbox v-model="selected" multiple :value="user" style="margin: 0px; padding: 0px" hide-details />
                   </td>
                   <td class="py-4">
-                    <vs-tooltip :not-hover="!user.verified && !user.disabled" shadow circle color="#ccc">
+                    <vs-tooltip :not-hover="!user.verified && !user.disabled" shadow circle>
                       <v-badge :color="getStatusColor(user)" :icon="getStatusIcon(user)" overlap>
                         <baseAvatarImg v-if="!user.photoURL" class="hoverAvatar" :height="35" />
                         <v-avatar v-else size="35">
@@ -76,14 +76,14 @@
                         :key="provider"
                       >
                         <template v-if="provider === 'google.com'">
-                          <vs-tooltip top shadow circle color="#ccc">
+                          <vs-tooltip top shadow circle>
                             <v-icon class="mx-1" small> $mdiGoogle</v-icon>
                             <template #tooltip> Google</template>
                           </vs-tooltip>
                         </template>
 
                         <template v-if="provider === 'password'">
-                          <vs-tooltip top shadow circle color="#ccc">
+                          <vs-tooltip top shadow circle>
                             <v-icon class="mx-1" small> $mdiEmail</v-icon>
                             <template #tooltip> Password</template>
                           </vs-tooltip>
@@ -95,7 +95,7 @@
                   <td>
                     <div class="d-flex flex-wrap justify-center align-center">
                       <div v-for="role in user.roles" :key="role">
-                        <vs-tooltip top shadow circle color="#ccc">
+                        <vs-tooltip top shadow circle>
                           <v-avatar class="mx-1" size="25" color="#373c4c"> {{ role[0] }} </v-avatar>
                           <template #tooltip> {{ role }} </template>
                         </vs-tooltip>
@@ -105,14 +105,14 @@
 
                   <td>
                     <div class="d-flex justify-center">
-                      <vs-tooltip shadow circle color="#ccc">
+                      <vs-tooltip shadow circle>
                         <v-fade-transition>
                           <v-icon v-if="user.hover" class="cursor-pointer">$mdiContentCopy</v-icon>
                         </v-fade-transition>
                         <template #tooltip> Copy UID </template>
                       </vs-tooltip>
 
-                      <vs-tooltip shadow circle color="#ccc">
+                      <vs-tooltip shadow circle>
                         <v-menu absolute rounded="md">
                           <template #activator="{ on }">
                             <v-fade-transition>
@@ -213,14 +213,8 @@
 </template>
 
 <script>
-  import { onSnapshot, collection } from 'firebase/firestore';
   import { call, get, sync } from 'vuex-pathify';
-  import { db } from '@/firebase/firebase';
   import UserRolesDialog from './user-roles-dialog.vue';
-
-  // Roles collection ref
-  const colRefRoles = collection(db, 'roles');
-  const colRefCapabilities = collection(db, 'capabilities');
 
   export default {
     name: 'SkriptagEditUsers',
@@ -237,7 +231,6 @@
         headers: [
           { text: 'Avatar', value: 'avatar', width: '100px' },
           { text: 'Identifier', value: 'email', width: '200' },
-          // { text: 'User ID', value: 'uid', align: 'start', sortable: false },
           { text: 'Providers', align: 'center', value: 'providers', width: '159', sortable: false },
           { text: 'Roles', align: 'center', value: 'roles', sortable: false },
           { text: 'Actions', align: 'center', value: 'actions', width: '200px', sortable: false },
@@ -485,35 +478,14 @@
       },
 
       isSelected(uid) {
-        return this.selected.some((user) => user.uid === uid) ? 'background: #303036' : '';
+        return this.selected.some((user) => user.uid === uid) ? 'background: #2d333b' : '';
       },
-
-      // getCapabilitiesSnaphot() {
-      //   onSnapshot(colRefCapabilities, (snapshot) => {
-      //     const capabilities = [];
-      //     snapshot.docs.forEach((doc) => {
-      //       capabilities.push({ ...doc.data(), hover: false });
-      //     });
-      //     this.capabilities = capabilities;
-      //   });
-      // },
-
-      // getRolesSnaphot() {
-      //   onSnapshot(colRefRoles, (snapshot) => {
-      //     const roles = [];
-      //     snapshot.docs.forEach((doc) => {
-      //       roles.push({ ...doc.data(), hover: false });
-      //     });
-      //     this.roles = roles;
-      //   });
-      // },
     },
   };
 </script>
 <style scoped>
   .theme--dark.v-data-table.solidBackground {
     background-color: #22272e !important;
-    color: #ccc;
   }
 
   .v-data-table {

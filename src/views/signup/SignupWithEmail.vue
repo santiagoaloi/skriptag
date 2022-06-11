@@ -4,7 +4,7 @@
       <form class="d-flex flex-column" @submit.prevent="validate()">
         <v-row>
           <v-col cols="12" lg="12">
-            <small class="ml-1">Email</small>
+            <Base-field-title> Email</Base-field-title>
             <div class="pr-2">
               <Validation-provider
                 v-slot="{ errors, failed }"
@@ -32,7 +32,7 @@
             </div>
           </v-col>
           <v-col cols="12" lg="6">
-            <small class="ml-1">Password</small>
+            <Base-field-title> Password</Base-field-title>
             <div class="pr-2">
               <Validation-provider
                 v-slot="{ errors, failed }"
@@ -63,7 +63,7 @@
             </div>
           </v-col>
           <v-col cols="12" lg="6">
-            <small class="ml-1">Confirm password</small>
+            <Base-field-title> Confirm Password</Base-field-title>
             <div class="pr-2">
               <Validation-provider
                 v-slot="{ errors, failed }"
@@ -94,7 +94,7 @@
             </div>
           </v-col>
           <v-col cols="12" lg="6">
-            <small class="ml-1">Name</small>
+            <Base-field-title> Name</Base-field-title>
             <div class="pr-2">
               <Validation-provider
                 v-slot="{ errors, failed }"
@@ -122,8 +122,7 @@
             </div>
           </v-col>
           <v-col cols="12" lg="6">
-            <small class="ml-1">Last name</small>
-
+            <Base-field-title> Last Name</Base-field-title>
             <div class="pr-2">
               <Validation-provider
                 v-slot="{ errors, failed }"
@@ -152,8 +151,17 @@
           </v-col>
 
           <v-col cols="12">
+            <div class="d-flex align-center my-4">
+              <v-divider class="grey darken-3" />
+            </div>
+            <small>
+              By creating an account, you agree to the <a> Terms of Service.</a> For more information about Skriptags's privacy
+              practices, see the <a> Privacy Statement.</a>
+            </small>
+          </v-col>
+          <v-col cols="12">
             <div :style="$vuetify.breakpoint.smAndUp ? 'float:right' : ''" class="mr-3 mt-2">
-              <Base-button type="submit" :loading="loading"> Signup</Base-button>
+              <Base-button type="submit" :loading="loading"> <v-icon small left>$mdiCheck</v-icon> Signup</Base-button>
             </div>
           </v-col>
         </v-row>
@@ -200,7 +208,7 @@
             this.signup(this.signupForm);
             return;
           }
-          this.snackbarError('Please correct the fields in red');
+          this.snackbarError('please correct the fields highlighted in red');
         } catch (error) {
           this.snackbarError('Something went wrong');
         }

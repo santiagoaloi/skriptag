@@ -20,7 +20,7 @@
           >
             <v-img :transition="false" class="rounded-t-lg" :src="card.img" v-bind="imageOptions()" />
             <v-container>
-              <div class="pa-3" style="color: #ccc">
+              <div class="pa-3">
                 <h4>{{ card.title }}</h4>
                 <h5>{{ card.text }}</h5>
               </div>
@@ -116,6 +116,7 @@
 </script>
 <style>
   .hoverCard:hover {
+    transform: translate(0, 5px);
     -webkit-transform: translate(0, 5px);
     -webkit-box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, 0) !important;
     box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0) !important;
@@ -134,24 +135,5 @@
 
   .ripple-opacity {
     opacity: 0.1;
-  }
-
-  box-shadow .disabled-card {
-    pointer-events: none;
-  }
-  .my-card .vs-card {
-    width: auto !important;
-    height: 100% !important;
-
-    max-width: unset !important;
-    max-height: unset !important;
-  }
-
-  .my-card .vs-card:hover {
-    opacity: 1w;
-  }
-
-  .vs-card-content {
-    height: 100% !important;
   }
 </style>

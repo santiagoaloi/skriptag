@@ -6,7 +6,7 @@
     <ValidationObserver ref="passwordField" slim>
       <form class="d-flex flex-column" @submit.prevent="validatePassword()">
         <v-card-text class="mt-n6">
-          <v-btn tabindex="-1" :ripple="false" x-small color="white" class="ml-n2 mb-n2" plain>Password</v-btn>
+          <Base-field-title> Password</Base-field-title>
           <v-row>
             <v-col cols="12">
               <div v class="py-2 pr-2">
@@ -37,7 +37,7 @@
               </div>
             </v-col>
             <v-col cols="12" lg="6">
-              <small class="ml-1">New password</small>
+              <Base-field-title> New Password</Base-field-title>
               <div class="pr-2">
                 <Validation-provider
                   v-slot="{ errors, failed }"
@@ -71,7 +71,7 @@
               </div>
             </v-col>
             <v-col cols="12" lg="6">
-              <small class="ml-1">Confirm password</small>
+              <Base-field-title> Confirm Password</Base-field-title>
               <div class="pr-2">
                 <Validation-provider
                   v-slot="{ errors, failed }"
@@ -109,8 +109,8 @@
 
         <v-card-actions class="px-6 mt-5">
           <v-spacer></v-spacer>
-          <v-btn :disabled="loading" color="grey lighten-1" text @click.prevent="close()"> Close </v-btn>
-          <v-btn :loading="loading" color="#de355f" text type="submit"> Continue </v-btn>
+          <BaseButton :disabled="loading" text @click.prevent="close()"> Close</BaseButton>
+          <BaseButton class="ml-3" :loading="loading" type="submit"> Continue</BaseButton>
         </v-card-actions>
       </form>
     </ValidationObserver>

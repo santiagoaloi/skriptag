@@ -1,5 +1,5 @@
 <template>
-  <div style="color: #ccc">
+  <div>
     <v-tabs v-model="selectedTab" background-color="transparent">
       <v-tabs-slider color="#f47067"></v-tabs-slider>
       <v-tab v-for="tab in tabs" :key="tab.route" :to="tab.route" active-class="active" :disabled="tab.disabled" :ripple="false">

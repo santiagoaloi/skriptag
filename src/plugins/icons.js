@@ -38,6 +38,7 @@ import {
   mdiContentCopy,
   mdiAlertOctagon,
   mdiSlashForward,
+  mdiConsole,
 } from '@mdi/js';
 
 export const icons = {
@@ -81,5 +82,6 @@ export const icons = {
     mdiContentCopy,
     mdiAlertOctagon,
     mdiSlashForward,
+    mdiConsole,
   },
 };

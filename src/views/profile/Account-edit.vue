@@ -1,16 +1,16 @@
 <template>
-  <div style="color: #ccc">
+  <div>
     <ValidationObserver ref="accountEdit" slim>
       <form class="d-flex flex-column" @submit.prevent="validatePasswords()">
         <v-row no-gutters>
           <v-col cols="12" sm="6" md="4">
             <v-row>
               <v-col cols="12">
-                <h3 class="mb-2">Change password</h3>
+                <BaseTitleDivider>Change Password</BaseTitleDivider>
               </v-col>
 
               <v-col cols="12">
-                <small class="ml-1">Old password</small>
+                <Base-field-title> Old Password</Base-field-title>
                 <Validation-provider
                   v-slot="{ errors, failed }"
                   v-bind="{ ...vvOptions }"
@@ -30,14 +30,14 @@
                       <v-icon dark>$mdiAccount</v-icon>
                     </template>
                     <template #message-danger>
-                      <v-icon v-if="failed" color="pink" style="margin-top: -1px" x-small dark>$mdiAlertCircle</v-icon>
+                      <v-icon v-if="failed" color="pink" style="margin-top: -1px" x-small dark>$mdiAlertCircleOutline</v-icon>
                       {{ errors[0] }}
                     </template>
                   </vs-input>
                 </Validation-provider>
               </v-col>
               <v-col cols="12">
-                <small class="ml-1">New password</small>
+                <Base-field-title> New Password</Base-field-title>
                 <Validation-provider
                   v-slot="{ errors, failed }"
                   v-bind="{ ...vvOptions }"
@@ -58,14 +58,14 @@
                       <v-icon dark>$mdiLock</v-icon>
                     </template>
                     <template #message-danger>
-                      <v-icon v-if="failed" color="pink" style="margin-top: -1px" x-small dark>$mdiAlertCircle</v-icon>
+                      <v-icon v-if="failed" color="pink" style="margin-top: -1px" x-small dark>$mdiAlertCircleOutline</v-icon>
                       {{ errors[0] }}
                     </template>
                   </vs-input>
                 </Validation-provider>
               </v-col>
               <v-col cols="12">
-                <small class="ml-1">Confirm password</small>
+                <Base-field-title> Confirm Password</Base-field-title>
                 <Validation-provider
                   v-slot="{ errors, failed }"
                   v-bind="{ ...vvOptions }"
@@ -86,7 +86,7 @@
                       <v-icon dark>$mdiLock</v-icon>
                     </template>
                     <template #message-danger>
-                      <v-icon v-if="failed" color="pink" style="margin-top: -1px" x-small dark>$mdiAlertCircle</v-icon>
+                      <v-icon v-if="failed" color="pink" style="margin-top: -1px" x-small dark>$mdiAlertCircleOutline</v-icon>
                       {{ errors[0] }}
                     </template>
                   </vs-input>
@@ -94,47 +94,40 @@
               </v-col>
               <v-col cols="12">
                 <div class="mt-4">
-                  <v-btn
-                    :ripple="false"
-                    :block="!$vuetify.breakpoint.smAndUp"
-                    :loading="loading"
-                    type="submit"
-                    dark
-                    color="#2a3143"
-                    ><v-icon left> $mdiRefresh</v-icon><span>Update password </span></v-btn
-                  >
+                  <BaseButton :loading="loading" type="submit">
+                    <v-icon left> $mdiRefresh</v-icon><span>Update password </span>
+                  </BaseButton>
                 </div>
               </v-col>
 
               <v-col cols="12">
                 <div class="mt-4">
-                  <h3 class="mb-2">Remove account</h3>
+                  <BaseTitleDivider danger>Delete Account</BaseTitleDivider>
                   <p>
                     <v-icon small style="color: #ccc">$mdiHelpCircleOutline</v-icon>
                     Removing your account will also remove everything related to it, like blog posts, comments, downloadable
-                    content and so on. This action cannot be undone.
+                    content and so on. This action can't be undone.
                   </p>
                 </div>
               </v-col>
 
               <v-col cols="12">
-                <v-btn :block="!$vuetify.breakpoint.smAndUp" dark color="#de355f" @click="removeAccountDialog = true">
+                <BaseButton style="color: #e5534b" :loading="loading" @click="removeAccountDialog = true">
                   <v-icon :left="$vuetify.breakpoint.lgAndUp"> $mdiDeleteOutline</v-icon>
                   <span v-if="$vuetify.breakpoint.xs || (!$vuetify.breakpoint.md && !$vuetify.breakpoint.sm) || verified">
                     Remove account</span
                   >
-                </v-btn>
+                </BaseButton>
 
-                <v-btn
+                <BaseButton
                   v-if="!verified"
-                  :block="!$vuetify.breakpoint.smAndUp"
-                  dark
-                  color="orange darken-3"
                   :class="{ 'ml-3': $vuetify.breakpoint.smAndUp, 'mt-3': !$vuetify.breakpoint.smAndUp }"
+                  color="orange darken-3"
+                  :loading="loading"
                   @click="verifyAccountDialog = true"
                 >
-                  <v-icon left> $mdiEmailSeal</v-icon>Resend verification email</v-btn
-                >
+                  <v-icon left> $mdiRefresh</v-icon><span>Resend verification email </span>
+                </BaseButton>
               </v-col>
               <v-col cols="12">
                 <v-divider class="my-4" style="background: #404040"></v-divider>
@@ -210,7 +203,7 @@
             this.accountResetPassword({ credentials: this.credentials });
             this.clearCredentialsform();
           } else {
-            this.snackbarError('Please correct the fields in red');
+            this.snackbarError('please correct the fields highlighted in red');
           }
         } catch (error) {
           this.snackbarError('Something went wrong ');

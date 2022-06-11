@@ -1,5 +1,5 @@
 <template>
-  <base-split-2 col="6" right src="https://media.skriptag.com/img/3.svg" v-bind="$attrs">
+  <base-split-2 col="6" right src="login1.svg" v-bind="$attrs">
     <v-container>
       <div class="d-flex flex-wrap flex-column">
         <template v-if="!recoveryMode">
@@ -21,7 +21,7 @@
             <Base-button disabled class="my-3" block> <v-icon left> $mdiGithub</v-icon> Sign-in with Github</Base-button>
 
             <div class="d-flex align-center">
-              <v-divider class="grey darken-3" /> <span class="mx-3" style="color: #ccc"> or </span>
+              <v-divider class="grey darken-3" /> <span class="mx-3"> or </span>
               <v-divider class="grey darken-3" />
             </div>
             <Base-button class="mt-2" block @click="mode = 'email'">
@@ -97,7 +97,7 @@
 
             return;
           }
-          this.snackbarError('Please correct the fields in red');
+          this.snackbarError('please correct the fields highlighted in red');
         } catch (error) {
           this.snackbarError('something went wrong ');
         }

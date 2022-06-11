@@ -1,5 +1,4 @@
 module.exports = {
-  // https://cli.vuejs.org/config/#css-extract
   configureWebpack: {
     devtool: 'source-map',
   },

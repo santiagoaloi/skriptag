@@ -1,20 +1,21 @@
 <template>
-  <base-split-2 col="7" src="https://media.skriptag.com/img/3.svg" v-bind="$attrs">
-    <v-container>
-      <div class="d-flex flex-wrap flex-column">
-        <h2 class="mb-5">Signup with email</h2>
-        <div>
-          <v-alert style="color: #ccc" dense text dark color="#22272d" border="left" icon="$mdiChevronUp">
-            To signup with google or github,
-            <span class="cursor-pointer teal--text text--accent-4" @click="$router.push('login')"> go to the login page</span>. An
-            account will be created on your first login.
-          </v-alert>
-        </div>
+  <base-split-2 col="7" src="signup2.svg" v-bind="$attrs">
+    <div class="d-flex flex-wrap flex-column">
+      <skriptag-title small>
+        <template #text> Signup with email to </template>
+      </skriptag-title>
 
-        <BaseLink to="login">Already have an account? Login</BaseLink>
-        <SignupWithEmail />
-      </div>
-    </v-container>
+      <v-alert dark dismissible color="#383f43" border="top">
+        <div class="px-3">
+          To signup with google or github,
+          <span style="color: #539bf5" class="cursor-pointer" @click="$router.push('login')"> go to the login page</span>, an
+          account will be created on your first login.
+        </div>
+      </v-alert>
+
+      <BaseLink to="login">Already have an account? Login</BaseLink>
+      <SignupWithEmail />
+    </div>
   </base-split-2>
 </template>
 <script>
@@ -66,7 +67,7 @@
             this.signup(this.signupForm);
             return;
           }
-          this.snackbarError('Please correct the fields in red');
+          this.snackbarError('please correct the fields highlighted in red');
         } catch (error) {
           this.snackbarError('Something went wrong');
         }

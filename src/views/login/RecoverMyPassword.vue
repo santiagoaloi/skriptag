@@ -11,7 +11,7 @@
         <BaseLink v-if="!recoveryMode" icon="$mdiLock" @click="recoveryMode = true">Recover my password</BaseLink>
         <v-row>
           <v-col cols="12" lg="10">
-            <small class="pl-1">Email</small>
+            <Base-field-title> Email</Base-field-title>
             <div class="pr-2">
               <Validation-provider
                 v-slot="{ errors, failed }"
@@ -39,7 +39,7 @@
             </div>
           </v-col>
           <v-col v-if="!recoveryMode" cols="12" lg="10">
-            <small class="pl-1">Password</small>
+            <Base-field-title> Password</Base-field-title>
             <div class="pr-2">
               <Validation-provider
                 v-slot="{ errors, failed }"
@@ -74,7 +74,7 @@
               </template>
 
               <template v-if="recoveryMode">
-                <Base-button large @click.prevent="recoveryMode = false"> Cancel</Base-button>
+                <Base-button @click.prevent="recoveryMode = false"> Cancel</Base-button>
                 <Base-button type="submit" :loading="loading"> Reset password</Base-button>
               </template>
             </div>
@@ -134,7 +134,7 @@
 
             return;
           }
-          this.snackbarError('Please correct the fields in red');
+          this.snackbarError('please correct the fields highlighted in red');
         } catch (error) {
           this.snackbarError('something went wrong ');
         }

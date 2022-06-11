@@ -1,11 +1,11 @@
 <template>
-  <div>
+  <div v-if="profile">
     <v-hover v-slot="{ hover }">
       <v-img
         :src="src"
         flat
-        height="180"
-        class="d-flex align-center elevation-3 decreaseColor"
+        height="240"
+        class="d-flex align-center elevation-3"
         transition="fade-transition"
         style="color: #ccc"
         :gradient="gradientOptions()"
@@ -47,7 +47,7 @@
             class="cursor-pointer"
           >
             <baseAvatarImg v-if="!profile.photoURL" class="hoverAvatar" :height="180" @click="triggerAvatarInput()" />
-            <v-avatar v-else v-ripple style="background: rgba(8, 29, 86, 0.3)" class="elevation-13" size="180">
+            <v-avatar v-else v-ripple class="elevation-13" size="180">
               <v-img transition="fade-transition" class="hoverAvatar" :src="profile.photoURL" flat @click="triggerAvatarInput()">
                 <template #placeholder>
                   <v-row class="fill-height ma-0" align="center" justify="center">
@@ -76,7 +76,7 @@
                 <v-chip
                   class="mb-4 elevation-6"
                   small
-                  :color="verified ? 'indigo darken-2' : 'orange darken-1'"
+                  :color="verified ? 'indigo darken-3' : 'orange darken-1'"
                   text-color="white"
                 >
                   <v-avatar left>
@@ -84,7 +84,7 @@
                   </v-avatar>
                   <span v-if="verificationInProgressLoader"> loading... </span>
                   <span v-else>
-                    {{ verified ? 'Verified' : 'pending verification' }}
+                    {{ verified ? 'Verified' : 'Pending Verification' }}
                   </span>
                 </v-chip>
 
@@ -121,10 +121,10 @@
 
     <profile-cards v-show="$route.name === 'profile'" />
 
-    <!-- route to profile cards (childs of profile route) -->
-    <v-card-text class="px-8">
+    <!-- route to profile cards (childs of profile) -->
+    <v-card-text v-show="$route.name !== 'profile'" class="px-8">
       <div class="d-flex justify-space-between mr-5 align-center">
-        <div v-if="$route.name !== 'profile'" class="d-flex align-center linkColor">
+        <div class="d-flex align-center linkColor">
           <span class="mb-6 mt-3 cursor-pointer underlineHover bread" @click="$router.push('/profile')">Profile</span>
           <v-icon class="mt-n2 grey--text text--darken-1 mt-n3" size="18 " dark> $mdiSlashForward</v-icon>
           <span class="mb-6 mt-3 underlineHover bread">{{ $route.meta.title }}</span>
@@ -170,7 +170,7 @@
       ...sync('loaders', ['verificationInProgressLoader']),
 
       src() {
-        return this.profile.coverAvatar || `https://media.skriptag.com/img/banner.png`;
+        return this.profile?.coverAvatar || `https://media.skriptag.com/img/banner.png`;
       },
 
       editableProfile: sync('authentication/profile'),
@@ -206,7 +206,7 @@
         const fileSize = this.$refs.avatarInput.files[0].size;
 
         if (fileSize > 2 * 1024 * 1024) {
-          this.snackbarError('The avatar image size cannot be bigger than 2MB');
+          this.snackbarError('The avatar image should be less than 2MB');
           return;
         }
 
@@ -237,7 +237,7 @@
         const fileSize = this.$refs.coverInput.files[0].size;
 
         if (fileSize > 2 * 1024 * 1024) {
-          this.snackbarError('The cover image size cannot be bigger than 2MB');
+          this.snackbarError('The cover image should be less than 2MB');
           return;
         }
 
@@ -314,7 +314,8 @@
   }
 
   .linkColor {
-    color: #539bf5;
+    /* color: #539bf5; */
+    color: #5c77a5;
   }
 
   .slashcolor {

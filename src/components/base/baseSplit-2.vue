@@ -1,7 +1,14 @@
 <template>
-  <v-row style="color: #ccc" :class="rowClass" no-gutters>
+  <v-row :class="rowClass" no-gutters>
     <v-col :order="colOrder()" :md="remainingCols" cols="12">
-      <v-img class="decreaseColor" :class="imageClass()" v-bind="imageOptions()" @load="imageLoaded = true"> </v-img>
+      <v-img
+        :src="require(`@/assets/static/${src}`)"
+        class="decreaseColor"
+        :class="imageClass()"
+        v-bind="imageOptions()"
+        @load="imageLoaded = true"
+      >
+      </v-img>
     </v-col>
     <v-col :md="col" cols="12">
       <v-container class="fill-height">
@@ -42,7 +49,7 @@
 
     computed: {
       rowClass() {
-        return ['fill-height', 'pattern-bg', this.imageLoaded ? 'reveal' : 'hide'];
+        return ['fill-height'];
       },
 
       remainingCols() {
@@ -91,7 +98,6 @@
           gradient: gradientOptions(),
           width: '100%',
           style: { height: '100%' },
-          src: this.src || `https://picsum.photos/1280/800?${Date.now().toString().slice(0, 1)}`,
           transition: (() => {
             if (smAndDown) {
               return 'fade-transition';

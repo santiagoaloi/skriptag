@@ -9,20 +9,21 @@ service firebase.storage {
 
   // Cascade read to any image type at any path
   // All images can be read.
+  
   match /{allImages=**} {
     allow read;
   }
 
-  // File should be less than 2MB
-  // Allow images only.
-  // Uploaded content type matches existing content type
-  // Only images with metadata visibility set as public
-  // Allow only authenticated content owners access
+// Grants a user write access if the file is...
+// less than 2MB.
+// an image type only.
+// the user is authenticated
+// authenticated user matches their user ID.
+
   match /users/{userId}/{fileName} {
     allow write: if 
     isImageBelowMaxSize(2) &&
     request.resource.contentType.matches('image/.*') &&
-    request.resource.contentType == resource.contentType &&
     request.auth != null && 
     request.auth.uid == userId 
     }

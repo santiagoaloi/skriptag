@@ -281,14 +281,9 @@ const actions = {
   },
 
   // Logout and clear user data objects in Vuex.
-  async logout({ state }) {
-    await signOut(auth);
-
-    // Terminate the user profile listener.
-    // No more real-time updates after logout.
-    state.unSubscriveProfile();
-
+  async logout() {
     route('/');
+    await signOut(auth);
   },
 
   // Creates a new user account and routes to profile page.
@@ -305,8 +300,6 @@ const actions = {
       await sendEmailVerification(userCredential.user);
       dispatch('addUserToUsersCollection', { user, signupForm });
 
-      // Set user in Vuex and navigate to the new user profile.
-      // store.set('authentication/user', user);
       router.push('profile');
       store.set('loaders/signupLoader', false);
     } catch ({ ...error }) {
@@ -346,11 +339,6 @@ const actions = {
   async authenticateWithGoogle({ dispatch }) {
     store.set('loaders/signInWithGoogle', true);
 
-    // User chooses not to persist the sessio on tab or browser exit..
-    if (!state.isSessionPersisted) {
-      await setPersistence(auth, browserSessionPersistence);
-    }
-
     try {
       const provider = new GoogleAuthProvider();
 
@@ -375,13 +363,11 @@ const actions = {
         }
       }
 
-      // Set user in Vuex and navigate to the new user profile.
-      store.set('authentication/user', user);
+      route('/profile');
 
-      router.push('/profile');
       store.set('loaders/signInWithGoogle', false);
     } catch ({ ...error }) {
-      // console.log(error.code);
+      dispatch('snackbar/snackbarError', `Something went wrong authenticating`, { root: true });
       store.set('loaders/signInWithGoogle', false);
     }
   },
@@ -574,6 +560,7 @@ const actions = {
         snap.docChanges().forEach(({ doc, type }) => {
           const profile = doc.data();
 
+          // Merge authUser with User profile and add hover key, used for table row hover buttons.
           const profileCombined = { ...profile, authUser: userMap.get(profile.uid) || {}, hover: false };
 
           if (type === 'modified') {

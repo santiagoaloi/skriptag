@@ -13,7 +13,7 @@
             solo
           />
           <Base-button small class="ml-2" large @click="roleDialog = true"> Add role</Base-button>
-          <vs-tooltip shadow circle color="#ccc">
+          <vs-tooltip shadow circle>
             <template #tooltip> Reload </template>
           </vs-tooltip>
 
@@ -44,7 +44,7 @@
 
                   <td>
                     <div class="d-flex justify-center">
-                      <vs-tooltip shadow circle color="#ccc">
+                      <vs-tooltip shadow circle>
                         <v-menu absolute rounded="md">
                           <template #activator="{ on }">
                             <v-fade-transition>
@@ -251,7 +251,6 @@
 <style scoped>
   .theme--dark.v-data-table.solidBackground {
     background-color: #25272c !important;
-    color: #ccc;
   }
 
   .v-data-table {

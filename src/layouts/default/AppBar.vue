@@ -29,7 +29,7 @@
 
     <template v-if="profile">
       <BaseButton v-if="!$vuetify.breakpoint.smAndDown" key="btn1" @click="logout">
-        {{ `Logout ${firstAndShortLast || ''}` }}
+        <v-icon left class="mr-2" small>$mdiLogoutVariant</v-icon>{{ `Logout ${firstAndShortLast || ''}` }}
       </BaseButton>
       <BaseButton
         v-if="!$vuetify.breakpoint.smAndDown && $route.name !== 'profile'"
@@ -37,7 +37,7 @@
         class="ml-3"
         @click="$router.push('/profile')"
       >
-        Console
+        <v-icon left class="mr-2" small>$mdiConsole</v-icon> Console
       </BaseButton>
     </template>
 

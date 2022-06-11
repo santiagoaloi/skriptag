@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer v-if="$vuetify.breakpoint.mdAndUp" color="#22272d" width="220" dark app>
+  <v-navigation-drawer v-if="$vuetify.breakpoint.mdAndUp" color="#22272d" width="220" dark app stateless>
     <v-divider></v-divider>
 
     <v-list nav dense>
@@ -22,7 +22,7 @@
   </v-navigation-drawer>
 </template>
 <script>
-  import { call, get } from 'vuex-pathify';
+  import { get } from 'vuex-pathify';
 
   export default {
     name: 'DefaultDrawer',
@@ -36,19 +36,6 @@
 
     computed: {
       ...get('authentication', ['isLoggedIn', 'profile']),
-    },
-
-    mounted() {
-      this.delayRender(400);
-    },
-
-    methods: {
-      ...call('app', ['sleep']),
-
-      async delayRender(ms) {
-        await this.sleep(ms);
-        this.showSidebar = true;
-      },
     },
   };
 </script>

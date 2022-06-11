@@ -25,7 +25,7 @@ const actions = {
     const payload = {
       value: true,
       text: message,
-      color: 'pink accent-3',
+      color: 'pink accent-2',
       icon: '$mdiAlertOctagon',
     };
 

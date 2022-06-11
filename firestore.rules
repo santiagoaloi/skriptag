@@ -7,13 +7,14 @@ service cloud.firestore {
       allow read, write: if false;
     }
 
-  //Roots can do anything.
+  // Roots can do anything.
+  // Checking for root means one document read per rule check.
   match /{document=**} {
     allow read, write: if
     get(/databases/$(database)/documents/users/$(request.auth.uid)).data.roles.hasAny(['root'])
   }
 
-  // Grants a user access to a node matching their user ID
+  // Grants a user (write,read) access to a node matching their user ID
   // writes are allowed if no new fields are added.
   // Files look like: "user/<UID>/path/to/file.txt"
   

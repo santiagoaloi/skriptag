@@ -1,6 +1,3 @@
-import { isEmpty } from 'lodash';
-import { store } from '@/store';
-
 export default [
   {
     path: '',
@@ -46,7 +43,7 @@ export default [
         name: 'skriptag-edit',
         meta: {
           requiresAuth: true,
-          title: 'skriptag edit',
+          title: 'Skriptag Edit',
         },
         redirect: { name: 'skriptag-edit-users' },
         component: () => import(/* webpackChunkName: 'profile-skriptag-edit' */ '@/views/profile/Skriptag-edit'),
@@ -91,7 +88,7 @@ export default [
         name: 'profile-edit',
         meta: {
           requiresAuth: true,
-          title: 'basic profile information',
+          title: 'Basic Profile Information',
         },
 
         component: () => import(/* webpackChunkName: 'profile-profile-edit' */ '@/views/profile/Profile-edit'),
@@ -101,7 +98,7 @@ export default [
         name: 'account-edit',
         meta: {
           requiresAuth: true,
-          title: 'account details',
+          title: 'Account Details',
         },
 
         component: () => import(/* webpackChunkName: 'profile-account-edit' */ '@/views/profile/Account-edit'),

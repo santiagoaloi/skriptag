@@ -61,11 +61,14 @@ Vue.directive('animation', {
   },
 });
 
-let app;
+// Vue will be mounted here.
+let appMounted;
+
+const profileLoaded = store.state.authentication.isProfileLoaded;
 
 // Call this function to instanciate Vue.
 function mountVue() {
-  app = new Vue({
+  appMounted = new Vue({
     vuetify,
     store,
     router,
@@ -76,47 +79,54 @@ function mountVue() {
 // real-time authentication state.
 // real-time profile snapShots.
 // auto-closing listener on signOut.
-auth.onAuthStateChanged(async (currentUser) => {
+auth.onAuthStateChanged(async (authenticatedUser) => {
   // mounts Vue excluding authentication features.
-  // Stop the function right here.
-  if (!app && !currentUser) {
+  // Stop the function right there.
+  if (!appMounted && !authenticatedUser) {
     mountVue();
     return;
   }
 
-  let userProfile;
-  let killListener;
-
-  //  If a persisted session exists.
-  // Set the user and profile state.
-  //  Create real-time profile updates through a listener.
-  if (currentUser) {
-    // Set active session user state.
-    store.set('authentication/user', currentUser ?? {});
-
-    // fetch the user profile,
-    const { uid } = currentUser;
-    const docRef = doc(db, 'users', uid);
-    const q = query(docRef);
-
-    // create the listener, calling killListener() will destroy it,
-    killListener = onSnapshot(q, (querySnap) => {
-      userProfile = querySnap.data();
-      store.set('authentication/profile', userProfile);
-    });
-
-    // Store the listnener in state, can be called on signOut.
-    store.set('authentication/unSubscriveProfile', killListener);
-  }
-
-  // Instanciate Vue only if the user and profile objects are set.
-  // The wather here is acting like a computed prop.
+  // Instanciate Vue only if profile object is loaded
+  // and vue isn't instanciated.
   store.watch(
     (state) => state.authentication.profile,
     (newProfile) => {
-      if (!isEmpty(newProfile) && !app) {
+      if (!isEmpty(newProfile) && !appMounted) {
         mountVue();
       }
     },
   );
+
+  let userProfile;
+  let unSubscriveProfile;
+
+  // If a persisted session exists.
+  // Set the user and profile state.
+  // Create real-time profile updates through a listener.
+  if (authenticatedUser) {
+    // Set active session user state.
+    store.set('authentication/user', authenticatedUser);
+
+    if (!profileLoaded) {
+      // fetch the user profile.
+      const { uid } = authenticatedUser;
+      const docRef = doc(db, 'users', uid);
+      const q = query(docRef);
+
+      // create the listener, calling killListener() will destroy it,
+      unSubscriveProfile = onSnapshot(q, (querySnap) => {
+        userProfile = querySnap.data();
+        store.set('authentication/profile', userProfile);
+        store.set('authentication/unSubscriveProfile', unSubscriveProfile);
+      });
+    }
+    return;
+  }
+  // Kill the profile real-time data listener.
+  store.state.authentication.unSubscriveProfile();
+
+  // Clear user and profile objects.
+  store.set('authentication/profile', {});
+  store.set('authentication/user', authenticatedUser);
 });

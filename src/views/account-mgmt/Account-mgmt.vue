@@ -4,7 +4,6 @@
       <div class="d-flex flex-wrap flex-column">
         <h1 v-if="mode === 'resetPassword'">Reset Password</h1>
         <h1 v-else>Account verification</h1>
-
         <p v-if="mode === 'resetPassword'">Type your new password here.</p>
         <p v-else>Verification in progres...</p>
       </div>
@@ -12,7 +11,7 @@
         <form class="d-flex flex-column" @submit.prevent="validateNewPassword()">
           <v-row>
             <v-col v-if="mode === 'resetPassword'" cols="12" lg="10">
-              <small class="ml-1">Password</small>
+              <Base-field-title> Password</Base-field-title>
               <div class="pr-2">
                 <Validation-provider
                   v-slot="{ errors, failed }"
@@ -38,7 +37,7 @@
               </div>
             </v-col>
             <v-col v-if="mode === 'resetPassword'" cols="12" lg="10">
-              <small class="ml-1">Confirm password</small>
+              <Base-field-title> Confirm Password</Base-field-title>
               <div class="pr-2">
                 <Validation-provider
                   v-slot="{ errors, failed }"
@@ -118,7 +117,7 @@
             this.accountRecoveryResetPassword({ payload: { newPassword: this.newPassword, oobCode: this.oobCode } });
             return;
           }
-          this.snackbarError('Please correct the fields in red');
+          this.snackbarError('please correct the fields highlighted in red');
         } catch (error) {
           this.snackbarError('something went wrong ');
         }

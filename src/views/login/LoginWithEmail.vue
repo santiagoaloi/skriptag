@@ -1,10 +1,10 @@
 <template>
   <ValidationObserver ref="loginForm" slim>
     <form class="d-flex flex-column" @submit.prevent="validateLoginForm()">
-      <BaseLink v-if="!recoveryMode" icon="$mdiLock" @click="recoveryMode = true">Recover my password</BaseLink>
+      <BaseLink v-if="!recoveryMode" icon="$mdiLock"><span @click="recoveryMode = true"> Recover my password</span></BaseLink>
       <v-row>
         <v-col cols="12">
-          <small class="pl-1">Email</small>
+          <Base-field-title> Email</Base-field-title>
           <div class="pr-2">
             <Validation-provider
               v-slot="{ errors, failed }"
@@ -32,7 +32,7 @@
           </div>
         </v-col>
         <v-col v-if="!recoveryMode" cols="12">
-          <small class="pl-1">Password</small>
+          <Base-field-title> Password</Base-field-title>
           <div class="pr-2">
             <Validation-provider
               v-slot="{ errors, failed }"
@@ -75,7 +75,7 @@
             </template>
 
             <template v-if="recoveryMode">
-              <Base-button :disabled="loading" class="mr-sm-3" large @click.prevent="recoveryMode = false"> Cancel</Base-button>
+              <Base-button :disabled="loading" class="mr-sm-3" @click.prevent="recoveryMode = false"> Cancel</Base-button>
               <Base-button type="submit" :loading="loading"> Reset password</Base-button>
             </template>
           </div>
@@ -135,7 +135,7 @@
 
             return;
           }
-          this.snackbarError('Please correct the fields in red');
+          this.snackbarError('please correct the fields highlighted in red');
         } catch (error) {
           this.snackbarError('something went wrong ');
         }

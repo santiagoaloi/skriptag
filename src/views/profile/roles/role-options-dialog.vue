@@ -6,7 +6,7 @@
       <v-card-text class="mt-n6">
         <v-row>
           <v-col cols="6">
-            <small class="ml-1">Role name</small>
+            <Base-field-title> Role Name</Base-field-title>
             <div class="pr-2 py-1">
               <Validation-provider
                 v-slot="{ failed, errors }"
@@ -35,7 +35,7 @@
           </v-col>
 
           <v-col cols="12">
-            <small class="ml-1">Role description</small>
+            <Base-field-title> Role Description</Base-field-title>
             <div class="pr-2 py-1">
               <Validation-provider
                 v-slot="{ failed, errors }"
@@ -63,7 +63,7 @@
           </v-col>
 
           <v-col cols="12">
-            <small class="ml-1">Capabilities</small>
+            <Base-field-title> Role Capabilities</Base-field-title>
             <div class="pr-2 py-1">
               <vs-select
                 v-model="role.capabilities"
@@ -176,7 +176,7 @@
             return;
           }
           this.loading = false;
-          this.snackbarError('Please correct the fields in red');
+          this.snackbarError('please correct the fields highlighted in red');
         } catch (error) {
           this.snackbarError('something went wrong ');
           this.loading = false;

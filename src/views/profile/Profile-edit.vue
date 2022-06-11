@@ -6,7 +6,7 @@
           <v-col cols="12" sm="6" md="4">
             <v-row>
               <v-col cols="12">
-                <small class="ml-1">Name</small>
+                <Base-field-title> Name</Base-field-title>
                 <div class="pr-2">
                   <Validation-provider
                     v-slot="{ failed, errors }"
@@ -34,7 +34,7 @@
                 </div>
               </v-col>
               <v-col cols="12">
-                <small class="ml-1">Last name</small>
+                <Base-field-title> Last Name</Base-field-title>
                 <div class="pr-2">
                   <Validation-provider
                     v-slot="{ failed, errors }"
@@ -94,7 +94,7 @@
 </template>
 <script>
   import { sync, call, get } from 'vuex-pathify';
-  import { cloneDeep, merge } from 'lodash';
+  import { cloneDeep } from 'lodash';
 
   export default {
     name: 'ProfileEdit',
@@ -165,7 +165,7 @@
               this.$router.push('/profile');
               return;
             }
-            this.snackbarError('Please correct the fields in red');
+            this.snackbarError('please correct the fields highlighted in red');
             this.loading = false;
           }
         } catch (error) {

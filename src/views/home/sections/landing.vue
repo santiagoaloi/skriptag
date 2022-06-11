@@ -1,6 +1,6 @@
 <template>
-  <base-split-2 col="6" src="https://media.skriptag.com/img/2.svg" v-bind="$attrs">
-    <v-chip color="pink" dark small>Beta 1.1.4</v-chip>
+  <base-split-2 col="6" src="landing1.svg" v-bind="$attrs">
+    <v-chip color="pink" dark small>Beta 0.1.4</v-chip>
     <skriptag-title large class="mb-4" />
     <article>
       <h2 class="font-weight-light">
