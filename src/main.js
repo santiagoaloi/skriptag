@@ -66,11 +66,11 @@ let appMounted;
 
 const profileLoaded = store.state.authentication.isProfileLoaded;
 
-// Call this function to instanciate Vue.
+// Call mountVue to instanciate Vue.
 function mountVue() {
   appMounted = new Vue({
-    vuetify,
     store,
+    vuetify,
     router,
     render: (h) => h(App),
   }).$mount('#app');
@@ -80,15 +80,15 @@ function mountVue() {
 // real-time profile snapShots.
 // auto-closing listener on signOut.
 auth.onAuthStateChanged(async (authenticatedUser) => {
-  // mounts Vue excluding authentication features.
+  // mounts Vue excluding authentication information.
   // Stop the function right there.
   if (!appMounted && !authenticatedUser) {
     mountVue();
     return;
   }
 
-  // Instanciate Vue only if profile object is loaded
-  // and vue isn't instanciated.
+  // Instanciate Vue only if the profile object is loaded
+  // and vue isn't instanciated yet.
   store.watch(
     (state) => state.authentication.profile,
     (newProfile) => {
@@ -123,10 +123,12 @@ auth.onAuthStateChanged(async (authenticatedUser) => {
     }
     return;
   }
+
+  // No authentixated user detected.
   // Kill the profile real-time data listener.
   store.state.authentication.unSubscriveProfile();
 
   // Clear user and profile objects.
+  store.set('authentication/user', {});
   store.set('authentication/profile', {});
-  store.set('authentication/user', authenticatedUser);
 });

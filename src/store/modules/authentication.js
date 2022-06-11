@@ -297,8 +297,8 @@ const actions = {
 
       const { user } = userCredential;
 
+      await dispatch('addUserToUsersCollection', { user, signupForm });
       await sendEmailVerification(userCredential.user);
-      dispatch('addUserToUsersCollection', { user, signupForm });
 
       router.push('profile');
       store.set('loaders/signupLoader', false);

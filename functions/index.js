@@ -114,7 +114,7 @@ exports.enableUserByEmail = functions.region('us-central1').https.onCall(async (
       .add({
         to: email,
         message: {
-          subject: 'Skriptag | Account Enabled ',
+          subject: 'Skriptag | Account Enabled.',
           html: `
           <table role="presentation" style="width:100%;border-collapse:collapse;border:0;border-spacing:0;">
            <tr>

@@ -4,6 +4,7 @@
 
 <script>
   import { get, call } from 'vuex-pathify';
+  import { isEmpty } from 'lodash';
 
   export default {
     name: 'BaseApp',
@@ -16,17 +17,28 @@
       ...get('authentication', ['isAccountDisabled', 'profile']),
     },
     // The authenticated account profile gets real-time updates.
-    // If the disabled flag shows up, that means that all tokens are revoked
-    // We are reacting to isAccountDisabled getter and forcing a logout.
+    // If the disabled flag shows up, that means that auth is revoked.
+    // We are reacting to isAccountDisabled Vuex getter and forcing logout.
     watch: {
       isAccountDisabled(disabled) {
         if (disabled) {
           this.logout();
+          this.snackbarError('You have been logged out, contact support.');
+        }
+      },
+
+      // If the authenticated account profile is missing
+      // force logout.
+      profile(profile) {
+        if (isEmpty(profile)) {
+          this.logout();
+          this.snackbarError('You have been logged out, contact support.');
         }
       },
     },
 
     methods: {
+      ...call('snackbar', ['snackbarError']),
       ...call('authentication', ['logout']),
     },
   };

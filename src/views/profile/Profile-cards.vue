@@ -12,16 +12,16 @@
         >
           <v-card
             :ripple="{ class: 'rounded-lg, ripple-opacity' }"
-            color="#22272d"
+            color="#2d333b"
             height="100%"
-            class="hoverCard rounded-lg cursor-pointer elevation-16"
+            class="hoverCard rounded-lg cursor-pointer"
             dark
             :disabled="card.disabled"
           >
-            <v-img :transition="false" class="rounded-t-lg" :src="card.img" v-bind="imageOptions()" />
+            <v-img :transition="false" class="rounded-t-lg decreaseColor" :src="card.img" v-bind="imageOptions()" />
             <v-container>
               <div class="pa-3">
-                <h4>{{ card.title }}</h4>
+                <p>{{ card.title }}</p>
                 <h5>{{ card.text }}</h5>
               </div>
             </v-container>
@@ -116,24 +116,28 @@
 </script>
 <style>
   .hoverCard:hover {
-    transform: translate(0, 5px);
-    -webkit-transform: translate(0, 5px);
-    -webkit-box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, 0) !important;
-    box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0) !important;
+    transform: translate(0, 5px) !important;
+    -webkit-transform: translate(0, 5px) !important;
+    -webkit-box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, 0);
+    box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0);
   }
 
   .hoverCard {
     -webkit-box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, var(--vs-shadow-opacity)) !important;
     box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, var(--vs-shadow-opacity)) !important;
-    -webkit-transition: all 0.25s ease;
-    transition: all 0.25s ease;
-    transition-property: all;
-    transition-duration: 0.25s;
+    -webkit-transition: all 0.25s ease !important;
+    transition: all 0.25s ease !important;
+    transition-property: all !important;
+    transition-duration: 0.25s !important;
     transition-timing-function: ease;
     transition-delay: 0s;
   }
 
   .ripple-opacity {
     opacity: 0.1;
+  }
+
+  .decreaseColor {
+    filter: grayscale(0.1) hue-rotate(340deg);
   }
 </style>

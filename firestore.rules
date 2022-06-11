@@ -2,10 +2,6 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-//Keep database locked down by default.
-    match /{document=**} {
-      allow read, write: if false;
-    }
 
   // Roots can do anything.
   // Checking for root means one document read per rule check.
@@ -21,7 +17,7 @@ service cloud.firestore {
   match /users/{uid}/{allPaths=**}  {
     allow read: if request.auth.uid == uid; 
     allow write:  if request.auth.uid == uid
-    && (request.resource.data.keys() == resource.data.keys()) 
+    //&& (request.resource.data.keys() == resource.data.keys()) 
   }
 
 }}

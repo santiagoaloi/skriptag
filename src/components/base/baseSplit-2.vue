@@ -133,6 +133,6 @@
     filter: opacity(0);
   }
   .decreaseColor {
-    filter: grayscale(0.4);
+    filter: grayscale(0.1) hue-rotate(340deg);
   }
 </style>

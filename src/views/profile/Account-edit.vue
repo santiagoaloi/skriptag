@@ -105,8 +105,8 @@
                   <BaseTitleDivider danger>Delete Account</BaseTitleDivider>
                   <p>
                     <v-icon small style="color: #ccc">$mdiHelpCircleOutline</v-icon>
-                    Removing your account will also remove everything related to it, like blog posts, comments, downloadable
-                    content and so on. This action can't be undone.
+                    Once you delete your account, there is no going back. Please be certain. Any uploaded media will be
+                    inmediately removed from our servers.
                   </p>
                 </div>
               </v-col>
@@ -115,7 +115,7 @@
                 <BaseButton style="color: #e5534b" :loading="loading" @click="removeAccountDialog = true">
                   <v-icon :left="$vuetify.breakpoint.lgAndUp"> $mdiDeleteOutline</v-icon>
                   <span v-if="$vuetify.breakpoint.xs || (!$vuetify.breakpoint.md && !$vuetify.breakpoint.sm) || verified">
-                    Remove account</span
+                    Delete your account</span
                   >
                 </BaseButton>
 
