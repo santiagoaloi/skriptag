@@ -133,7 +133,7 @@ const actions = {
       return {
         saved: true,
       };
-    } catch (ex) {
+    } catch ({ ...error }) {
       return {
         saved: false,
       };
@@ -252,7 +252,7 @@ const actions = {
       return {
         saved: true,
       };
-    } catch (ex) {
+    } catch ({ ...error }) {
       return {
         saved: false,
       };
@@ -406,7 +406,7 @@ const actions = {
       return {
         created: true,
       };
-    } catch (error) {
+    } catch ({ ...error }) {
       return {
         created: false,
       };
@@ -435,7 +435,7 @@ const actions = {
       return {
         assigned: true,
       };
-    } catch (ex) {
+    } catch ({ ...error }) {
       return {
         assigned: false,
       };
@@ -459,7 +459,7 @@ const actions = {
       return {
         added: true,
       };
-    } catch (ex) {
+    } catch ({ ...error }) {
       return {
         added: false,
       };
@@ -480,7 +480,7 @@ const actions = {
       return {
         removed: true,
       };
-    } catch (ex) {
+    } catch ({ ...error }) {
       return {
         removed: false,
       };
@@ -505,7 +505,7 @@ const actions = {
       return {
         edited: true,
       };
-    } catch (ex) {
+    } catch ({ ...error }) {
       return {
         edited: false,
       };
@@ -577,7 +577,7 @@ const actions = {
 
       store.set('authentication/users', users);
       return u;
-    } catch (error) {
+    } catch ({ ...error }) {
       // console.log(error.code);
     }
   },
@@ -641,9 +641,10 @@ const getters = {
     return _getters.profile?.email;
   },
 
-  verified: (_, _getters) => {
+  verified: (_state, _getters) => {
     if (!_getters.isLoggedIn) return;
-    return _getters.profile?.verified || _getters.isAuthExternalProvider;
+    // return _state.profile?.verified || _getters.isAuthExternalProvider;
+    return _state.profile?.verified;
   },
 
   authProviders: (_state, _getters) => {

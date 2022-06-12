@@ -1,120 +1,138 @@
 <template>
   <div v-if="profile">
-    <v-hover v-slot="{ hover }">
-      <v-img
-        :src="profile.coverAvatar"
-        flat
-        height="240"
-        class="d-flex align-center elevation-3"
-        :class="{ 'default-banner-bg': !profile.coverAvatar }"
-        transition="fade-transition"
-        style="color: #ccc"
-        :gradient="gradientOptions()"
-        @load="imgCounter++"
-      >
-        <v-fade-transition>
-          <v-btn
-            v-show="hover"
-            fab
-            icon
-            :style="`
+    <v-expand-transition>
+      <div v-show="isBannerVisible">
+        <v-hover v-slot="{ hover }">
+          <v-img
+            :src="profile.coverAvatar"
+            flat
+            height="240"
+            class="d-flex align-center elevation-3"
+            :class="{ 'default-banner-bg': !profile.coverAvatar }"
+            transition="fade-transition"
+            style="color: #ccc"
+            :gradient="gradientOptions()"
+          >
+            <v-fade-transition>
+              <v-btn
+                v-show="hover"
+                fab
+                icon
+                :style="`
                  position: absolute; right: 0;
                  margin-right: ${!$vuetify.breakpoint.smAndDown ? '80px' : '20px'}`"
-            class="mt-5"
-            color="rgba(10,10,10 , .5)"
-            dark
-            @click="triggerCoverInput()"
-          >
-            <vs-tooltip shadow color="#ccc">
-              <v-icon class="white--text"> $mdiCamera</v-icon>
-              <template #tooltip> Change cover image </template>
-            </vs-tooltip>
-          </v-btn>
-        </v-fade-transition>
-
-        <!-- image upload inputs -->
-        <input ref="coverInput" accept="image/*" style="display: none" type="file" @change="uploadCoverPhoto()" />
-        <input ref="avatarInput" accept="image/*" style="display: none" type="file" @change="uploadProfilePhoto()" />
-
-        <div :class="$vuetify.breakpoint.smAndUp ? 'mx-13' : 'justify-center'" class="media d-flex align-center justify-start">
-          <v-badge
-            offset-x="40"
-            offset-y="34"
-            bottom
-            bordered
-            color="black"
-            :icon="profile.photoURL ? '$mdiTrashCanOutline' : '$mdiPlus'"
-            overlapa
-            class="cursor-pointer"
-          >
-            <baseAvatarImg v-if="!profile.photoURL" class="hoverAvatar" :height="180" @click="triggerAvatarInput()" />
-            <v-avatar v-else v-ripple class="elevation-13" size="180">
-              <v-img transition="fade-transition" class="hoverAvatar" :src="profile.photoURL" flat @click="triggerAvatarInput()">
-                <template #placeholder>
-                  <v-row class="fill-height ma-0" align="center" justify="center">
-                    <v-icon dark size="40">$mdiCamera</v-icon>
-                  </v-row>
-                </template>
-              </v-img>
-            </v-avatar>
-          </v-badge>
-
-          <div v-if="$vuetify.breakpoint.smAndUp" class="px-13">
-            <v-row no-gutters align="center">
-              <v-col cols="12">
-                <v-chip
-                  v-if="(profile.roles || []).includes('root')"
-                  class="mb-4 mr-3 elevation-6"
-                  small
-                  color="brown"
-                  text-color="white"
-                >
-                  <v-avatar left>
-                    <v-icon small>$mdiLock</v-icon>
-                  </v-avatar>
-                  Root
-                </v-chip>
-                <v-chip
-                  class="mb-4 elevation-6"
-                  small
-                  :color="verified ? 'indigo darken-3' : 'orange darken-1'"
-                  text-color="white"
-                >
-                  <v-avatar left>
-                    <v-icon small> {{ verificationInProgressLoader ? '$mdiCircleSlice2' : '$mdiAccountStar' }}</v-icon>
-                  </v-avatar>
-                  <span v-if="verificationInProgressLoader"> loading... </span>
-                  <span v-else>
-                    {{ verified ? 'Verified' : 'Pending Verification' }}
-                  </span>
-                </v-chip>
-
-                <p class="mb-n2">{{ profile.email }}</p>
-              </v-col>
-              <v-col cols="12">
-                <base-typing-indicator v-if="!profile.name && !profile.lastName & !profile.displayName" class="py-12" />
-              </v-col>
-
-              <span
-                class="d-inline-block text-truncate mb-2 font-weight-bold"
-                style="font-size: 55px"
-                :style="$vuetify.breakpoint.mdAndDown ? 'max-width: 390px' : 'max-width: 500px'"
+                class="mt-5"
+                color="rgba(10,10,10 , .5)"
+                dark
+                @click="triggerCoverInput()"
               >
-                {{ fullName || profile.displayName }}
-              </span>
-              <v-col cols="12">
-                <h5 class="mt-n2">
-                  <span class="grey--text text--accent-1"> Previous login: {{ profile.metadata.lastSignInTime }} </span> • 44
-                  followers
-                </h5>
-              </v-col>
-            </v-row>
-          </div>
-        </div>
-      </v-img>
-    </v-hover>
+                <vs-tooltip shadow color="#ccc">
+                  <v-icon class="white--text"> $mdiCamera</v-icon>
+                  <template #tooltip> Change cover image </template>
+                </vs-tooltip>
+              </v-btn>
+            </v-fade-transition>
 
-    <v-alert :value="!verified" dark dense tile color="#212326" icon="$mdiInformationOutline">
+            <!-- image upload inputs -->
+            <input ref="coverInput" accept="image/*" style="display: none" type="file" @change="uploadCoverPhoto()" />
+            <input ref="avatarInput" accept="image/*" style="display: none" type="file" @change="uploadProfilePhoto()" />
+
+            <div
+              :class="$vuetify.breakpoint.smAndUp ? 'mx-13' : 'justify-center'"
+              class="media d-flex align-center justify-start"
+            >
+              <v-badge
+                offset-x="40"
+                offset-y="34"
+                bottom
+                bordered
+                color="black"
+                :icon="profile.photoURL ? '$mdiTrashCanOutline' : '$mdiPlus'"
+                overlapa
+                class="cursor-pointer"
+              >
+                <baseAvatarImg v-if="!profile.photoURL" class="hoverAvatar" :height="180" @click="triggerAvatarInput()" />
+                <v-avatar v-else v-ripple class="elevation-13" size="180">
+                  <v-img
+                    transition="fade-transition"
+                    class="hoverAvatar"
+                    :src="profile.photoURL"
+                    flat
+                    @click="triggerAvatarInput()"
+                  >
+                    <template #placeholder>
+                      <v-row class="fill-height ma-0" align="center" justify="center">
+                        <v-icon dark size="40">$mdiCamera</v-icon>
+                      </v-row>
+                    </template>
+                  </v-img>
+                </v-avatar>
+              </v-badge>
+
+              <div v-if="$vuetify.breakpoint.smAndUp" class="px-13">
+                <v-row no-gutters align="center">
+                  <v-col cols="12">
+                    <v-chip
+                      v-if="(profile.roles || []).includes('root')"
+                      class="mb-4 mr-3 elevation-6"
+                      small
+                      color="brown"
+                      text-color="white"
+                    >
+                      <v-avatar left>
+                        <v-icon small>$mdiLock</v-icon>
+                      </v-avatar>
+                      Root
+                    </v-chip>
+                    <v-chip
+                      class="mb-4 elevation-6"
+                      small
+                      :color="verified ? 'indigo darken-3' : 'orange darken-1'"
+                      text-color="white"
+                    >
+                      <v-avatar left>
+                        <v-icon small> {{ verificationInProgressLoader ? '$mdiCircleSlice2' : '$mdiAccountStar' }}</v-icon>
+                      </v-avatar>
+                      <span v-if="verificationInProgressLoader"> loading... </span>
+                      <span v-else>
+                        {{ verified ? 'Verified' : 'Pending Verification' }}
+                      </span>
+                    </v-chip>
+
+                    <p class="mb-n2">{{ profile.email }}</p>
+                  </v-col>
+                  <v-col cols="12">
+                    <base-typing-indicator v-if="!profile.name && !profile.lastName & !profile.displayName" class="py-12" />
+                  </v-col>
+
+                  <span
+                    class="d-inline-block text-truncate mb-2 font-weight-bold"
+                    style="font-size: 55px"
+                    :style="$vuetify.breakpoint.mdAndDown ? 'max-width: 390px' : 'max-width: 500px'"
+                  >
+                    {{ fullName || profile.displayName }}
+                  </span>
+                  <v-col cols="12">
+                    <h5 class="mt-n2">
+                      <span class="grey--text text--accent-1"> Previous login: {{ profile.metadata.lastSignInTime }} </span> • 44
+                      followers
+                    </h5>
+                  </v-col>
+                </v-row>
+              </div>
+            </div>
+          </v-img>
+        </v-hover>
+      </div>
+    </v-expand-transition>
+
+    <v-sheet class="d-flex align-center justify-center blue" height="0">
+      <v-btn style="z-index: 99 !important" height="14" dark x-small color="#38404b" @click="isBannerVisible = !isBannerVisible"
+        ><v-icon> {{ isBannerVisible ? '$mdiChevronUp' : '$mdiChevronDown' }} </v-icon></v-btn
+      >
+    </v-sheet>
+
+    <v-alert class="mr-2" :value="!verified" dark dense tile color="#ccc" text dismissible icon="$mdiInformationOutline">
       Some profile settings will not be enabled until you verify your email account.
     </v-alert>
 
@@ -159,10 +177,10 @@
     },
     data() {
       return {
-        imgCounter: 0,
         progress: 0,
         imgBannerLoaded: false,
         showProfileItems: false,
+        isBannerVisible: true,
       };
     },
 

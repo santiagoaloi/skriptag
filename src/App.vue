@@ -18,7 +18,7 @@
     },
     // The authenticated account profile gets real-time updates.
     // If the disabled flag shows up, that means that auth is revoked.
-    // We are reacting to isAccountDisabled Vuex getter and forcing logout.
+    // We are reacting to isAccountDisabled Vuex getter and forcing a logout.
     watch: {
       isAccountDisabled(disabled) {
         if (disabled) {
@@ -28,11 +28,10 @@
       },
 
       // If the authenticated account profile is missing
-      // force logout.
+      // force a logout.
       profile(profile) {
         if (isEmpty(profile)) {
           this.logout();
-          this.snackbarError('You have been logged out, contact support.');
         }
       },
     },

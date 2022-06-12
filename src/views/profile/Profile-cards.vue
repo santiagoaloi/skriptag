@@ -8,7 +8,7 @@
           cols="12"
           sm="6"
           :md="card.responsiveSize"
-          @click="$router.push(`/profile/${card.route}`)"
+          @click="!card.disabled && $router.push(`/profile/${card.route}`)"
         >
           <v-card
             :ripple="{ class: 'rounded-lg, ripple-opacity' }"
@@ -85,7 +85,7 @@
             img: 'https://media.skriptag.com/img/a5.svg',
             route: 'skriptag-edit',
             responsiveSize: 3,
-            disabled: !this.profile.roles?.includes('root'),
+            disabled: !this.profile.roles?.includes('root') || !this.verified,
             visible: this.profile.roles?.includes('root'),
           },
         ];
