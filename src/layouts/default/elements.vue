@@ -2,6 +2,7 @@
   <v-app class="no-select no-drag pattern-bg">
     <default-app-bar />
     <default-drawer v-if="$vuetify.breakpoint.mdAndUp" />
+
     <default-view />
     <base-snackbar v-if="isActive" />
   </v-app>

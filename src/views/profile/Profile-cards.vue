@@ -1,7 +1,7 @@
 <template>
   <base-no-split>
     <template #left>
-      <v-row>
+      <v-row class="px-5">
         <v-col
           v-for="(card, i) in allCardsFiltered"
           :key="i"

@@ -8,8 +8,7 @@ import router from './router';
 import { store } from '@/store';
 import vuetify from './plugins/vuetify';
 import './plugins';
-// Styles amd Animations
-// import 'aos/dist/aos.css';
+
 import './assets/css/style.css';
 import 'vuesax/dist/vuesax.css';
 
