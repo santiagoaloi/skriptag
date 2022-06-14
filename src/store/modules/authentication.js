@@ -555,6 +555,8 @@ const actions = {
 
       const users = [];
       const u = onSnapshot(colRefUsers, { includeMetadataChanges: true }, (snap) => {
+        console.log(snap);
+
         const userMap = new Map(allUsers.map((u) => [u.uid, u]));
 
         snap.docChanges().forEach(({ doc, type }) => {

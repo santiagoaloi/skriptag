@@ -115,6 +115,7 @@ auth.onAuthStateChanged(async (authenticatedUser) => {
 
       // create the listener, calling killListener() will destroy it,
       unSubscriveProfile = onSnapshot(q, (querySnap) => {
+        console.log(querySnap);
         userProfile = querySnap.data();
         store.set('authentication/profile', userProfile);
         store.set('authentication/unSubscriveProfile', unSubscriveProfile);

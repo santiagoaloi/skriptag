@@ -23,7 +23,7 @@
     </v-navigation-drawer>
     <v-sheet
       v-if="$vuetify.breakpoint.mdAndUp"
-      class="d-flex align-end justify-center v-navigation-drawer v-navigation-drawer--fixed"
+      class="d-flex align-end justify-center v-navigation-drawer v-navigation-drawer--fixed border-right"
       height="100vh"
       :style="`margin-left:${drawer ? '170px' : '0px'}`"
       :color="drawer ? 'transparent' : '#22272d'"
@@ -61,3 +61,8 @@
     },
   };
 </script>
+<style>
+  .border-right {
+    border-right: solid 1px #444c56 !important;
+  }
+</style>
