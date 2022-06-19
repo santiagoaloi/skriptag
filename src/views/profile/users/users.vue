@@ -270,7 +270,7 @@
         'disableAccountByEmail',
         'enableAccountByEmail',
         'deleteAccountByEmail',
-        'chageUserPasswordByEmail',
+        'changeUserPasswordByEmail',
         'assignRolesToUser',
         'getUsersSnapshot',
       ]),

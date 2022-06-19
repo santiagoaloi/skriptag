@@ -185,7 +185,7 @@ exports.deleteUserByEmail = functions.region('us-central1').https.onCall(async (
   }
 });
 
-exports.chageUserPasswordByEmail = functions.region('us-central1').https.onCall(async ({ payload }) => {
+exports.changeUserPasswordByEmail = functions.region('us-central1').https.onCall(async ({ payload }) => {
   try {
     const { email, password } = payload;
     const user = await admin.auth().getUserByEmail(email);

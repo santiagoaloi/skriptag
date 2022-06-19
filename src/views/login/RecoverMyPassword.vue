@@ -74,7 +74,7 @@
               </template>
 
               <template v-if="recoveryMode">
-                <Base-button @click.prevent="recoveryMode = false"> Cancel</Base-button>
+                <Base-button @click.prevent="recoveryMode = false"> Back</Base-button>
                 <Base-button type="submit" :loading="loading"> Reset password</Base-button>
               </template>
             </div>

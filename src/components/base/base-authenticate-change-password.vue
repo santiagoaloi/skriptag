@@ -174,7 +174,7 @@
 
     methods: {
       ...call('snackbar/*'),
-      ...call('authentication', ['reAuthenticate', 'chageUserPasswordByEmail']),
+      ...call('authentication', ['reAuthenticate', 'changeUserPasswordByEmail']),
 
       resetValidation() {
         this.$refs.passwordField.reset();
@@ -191,7 +191,7 @@
 
             if (authenticated) {
               const payload = { email: this.payload.email, password: this.newPassword };
-              const result = await this.chageUserPasswordByEmail({ payload });
+              const result = await this.changeUserPasswordByEmail({ payload });
               if (result.changed) {
                 this.password = '';
                 this.newPassword = '';

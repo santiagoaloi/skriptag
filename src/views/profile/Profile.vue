@@ -8,10 +8,11 @@
             flat
             height="240"
             class="d-flex align-center elevation-3"
-            :class="{ 'default-banner-bg': !profile.coverAvatar }"
+            :class="{ 'default-banner-bg': !profile.coverAvatar || isBannerError }"
             transition="fade-transition"
             style="color: #ccc"
             :gradient="gradientOptions()"
+            @error="isBannerError = true"
           >
             <v-fade-transition>
               <v-btn
@@ -178,9 +179,9 @@
     data() {
       return {
         progress: 0,
-        imgBannerLoaded: false,
         showProfileItems: false,
         isBannerVisible: true,
+        isBannerError: false,
       };
     },
 

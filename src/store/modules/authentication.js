@@ -141,9 +141,9 @@ const actions = {
   },
 
   // Admin SDK, change account password { email, password }
-  async chageUserPasswordByEmail({ dispatch }, { payload }) {
+  async changeUserPasswordByEmail({ dispatch }, { payload }) {
     try {
-      const changePassword = httpsCallable(functions, 'chageUserPasswordByEmail');
+      const changePassword = httpsCallable(functions, 'changeUserPasswordByEmail');
       const result = await changePassword({ payload });
 
       if (!result.data.changed) return;
@@ -555,8 +555,6 @@ const actions = {
 
       const users = [];
       const u = onSnapshot(colRefUsers, { includeMetadataChanges: true }, (snap) => {
-        console.log(snap);
-
         const userMap = new Map(allUsers.map((u) => [u.uid, u]));
 
         snap.docChanges().forEach(({ doc, type }) => {
