@@ -6,7 +6,7 @@ admin.initializeApp();
 // Appcheck protected / reCAPTCHA authorices only skriptag.com domain.
 exports.listAllUsers = functions.region('us-central1').https.onCall(async (data, context) => {
   // If appCheck fails, terminate the funciton.
-  if (context.app === undefined) {
+  if (!context.app) {
     throw new functions.https.HttpsError('failed-precondition', 'The function must be called from an App Check verified app.');
   }
 
@@ -42,7 +42,7 @@ exports.verifiyUserByEmail = functions.region('us-central1').https.onCall(async 
 
 exports.disableUserByEmail = functions.region('us-central1').https.onCall(async (email, context) => {
   // If appCheck fails, terminate the funciton.
-  if (context.app === undefined) {
+  if (!context.app) {
     throw new functions.https.HttpsError('failed-precondition', 'The function must be called from an App Check verified app.');
   }
 

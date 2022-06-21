@@ -25,7 +25,8 @@
                 class="mt-5"
                 color="rgba(10,10,10 , .5)"
                 dark
-                @click="triggerCoverInput()"
+                small
+                @click="triggerUploadCoverPhoto()"
               >
                 <vs-tooltip shadow color="#ccc">
                   <v-icon class="white--text"> $mdiCamera</v-icon>
@@ -52,14 +53,14 @@
                 overlapa
                 class="cursor-pointer"
               >
-                <baseAvatarImg v-if="!profile.photoURL" class="hoverAvatar" :height="180" @click="triggerAvatarInput()" />
+                <baseAvatarImg v-if="!profile.photoURL" class="hoverAvatar" :height="180" @click="triggerUploadProfilePhoto()" />
                 <v-avatar v-else v-ripple class="elevation-13" size="180">
                   <v-img
                     transition="fade-transition"
                     class="hoverAvatar"
                     :src="profile.photoURL"
                     flat
-                    @click="triggerAvatarInput()"
+                    @click="triggerUploadProfilePhoto()"
                   >
                     <template #placeholder>
                       <v-row class="fill-height ma-0" align="center" justify="center">
@@ -213,11 +214,11 @@
         return isEmpty(v);
       },
 
-      triggerAvatarInput() {
+      triggerUploadProfilePhoto() {
         this.$refs.avatarInput.click();
       },
 
-      triggerCoverInput() {
+      triggerUploadCoverPhoto() {
         this.$refs.coverInput.click();
       },
 
