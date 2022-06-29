@@ -12,8 +12,8 @@
             dense
             solo
           />
-          <Base-button small class="ml-2" large @click="addCapabilityDialog = true"> Add capability</Base-button>
-          <Base-button small class="ml-2" large> <v-icon> $mdiDotsVertical</v-icon></Base-button>
+          <Base-button class="ml-2" @click="addCapabilityDialog = true"> Add capability</Base-button>
+          <Base-button class="ml-2"> <v-icon> $mdiDotsVertical</v-icon></Base-button>
         </v-card-actions>
         <v-fade-transition>
           <v-data-table

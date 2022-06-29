@@ -12,12 +12,12 @@
             dense
             solo
           />
-          <Base-button small class="ml-2" large @click="roleDialog = true"> Add role</Base-button>
+          <Base-button class="ml-2" @click="roleDialog = true"> Add role</Base-button>
           <vs-tooltip shadow circle>
             <template #tooltip> Reload </template>
           </vs-tooltip>
 
-          <Base-button small class="ml-2" large> <v-icon> $mdiDotsVertical</v-icon></Base-button>
+          <Base-button class="ml-2"> <v-icon> $mdiDotsVertical</v-icon></Base-button>
         </v-card-actions>
         <v-fade-transition>
           <v-data-table

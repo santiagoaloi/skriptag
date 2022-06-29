@@ -65,26 +65,15 @@
           </v-col>
           <v-col cols="12">
             <div class="pt-8">
-              <v-btn
-                :ripple="false"
-                class="mr-2"
-                :block="!$vuetify.breakpoint.smAndUp"
-                :class="$vuetify.breakpoint.smAndUp ? '' : 'mt-3 '"
-                dark
-                color="#1b1e25"
-                @click="close()"
-                ><v-icon left>$mdiClose</v-icon>Close</v-btn
-              >
-              <v-btn
-                :ripple="false"
-                :block="!$vuetify.breakpoint.smAndUp"
-                :class="$vuetify.breakpoint.smAndUp ? 'ml-2' : 'mt-3'"
-                type="submit"
-                dark
-                color="#2a3143"
-                :loading="loading"
-                ><v-icon left> $mdiCheck-bold</v-icon>Save</v-btn
-              >
+              <BaseButton @click="close()">
+                <v-icon left class="mr-2" small>$mdiClose</v-icon>
+                Close
+              </BaseButton>
+
+              <BaseButton class="ml-2" type="submit" :loading="loading">
+                <v-icon left class="mr-2" small>$mdiCheck</v-icon>
+                Save
+              </BaseButton>
             </div>
           </v-col>
         </v-row>

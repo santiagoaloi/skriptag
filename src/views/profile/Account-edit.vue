@@ -131,9 +131,10 @@
               </v-col>
               <v-col cols="12">
                 <v-divider class="my-4" style="background: #404040"></v-divider>
-                <v-btn :ripple="false" class="mr-2 my-2" dark color="#1b1e25" @click="close()"
-                  ><v-icon left>$mdiClose</v-icon>Close</v-btn
-                >
+                <BaseButton @click="close()">
+                  <v-icon left class="mr-2" small>$mdiClose</v-icon>
+                  Close
+                </BaseButton>
               </v-col>
             </v-row>
           </v-col>
