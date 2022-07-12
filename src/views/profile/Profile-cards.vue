@@ -7,7 +7,8 @@
           :key="i"
           cols="12"
           sm="6"
-          :md="card.responsiveSize"
+          md="4"
+          :lg="card.responsiveSize"
           @click="!card.disabled && $router.push(`/profile/${card.route}`)"
         >
           <v-card
@@ -18,11 +19,17 @@
             dark
             :disabled="card.disabled"
           >
-            <v-img :transition="false" class="rounded-t-lg decreaseColor" :src="card.img" v-bind="imageOptions()" />
+            <v-img
+              :height="$vuetify.breakpoint.smAndDown ? 150 : 140"
+              :transition="false"
+              class="rounded-t-lg decreaseColor"
+              :src="card.img"
+              v-bind="imageOptions()"
+            />
             <v-container>
               <div class="pa-3">
-                <p>{{ card.title }}</p>
-                <h5>{{ card.text }}</h5>
+                <p style="font-size: 130%">{{ card.title }}</p>
+                <div style="font-size: 14px" class="mt-n3">{{ card.text }}</div>
               </div>
             </v-container>
           </v-card>
@@ -51,7 +58,7 @@
         return [
           {
             title: 'Profile Details',
-            text: 'Edit your profile information such as your names, tags,and more...',
+            text: 'Edit your profile personal information',
             img: 'https://media.skriptag.com/img/a1.svg',
             route: 'profile-edit',
             responsiveSize: 3,
@@ -61,7 +68,7 @@
 
           {
             title: 'Account settings',
-            text: 'Change your authentication settings,account email, 2FA, remove or disable your account.',
+            text: 'Change your authentication settings',
             img: 'https://media.skriptag.com/img/a2.svg',
             route: 'account-edit',
             responsiveSize: 3,
@@ -71,7 +78,7 @@
 
           {
             title: 'Billing information',
-            text: '  add or change your payment methods, download your invoices, check your purchase history.',
+            text: 'Add or change your payment methods',
             img: 'https://media.skriptag.com/img/a4.svg',
             route: '',
             responsiveSize: 3,
@@ -81,7 +88,7 @@
 
           {
             title: 'Manage Skriptag',
-            text: 'Manage users, roles, and project settings.',
+            text: 'Manage users, roles, and project settings',
             img: 'https://media.skriptag.com/img/a5.svg',
             route: 'skriptag-edit',
             responsiveSize: 3,
@@ -104,7 +111,7 @@
 
         return {
           gradient: gradientOptions(),
-          height: this.$vuetify.breakpoint.smAndDown ? '300' : '140',
+          height: this.$vuetify.breakpoint.smAndDown ? '265' : '140',
         };
       },
 

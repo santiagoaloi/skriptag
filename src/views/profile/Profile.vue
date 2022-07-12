@@ -140,7 +140,20 @@
 
     <v-progress-linear v-if="progress > 0" v-model="progress" color="indigo" style="position: absolute"></v-progress-linear>
 
-    <profile-cards v-show="$route.name === 'profile'" />
+    <v-container>
+      <!-- <v-sheet :width="$vuetify.breakpoint.mdAndDown ? '100%' : 980" class="mx-auto transparent" dark> -->
+      <template v-if="$route.name === 'profile'">
+        <v-card-title style="font-size: 26px;font-family:'Product Sans Medium Regular" class="ml-6 font-weight-bold">
+          Manage your profile
+        </v-card-title>
+        <v-card-subtitle class="ml-6">
+          <h4>Set different options for your account, billing, personal data among other settings</h4>
+        </v-card-subtitle>
+      </template>
+
+      <profile-cards v-show="$route.name === 'profile'" />
+      <!-- </v-sheet> -->
+    </v-container>
 
     <!-- route to profile cards (childs of profile) -->
     <v-card-text v-show="$route.name !== 'profile'" class="px-8">

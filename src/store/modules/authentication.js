@@ -334,44 +334,6 @@ const actions = {
     await setDoc(userDocRef, userDocData);
   },
 
-  // Creates a new user account on first login or else login
-  // the existing account, route to user profile on succesful login.
-  async authenticateWithGoogle({ dispatch }) {
-    store.set('loaders/signInWithGoogle', true);
-
-    try {
-      const provider = new GoogleAuthProvider();
-
-      provider.setCustomParameters({
-        prompt: 'consent',
-        display: 'popup',
-      });
-
-      const userCredential = await signInWithPopup(auth, provider);
-      const { user } = userCredential;
-
-      // Don't re-create the user profile, if the the user
-      // already has a profile created.
-      const docRef = doc(db, 'users', user.uid);
-      const docSnap = await getDoc(docRef);
-
-      if (!docSnap.exists()) {
-        const profile = await dispatch('addUserToUsersCollectionGgoogle', { user });
-        if (!profile.created) {
-          dispatch('snackbar/snackbarError', `Something went wrong while creating the account profile.`, { root: true });
-          return;
-        }
-      }
-
-      route('/profile');
-
-      store.set('loaders/signInWithGoogle', false);
-    } catch ({ ...error }) {
-      dispatch('snackbar/snackbarError', `Something went wrong authenticating`, { root: true });
-      store.set('loaders/signInWithGoogle', false);
-    }
-  },
-
   // If the google account has not profile docuemnt, it creates it.
   async addUserToUsersCollectionGgoogle(_, { user }) {
     // Adds a document in a  firestore collection.
@@ -410,6 +372,44 @@ const actions = {
       return {
         created: false,
       };
+    }
+  },
+
+  // Creates a new user account on first login or else login
+  // the existing account, route to user profile on succesful login.
+  async authenticateWithGoogle({ dispatch }) {
+    store.set('loaders/signInWithGoogle', true);
+
+    try {
+      const provider = new GoogleAuthProvider();
+
+      provider.setCustomParameters({
+        prompt: 'consent',
+        display: 'popup',
+      });
+
+      const userCredential = await signInWithPopup(auth, provider);
+      const { user } = userCredential;
+
+      // Don't re-create the user profile, if the the user
+      // already has a profile doc already.
+      const docRef = doc(db, 'users', user.uid);
+      const docSnap = await getDoc(docRef);
+
+      if (!docSnap.exists()) {
+        const profile = await dispatch('addUserToUsersCollectionGgoogle', { user });
+        if (!profile.created) {
+          dispatch('snackbar/snackbarError', `Something went wrong while creating the account profile.`, { root: true });
+          return;
+        }
+      }
+
+      route('/profile');
+
+      store.set('loaders/signInWithGoogle', false);
+    } catch ({ ...error }) {
+      dispatch('snackbar/snackbarError', `Something went wrong authenticating`, { root: true });
+      store.set('loaders/signInWithGoogle', false);
     }
   },
 

@@ -20,7 +20,7 @@
         </template>
 
         <v-toolbar-title>
-          <h5 class="text--lighten-5">
+          <h5>
             {{ title }}
           </h5>
         </v-toolbar-title>
@@ -69,7 +69,7 @@
 
       <slot name="top"> </slot>
 
-      <v-card color="#23282f" dark style="color: #ccc; overflow: hidden" width="100%" :class="{ 'pa-2': !noGutters }" flat tile>
+      <v-card color="#2d333b" dark style="overflow: hidden" width="100%" :class="{ 'pa-2': !noGutters }" flat tile>
         <v-container v-if="!noContainer" :fluid="fluid" :class="{ 'fill-height': filled }">
           <slot />
         </v-container>

@@ -1,32 +1,52 @@
 <template>
   <div>
-    <v-navigation-drawer v-if="$vuetify.breakpoint.mdAndUp" v-model="drawer" color="#22272d" width="180" dark app @click.stop>
+    <v-navigation-drawer v-if="$vuetify.breakpoint.mdAndUp" v-model="drawer" color="rgba(22, 22, 33, 0.2)" width="245" dark app>
+      <template #prepend>
+        <skriptag-title
+          class="overflow-visible cursor-pointer"
+          style="margin: 6.5px 0 6.5px 18px"
+          link
+          small
+          @click.native="$router.push('/')"
+        />
+      </template>
+
       <v-divider></v-divider>
 
-      <!-- <v-list nav dense>
-        <v-menu dark offset-y offset-x :nudge-left="-10">
-          <template #activator="{ on }">
-            <v-list-item link v-on="on">
-              <v-list-item-icon>
-                <v-icon>$mdiFolder</v-icon>
-              </v-list-item-icon>
-              <v-list-item-title>My Files</v-list-item-title>
-            </v-list-item>
-          </template>
-          <v-list>
-            <v-list-item v-for="(item, index) in items" :key="index">
-              <v-list-item-title>{{ item.title }}</v-list-item-title>
-            </v-list-item>
+      <div class="pa-1">
+        <v-list-item>
+          <v-list-item-content>
+            <v-list-item-title style="font-size: 13px !important; color: darkgrey">Categories</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <!-- <v-card flat style="color: #adbac7 !important" class="rounded-t-lg" color="rgba(18, 20, 23, 0.2)"> -->
+
+        <v-card flat style="color: #adbac7 !important" class="rounded-t-lg mx-2" color="rgba(18, 20, 23, 0.2)">
+          <v-list flat :ripple="false" class="ma-0 pa-0">
+            <v-list-group v-for="item in items" :key="item.title" v-model="item.active" color="#5c77a5" :ripple="false" no-action>
+              <template #activator>
+                <v-list-item-content>
+                  <v-list-item-title style="font-size: 14px !important"> {{ item.title }}</v-list-item-title>
+                </v-list-item-content>
+              </template>
+
+              <v-list-item v-for="child in item.items" :key="child.title">
+                <v-list-item-content>
+                  <v-list-item-title style="font-size: 14px !important"> {{ child.title }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list-group>
           </v-list>
-        </v-menu>
-      </v-list> -->
+        </v-card>
+      </div>
     </v-navigation-drawer>
 
     <v-sheet
       v-if="$vuetify.breakpoint.mdAndUp"
       class="d-flex align-end justify-center v-navigation-drawer v-navigation-drawer--fixed border-right"
       height="100vh"
-      :style="`margin-left:${drawer ? '170px' : '0px'}`"
+      :style="`margin-left:${drawer ? '235px' : '0px'}`"
       :color="drawer ? 'transparent' : '#22272d'"
       :width="drawer ? 0 : 13"
     >
@@ -53,7 +73,24 @@
         drawer: false,
         route: '/',
         showSidebar: false,
-        items: [{ title: 'Click Me' }, { title: 'Click Me' }, { title: 'Click Me' }, { title: 'Click Me 2' }],
+        items: [
+          {
+            items: [{ title: 'List Item' }],
+            title: 'Attractions',
+          },
+          {
+            items: [{ title: 'Breakfast & brunch' }, { title: 'New American' }, { title: 'Sushi' }],
+            title: 'Dining',
+          },
+          {
+            items: [{ title: 'List Item' }],
+            title: 'Education',
+          },
+          {
+            items: [{ title: 'List Item' }],
+            title: 'Family',
+          },
+        ],
       };
     },
 

@@ -9,7 +9,7 @@
 
     <v-divider style="background: #444c56"></v-divider>
 
-    <v-row>
+    <v-row class="mt-0">
       <v-col sm="10">
         <keep-alive>
           <router-view></router-view>

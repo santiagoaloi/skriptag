@@ -1,7 +1,7 @@
 <template>
   <BaseDialog v-model="internalValue" no-toolbar dense close-only no-actions width="500" @close="close()">
-    <v-card-title class="text-h5"> {{ title }}</v-card-title>
-    <v-card-text>{{ text }}</v-card-text>
+    <v-card-title style="color: #adbac7" class="text-h5"> {{ title }}</v-card-title>
+    <v-card-text style="color: #adbac7" class="mb-2">{{ text }}</v-card-text>
 
     <ValidationObserver ref="passwordField" slim>
       <form class="d-flex flex-column" @submit.prevent="validatePassword()">
@@ -61,9 +61,7 @@
                     </template>
 
                     <template #message-danger>
-                      <v-icon v-if="failed" color="pink" style="margin-top: -1px" x-small dark>{{
-                        $mdiAlertCircleOutline
-                      }}</v-icon>
+                      <v-icon v-if="failed" color="pink" style="margin-top: -1px" x-small dark> $mdiAlertCircleOutline </v-icon>
                       {{ errors[0] }}
                     </template>
                   </vs-input>

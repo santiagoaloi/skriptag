@@ -1,5 +1,11 @@
 <template>
-  <component :is="size" v-animation:shrink="{ link: link, longPress: true }" style="color: #ccc" v-on="$listeners">
+  <component
+    :is="size"
+    v-animation:shrink="{ link: link, longPress: true }"
+    style="color: #adbac7 !important"
+    class="ignore-font"
+    v-on="$listeners"
+  >
     <slot name="text" /> Skriptag
     <span :class="small ? 'ml-n8' : large ? 'ml-n16' : 'ml-n10'" class="primary-font-color">ˆ </span>
   </component>

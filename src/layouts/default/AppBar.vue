@@ -1,6 +1,7 @@
 <template>
-  <v-app-bar class="border-bottom" absolute height="50" flat color="transparent" dark app>
+  <v-app-bar class="border-bottom" height="50" color="#22272d" absolute flat dark app>
     <skriptag-title
+      v-if="!$route.meta.requiresAuth"
       class="overflow-visible cursor-pointer"
       :class="{ 'ml-2 ': !$vuetify.breakpoint.smAndDown }"
       link
@@ -32,7 +33,7 @@
         <v-icon left class="mr-2" small>$mdiLogoutVariant</v-icon>{{ `Logout ${firstAndShortLast || ''}` }}
       </BaseButton>
       <BaseButton
-        v-if="!$vuetify.breakpoint.smAndDown && $route.name !== 'profile'"
+        v-if="!$vuetify.breakpoint.smAndDown && !$route.meta.requiresAuth"
         key="btn2"
         class="ml-3"
         @click="$router.push('/profile')"

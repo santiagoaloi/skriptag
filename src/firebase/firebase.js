@@ -62,7 +62,7 @@ if (usingEmulators) {
 
 if (development) {
   // appCheck debug token for development.
-  self.FIREBASE_APPCHECK_DEBUG_TOKEN = process.env.VUE_APP_SKRIPTAG_FIREBASE_APP_CHECK_DEBUG_TOKEN_FROM_CI;
+  window.FIREBASE_APPCHECK_DEBUG_TOKEN = process.env.VUE_APP_SKRIPTAG_FIREBASE_APP_CHECK_DEBUG_TOKEN_FROM_CI;
 }
 
 initializeAppCheck(app, {

@@ -1,34 +1,121 @@
 @font-face {
-  font-family: 'proxima_nova_rgregular';
-  src: url('https://litmus.com/fonts/Emails/proximanova-regular-webfont.ttf') format('truetype');
-}
-@font-face {
-  font-family: 'proxima_nova_rgbold';
-  src: url('https://litmus.com/fonts/Emails/proximanova-bold-webfont.ttf') format('truetype');
+  font-family: 'Product Sans Regular';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Product Sans Regular'), url('ProductSans-Regular.woff') format('woff');
 }
 
-body {
-  font-family: 'proxima_nova_rgregular', Helvetica, Arial, sans-serif;
+@font-face {
+  font-family: 'Product Sans Italic';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Product Sans Italic'), url('ProductSans-Italic.woff') format('woff');
 }
-h1,
-h2,
+
+@font-face {
+  font-family: 'Product Sans Thin Regular';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Product Sans Thin Regular'), url('ProductSans-Thin.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Product Sans Light Regular';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Product Sans Light Regular'), url('ProductSans-Light.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Product Sans Medium Regular';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Product Sans Medium Regular'), url('ProductSans-Medium.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Product Sans Black Regular';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Product Sans Black Regular'), url('ProductSans-Black.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Product Sans Thin Italic';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Product Sans Thin Italic'), url('ProductSans-ThinItalic.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Product Sans Light Italic';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Product Sans Light Italic'), url('ProductSans-LightItalic.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Product Sans Medium Italic';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Product Sans Medium Italic'), url('ProductSans-MediumItalic.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Product Sans Bold';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Product Sans Bold'), url('ProductSans-Bold.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Product Sans Bold Italic';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Product Sans Bold Italic'), url('ProductSans-BoldItalic.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Product Sans Black Italic';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Product Sans Black Italic'), url('ProductSans-BlackItalic.woff') format('woff');
+}
+
+h1:not(.ignore-font),
+h2:not(.ignore-font),
 h3,
 h4,
 h5,
 h6,
 p,
 a {
-  font-family: 'proxima_nova_rgbold', Arial, Helvetica, sans-serif !important;
+  font-family: 'Product Sans Medium Regular', Arial, Helvetica, sans-serif !important;
+  color: #adbac7 !important;
 }
 
 body {
   overflow-x: hidden !important;
   overflow-y: overlay !important;
   background: #22272e !important;
+  font-family: 'Product Sans Medium Regular', Helvetica, Arial, sans-serif;
 }
 
 a {
   color: #316dca !important;
+}
+
+.v-list-item--link:before {
+  /* background-color: currentColor; */
+  background-color: transparent !important;
+}
+
+.v-application--is-ltr .v-list-group--no-action > .v-list-group__items > .v-list-item {
+  padding-left: 16px !important;
+}
+
+.theme--dark.v-data-table {
+  color: #adbac7 !important;
 }
 
 .v-main {

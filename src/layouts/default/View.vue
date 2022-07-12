@@ -9,7 +9,7 @@
 
 <script>
   import { sync } from 'vuex-pathify';
-  // import MobileMenuView from './mobileMenu.vue';
+  // import MobileMenuView from './MobileMenu.vue';
 
   export default {
     name: 'DefaultView',

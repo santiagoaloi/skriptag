@@ -1,7 +1,7 @@
 <template>
   <v-app class="no-select no-drag pattern-bg">
     <default-app-bar />
-    <default-drawer v-if="$vuetify.breakpoint.mdAndUp" />
+    <default-drawer v-if="$vuetify.breakpoint.mdAndUp && $route.meta.requiresAuth" />
 
     <default-view />
     <base-snackbar v-if="isActive" />

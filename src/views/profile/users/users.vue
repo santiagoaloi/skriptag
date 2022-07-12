@@ -485,15 +485,11 @@
 </script>
 <style scoped>
   .theme--dark.v-data-table.solidBackground {
-    background-color: #22272e !important;
+    background-color: transparent !important;
   }
 
   .v-data-table {
     border-radius: 0px;
-  }
-
-  tr.v-data-table__selected {
-    background: red !important;
   }
 
   ::v-deep .vs-loading {

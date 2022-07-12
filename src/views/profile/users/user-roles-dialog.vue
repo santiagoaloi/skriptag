@@ -1,12 +1,12 @@
 <template>
   <BaseDialog v-model="internalValue" no-toolbar dense close-only no-actions width="500" @close="close()">
-    <v-card-title class="text-h5"> Assign roles</v-card-title>
+    <v-card-title style="color: #adbac7" class="text-h5"> Assign roles</v-card-title>
 
     <ValidationObserver ref="addRole" slim>
       <v-card-text class="mt-n6">
         <v-row>
           <v-col cols="12">
-            <small class="ml-1">Roles</small>
+            <base-field-title>Roles</base-field-title>
             <div class="pr-2 py-1">
               <vs-select v-model="roles" collapse-chips filter multiple color="#3a3f50">
                 <vs-option v-for="role in allRoles" :key="role" :label="role" :value="role">

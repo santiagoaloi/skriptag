@@ -39,6 +39,8 @@ import {
   mdiAlertOctagon,
   mdiSlashForward,
   mdiConsole,
+  mdiShieldLockOutline,
+  mdiAlert,
 } from '@mdi/js';
 
 export const icons = {
@@ -83,5 +85,7 @@ export const icons = {
     mdiAlertOctagon,
     mdiSlashForward,
     mdiConsole,
+    mdiShieldLockOutline,
+    mdiAlert,
   },
 };
