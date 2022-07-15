@@ -5,99 +5,117 @@
         <v-row no-gutters>
           <v-col cols="12" sm="6" md="4">
             <v-row>
-              <v-col cols="12">
-                <BaseTitleDivider>Change Password</BaseTitleDivider>
-              </v-col>
+              <template v-if="!isAuthExternalProvider">
+                <v-col cols="12">
+                  <BaseTitleDivider>Change Password</BaseTitleDivider>
+                </v-col>
+
+                <v-col cols="12">
+                  <Base-field-title> Old Password</Base-field-title>
+                  <Validation-provider
+                    v-slot="{ errors, failed }"
+                    v-bind="{ ...vvOptions }"
+                    name="current password"
+                    :rules="{ required: false }"
+                  >
+                    <vs-input
+                      v-model="credentials.currentPassword"
+                      type="password"
+                      :danger="failed"
+                      maxlength="20"
+                      block
+                      placeholder="Current password"
+                      @focus="resetValidation()"
+                    >
+                      <template #icon>
+                        <v-icon dark>$mdiAccount</v-icon>
+                      </template>
+                      <template #message-danger>
+                        <v-icon v-if="failed" color="pink" style="margin-top: -1px" x-small dark>$mdiAlertCircleOutline</v-icon>
+                        {{ errors[0] }}
+                      </template>
+                    </vs-input>
+                  </Validation-provider>
+                </v-col>
+                <v-col cols="12">
+                  <Base-field-title> New Password</Base-field-title>
+                  <Validation-provider
+                    v-slot="{ errors, failed }"
+                    v-bind="{ ...vvOptions }"
+                    name="new password"
+                    :rules="{ required: true, confirmed: 'confirmation' }"
+                  >
+                    <vs-input
+                      v-model="credentials.newPassword"
+                      type="password"
+                      :danger="failed"
+                      maxlength="20"
+                      block
+                      placeholder="New password"
+                      :progress="!failed ? getPasswordComplexity(credentials.newPassword) : null"
+                      @focus="resetValidation()"
+                    >
+                      <template #icon>
+                        <v-icon dark>$mdiLock</v-icon>
+                      </template>
+                      <template #message-danger>
+                        <v-icon v-if="failed" color="pink" style="margin-top: -1px" x-small dark>$mdiAlertCircleOutline</v-icon>
+                        {{ errors[0] }}
+                      </template>
+                    </vs-input>
+                  </Validation-provider>
+                </v-col>
+                <v-col cols="12">
+                  <Base-field-title> Confirm Password</Base-field-title>
+                  <Validation-provider
+                    v-slot="{ errors, failed }"
+                    v-bind="{ ...vvOptions }"
+                    name="repeat new password"
+                    :rules="{ required: true }"
+                    vid="confirmation"
+                  >
+                    <vs-input
+                      v-model="credentials.confirmNewPasswordRepeat"
+                      type="password"
+                      :danger="failed"
+                      maxlength="20"
+                      block
+                      placeholder="Repeat New password"
+                      @focus="resetValidation()"
+                    >
+                      <template #icon>
+                        <v-icon dark>$mdiLock</v-icon>
+                      </template>
+                      <template #message-danger>
+                        <v-icon v-if="failed" color="pink" style="margin-top: -1px" x-small dark>$mdiAlertCircleOutline</v-icon>
+                        {{ errors[0] }}
+                      </template>
+                    </vs-input>
+                  </Validation-provider>
+                </v-col>
+
+                <v-col cols="12">
+                  <div class="mt-4">
+                    <BaseButton :loading="loading" type="submit">
+                      <v-icon left> $mdiRefresh</v-icon><span>Update password </span>
+                    </BaseButton>
+                  </div>
+                </v-col>
+              </template>
 
               <v-col cols="12">
-                <Base-field-title> Old Password</Base-field-title>
-                <Validation-provider
-                  v-slot="{ errors, failed }"
-                  v-bind="{ ...vvOptions }"
-                  name="current password"
-                  :rules="{ required: false }"
-                >
-                  <vs-input
-                    v-model="credentials.currentPassword"
-                    type="password"
-                    :danger="failed"
-                    maxlength="20"
-                    block
-                    placeholder="Current password"
-                    @focus="resetValidation()"
-                  >
-                    <template #icon>
-                      <v-icon dark>$mdiAccount</v-icon>
-                    </template>
-                    <template #message-danger>
-                      <v-icon v-if="failed" color="pink" style="margin-top: -1px" x-small dark>$mdiAlertCircleOutline</v-icon>
-                      {{ errors[0] }}
-                    </template>
-                  </vs-input>
-                </Validation-provider>
-              </v-col>
-              <v-col cols="12">
-                <Base-field-title> New Password</Base-field-title>
-                <Validation-provider
-                  v-slot="{ errors, failed }"
-                  v-bind="{ ...vvOptions }"
-                  name="new password"
-                  :rules="{ required: true, confirmed: 'confirmation' }"
-                >
-                  <vs-input
-                    v-model="credentials.newPassword"
-                    type="password"
-                    :danger="failed"
-                    maxlength="20"
-                    block
-                    placeholder="New password"
-                    :progress="!failed ? getPasswordComplexity(credentials.newPassword) : null"
-                    @focus="resetValidation()"
-                  >
-                    <template #icon>
-                      <v-icon dark>$mdiLock</v-icon>
-                    </template>
-                    <template #message-danger>
-                      <v-icon v-if="failed" color="pink" style="margin-top: -1px" x-small dark>$mdiAlertCircleOutline</v-icon>
-                      {{ errors[0] }}
-                    </template>
-                  </vs-input>
-                </Validation-provider>
-              </v-col>
-              <v-col cols="12">
-                <Base-field-title> Confirm Password</Base-field-title>
-                <Validation-provider
-                  v-slot="{ errors, failed }"
-                  v-bind="{ ...vvOptions }"
-                  name="repeat new password"
-                  :rules="{ required: true }"
-                  vid="confirmation"
-                >
-                  <vs-input
-                    v-model="credentials.confirmNewPasswordRepeat"
-                    type="password"
-                    :danger="failed"
-                    maxlength="20"
-                    block
-                    placeholder="Repeat New password"
-                    @focus="resetValidation()"
-                  >
-                    <template #icon>
-                      <v-icon dark>$mdiLock</v-icon>
-                    </template>
-                    <template #message-danger>
-                      <v-icon v-if="failed" color="pink" style="margin-top: -1px" x-small dark>$mdiAlertCircleOutline</v-icon>
-                      {{ errors[0] }}
-                    </template>
-                  </vs-input>
-                </Validation-provider>
-              </v-col>
-              <v-col cols="12">
                 <div class="mt-4">
-                  <BaseButton :loading="loading" type="submit">
-                    <v-icon left> $mdiRefresh</v-icon><span>Update password </span>
-                  </BaseButton>
+                  <BaseTitleDivider danger>Resend verification email</BaseTitleDivider>
+                  <p>
+                    <v-icon small style="color: #ccc">$mdiHelpCircleOutline</v-icon>
+                    Check your junk folder, sometimes emails can get lost.
+                  </p>
                 </div>
+              </v-col>
+              <v-col cols="12">
+                <BaseButton v-if="!verified" :loading="loading" @click="verifyAccountDialog = true">
+                  <v-icon left> $mdiRefresh</v-icon><span>Resend verification email </span>
+                </BaseButton>
               </v-col>
 
               <v-col cols="12">
@@ -112,21 +130,11 @@
               </v-col>
 
               <v-col cols="12">
-                <BaseButton style="color: #e5534b" :loading="loading" @click="removeAccountDialog = true">
+                <BaseButton danger :loading="loading" @click="triggerDeleteAccount()">
                   <v-icon :left="$vuetify.breakpoint.lgAndUp"> $mdiDeleteOutline</v-icon>
                   <span v-if="$vuetify.breakpoint.xs || (!$vuetify.breakpoint.md && !$vuetify.breakpoint.sm) || verified">
                     Delete your account</span
                   >
-                </BaseButton>
-
-                <BaseButton
-                  v-if="!verified"
-                  :class="{ 'ml-3': $vuetify.breakpoint.smAndUp, 'mt-3': !$vuetify.breakpoint.smAndUp }"
-                  color="orange darken-3"
-                  :loading="loading"
-                  @click="verifyAccountDialog = true"
-                >
-                  <v-icon left> $mdiRefresh</v-icon><span>Resend verification email </span>
                 </BaseButton>
               </v-col>
               <v-col cols="12">
@@ -157,6 +165,16 @@
       @close="verifyAccountDialog = false"
       @authenticated="sendVerificationEmail"
     />
+
+    <base-warning-remove-dialog
+      v-model="warningRemoveDialog"
+      :title="accountRemoveTitle()"
+      :text="accountRemoveText()"
+      :email="userEmail"
+      :loading="removeAccountLoader"
+      @close="warningRemoveDialog = false"
+      @validated="removeAccountSkipAuthentication()"
+    />
   </div>
 </template>
 <script>
@@ -170,6 +188,7 @@
         removeAccountLoader: false,
         verifyAccountDialog: false,
         removeAccountDialog: false,
+        warningRemoveDialog: false,
         vvOptions: {
           mode: 'passive',
           slim: true,
@@ -184,13 +203,27 @@
 
     computed: {
       loading: sync('loaders/authLoader'),
-      ...get('authentication', ['getPasswordComplexity', 'verified']),
+      ...get('authentication', ['getPasswordComplexity', 'verified', 'isAuthExternalProvider', 'userEmail']),
       ...sync('loaders', ['resendVerificationLoader']),
     },
 
     methods: {
       ...call('authentication', ['accountResetPassword', 'deleteAccountByEmail', 'resendEmailVerification', 'logout']),
       ...call('snackbar/*'),
+
+      triggerDeleteAccount() {
+        if (!this.isAuthExternalProvider) {
+          this.removeAccountDialog = true;
+          return;
+        }
+
+        this.warningRemoveDialog = true;
+      },
+
+      removeAccountSkipAuthentication() {
+        const account = { email: this.userEmail };
+        this.removeAccount(account);
+      },
 
       resetValidation() {
         this.$refs.accountEdit.reset();
@@ -204,7 +237,7 @@
             this.accountResetPassword({ credentials: this.credentials });
             this.clearCredentialsform();
           } else {
-            this.snackbarError('please correct the fields highlighted in red');
+            this.snackbarError('Please correct the fields highlighted in red');
           }
         } catch (error) {
           this.snackbarError('Something went wrong ');
@@ -216,7 +249,7 @@
       },
 
       accountRemoveText() {
-        return 'This action is permament, you will not be able to undo it. All your data, will be removed immediately.';
+        return 'This action is permament, you will not be able to undo it.';
       },
 
       accountVerificationTitle() {
@@ -250,6 +283,7 @@
           }
           this.removeAccountLoader = false;
         } catch ({ ...error }) {
+          console.log(error.code);
           this.removeAccountLoader = false;
         }
       },
@@ -268,6 +302,7 @@
           }
           this.resendVerificationLoader = false;
         } catch ({ ...error }) {
+          console.log(error.code);
           this.resendVerificationLoader = false;
         }
       },

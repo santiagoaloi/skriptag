@@ -154,7 +154,7 @@
               this.$router.push('/profile');
               return;
             }
-            this.snackbarError('please correct the fields highlighted in red');
+            this.snackbarError('Please correct the fields highlighted in red');
             this.loading = false;
           }
         } catch (error) {

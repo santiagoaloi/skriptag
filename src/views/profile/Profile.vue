@@ -1,7 +1,7 @@
 <template>
   <div v-if="profile">
     <v-expand-transition>
-      <div v-show="isBannerVisible">
+      <div v-show="profileBanner">
         <v-hover v-slot="{ hover }">
           <v-img
             :src="profile.coverAvatar"
@@ -129,8 +129,8 @@
     </v-expand-transition>
 
     <v-sheet class="d-flex align-center justify-center blue" height="0">
-      <v-btn style="z-index: 99 !important" height="14" dark x-small color="#38404b" @click="isBannerVisible = !isBannerVisible"
-        ><v-icon> {{ isBannerVisible ? '$mdiChevronUp' : '$mdiChevronDown' }} </v-icon></v-btn
+      <v-btn style="z-index: 99 !important" height="14" dark x-small color="#38404b" @click="profileBanner = !profileBanner"
+        ><v-icon> {{ profileBanner ? '$mdiChevronUp' : '$mdiChevronDown' }} </v-icon></v-btn
       >
     </v-sheet>
 
@@ -194,7 +194,6 @@
       return {
         progress: 0,
         showProfileItems: false,
-        isBannerVisible: true,
         isBannerError: false,
       };
     },
@@ -202,6 +201,7 @@
     computed: {
       ...get('authentication', ['fullName', 'verified', 'isLoggedIn', 'isAuthExternalProvider', 'profile', 'isProfileLoaded']),
       ...sync('loaders', ['verificationInProgressLoader']),
+      ...sync('app', ['profileBanner']),
 
       src() {
         return this.profile.coverAvatar || `https://media.skriptag.com/img/banner.png`;

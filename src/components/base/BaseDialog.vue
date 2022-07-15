@@ -69,7 +69,7 @@
 
       <slot name="top"> </slot>
 
-      <v-card color="#2d333b" dark style="overflow: hidden" width="100%" :class="{ 'pa-2': !noGutters }" flat tile>
+      <v-card color="#22272e" dark style="overflow: hidden" width="100%" :class="{ 'pa-2': !noGutters }" flat tile>
         <v-container v-if="!noContainer" :fluid="fluid" :class="{ 'fill-height': filled }">
           <slot />
         </v-container>

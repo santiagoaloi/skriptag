@@ -29,6 +29,7 @@ import {
   checkActionCode,
   signInWithPopup,
   GoogleAuthProvider,
+  GithubAuthProvider,
   setPersistence,
   browserSessionPersistence,
 } from '@firebase/auth';
@@ -389,6 +390,9 @@ const actions = {
       });
 
       const userCredential = await signInWithPopup(auth, provider);
+
+      console.log(userCredential);
+
       const { user } = userCredential;
 
       // Don't re-create the user profile, if the the user
@@ -408,8 +412,60 @@ const actions = {
 
       store.set('loaders/signInWithGoogle', false);
     } catch ({ ...error }) {
-      dispatch('snackbar/snackbarError', `Something went wrong authenticating`, { root: true });
       store.set('loaders/signInWithGoogle', false);
+
+      if (error.code === 'auth/account-exists-with-different-credential') {
+        const currentProvider = error.customData._tokenResponse.verifiedProvider[0];
+        dispatch('snackbar/snackbarError', `This account is being used to authenticate with ${currentProvider}`, { root: true });
+        return;
+      }
+
+      dispatch('snackbar/snackbarError', `Something went wrong authenticating`, { root: true });
+    }
+  },
+
+  // Creates a new user account on first login or else login
+  // the existing account, route to user profile on succesful login.
+  async authenticateWithGithub({ dispatch }) {
+    store.set('loaders/signInWithGithub', true);
+
+    try {
+      const provider = new GithubAuthProvider();
+
+      const userCredential = await signInWithPopup(auth, provider);
+      const { user } = userCredential;
+
+      // Don't re-create the user profile, if the the user
+      // already has a profile doc already.
+      const docRef = doc(db, 'users', user.uid);
+      const docSnap = await getDoc(docRef);
+
+      if (!docSnap.exists()) {
+        const profile = await dispatch('addUserToUsersCollectionGgoogle', { user });
+        if (!profile.created) {
+          dispatch('snackbar/snackbarError', `Something went wrong while creating the account profile.`, { root: true });
+          return;
+        }
+      }
+
+      route('/profile');
+
+      store.set('loaders/signInWithGithub', false);
+    } catch ({ ...error }) {
+      store.set('loaders/signInWithGithub', false);
+
+      if (error.code === 'auth/account-exists-with-different-credential') {
+        const currentProvider = error.customData._tokenResponse.verifiedProvider[0];
+        dispatch(
+          'snackbar/snackbarError',
+          `This account is being used to authenticate with ${currentProvider}
+           - Sign-in with ${currentProvider} and link your account with GitHub in your account settings. `,
+          { root: true },
+        );
+        return;
+      }
+
+      dispatch('snackbar/snackbarError', `Something went wrong authenticating`, { root: true });
     }
   },
 

@@ -26,7 +26,7 @@ exports.listAllUsers = functions.region('us-central1').https.onCall(async (data,
   }
 });
 
-exports.verifiyUserByEmail = functions.region('us-central1').https.onCall(async (email) => {
+exports.verifiyUserByEmail = functions.https.onCall(async (email) => {
   try {
     const user = await admin.auth().getUserByEmail(email);
     const docRef = admin.firestore().collection('users').doc(user.uid);
@@ -40,7 +40,7 @@ exports.verifiyUserByEmail = functions.region('us-central1').https.onCall(async 
   }
 });
 
-exports.disableUserByEmail = functions.region('us-central1').https.onCall(async (email, context) => {
+exports.disableUserByEmail = functions.https.onCall(async (email, context) => {
   // If appCheck fails, terminate the funciton.
   if (!context.app) {
     throw new functions.https.HttpsError('failed-precondition', 'The function must be called from an App Check verified app.');
@@ -97,7 +97,7 @@ exports.disableUserByEmail = functions.region('us-central1').https.onCall(async 
   }
 });
 
-exports.enableUserByEmail = functions.region('us-central1').https.onCall(async (email) => {
+exports.enableUserByEmail = functions.https.onCall(async (email) => {
   try {
     const user = await admin.auth().getUserByEmail(email);
     const id = user.uid;
@@ -140,7 +140,7 @@ exports.enableUserByEmail = functions.region('us-central1').https.onCall(async (
   }
 });
 
-exports.deleteUserByEmail = functions.region('us-central1').https.onCall(async (email) => {
+exports.deleteUserByEmail = functions.https.onCall(async (email) => {
   try {
     const user = await admin.auth().getUserByEmail(email);
     const id = user.uid;
@@ -185,7 +185,7 @@ exports.deleteUserByEmail = functions.region('us-central1').https.onCall(async (
   }
 });
 
-exports.changeUserPasswordByEmail = functions.region('us-central1').https.onCall(async ({ payload }) => {
+exports.changeUserPasswordByEmail = functions.https.onCall(async ({ payload }) => {
   try {
     const { email, password } = payload;
     const user = await admin.auth().getUserByEmail(email);

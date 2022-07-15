@@ -1,12 +1,13 @@
 <template>
   <v-snackbar
     v-model="snackbar.data.value"
-    :timeout="snackbar.data.permanent ? 0 : 6000"
+    :timeout="snackbar.data.permanent ? 0 : 8000"
     :color="snackbar.data.color"
     transition="slide-y-reverse-transition"
     multi-line
     center
     class="px-5 mb-2"
+    max-width="450"
   >
     <div class="d-flex align-center">
       <v-icon class="mr-4"> {{ snackbar.data.icon }}</v-icon>

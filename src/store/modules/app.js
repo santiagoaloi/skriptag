@@ -3,7 +3,8 @@ import { make } from 'vuex-pathify';
 
 // Data
 const state = {
-  drawer: null,
+  drawer: true,
+  profileBanner: true,
   mobileMenu: false,
 };
 

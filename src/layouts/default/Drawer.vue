@@ -64,15 +64,13 @@
   </div>
 </template>
 <script>
-  import { get } from 'vuex-pathify';
+  import { get, sync } from 'vuex-pathify';
 
   export default {
     name: 'DefaultDrawer',
     data() {
       return {
-        drawer: false,
         route: '/',
-        showSidebar: false,
         items: [
           {
             items: [{ title: 'List Item' }],
@@ -96,6 +94,7 @@
 
     computed: {
       ...get('authentication', ['isLoggedIn', 'profile']),
+      ...sync('app', ['drawer']),
     },
   };
 </script>

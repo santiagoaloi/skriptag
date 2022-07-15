@@ -176,7 +176,7 @@
             return;
           }
           this.loading = false;
-          this.snackbarError('please correct the fields highlighted in red');
+          this.snackbarError('Please correct the fields highlighted in red');
         } catch (error) {
           this.snackbarError('something went wrong ');
           this.loading = false;

@@ -18,7 +18,7 @@
             <Base-button :loading="loading" class="my-3" block @click="google()">
               <v-icon left> $mdiGoogle</v-icon> Sign-in with Google</Base-button
             >
-            <Base-button disabled class="my-3" block> <v-icon left> $mdiGithub</v-icon> Sign-in with Github</Base-button>
+            <Base-button class="my-3" block @click="github()"> <v-icon left> $mdiGithub</v-icon> Sign-in with Github</Base-button>
 
             <div class="d-flex align-center">
               <v-divider class="grey darken-3" /> <span class="mx-3"> or </span>
@@ -64,16 +64,20 @@
     },
 
     computed: {
-      loading: sync('loaders/signInWithGoogle'),
+      ...sync('loaders', ['signInWithGoogle', 'signInWithGithub']),
       ...get('authentication', ['isLoggedIn']),
     },
 
     methods: {
-      ...call('authentication', ['login', 'accountRecoveryRequest', 'authenticateWithGoogle']),
+      ...call('authentication', ['login', 'accountRecoveryRequest', 'authenticateWithGoogle', 'authenticateWithGithub']),
       ...call('snackbar/*'),
 
       google() {
         this.authenticateWithGoogle();
+      },
+
+      github() {
+        this.authenticateWithGithub();
       },
 
       resetValidation() {
@@ -97,7 +101,7 @@
 
             return;
           }
-          this.snackbarError('please correct the fields highlighted in red');
+          this.snackbarError('Please correct the fields highlighted in red');
         } catch (error) {
           this.snackbarError('something went wrong ');
         }

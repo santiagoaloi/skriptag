@@ -5,6 +5,7 @@ const state = {
   authLoader: false,
   signupLoader: false,
   signInWithGoogle: false,
+  signInWithGithub: false,
   resendVerificationLoader: false,
   verificationInProgressLoader: false,
   removeAccountLoader: false,
