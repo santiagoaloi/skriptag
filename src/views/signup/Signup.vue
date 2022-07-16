@@ -8,8 +8,8 @@
       <v-alert dark dismissible color="#383f43" border="top">
         <div class="px-3">
           To signup with google or Github,
-          <span style="color: #539bf5" class="cursor-pointer" @click="$router.push('login')"> go to the login page</span>, an
-          account will be created on your first login, associated with your email.
+          <span class="cursor-pointer" @click="$router.push('login')"> go to the login page</span>, an account will be created on
+          your first login, associated with your email.
         </div>
       </v-alert>
 

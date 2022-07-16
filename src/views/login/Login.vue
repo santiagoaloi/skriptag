@@ -1,5 +1,5 @@
 <template>
-  <base-split-2 col="6" right src="login1.svg" v-bind="$attrs">
+  <base-split-2 col="6" right src="login2.svg" v-bind="$attrs">
     <v-container>
       <div class="d-flex flex-wrap flex-column">
         <template v-if="!recoveryMode">

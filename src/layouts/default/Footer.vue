@@ -1,9 +1,8 @@
 <template>
   <v-footer app dark padless>
-    <v-card class="flex py-2 px-4 blue-grey darken-3" flat tile>
-      <v-card-actions class="pa-0 px-5">
-        <div>© 2022 Skriptag, Inc.</div>
-        <div class="px-2">·</div>
+    <v-card class="flex py-2 pl-3" flat tile>
+      <v-card-actions style="font-size: 13px" class="pa-0 px-5">
+        <div class="mr-6">© 2022 Skriptag, Inc.</div>
         <a>Privacy</a>
         <div class="px-2">·</div>
         <a>Terms</a>
@@ -12,8 +11,8 @@
 
         <v-spacer></v-spacer>
 
-        <base-button>English (US)</base-button>
-        <base-button>Support and Resources</base-button>
+        <base-button small>English (US)</base-button>
+        <base-button small>Support and Resources</base-button>
       </v-card-actions>
     </v-card>
   </v-footer>

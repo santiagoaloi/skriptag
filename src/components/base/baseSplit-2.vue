@@ -2,7 +2,7 @@
   <v-row :class="rowClass" no-gutters>
     <v-col :order="colOrder()" :md="remainingCols" cols="12">
       <v-img
-        :src="require(`@/assets/static/${src}`)"
+        :src="src ? require(`@/assets/static/${src}`) : null"
         class="decreaseColor"
         :class="imageClass()"
         v-bind="imageOptions()"
@@ -39,6 +39,11 @@
         type: [String],
         default: '',
       },
+
+      svgClass: {
+        type: [String],
+        default: '',
+      },
     },
 
     data() {
@@ -66,11 +71,11 @@
         }
 
         if (right && !smAndDown) {
-          return 'diagonal-divider-right';
+          return `diagonal-divider-right ${this.svgClass}`;
         }
 
         if (!right && !smAndDown) {
-          return 'diagonal-divider-left';
+          return `diagonal-divider-left ${this.svgClass}`;
         }
       },
 
@@ -95,7 +100,7 @@
         const { smAndDown } = this.$vuetify.breakpoint;
 
         return {
-          gradient: gradientOptions(),
+          // gradient: gradientOptions(),
           width: '100%',
           style: { height: '100%' },
           transition: (() => {
@@ -132,7 +137,7 @@
   .hide {
     filter: opacity(0);
   }
-  .decreaseColor {
+  /* .decreaseColor {
     filter: grayscale(0.1) hue-rotate(340deg);
-  }
+  } */
 </style>
