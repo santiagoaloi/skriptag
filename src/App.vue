@@ -8,11 +8,7 @@
 
   export default {
     name: 'BaseApp',
-    data() {
-      return {
-        hide: false,
-      };
-    },
+
     computed: {
       ...get('authentication', ['isAccountDisabled', 'profile']),
     },

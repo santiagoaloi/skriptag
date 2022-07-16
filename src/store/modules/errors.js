@@ -12,18 +12,22 @@ const actions = {
       dispatch('snackbar/snackbarError', 'This email is not valid, please try again.', { root: true });
       return;
     }
+
     if (message.includes('auth/wrong-password')) {
       dispatch('snackbar/snackbarError', 'Incorrect password , please try again.', { root: true });
       return;
     }
+
     if (message.includes('auth/user-not-found')) {
       dispatch('snackbar/snackbarError', 'This account does not exist in our records.', { root: true });
       return;
     }
+
     if (message.includes('auth/too-many-attempts')) {
       dispatch('snackbar/snackbarError', 'Too many invalid attemps, please try again later.', { root: true });
       return;
     }
+
     if (message.includes('auth/user-disabled')) {
       dispatch('snackbar/snackbarError', 'This account is disabled.', { root: true });
       return;
@@ -35,6 +39,7 @@ const actions = {
       });
       return;
     }
+
     if (message.includes('auth/weak-password')) {
       dispatch('snackbar/snackbarError', 'The password is to weak.', { root: true });
       return;

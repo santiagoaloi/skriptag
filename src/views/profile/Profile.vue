@@ -199,7 +199,14 @@
     },
 
     computed: {
-      ...get('authentication', ['fullName', 'verified', 'isLoggedIn', 'isAuthExternalProvider', 'profile', 'isProfileLoaded']),
+      ...get('authentication', [
+        'fullName',
+        'verified',
+        'isLoggedIn',
+        'isAuthExternalProviderOnly',
+        'profile',
+        'isProfileLoaded',
+      ]),
       ...sync('loaders', ['verificationInProgressLoader']),
       ...sync('app', ['profileBanner']),
 

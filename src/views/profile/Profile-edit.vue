@@ -100,7 +100,7 @@
     },
 
     computed: {
-      ...get('authentication', ['isAuthExternalProvider']),
+      ...get('authentication', ['isAuthExternalProviderOnly']),
       editableProfile: sync('authentication/profile'),
     },
 
@@ -129,7 +129,7 @@
         // const profileMedia = { photoURL: this.profile.photoURL, coverAvatar: this.profile.coverAvatar };
         this.editableProfile = this.originProfile;
 
-        // if (this.isAuthExternalProvider) {
+        // if (this.isAuthExternalProviderOnly) {
         //   const profileMedia = { coverAvatar: this.profile.coverAvatar };
         //   this.profile = merge(originProfile, profileMedia);
         // }

@@ -120,6 +120,7 @@ const actions = {
       const result = await deleteAccount(email);
 
       if (!result.data.removed) return;
+
       return {
         removed: true,
       };
@@ -180,7 +181,6 @@ const actions = {
   async accountEmailVerification({ dispatch, state, getters }, code) {
     try {
       store.set('loaders/verificationInProgressLoader', true);
-
       const metadata = await checkActionCode(auth, code);
 
       const OOB = await dispatch('applyCode', code);
@@ -225,6 +225,7 @@ const actions = {
   // Generates a password recovery email from the login screen.
   async accountRecoveryRequest({ dispatch }, email) {
     store.set('loaders/authLoader', true);
+
     try {
       await sendPasswordResetEmail(auth, email);
       dispatch('snackbar/snackbarSuccess', 'Account recovery email sent.', { root: true });
@@ -240,7 +241,9 @@ const actions = {
   // if valid, the account password will be changed.
   async accountRecoveryResetPassword({ dispatch }, { payload }) {
     const { oobCode, newPassword } = payload;
+
     store.set('loaders/authLoader', true);
+
     try {
       await confirmPasswordReset(auth, oobCode, newPassword);
       dispatch('snackbar/snackbarSuccess', 'Account password changed.', { root: true });
@@ -293,6 +296,7 @@ const actions = {
   // Login user account, load user profile object and route to profile page.
   async login({ dispatch, state }, loginForm) {
     store.set('loaders/authLoader', true);
+
     const { email, password } = loginForm;
 
     try {
@@ -420,9 +424,6 @@ const actions = {
       });
 
       const userCredential = await signInWithPopup(auth, provider);
-
-      console.log(userCredential);
-
       const { user } = userCredential;
 
       // Don't re-create the user profile, if the the user
@@ -461,7 +462,6 @@ const actions = {
 
     try {
       const provider = new GithubAuthProvider();
-
       const userCredential = await signInWithPopup(auth, provider);
       const { user } = userCredential;
 
@@ -483,8 +483,6 @@ const actions = {
       store.set('loaders/signInWithGithub', false);
     } catch ({ ...error }) {
       store.set('loaders/signInWithGithub', false);
-
-      console.log(error.code);
 
       if (error.code === 'auth/account-exists-with-different-credential') {
         dispatch(
@@ -513,8 +511,8 @@ const actions = {
   async assignRolesToUser(_, payload) {
     try {
       const { uid, roles } = payload;
-
       const profile = doc(db, 'users', uid);
+
       await updateDoc(profile, {
         roles,
       });
@@ -538,7 +536,6 @@ const actions = {
       // Add a new document with a generated id.
       await addDoc(colRef, {
         name: name.trim(),
-        // alias: name.trim(),
         description,
         capabilities: (capabilities || []).filter((c) => c !== ''), // No empty values
       });
@@ -607,7 +604,6 @@ const actions = {
     // Add a new document with a generated id.
     await addDoc(colRef, {
       name: name.trim(),
-      // alias: name.trim(),
       description,
     });
   },
@@ -633,9 +629,11 @@ const actions = {
   async getUsersSnapshot({ getters }) {
     try {
       const getAllUsers = httpsCallable(functions, 'listAllUsers');
+
       const accounts = await getAllUsers({
         allowed: getters.isRoot,
       });
+
       const allUsers = Object.values(accounts.data) || [];
 
       const colRefUsers = collection(db, 'users');
@@ -730,7 +728,6 @@ const getters = {
 
   verified: (_state, _getters) => {
     if (!_getters.isLoggedIn) return;
-    // return _state.profile?.verified || _getters.isAuthExternalProvider;
     return _state.profile?.verified;
   },
 
@@ -739,8 +736,8 @@ const getters = {
     return _state.user.providerData.flatMap((profile) => profile.providerId);
   },
 
-  isAuthExternalProvider: (_state, _getters) => {
-    if (_getters.isLoggedIn) return _state.user.providerData[0].providerId !== 'password';
+  isAuthExternalProviderOnly: (_state, _getters) => {
+    if (_getters.isLoggedIn) return !_state.user.providerData.find((p) => p.providerId === 'password');
   },
 
   profile: (_state) => {
@@ -778,7 +775,9 @@ const getters = {
 
   // returns current user last login date/time.
   allRoles: (_state) => _state.roles.flatMap((role) => role.name),
+
   lastLogin: (_state) => _state.user?.metadata?.lastSignInTime,
+
   allCapabilities: (_state) => _state.capabilities.flatMap((c) => c.name),
 };
 

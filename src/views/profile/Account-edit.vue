@@ -5,7 +5,7 @@
         <v-row no-gutters>
           <v-col cols="12" sm="6" md="4">
             <v-row>
-              <template v-if="!isAuthExternalProvider">
+              <template v-if="!isAuthExternalProviderOnly">
                 <v-col cols="12">
                   <BaseTitleDivider>Change Password</BaseTitleDivider>
                 </v-col>
@@ -114,7 +114,7 @@
                   </div>
                 </v-col>
                 <v-col cols="12">
-                  <BaseButton :loading="loading" @click="verifyAccountDialog = true">
+                  <BaseButton :loading="resendVerificationLoader" @click="verifyAccountDialog = true">
                     <v-icon left> $mdiRefresh</v-icon><span>Resend verification email </span>
                   </BaseButton>
                 </v-col>
@@ -132,7 +132,7 @@
               </v-col>
 
               <v-col cols="12">
-                <BaseButton danger :loading="loading" @click="triggerDeleteAccount()">
+                <BaseButton danger :loading="removeAccountLoader" @click="triggerDeleteAccount()">
                   <v-icon :left="$vuetify.breakpoint.lgAndUp"> $mdiDeleteOutline</v-icon>
                   <span v-if="$vuetify.breakpoint.xs || (!$vuetify.breakpoint.md && !$vuetify.breakpoint.sm) || verified">
                     Delete your account</span
@@ -152,6 +152,7 @@
       </form>
     </ValidationObserver>
     <base-authenticate-dialog
+      v-if="removeAccountDialog"
       v-model="removeAccountDialog"
       :title="accountRemoveTitle()"
       :text="accountRemoveText()"
@@ -160,6 +161,7 @@
       @authenticated="removeAccount"
     />
     <base-authenticate-dialog
+      v-if="verifyAccountDialog"
       v-model="verifyAccountDialog"
       :title="accountVerificationTitle()"
       :text="accountVerificationText()"
@@ -169,6 +171,7 @@
     />
 
     <base-warning-remove-dialog
+      v-if="warningRemoveDialog"
       v-model="warningRemoveDialog"
       :title="accountRemoveTitle()"
       :text="accountRemoveText()"
@@ -205,7 +208,7 @@
 
     computed: {
       loading: sync('loaders/authLoader'),
-      ...get('authentication', ['getPasswordComplexity', 'verified', 'isAuthExternalProvider', 'userEmail']),
+      ...get('authentication', ['getPasswordComplexity', 'verified', 'isAuthExternalProviderOnly', 'userEmail']),
       ...sync('loaders', ['resendVerificationLoader']),
     },
 
@@ -214,7 +217,7 @@
       ...call('snackbar/*'),
 
       triggerDeleteAccount() {
-        if (!this.isAuthExternalProvider) {
+        if (!this.isAuthExternalProviderOnly) {
           this.removeAccountDialog = true;
           return;
         }

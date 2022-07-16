@@ -110,6 +110,10 @@ a {
   background-color: transparent !important;
 }
 
+.v-application a {
+  color: #0aae9b !important;
+}
+
 .v-application--is-ltr .v-list-group--no-action > .v-list-group__items > .v-list-item {
   padding-left: 16px !important;
 }

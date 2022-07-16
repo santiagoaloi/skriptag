@@ -3,6 +3,62 @@
     <ValidationObserver ref="profileEdit" slim>
       <form class="d-flex flex-column" @submit.prevent="validate()">
         <v-row>
+          <v-col cols="12" lg="6">
+            <Base-field-title> Name</Base-field-title>
+            <div class="pr-2">
+              <Validation-provider
+                v-slot="{ errors, failed }"
+                v-bind="{ ...vvOptions }"
+                name="name"
+                :rules="{ required: true, alpha_spaces: true }"
+              >
+                <vs-input
+                  v-model="signupForm.name"
+                  maxlength="20"
+                  :danger="failed"
+                  block
+                  placeholder="Name"
+                  @focus="resetValidation()"
+                >
+                  <template #icon>
+                    <v-icon dark>$mdiAccount</v-icon>
+                  </template>
+                  <template #message-danger>
+                    <v-icon v-if="failed" color="pink" style="margin-top: -1px" x-small dark>$mdiAlertCircleOutline</v-icon>
+                    {{ errors[0] }}
+                  </template>
+                </vs-input>
+              </Validation-provider>
+            </div>
+          </v-col>
+          <v-col cols="12" lg="6">
+            <Base-field-title> Last Name</Base-field-title>
+            <div class="pr-2">
+              <Validation-provider
+                v-slot="{ errors, failed }"
+                v-bind="{ ...vvOptions }"
+                name="last name"
+                :rules="{ required: true, alpha_spaces: true }"
+              >
+                <vs-input
+                  v-model="signupForm.lastName"
+                  maxlength="20"
+                  :danger="failed"
+                  block
+                  placeholder="Last name"
+                  @focus="resetValidation()"
+                >
+                  <template #icon>
+                    <v-icon dark>$mdiAccount</v-icon>
+                  </template>
+                  <template #message-danger>
+                    <v-icon v-if="failed" color="pink" style="margin-top: -1px" x-small dark>$mdiAlertCircleOutline</v-icon>
+                    {{ errors[0] }}
+                  </template>
+                </vs-input>
+              </Validation-provider>
+            </div>
+          </v-col>
           <v-col cols="12" lg="12">
             <Base-field-title> Email</Base-field-title>
             <div class="pr-2">
@@ -85,62 +141,6 @@
                     <v-icon dark>$mdiLock</v-icon>
                   </template>
 
-                  <template #message-danger>
-                    <v-icon v-if="failed" color="pink" style="margin-top: -1px" x-small dark>$mdiAlertCircleOutline</v-icon>
-                    {{ errors[0] }}
-                  </template>
-                </vs-input>
-              </Validation-provider>
-            </div>
-          </v-col>
-          <v-col cols="12" lg="6">
-            <Base-field-title> Name</Base-field-title>
-            <div class="pr-2">
-              <Validation-provider
-                v-slot="{ errors, failed }"
-                v-bind="{ ...vvOptions }"
-                name="name"
-                :rules="{ required: true, alpha_spaces: true }"
-              >
-                <vs-input
-                  v-model="signupForm.name"
-                  maxlength="20"
-                  :danger="failed"
-                  block
-                  placeholder="Name"
-                  @focus="resetValidation()"
-                >
-                  <template #icon>
-                    <v-icon dark>$mdiAccount</v-icon>
-                  </template>
-                  <template #message-danger>
-                    <v-icon v-if="failed" color="pink" style="margin-top: -1px" x-small dark>$mdiAlertCircleOutline</v-icon>
-                    {{ errors[0] }}
-                  </template>
-                </vs-input>
-              </Validation-provider>
-            </div>
-          </v-col>
-          <v-col cols="12" lg="6">
-            <Base-field-title> Last Name</Base-field-title>
-            <div class="pr-2">
-              <Validation-provider
-                v-slot="{ errors, failed }"
-                v-bind="{ ...vvOptions }"
-                name="last name"
-                :rules="{ required: true, alpha_spaces: true }"
-              >
-                <vs-input
-                  v-model="signupForm.lastName"
-                  maxlength="20"
-                  :danger="failed"
-                  block
-                  placeholder="Last name"
-                  @focus="resetValidation()"
-                >
-                  <template #icon>
-                    <v-icon dark>$mdiAccount</v-icon>
-                  </template>
                   <template #message-danger>
                     <v-icon v-if="failed" color="pink" style="margin-top: -1px" x-small dark>$mdiAlertCircleOutline</v-icon>
                     {{ errors[0] }}
