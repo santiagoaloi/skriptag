@@ -66,14 +66,19 @@ const actions = {
   },
 
   // Admin SDK, verifies the user email via verificaion link.
-  async findUserByEmailAndVerify({ dispatch }, email) {
+  async findUserByEmailAndVerify(_, email) {
     const veriyUser = httpsCallable(functions, 'verifiyUserByEmail');
     const result = await veriyUser(email);
 
-    if (!result.data.verified) return;
+    if (!result.data.verified) {
+      return {
+        verified: false,
+      };
+    }
 
-    dispatch('snackbar/snackbarSuccess', `Your account ${email} is now verified.`, { root: true });
-    store.set('loaders/verificationInProgressLoader', false);
+    return {
+      verified: true,
+    };
   },
 
   // Admin SDK, disable any account matching the email.
@@ -157,38 +162,63 @@ const actions = {
     }
   },
 
+  async applyCode(_, code) {
+    try {
+      await applyActionCode(auth, code);
+
+      return {
+        authorized: true,
+      };
+    } catch ({ ...error }) {
+      return {
+        authorized: false,
+        error: { ...error },
+      };
+    }
+  },
   //  Set the flag "verified" to the user account.
   async accountEmailVerification({ dispatch, state, getters }, code) {
     try {
       store.set('loaders/verificationInProgressLoader', true);
 
       const metadata = await checkActionCode(auth, code);
-      await applyActionCode(auth, code);
+
+      const OOB = await dispatch('applyCode', code);
+
+      if (!OOB.authorized) {
+        alert('OOB not authorized');
+        store.set('loaders/verificationInProgressLoader', false);
+        return;
+      }
 
       // Set user profile verified key to true (admin function)
-      dispatch('findUserByEmailAndVerify', metadata.data.email);
+      const action = await dispatch('findUserByEmailAndVerify', metadata.data.email);
 
-      if (getters.isLoggedIn && !getters.verified) {
-        // reloads user object to reflect emailVerified value as true.
-        state.user.reload();
-        router.push('profile');
-        return;
+      if (action.verified) {
+        dispatch('snackbar/snackbarSuccess', `Your account is now verified.`, { root: true });
+        store.set('loaders/verificationInProgressLoader', false);
+
+        if (getters.isLoggedIn && !getters.verified) {
+          // reloads user object to reflect emailVerified value as true.
+          state.user.reload();
+          router.push('profile');
+          return;
+        }
+
+        if (!getters.isLoggedIn) {
+          router.push('login');
+          return;
+        }
       }
 
-      if (!getters.isLoggedIn) {
-        router.push('login');
-        return;
-      }
-
+      store.set('loaders/verificationInProgressLoader', false);
       dispatch('snackbar/snackbarSuccess', 'Your account is already verified.', {
         root: true,
       });
-
-      store.set('loaders/verificationInProgressLoader', false);
     } catch ({ ...error }) {
-      await router.push('login');
       dispatch('errors/authMessagesSnackbar', error.code, { root: true });
       store.set('loaders/verificationInProgressLoader', false);
+      router.push('login');
     }
   },
 
@@ -454,12 +484,13 @@ const actions = {
     } catch ({ ...error }) {
       store.set('loaders/signInWithGithub', false);
 
+      console.log(error.code);
+
       if (error.code === 'auth/account-exists-with-different-credential') {
-        const currentProvider = error.customData._tokenResponse.verifiedProvider[0];
         dispatch(
           'snackbar/snackbarError',
-          `This account is being used to authenticate with ${currentProvider}
-           - Sign-in with ${currentProvider} and link your account with GitHub in your account settings. `,
+          `This account is being used to authenticate with another authentication provider.
+           You can link your  account with GitHub in your account settings.`,
           { root: true },
         );
         return;

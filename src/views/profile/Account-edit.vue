@@ -103,20 +103,22 @@
                 </v-col>
               </template>
 
-              <v-col cols="12">
-                <div class="mt-4">
-                  <BaseTitleDivider danger>Resend verification email</BaseTitleDivider>
-                  <p>
-                    <v-icon small style="color: #ccc">$mdiHelpCircleOutline</v-icon>
-                    Check your junk folder, sometimes emails can get lost.
-                  </p>
-                </div>
-              </v-col>
-              <v-col cols="12">
-                <BaseButton v-if="!verified" :loading="loading" @click="verifyAccountDialog = true">
-                  <v-icon left> $mdiRefresh</v-icon><span>Resend verification email </span>
-                </BaseButton>
-              </v-col>
+              <template v-if="!verified">
+                <v-col cols="12">
+                  <div class="mt-4">
+                    <BaseTitleDivider danger>Resend verification email</BaseTitleDivider>
+                    <p>
+                      <v-icon small style="color: #ccc">$mdiHelpCircleOutline</v-icon>
+                      Check your junk folder, sometimes emails can get lost.
+                    </p>
+                  </div>
+                </v-col>
+                <v-col cols="12">
+                  <BaseButton :loading="loading" @click="verifyAccountDialog = true">
+                    <v-icon left> $mdiRefresh</v-icon><span>Resend verification email </span>
+                  </BaseButton>
+                </v-col>
+              </template>
 
               <v-col cols="12">
                 <div class="mt-4">

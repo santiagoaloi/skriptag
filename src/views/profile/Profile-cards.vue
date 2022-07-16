@@ -28,7 +28,7 @@
             />
             <v-container>
               <div class="pa-3">
-                <p style="font-size: 130%">{{ card.title }}</p>
+                <p style="font-size: 110%">{{ card.title }}</p>
                 <div style="font-size: 14px" class="mt-n3">{{ card.text }}</div>
               </div>
             </v-container>
