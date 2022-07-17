@@ -2,10 +2,15 @@
   <v-footer app dark padless>
     <v-card class="flex py-2 pl-3" flat tile>
       <v-card-actions style="font-size: 13px" class="pa-0 px-5">
-        <div class="mr-6">© 2022 Skriptag, Inc.</div>
-        <a>Privacy</a>
+        <div style="width: 120px; font-size: 8px">
+          <skriptag-title small>
+            <template #text> © 2022 </template>
+          </skriptag-title>
+        </div>
+
+        <a>Privacy Statement</a>
         <div class="px-2">·</div>
-        <a>Terms</a>
+        <a>Terms of Service</a>
         <div class="px-2">·</div>
         <a>Sitemap</a>
 

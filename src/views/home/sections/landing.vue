@@ -1,7 +1,7 @@
 <template>
   <base-split-2 col="6" src="landing4.svg" v-bind="$attrs">
     <!-- <base-split-2 col="6" svg-class="home-landing-svg" v-bind="$attrs"> -->
-    <v-chip color="indigo" dark small>V1 Beta-2</v-chip>
+    <v-chip color="indigo darken-3" dark small>V1.0 Beta-2</v-chip>
     <skriptag-title large class="mb-4" />
     <article>
       <h2 class="font-weight-light">

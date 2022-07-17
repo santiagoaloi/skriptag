@@ -22,9 +22,10 @@
             <v-img
               :height="$vuetify.breakpoint.smAndDown ? 150 : 140"
               :transition="false"
-              class="rounded-t-lg decreaseColor"
+              class="rounded-t-lg"
               :src="card.img"
               v-bind="imageOptions()"
+              style="filter: grayscale(1)"
             />
             <v-container>
               <div class="pa-3">
@@ -144,7 +145,7 @@
     opacity: 0.1;
   }
 
-  .decreaseColor {
+  /* .decreaseColor {
     filter: grayscale(0.1) hue-rotate(340deg);
-  }
+  } */
 </style>

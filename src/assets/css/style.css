@@ -111,7 +111,11 @@ a {
 }
 
 .v-application a {
-  color: #0aae9b !important;
+  color: #ada0fa !important;
+}
+
+.link-color {
+  color: #ada0fa !important;
 }
 
 .v-application--is-ltr .v-list-group--no-action > .v-list-group__items > .v-list-item {

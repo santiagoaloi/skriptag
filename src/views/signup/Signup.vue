@@ -1,19 +1,15 @@
 <template>
   <base-split-2 col="7" src="signup2.svg" v-bind="$attrs">
     <div class="d-flex flex-wrap flex-column">
-      <skriptag-title small>
+      <skriptag-title small class="mb-n4">
         <template #text> Signup with email to </template>
       </skriptag-title>
 
-      <v-alert dark dismissible color="#383f43" border="top">
-        <div class="px-3">
-          To signup with google or Github,
-          <span class="cursor-pointer" @click="$router.push('login')"> go to the login page</span>, an account will be created on
-          your first login, associated with your email.
-        </div>
-      </v-alert>
+      <small class="mb-3">
+        To signup with google or Github or if you already have an account,
+        <span class="cursor-pointer link-color" @click="$router.push('login')"> go to the login page.</span>
+      </small>
 
-      <BaseLink to="login">Already have an account? Login</BaseLink>
       <SignupWithEmail />
     </div>
   </base-split-2>
