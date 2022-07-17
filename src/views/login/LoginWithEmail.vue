@@ -17,7 +17,7 @@
                 :danger="failed"
                 maxlength="100"
                 block
-                placeholder="Email"
+                placeholder="Your account email"
                 @focus="resetValidation()"
               >
                 <template #icon>

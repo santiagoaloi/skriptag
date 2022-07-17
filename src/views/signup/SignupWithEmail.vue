@@ -17,7 +17,7 @@
                   maxlength="20"
                   :danger="failed"
                   block
-                  placeholder="Name"
+                  placeholder="Your first name"
                   @focus="resetValidation()"
                 >
                   <template #icon>
@@ -45,7 +45,7 @@
                   maxlength="20"
                   :danger="failed"
                   block
-                  placeholder="Last name"
+                  placeholder="Your last name"
                   @focus="resetValidation()"
                 >
                   <template #icon>
@@ -73,7 +73,7 @@
                   maxlength="100"
                   :danger="failed"
                   block
-                  placeholder="Email"
+                  placeholder="The email you will use to authenticate"
                   @focus="resetValidation()"
                 >
                   <template #icon>

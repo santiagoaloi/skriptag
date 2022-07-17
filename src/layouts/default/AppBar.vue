@@ -11,14 +11,25 @@
 
     <v-spacer></v-spacer>
 
+    <div v-for="item in menuItems" :key="item.name" class="pr-8">
+      <BaseMenuLink>{{ item.name }}</BaseMenuLink>
+    </div>
+
+    <!-- <div class="pr-8">
+      <h4>Templates</h4>
+    </div>
+    <div class="pr-8">
+      <h4>Blog</h4>
+    </div> -->
+
     <template v-if="!isLoggedIn && !$vuetify.breakpoint.smAndDown">
       <BaseButton
         v-for="button in [
           { link: 'login', name: 'Login', icon: '$mdiAccountArrowRight' },
           { link: 'signup', name: 'Sign up', icon: '$mdiAccountPlus' },
         ]"
-        v-show="$route.name !== button.link"
         :key="button.name"
+        :disabled="$route.name === button.link"
         dark
         class="ml-3"
         @click="!$router.push(`${button.link}`)"
@@ -56,6 +67,11 @@
       return {
         dropdown: [],
         active: '',
+        menuItems: [
+          { name: 'Consulting', to: '', disabled: false },
+          { name: 'Templates', to: '', disabled: false },
+          { name: 'Blog', to: '', disabled: false },
+        ],
       };
     },
 

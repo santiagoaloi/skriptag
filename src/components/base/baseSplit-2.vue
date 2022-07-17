@@ -3,7 +3,6 @@
     <v-col :order="colOrder()" :md="remainingCols" cols="12">
       <v-img
         :src="src ? require(`@/assets/static/${src}`) : null"
-        class="decreaseColor"
         :class="imageClass()"
         v-bind="imageOptions()"
         @load="imageLoaded = true"
@@ -85,18 +84,18 @@
         return right && !smAndDown ? '12' : '-1';
       },
 
-      gradientOptions() {
-        const { imageLoaded } = this;
-        if (!imageLoaded) return;
+      // gradientOptions() {
+      //   const { imageLoaded } = this;
+      //   if (!imageLoaded) return;
 
-        const direction = 'to bottom';
-        const fromColor = 'rgba(0, 0, 0, .4) 40%';
-        const toColor = ' rgba(56, 61, 87,.1) 160%';
+      //   const direction = 'to bottom';
+      //   const fromColor = 'rgba(0, 0, 0, .4) 40%';
+      //   const toColor = ' rgba(56, 61, 87,.1) 160%';
 
-        return `${direction}, ${fromColor}, ${toColor}`;
-      },
+      //   return `${direction}, ${fromColor}, ${toColor}`;
+      // },
       imageOptions() {
-        const { right, gradientOptions } = this;
+        const { right } = this;
         const { smAndDown } = this.$vuetify.breakpoint;
 
         return {
@@ -129,14 +128,6 @@
     clip-path: polygon(0 0, 100% 0, 100% 100%, 14% 100%);
   }
 
-  .reveal {
-    filter: opacity(1);
-    transition-duration: 0.4s;
-  }
-
-  .hide {
-    filter: opacity(0);
-  }
   /* .decreaseColor {
     filter: grayscale(0.1) hue-rotate(340deg);
   } */

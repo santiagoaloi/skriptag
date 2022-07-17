@@ -737,7 +737,7 @@ const getters = {
   },
 
   isAuthExternalProviderOnly: (_state, _getters) => {
-    if (_getters.isLoggedIn) return !_state.user.providerData.find((p) => p.providerId === 'password');
+    if (_getters.isLoggedIn) return !_state.user.providerData.some((p) => p.providerId === 'password');
   },
 
   profile: (_state) => {

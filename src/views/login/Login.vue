@@ -1,5 +1,5 @@
 <template>
-  <base-split-2 col="6" right src="login2.svg" v-bind="$attrs">
+  <base-split-2 col="6" right :src="$vuetify.breakpoint.smAndDown ? 'login2-v.svg' : 'login2-h.svg'" v-bind="$attrs">
     <v-container>
       <div class="d-flex flex-wrap flex-column">
         <template v-if="!recoveryMode">

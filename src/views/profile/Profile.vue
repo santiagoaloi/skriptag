@@ -6,13 +6,17 @@
           <v-img
             :src="profile.coverAvatar"
             flat
-            height="250"
+            height="290"
             class="d-flex align-center elevation-0"
             :class="{ 'default-banner-bg': !profile.coverAvatar || isBannerError }"
             transition="fade-transition"
             style="color: #ccc"
             @error="isBannerError = true"
           >
+            <div class="mt-n12 pb-5 pl-10" style="font-size: 12px">
+              <v-icon small dark>$mdiInformationOutline</v-icon> Some profile settings will not be enabled until you verify your
+              email account.
+            </div>
             <v-fade-transition>
               <v-btn
                 v-show="hover"
@@ -71,7 +75,7 @@
               </v-badge>
 
               <div v-if="$vuetify.breakpoint.smAndUp" class="px-13">
-                <v-row no-gutters align="center">
+                <v-row class="mb-n3 mt-n3" no-gutters align="center">
                   <v-col cols="12">
                     <v-chip
                       v-if="(profile.roles || []).includes('root')"
@@ -99,8 +103,6 @@
                         {{ verified ? 'Verified' : 'Pending Verification' }}
                       </span>
                     </v-chip>
-
-                    <p class="mb-n2">{{ profile.email }}</p>
                   </v-col>
                   <v-col cols="12">
                     <base-typing-indicator v-if="!profile.name && !profile.lastName & !profile.displayName" class="py-12" />
@@ -108,15 +110,13 @@
 
                   <span
                     class="d-inline-block text-truncate font-weight-bold mt-n2"
-                    style="font-size: 55px"
+                    style="font-size: 45px"
                     :style="$vuetify.breakpoint.mdAndDown ? 'max-width: 390px' : 'max-width: 500px'"
                   >
                     {{ fullName || profile.displayName }}
                   </span>
-                  <v-col cols="12">
-                    <h5 class="mt-n2"><span class="grey--text text--accent-1"> </span> 44 followers</h5>
-                  </v-col>
                 </v-row>
+                <small>{{ profile.email }}</small>
               </div>
             </div>
           </v-img>
@@ -129,10 +129,6 @@
         ><v-icon> {{ profileBanner ? '$mdiChevronUp' : '$mdiChevronDown' }} </v-icon></v-btn
       >
     </v-sheet>
-
-    <v-alert class="mr-2" :value="!verified" dark dense tile color="#ccc" text dismissible icon="$mdiInformationOutline">
-      Some profile settings will not be enabled until you verify your email account.
-    </v-alert>
 
     <v-progress-linear v-if="progress > 0" v-model="progress" color="indigo" style="position: absolute"></v-progress-linear>
 

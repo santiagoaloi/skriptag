@@ -109,7 +109,7 @@
                     <BaseTitleDivider danger>Resend verification email</BaseTitleDivider>
                     <p>
                       <v-icon small style="color: #ccc">$mdiHelpCircleOutline</v-icon>
-                      Check your junk folder, sometimes emails can get lost.
+                      <span class="link-color"> Please check your email to confirm your account. </span>
                     </p>
                   </div>
                 </v-col>
@@ -125,8 +125,8 @@
                   <BaseTitleDivider danger>Delete Account</BaseTitleDivider>
                   <p>
                     <v-icon small style="color: #ccc">$mdiHelpCircleOutline</v-icon>
-                    Once you delete your account, there is no going back. Please be certain. Any uploaded media will be
-                    inmediately removed from our servers.
+                    Once you delete your account, there is no going back. Please be certain. We will remove your profile
+                    information and this account.
                   </p>
                 </div>
               </v-col>

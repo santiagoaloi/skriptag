@@ -1,5 +1,5 @@
 <template>
-  <base-split-2 col="7" src="signup2.svg" v-bind="$attrs">
+  <base-split-2 col="6" :src="$vuetify.breakpoint.smAndDown ? 'signup2-v.svg' : 'signup2-h.svg'" v-bind="$attrs">
     <div class="d-flex flex-wrap flex-column">
       <skriptag-title small class="mb-n4">
         <template #text> Signup with email to </template>
