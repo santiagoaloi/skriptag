@@ -3,9 +3,9 @@
     <v-chip color="purple darken-4" dark small>V1.0 Beta-2</v-chip>
     <skriptag-title large class="mb-4" />
     <article>
-      <h2>
-        Level up your <strong>skills</strong> and launch your career as a <strong>developer</strong> - Find learning content,
-        <strong> mentoring</strong> assistance or interact with other developers!
+      <h2 style="font-size: 40px">
+        Level up your <strong>skills. </strong> Find learning content, <strong> consulting</strong> assistance or interact with
+        other developers.
       </h2>
     </article>
 
