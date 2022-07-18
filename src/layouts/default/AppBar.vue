@@ -68,9 +68,9 @@
         dropdown: [],
         active: '',
         menuItems: [
-          { name: 'Consulting', to: '', disabled: false },
-          { name: 'Templates', to: '', disabled: false },
-          { name: 'Blog', to: '', disabled: false },
+          { name: 'Consulting', to: 'https://calendly.com/santiagoaloi/20min', disabled: false, external: true },
+          { name: 'Templates', to: '', disabled: false, external: false },
+          { name: 'Blog', to: '', disabled: false, external: false },
         ],
       };
     },
