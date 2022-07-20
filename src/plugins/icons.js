@@ -41,6 +41,7 @@ import {
   mdiConsole,
   mdiShieldLockOutline,
   mdiAlert,
+  mdiCheckDecagram,
 } from '@mdi/js';
 
 export const icons = {
@@ -87,5 +88,6 @@ export const icons = {
     mdiConsole,
     mdiShieldLockOutline,
     mdiAlert,
+    mdiCheckDecagram,
   },
 };

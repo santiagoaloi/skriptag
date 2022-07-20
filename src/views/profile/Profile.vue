@@ -89,20 +89,12 @@
                       </v-avatar>
                       Root
                     </v-chip>
-                    <v-chip
-                      class="mb-4 elevation-6"
-                      small
-                      :color="verified ? 'indigo darken-3' : 'orange darken-1'"
-                      text-color="white"
-                    >
-                      <v-avatar left>
-                        <v-icon small> {{ verificationInProgressLoader ? '$mdiCircleSlice2' : '$mdiAccountStar' }}</v-icon>
-                      </v-avatar>
-                      <span v-if="verificationInProgressLoader"> loading... </span>
-                      <span v-else>
-                        {{ verified ? 'Verified' : 'Pending Verification' }}
-                      </span>
-                    </v-chip>
+
+                    <div class="pointer-events-none">
+                      <v-btn icon :loading="verificationInProgressLoader" color="success">
+                        <v-icon> {{ verificationInProgressLoader ? '$mdiCircleSlice2' : '$mdiCheckDecagram' }}</v-icon>
+                      </v-btn>
+                    </div>
                   </v-col>
                   <v-col cols="12">
                     <base-typing-indicator v-if="!profile.name && !profile.lastName & !profile.displayName" class="py-12" />

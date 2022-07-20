@@ -68,5 +68,10 @@ $utilities: (
     property: overflow,
     class: overflow,
     values: visible hidden scroll auto clip visible
+  ),
+  "pointer-events": (
+    property: pointer-events,
+    class: pointer-events,
+    values: none auto
   )
 );
