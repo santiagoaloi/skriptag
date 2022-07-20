@@ -29,6 +29,14 @@
         type: Boolean,
         default: false,
       },
+      noDivider: {
+        type: Boolean,
+        default: false,
+      },
+      noAnimation: {
+        type: Boolean,
+        default: false,
+      },
       col: {
         type: [Number, String],
         default: 5,
@@ -65,7 +73,7 @@
         const { right } = this;
         const { smAndDown } = this.$vuetify.breakpoint;
 
-        if (smAndDown) {
+        if (smAndDown || this.noDivider) {
           return;
         }
 
@@ -103,6 +111,10 @@
           width: '100%',
           style: { height: '100%' },
           transition: (() => {
+            if (this.noAnimation) {
+              return;
+            }
+
             if (smAndDown) {
               return 'fade-transition';
             }

@@ -12,15 +12,8 @@
     <v-spacer></v-spacer>
 
     <div v-for="item in menuItems" :key="item.name" class="pr-8">
-      <BaseMenuLink>{{ item.name }}</BaseMenuLink>
+      <BaseMenuLink :link="item" />
     </div>
-
-    <!-- <div class="pr-8">
-      <h4>Templates</h4>
-    </div>
-    <div class="pr-8">
-      <h4>Blog</h4>
-    </div> -->
 
     <template v-if="!isLoggedIn && !$vuetify.breakpoint.smAndDown">
       <BaseButton
@@ -69,8 +62,8 @@
         active: '',
         menuItems: [
           { name: 'Consulting', to: 'https://calendly.com/santiagoaloi/20min', disabled: false, external: true },
-          { name: 'Templates', to: '', disabled: false, external: false },
-          { name: 'Blog', to: '', disabled: false, external: false },
+          { name: 'Templates', to: '', disabled: true, external: false },
+          { name: 'Blog', to: '', disabled: true, external: false },
         ],
       };
     },

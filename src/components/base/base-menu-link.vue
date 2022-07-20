@@ -1,7 +1,7 @@
 <template>
-  <h4 class="basic-link" v-on="$listeners" @click="to && $router.push(to)">
+  <h4 v-disabled="link.disabled" class="basic-link" v-on="$listeners" @click="link.to && goToUrl()">
     <v-icon v-if="icon" left small dark>{{ icon }}</v-icon>
-    <slot />
+    {{ link.name }}
   </h4>
 </template>
 
@@ -9,13 +9,20 @@
   export default {
     name: 'BaseMenuLink',
     props: {
-      icon: {
-        type: String,
-        default: null,
+      link: {
+        type: Object,
+        default: () => {},
       },
-      to: {
-        type: String,
-        default: null,
+    },
+
+    methods: {
+      goToUrl() {
+        if (this.link.external) {
+          window.location.href = this.link.to;
+          return;
+        }
+
+        this.$router.push(this.link.to);
       },
     },
   };

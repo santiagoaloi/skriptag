@@ -25,6 +25,13 @@ Vue.use(Vuesax, {
   },
 });
 
+Vue.directive('disabled', {
+  bind(el, binding) {
+    const { value } = binding;
+    if (value) el.style['pointer-events'] = 'none';
+  },
+});
+
 Vue.directive('animation', {
   bind(el, binding) {
     const validAnimations = ['shrink'];
