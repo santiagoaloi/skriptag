@@ -53,7 +53,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "deploy": "npm run build && firebase deploy --only hosting",
+    "deploy": "firebase deploy --only hosting",
     "deploy-functions": "firebase deploy --only functions"  
     },
   "devDependencies": {
