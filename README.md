@@ -1,4 +1,4 @@
-# skriptag
+# Skriptag
 
 ## Project setup
 ```
