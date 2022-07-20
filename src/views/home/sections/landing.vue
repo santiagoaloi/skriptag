@@ -16,8 +16,6 @@
       Get consultancy , learn coding, download free and premium application templates, access JS/VueJS training material and
       participate in blogs.
     </h2>
-
-    <div id="cal" />
   </base-split-2>
 </template>
 <script>

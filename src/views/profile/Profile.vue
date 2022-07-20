@@ -76,26 +76,24 @@
 
               <div v-if="$vuetify.breakpoint.smAndUp" class="px-13">
                 <v-row class="mb-n3 mt-n3" no-gutters align="center">
-                  <v-col cols="12">
-                    <v-chip
-                      v-if="(profile.roles || []).includes('root')"
-                      class="mb-4 mr-3 elevation-6"
-                      small
-                      color="brown"
-                      text-color="white"
-                    >
-                      <v-avatar left>
-                        <v-icon small>$mdiLock</v-icon>
-                      </v-avatar>
-                      Root
-                    </v-chip>
-
-                    <div class="pointer-events-none">
-                      <v-btn icon :loading="verificationInProgressLoader" color="success">
+                  <vs-tooltip shadow color="#ccc">
+                    <div class="pointer-events-none ml-n1">
+                      <v-btn :loading="verificationInProgressLoader" icon color="#ada0fa">
                         <v-icon> {{ verificationInProgressLoader ? '$mdiCircleSlice2' : '$mdiCheckDecagram' }}</v-icon>
                       </v-btn>
                     </div>
-                  </v-col>
+                    <template #tooltip> Verified </template>
+                  </vs-tooltip>
+
+                  <vs-tooltip shadow color="#ccc">
+                    <div v-if="(profile.roles || []).includes('root')" class="ml-n1">
+                      <v-btn icon color="teal lighten-4">
+                        <v-icon> $mdiLock</v-icon>
+                      </v-btn>
+                    </div>
+                    <template #tooltip> Root </template>
+                  </vs-tooltip>
+
                   <v-col cols="12">
                     <base-typing-indicator v-if="!profile.name && !profile.lastName & !profile.displayName" class="py-12" />
                   </v-col>
@@ -138,7 +136,7 @@
     <!-- route to profile cards (childs of profile) -->
     <v-card-text v-show="$route.name !== 'profile'" class="px-8">
       <div class="d-flex justify-space-between mr-5 align-center">
-        <div class="d-flex align-center linkColor">
+        <div class="d-flex align-center link-color">
           <span class="mb-6 mt-3 cursor-pointer underlineHover bread" @click="$router.push('/profile')">Profile</span>
           <v-icon class="mt-n2 grey--text text--darken-1 mt-n3" size="18 " dark> $mdiSlashForward</v-icon>
           <span class="mb-6 mt-3 underlineHover bread">{{ $route.meta.title }}</span>
