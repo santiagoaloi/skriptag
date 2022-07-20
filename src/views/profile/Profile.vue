@@ -13,7 +13,7 @@
             style="color: #ccc"
             @error="isBannerError = true"
           >
-            <div class="mt-n12 pb-5 pl-10" style="font-size: 12px">
+            <div v-if="!verified" class="mt-n12 pb-5 pl-10" style="font-size: 12px">
               <v-icon small dark>$mdiInformationOutline</v-icon> Some profile settings will not be enabled until you verify your
               email account.
             </div>
@@ -132,20 +132,16 @@
 
     <v-progress-linear v-if="progress > 0" v-model="progress" color="indigo" style="position: absolute"></v-progress-linear>
 
-    <v-container>
-      <!-- <v-sheet :width="$vuetify.breakpoint.mdAndDown ? '100%' : 980" class="mx-auto transparent" dark> -->
-      <template v-if="$route.name === 'profile'">
-        <v-card-title style="font-size: 26px;font-family:'Product Sans Medium Regular" class="ml-6 font-weight-bold">
-          Manage your profile
-        </v-card-title>
-        <v-card-subtitle class="ml-6">
-          <h4>Set different options for your account, billing, personal data among other settings</h4>
-        </v-card-subtitle>
-      </template>
+    <template v-if="$route.name === 'profile'">
+      <v-card-title style="font-size: 26px;font-family:'Product Sans Medium Regular" class="ml-6 font-weight-bold">
+        Manage your profile
+      </v-card-title>
+      <v-card-subtitle class="ml-6">
+        <h4>Set different options for your account, billing, personal data among other settings</h4>
+      </v-card-subtitle>
+    </template>
 
-      <profile-cards v-show="$route.name === 'profile'" />
-      <!-- </v-sheet> -->
-    </v-container>
+    <profile-cards v-show="$route.name === 'profile'" />
 
     <!-- route to profile cards (childs of profile) -->
     <v-card-text v-show="$route.name !== 'profile'" class="px-8">

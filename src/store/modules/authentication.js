@@ -503,7 +503,6 @@ const actions = {
   async reAuthenticate(_, password) {
     const credential = EmailAuthProvider.credential(auth.currentUser.email, password);
     const authenticated = await reauthenticateWithCredential(auth.currentUser, credential);
-
     return authenticated.user || {};
   },
 
