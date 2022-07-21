@@ -2,8 +2,7 @@
   <v-app-bar class="border-bottom" height="50" color="#22272d" absolute flat dark app>
     <skriptag-title
       v-if="!$route.meta.requiresAuth"
-      class="overflow-visible cursor-pointer"
-      :class="{ 'ml-2 ': !$vuetify.breakpoint.smAndDown }"
+      class="overflow-visible cursor-pointer ml-1"
       link
       small
       @click.native="$router.push('/')"
