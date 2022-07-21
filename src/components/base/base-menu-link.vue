@@ -1,5 +1,5 @@
 <template>
-  <h4 v-disabled="link.disabled" class="basic-link" v-on="$listeners" @click="link.to && goToUrl()">
+  <h4 v-disabled="link.disabled" :disabled="link.disabled" class="basic-link" v-on="$listeners" @click="link.to && goToUrl()">
     <v-icon v-if="icon" left small dark>{{ icon }}</v-icon>
     {{ link.name }}
   </h4>
