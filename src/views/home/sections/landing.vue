@@ -38,30 +38,30 @@
               <div class="terminal__content-block terminal__content--delay-2-anim">
                 <div class="terminal__content-shell mr-2">~ skriptag@my-shiny-MBP%</div>
                 <div class="terminal__content-command terminal__content--delay-5 terminal__content-command--2">ls</div>
-                <div class="terminal__content-print terminal__content--delay-8-anim">
+                <div class="terminal__content-print terminal__content--delay-10-anim">
                   my-test-vue-app my-test-react-app my-test-nodejs-app
                 </div>
               </div>
 
-              <div class="terminal__content-block terminal__content--delay-8-anim">
+              <div class="terminal__content-block terminal__content--delay-10-anim">
                 <div class="terminal__content-shell mr-2">~ skriptag@my-shiny-MBP%</div>
-                <div class="terminal__content-command terminal__content--delay-18 terminal__content-command--13">
+                <div class="terminal__content-command terminal__content--delay-20 terminal__content-command--13">
                   cd my-test-vue-app
                 </div>
                 <!-- <div class="terminal__content-print terminal__content--delay-29-anim">my-test-vue-app</div> -->
               </div>
 
-              <div class="terminal__content-block terminal__content--delay-33-anim">
+              <div class="terminal__content-block terminal__content--delay-35-anim">
                 <div class="terminal__content-shell mr-2">~ skriptag@my-shiny-MBP%</div>
-                <div class="terminal__content-command terminal__content--delay-38 terminal__content-command--12">
+                <div class="terminal__content-command terminal__content--delay-40 terminal__content-command--12">
                   cat package.json
                 </div>
-                <div class="terminal__content-print terminal__content--delay-46-anim">
+                <div class="terminal__content-print terminal__content--delay-48-anim">
                   <pre>
 {
-  "name": "my-text-vue-app",
-  "description": "Starting my fresh new Vue + Vuetify project,
-  "author": "A very curious app developer!",
+  "name": "my-next--cool-vue-app",
+  "description": "Starting my fresh new Vue + Vuetify project",
+  "author": "A very curious software developer using a shiny laptop",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -114,8 +114,8 @@
   $terminal-header-button-minimize: #fdbe41;
   $terminal-header-button-maximize: #35cc4b;
   $terminal-font-size: 0.7;
-  $terminal-primary-font-color: #fff;
-  $terminal-secondary-font-color: #bfbdbd;
+  $terminal-primary-font-color: rgb(230, 240, 223);
+  $terminal-secondary-font-color: #b8ebd1;
   $max-number-of-typewriter-animation-words: 50;
 
   @mixin typewriter-animation($numeroPalabras) {
