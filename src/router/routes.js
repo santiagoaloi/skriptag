@@ -29,6 +29,12 @@ export default [
   },
 
   {
+    path: '/Privacy',
+    name: 'Privacy',
+    component: () => import(/* webpackChunkName: 'legal-privacy' */ '@/views/legal/Privacy'),
+  },
+
+  {
     path: '/Profile',
     name: 'profile',
     meta: {
