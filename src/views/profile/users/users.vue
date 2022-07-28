@@ -64,9 +64,10 @@
                   </td>
 
                   <td>
-                    {{ user.email }} <br />
-                    {{ user.name }} {{ user.lastName }}
+                    <div class="text-truncate pa-0">{{ user.email }}</div>
+                    <div class="text-truncate pa-0">{{ user.name }} {{ user.lastName }}</div>
                   </td>
+
                   <!-- <td>{{ user.uid }}</td> -->
 
                   <td>
@@ -230,8 +231,8 @@
         loading: false,
         headers: [
           { text: 'Avatar', value: 'avatar', width: '100px' },
-          { text: 'Identifier', value: 'email', width: '200' },
-          { text: 'Providers', align: 'center', value: 'providers', width: '159', sortable: false },
+          { text: 'Identifier', value: 'email', width: '50px' },
+          { text: 'Providers', align: 'center', value: 'providers', sortable: false },
           { text: 'Roles', align: 'center', value: 'roles', sortable: false },
           { text: 'Actions', align: 'center', value: 'actions', width: '200px', sortable: false },
         ],
