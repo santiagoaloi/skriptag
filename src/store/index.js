@@ -7,7 +7,7 @@ import VuexPersist from 'vuex-persist';
 import localforage from 'localforage';
 import pathify from '@/plugins/vuex-pathify';
 
-// All Vuex Modules definned in ./modules/index.js
+// All Vuex Modules definned in @/modules/index.js
 import * as modules from './modules';
 
 Vue.use(Vuex);
