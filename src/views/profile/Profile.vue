@@ -1,116 +1,104 @@
 <template>
-  <div v-if="profile">
+  <div v-if="profile" id="tsparticles">
     <v-expand-transition>
       <div v-show="profileBanner">
-        <v-hover v-slot="{ hover }">
-          <v-img
-            :src="profile.coverAvatar"
-            flat
-            height="290"
-            class="d-flex align-center elevation-0"
-            :class="{ 'default-banner-bg': !profile.coverAvatar || isBannerError }"
-            transition="fade-transition"
-            style="color: #ccc"
-            @error="isBannerError = true"
-          >
-            <div v-if="!verified" class="mt-n12 pb-5 pl-10" style="font-size: 12px">
-              <v-icon small dark>$mdiInformationOutline</v-icon> Some profile settings will not be enabled until you verify your
-              email account.
-            </div>
-            <v-fade-transition>
-              <v-btn
-                v-show="hover"
-                fab
-                icon
-                :style="`
-                 position: absolute; right: 0;
-                 margin-right: ${!$vuetify.breakpoint.smAndDown ? '80px' : '20px'}`"
-                class="mt-5"
-                color="rgba(10,10,10 , .5)"
-                dark
-                small
-                @click="triggerUploadCoverPhoto()"
-              >
-                <vs-tooltip shadow color="#ccc">
-                  <v-icon class="white--text"> $mdiCamera</v-icon>
-                  <template #tooltip> Change cover image </template>
-                </vs-tooltip>
-              </v-btn>
-            </v-fade-transition>
+        <v-img
+          :src="profile.coverAvatar"
+          flat
+          height="230"
+          class="d-flex align-center elevation-0"
+          :class="{ 'default-banner-bg': !profile.coverAvatar || isBannerError }"
+          transition="fade-transition"
+          style="color: #ccc"
+          @error="isBannerError = true"
+        >
+          <div class="pb-5 pl-10" style="font-size: 12px">
+            <v-icon small dark>$mdiInformationOutline</v-icon> Some profile settings will not be enabled until you verify your
+            email account.
+          </div>
 
-            <!-- image upload inputs -->
-            <input ref="coverInput" accept="image/*" style="display: none" type="file" @change="uploadCoverPhoto()" />
-            <input ref="avatarInput" accept="image/*" style="display: none" type="file" @change="uploadProfilePhoto()" />
+          <!-- image upload inputs -->
+          <input ref="coverInput" accept="image/*" style="display: none" type="file" @change="uploadCoverPhoto()" />
+          <input ref="avatarInput" accept="image/*" style="display: none" type="file" @change="uploadProfilePhoto()" />
 
-            <div
-              :class="$vuetify.breakpoint.smAndUp ? 'mx-13' : 'justify-center'"
-              class="media d-flex align-center justify-start"
+          <div :class="$vuetify.breakpoint.smAndUp ? 'mx-13' : 'justify-center'" class="media d-flex align-center justify-start">
+            <v-badge
+              offset-x="40"
+              offset-y="34"
+              bottom
+              bordered
+              color="black"
+              :icon="profile.photoURL ? '$mdiTrashCanOutline' : '$mdiPlus'"
+              overlapa
+              class="cursor-pointer"
             >
-              <v-badge
-                offset-x="40"
-                offset-y="34"
-                bottom
-                bordered
-                color="black"
-                :icon="profile.photoURL ? '$mdiTrashCanOutline' : '$mdiPlus'"
-                overlapa
-                class="cursor-pointer"
+              <baseAvatarImg v-if="!profile.photoURL" class="hoverAvatar" :height="180" @click="triggerUploadProfilePhoto()" />
+              <v-avatar v-else v-ripple class="elevation-13" size="180">
+                <v-img
+                  transition="fade-transition"
+                  class="hoverAvatar"
+                  :src="profile.photoURL"
+                  flat
+                  @click="triggerUploadProfilePhoto()"
+                >
+                  <template #placeholder>
+                    <v-row class="fill-height ma-0" align="center" justify="center">
+                      <v-icon dark size="40">$mdiCamera</v-icon>
+                    </v-row>
+                  </template>
+                </v-img>
+              </v-avatar>
+            </v-badge>
+
+            <div v-if="$vuetify.breakpoint.smAndUp" class="d-flex flex-column ml-10">
+              <div class="d-flex align-center">
+                <vs-tooltip v-if="verified" shadow color="#ccc">
+                  <div class="pointer-events-none ml-n1">
+                    <v-btn :loading="verificationInProgressLoader" icon color="#ada0fa">
+                      <v-icon> {{ verificationInProgressLoader ? '$mdiCircleSlice2' : '$mdiCheckDecagram' }}</v-icon>
+                    </v-btn>
+                  </div>
+                  <template #tooltip> Verified </template>
+                </vs-tooltip>
+
+                <vs-tooltip shadow color="#ccc">
+                  <div v-if="(profile.roles || []).includes('root')" class="mx-2 pointer-events-none">
+                    <v-btn color="rgba(10,10,10 , .5)" small fab icon>
+                      <v-icon class="white--text"> $mdiLock</v-icon>
+                    </v-btn>
+                  </div>
+                  <template #tooltip> Root </template>
+                </vs-tooltip>
+
+                <!-- <div class="d-flex flex-grow-1" /> -->
+
+                <v-fade-transition>
+                  <v-btn fab icon color="rgba(10,10,10 , .5)" dark small @click="triggerUploadCoverPhoto()">
+                    <vs-tooltip shadow color="#ccc">
+                      <v-icon class="white--text"> $mdiCamera</v-icon>
+                      <template #tooltip> Change cover image </template>
+                    </vs-tooltip>
+                  </v-btn>
+                </v-fade-transition>
+              </div>
+
+              <v-fade-transition hide-on-leave>
+                <base-typing-indicator v-if="!profile.name && !profile.lastName && !profile.displayName" />
+              </v-fade-transition>
+
+              <span
+                class="d-inline-block text-truncate font-weight-bold"
+                style="font-size: 45px"
+                :style="$vuetify.breakpoint.mdAndDown ? 'max-width: 390px' : 'max-width: 500px'"
               >
-                <baseAvatarImg v-if="!profile.photoURL" class="hoverAvatar" :height="180" @click="triggerUploadProfilePhoto()" />
-                <v-avatar v-else v-ripple class="elevation-13" size="180">
-                  <v-img
-                    transition="fade-transition"
-                    class="hoverAvatar"
-                    :src="profile.photoURL"
-                    flat
-                    @click="triggerUploadProfilePhoto()"
-                  >
-                    <template #placeholder>
-                      <v-row class="fill-height ma-0" align="center" justify="center">
-                        <v-icon dark size="40">$mdiCamera</v-icon>
-                      </v-row>
-                    </template>
-                  </v-img>
-                </v-avatar>
-              </v-badge>
-
-              <div v-if="$vuetify.breakpoint.smAndUp" class="px-13">
-                <v-row class="mb-n3 mt-n3" no-gutters align="center">
-                  <vs-tooltip shadow color="#ccc">
-                    <div class="pointer-events-none ml-n1">
-                      <v-btn :loading="verificationInProgressLoader" icon color="#ada0fa">
-                        <v-icon> {{ verificationInProgressLoader ? '$mdiCircleSlice2' : '$mdiCheckDecagram' }}</v-icon>
-                      </v-btn>
-                    </div>
-                    <template #tooltip> Verified </template>
-                  </vs-tooltip>
-
-                  <vs-tooltip shadow color="#ccc">
-                    <div v-if="(profile.roles || []).includes('root')" class="ml-n1">
-                      <v-btn icon color="teal lighten-4">
-                        <v-icon> $mdiLock</v-icon>
-                      </v-btn>
-                    </div>
-                    <template #tooltip> Root </template>
-                  </vs-tooltip>
-
-                  <v-col cols="12">
-                    <base-typing-indicator v-if="!profile.name && !profile.lastName & !profile.displayName" class="py-12" />
-                  </v-col>
-
-                  <span
-                    class="d-inline-block text-truncate font-weight-bold mt-n2"
-                    style="font-size: 45px"
-                    :style="$vuetify.breakpoint.mdAndDown ? 'max-width: 390px' : 'max-width: 500px'"
-                  >
-                    {{ fullName || profile.displayName }}
-                  </span>
-                </v-row>
+                {{ fullName || profile.displayName }}
+              </span>
+              <div class="d-inline-block justify-start pl-1">
                 <small>{{ profile.email }}</small>
               </div>
             </div>
-          </v-img>
-        </v-hover>
+          </div>
+        </v-img>
       </div>
     </v-expand-transition>
 
@@ -143,9 +131,9 @@
         </div>
       </div>
 
-      <keep-alive>
-        <router-view />
-      </keep-alive>
+      <!-- <keep-alive> -->
+      <router-view />
+      <!-- </keep-alive> -->
     </v-card-text>
   </div>
 </template>
