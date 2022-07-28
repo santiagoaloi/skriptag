@@ -102,6 +102,36 @@
       (d) Advertising Cookies: Advertising Cookies are used to serve you with advertisements that may be relevant to you and your
       interests.
     </v-card-text>
+    <v-card-text class="px-0 text-h6">
+      (e) to gather analysis or valuable information so that we can improve our Service;
+    </v-card-text>
+    <v-card-text class="px-0 text-h6">
+      (e) to gather analysis or valuable information so that we can improve our Service;
+    </v-card-text>
+    <v-card-text class="px-0 text-h6"> (f) to monitor the usage of our Service; </v-card-text>
+    <v-card-text class="px-0 text-h6"> (g) to detect, prevent and address technical issues; </v-card-text>
+    <v-card-text class="px-0 text-h6"> (h) to fulfill any other purpose for which you provide it; </v-card-text>
+    <v-card-text class="px-0 text-h6">
+      (i) to carry out our obligations and enforce our rights arising from any contracts entered into between you and us,
+      including for billing and collection;</v-card-text
+    >
+    <v-card-text class="px-0 text-h6">
+      (j) to provide you with notices about your account and/or subscription, including expiration and renewal notices,
+      email-instructions, etc.;
+    </v-card-text>
+
+    <v-card-text class="px-0 text-h6">
+      (k) to provide you with news, special offers and general information about other goods, services and events which we offer
+      that are similar to those that you have already purchased or enquired about unless you have opted not to receive such
+      information;
+    </v-card-text>
+
+        <v-card-text class="px-0 text-h6">
+      (k) to provide you with news, special offers and general information about other goods, services and events which we offer
+      that are similar to those that you have already purchased or enquired about unless you have opted not to receive such
+      information;
+    </v-card-text>
+    
   </v-container>
 </template>
 <script>
