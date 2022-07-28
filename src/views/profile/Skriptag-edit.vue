@@ -11,9 +11,9 @@
 
     <v-row class="mt-0">
       <v-col sm="10">
-        <keep-alive>
-          <router-view></router-view>
-        </keep-alive>
+        <!-- <keep-alive> -->
+        <router-view></router-view>
+        <!-- </keep-alive> -->
       </v-col>
       <v-col class="border" sm="2">
         <v-card-text>
