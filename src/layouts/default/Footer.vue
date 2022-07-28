@@ -8,7 +8,7 @@
           </skriptag-title>
         </div>
 
-        <a>Privacy Statement</a>
+        <a @click="routeTo('/privacy')">Privacy Statement</a>
         <div class="px-2">·</div>
         <a>Terms of Service</a>
         <div class="px-2">·</div>
@@ -36,6 +36,12 @@
     computed: {
       ...get('authentication', ['isLoggedIn', 'profile']),
       ...sync('app', ['drawer']),
+    },
+
+    methods: {
+      routeTo(route) {
+        this.$router.push(route);
+      },
     },
   };
 </script>
