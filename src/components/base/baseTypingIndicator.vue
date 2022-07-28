@@ -18,9 +18,10 @@
     will-change: transform;
     width: auto;
     border-radius: 50px;
-    padding: 4px;
-    display: table;
-    margin: 0 auto;
+    padding: 12px;
+    // display: table;
+    // margin: 0 auto;
+    margin-left: -8px;
     position: relative;
     animation: 2s bulge infinite ease-out;
     &::before,
