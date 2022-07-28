@@ -12,12 +12,14 @@
           @click="!card.disabled && $router.push(`/profile/${card.route}`)"
         >
           <v-card
+            v-animation:shrink="{ longPress: true }"
             :ripple="{ class: 'rounded-lg, ripple-opacity' }"
             color="#2d333b"
             height="100%"
             class="hoverCard rounded-lg cursor-pointer"
             dark
             :disabled="card.disabled"
+            flat
           >
             <v-img
               :height="$vuetify.breakpoint.smAndDown ? 150 : 140"
@@ -124,15 +126,12 @@
 </script>
 <style>
   .hoverCard:hover {
-    transform: translate(0, 5px) !important;
-    -webkit-transform: translate(0, 5px) !important;
-    -webkit-box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, 0);
-    box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0);
+    transform: translateY(2px);
+    box-shadow: 0 2px 5px rgb(0 0 0 / 10%), 0 1px 2px rgb(0 0 0 / 5%) !important;
   }
 
   .hoverCard {
-    -webkit-box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, var(--vs-shadow-opacity)) !important;
-    box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, var(--vs-shadow-opacity)) !important;
+    box-shadow: 0 2px 43px -4px rgb(0 0 0 / 19%) !important;
     -webkit-transition: all 0.25s ease !important;
     transition: all 0.25s ease !important;
     transition-property: all !important;
