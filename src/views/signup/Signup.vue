@@ -7,7 +7,7 @@
 
       <small class="mb-3">
         To signup with google or Github or if you already have an account,
-        <span class="cursor-pointer link-color" @click="$router.push('login')"> go to the login page.</span>
+        <span class="cursor-pointer link-color" @click="$router.push({ name: 'skriptag-login' })"> go to the login page.</span>
       </small>
 
       <SignupWithEmail />

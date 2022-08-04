@@ -1,120 +1,137 @@
 export default [
   {
     path: '',
-    name: '/',
-    component: () => import(/* webpackChunkName: 'home-page' */ '@/views/home'),
+    name: 'skriptag-homepage',
+    meta: {
+      keepAlive: true,
+    },
+    component: () => import(/* webpackChunkName: 'homepage' */ '@/views/home'),
   },
 
   {
-    path: '/logout',
+    path: 'logout',
     name: 'logout',
   },
 
   {
-    path: '/Login',
-    name: 'login',
+    path: 'login',
+    name: 'skriptag-login',
+    meta: {
+      keepAlive: true,
+    },
     component: () => import(/* webpackChunkName: 'login-page' */ '@/views/login'),
   },
 
   {
-    path: '/Signup',
-    name: 'signup',
+    path: 'signup',
+    name: 'skriptag-signup',
+    meta: {
+      keepAlive: true,
+    },
     component: () => import(/* webpackChunkName: 'signup-page' */ '@/views/signup'),
   },
 
   {
-    path: '/AccountMgmt',
-    name: 'accountMgmt',
+    path: 'accountMgmt',
+    name: 'skriptag-accountMgmt',
     component: () => import(/* webpackChunkName: 'account-mgmt' */ '@/views/account-mgmt'),
   },
 
   {
-    path: '/Privacy',
-    name: 'Privacy',
+    path: 'privacy',
+    name: 'skriptag-rivacy',
+    meta: {
+      keepAlive: true,
+    },
     component: () => import(/* webpackChunkName: 'legal-privacy' */ '@/views/legal/Privacy'),
   },
 
   {
-    path: '/Profile',
-    name: 'profile',
+    path: 'profile',
+    name: 'skriptag-profile',
     meta: {
       requiresAuth: true,
+      keepAlive: true,
     },
-
+    redirect: { name: 'skriptag-settings' },
     component: () => import(/* webpackChunkName: 'profile-page' */ '@/views/profile'),
 
     children: [
       {
-        path: '/Profile/skriptag-edit',
-        name: 'skriptag-edit',
+        path: 'admin',
+        name: 'skriptag-admin',
         meta: {
-          requiresAuth: true,
           title: 'Skriptag Edit',
+          requiresAuth: true,
         },
-        redirect: { name: 'skriptag-edit-users' },
-        component: () => import(/* webpackChunkName: 'profile-skriptag-edit' */ '@/views/profile/Skriptag-edit'),
+        redirect: { name: 'users' },
+        component: () => import(/* webpackChunkName: 'profile-skriptag-admin' */ '@/views/profile/Skriptag-edit'),
 
         children: [
           {
             path: 'users',
-            name: 'skriptag-edit-users',
+            name: 'skriptag-users',
             meta: {
-              requiresAuth: true,
               title: 'Users',
+              requiresAuth: true,
             },
-            component: () => import(/* webpackChunkName: 'profile-skriptag-edit-users' */ '@/views/profile/users/users.vue'),
+            component: () => import(/* webpackChunkName: 'profile-skriptag-admin-users' */ '@/views/profile/users/users.vue'),
           },
 
           {
             path: 'roles',
-            name: 'skriptag-edit-roles',
+            name: 'skriptag-roles',
             meta: {
-              requiresAuth: true,
               title: 'Roles',
+              requiresAuth: true,
             },
-            component: () => import(/* webpackChunkName: 'profile-skriptag-edit-roles' */ '@/views/profile/roles/roles.vue'),
+            component: () => import(/* webpackChunkName: 'profile-skriptag-admin-roles' */ '@/views/profile/roles/roles.vue'),
           },
 
           {
             path: 'capabilities',
-            name: 'skriptag-edit-capabilities',
+            name: 'skriptag-capabilities',
             meta: {
-              requiresAuth: true,
               title: 'Capabilities',
+              requiresAuth: true,
             },
             component: () =>
               import(
-                /* webpackChunkName: 'profile-skriptag-edit-capabilities' */ '@/views/profile/capabilities/capabilities.vue'
+                /* webpackChunkName: 'profile-skriptag-admin-capabilities' */ '@/views/profile/capabilities/capabilities.vue'
               ),
           },
         ],
       },
       {
-        path: '/Profile/profile-edit',
-        name: 'profile-edit',
+        path: 'public',
+        name: 'skriptag-public',
         meta: {
-          requiresAuth: true,
           title: 'Basic Profile Information',
+          requiresAuth: true,
+          keepAlive: true,
         },
 
-        component: () => import(/* webpackChunkName: 'profile-profile-edit' */ '@/views/profile/Profile-edit'),
+        component: () => import(/* webpackChunkName: 'profile-public-edit' */ '@/views/profile/Profile-edit'),
       },
       {
-        path: '/Profile/account-edit',
-        name: 'account-edit',
+        path: 'account',
+        name: 'skriptag-account',
         meta: {
-          requiresAuth: true,
           title: 'Account Details',
+          requiresAuth: true,
+          keepAlive: true,
         },
-
         component: () => import(/* webpackChunkName: 'profile-account-edit' */ '@/views/profile/Account-edit'),
       },
+      {
+        path: 'settings',
+        name: 'skriptag-settings',
+        meta: {
+          requiresAuth: true,
+          keepAlive: true,
+        },
+        component: () => import(/* webpackChunkName: 'profile-settings-cards' */ '@/views/profile/Profile-cards'),
+      },
     ],
-  },
-
-  {
-    path: '/:catchAll(.*)*',
-    name: '404',
-    component: () => import(/* webpackChunkName: 'home-page' */ '@/views/home'),
   },
 ];

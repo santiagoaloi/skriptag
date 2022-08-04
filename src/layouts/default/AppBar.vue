@@ -1,11 +1,10 @@
 <template>
-  <v-app-bar class="border-bottom" height="50" color="#22272d" absolute flat dark app>
+  <v-app-bar class="border - bottom" height="50" color="#2d333b" absolute flat dark app>
     <skriptag-title
-      v-if="!$route.meta.requiresAuth"
       class="overflow-visible cursor-pointer ml-1"
       link
       small
-      @click.native="$router.push('/')"
+      @click.native="$router.push({ name: 'skriptag-homepage' })"
     />
 
     <v-spacer></v-spacer>
@@ -17,30 +16,25 @@
     <template v-if="!isLoggedIn && !$vuetify.breakpoint.smAndDown">
       <BaseButton
         v-for="button in [
-          { link: 'login', name: 'Login', icon: '$mdiAccountArrowRight' },
-          { link: 'signup', name: 'Sign up', icon: '$mdiAccountPlus' },
+          { link: 'skriptag-login', name: 'Login', icon: '$mdiAccountArrowRight' },
+          { link: 'skriptag-signup', name: 'Sign up', icon: '$mdiAccountPlus' },
         ]"
-        :key="button.name"
-        :disabled="$route.name === button.link"
+        :key="button.link"
         dark
         class="ml-3"
-        @click="!$router.push(`${button.link}`)"
+        :class="{ 'pointer-events-none': $route.name === button.link }"
+        @click="!$router.push({ name: button.link })"
       >
         <v-icon left> {{ button.icon }}</v-icon
         >{{ button.name }}
       </BaseButton>
     </template>
 
-    <template v-if="profile">
-      <BaseButton v-if="!$vuetify.breakpoint.smAndDown" key="btn1" @click="logout">
+    <template v-if="isLoggedIn && !$vuetify.breakpoint.smAndDown">
+      <BaseButton @click="logout">
         <v-icon left class="mr-2" small>$mdiLogoutVariant</v-icon>{{ `Logout ${firstAndShortLast || ''}` }}
       </BaseButton>
-      <BaseButton
-        v-if="!$vuetify.breakpoint.smAndDown && !$route.meta.requiresAuth"
-        key="btn2"
-        class="ml-3"
-        @click="$router.push('/profile')"
-      >
+      <BaseButton class="ml-3" @click="$router.push({ name: 'skriptag-profile' })">
         <v-icon left class="mr-2" small>$mdiConsole</v-icon> Console
       </BaseButton>
     </template>

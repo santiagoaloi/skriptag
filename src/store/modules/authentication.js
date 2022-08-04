@@ -201,12 +201,12 @@ const actions = {
         if (getters.isLoggedIn && !getters.verified) {
           // reloads user object to reflect emailVerified value as true.
           state.user.reload();
-          router.push('profile');
+          router.push({ name: 'skriptag-profile' });
           return;
         }
 
         if (!getters.isLoggedIn) {
-          router.push('login');
+          router.push({ name: 'skriptag-login' });
           return;
         }
       }
@@ -218,7 +218,7 @@ const actions = {
     } catch ({ ...error }) {
       dispatch('errors/authMessagesSnackbar', error.code, { root: true });
       store.set('loaders/verificationInProgressLoader', false);
-      router.push('login');
+      router.push({ name: 'skriptag-login' });
     }
   },
 
@@ -248,7 +248,7 @@ const actions = {
       await confirmPasswordReset(auth, oobCode, newPassword);
       dispatch('snackbar/snackbarSuccess', 'Account password changed.', { root: true });
 
-      await router.push('login');
+      router.push({ name: 'skriptag-login' });
       store.set('loaders/authLoader', false);
     } catch ({ ...error }) {
       dispatch('errors/authMessagesSnackbar', error.code, { root: true });
@@ -306,7 +306,7 @@ const actions = {
       }
 
       await signInWithEmailAndPassword(auth, email, password);
-      await router.push('profile');
+      router.push({ name: 'skriptag-profile' });
 
       store.set('loaders/authLoader', false);
     } catch ({ ...error }) {
@@ -317,8 +317,15 @@ const actions = {
 
   // Logout and clear user data objects in Vuex.
   async logout() {
-    route('/');
-    await signOut(auth);
+    // Stop listening profile snapshot.
+    store.state.authentication.unSubscriveProfile();
+
+    // Clear user profile settings
+    store.set('authentication/profile', {});
+
+    // Singout and route to homepage
+    signOut(auth);
+    route('skriptag-homepage');
   },
 
   // Creates a new user account and routes to profile page.
@@ -335,7 +342,7 @@ const actions = {
       await dispatch('addUserToUsersCollection', { user, signupForm });
       await sendEmailVerification(userCredential.user);
 
-      router.push('profile');
+      router.push({ name: 'skriptag-profile' });
       store.set('loaders/signupLoader', false);
     } catch ({ ...error }) {
       dispatch('errors/authMessagesSnackbar', error.code, { root: true });
@@ -439,7 +446,7 @@ const actions = {
         }
       }
 
-      route('/profile');
+      route('skriptag-profile');
 
       store.set('loaders/signInWithGoogle', false);
     } catch ({ ...error }) {
@@ -448,10 +455,9 @@ const actions = {
       if (error.code === 'auth/account-exists-with-different-credential') {
         const currentProvider = error.customData._tokenResponse.verifiedProvider[0];
         dispatch('snackbar/snackbarError', `This account is being used to authenticate with ${currentProvider}`, { root: true });
-        return;
       }
 
-      dispatch('snackbar/snackbarError', `Something went wrong authenticating`, { root: true });
+      // dispatch('snackbar/snackbarError', `Something went wrong authenticating`, { root: true });
     }
   },
 
@@ -478,7 +484,7 @@ const actions = {
         }
       }
 
-      route('/profile');
+      route('skriptag-profile');
 
       store.set('loaders/signInWithGithub', false);
     } catch ({ ...error }) {

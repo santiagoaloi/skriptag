@@ -1,16 +1,16 @@
 <template>
-  <v-row :class="rowClass" no-gutters>
+  <v-row v-show="imageLoaded" :class="rowClass" no-gutters>
     <v-col :order="colOrder()" :md="remainingCols" cols="12">
       <v-img
+        eager
         :src="src ? require(`@/assets/static/${src}`) : null"
         :class="imageClass()"
         v-bind="imageOptions()"
         class="d-flex align-center justify-end"
+        :transition="null"
         @load="imageLoaded = true"
       >
         <slot name="image-content"> </slot>
-
-        <!-- <v-card class="white mx-auto" width="500" height="500"> </v-card> -->
       </v-img>
     </v-col>
     <v-col :md="col" cols="12">
@@ -107,28 +107,28 @@
       //   return `${direction}, ${fromColor}, ${toColor}`;
       // },
       imageOptions() {
-        const { right } = this;
-        const { mobile } = this.$vuetify.breakpoint;
+        // const { right } = this;
+        // const { mobile } = this.$vuetify.breakpoint;
 
         return {
           // gradient: gradientOptions(),
           width: '100%',
           style: { height: '100%' },
-          transition: (() => {
-            if (this.noAnimation) {
-              return;
-            }
+          // transition: (() => {
+          //   if (this.noAnimation) {
+          //     return;
+          //   }
 
-            if (mobile) {
-              return 'fade-transition';
-            }
-            if (right) {
-              return 'slide-x-reverse-transition';
-            }
-            if (!right) {
-              return 'slide-x-transition';
-            }
-          })(),
+          //   if (mobile) {
+          //     return 'fade-transition';
+          //   }
+          //   if (right) {
+          //     return 'slide-x-reverse-transition';
+          //   }
+          //   if (!right) {
+          //     return 'slide-x-transition';
+          //   }
+          // })(),
         };
       },
     },

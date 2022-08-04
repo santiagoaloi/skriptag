@@ -1,5 +1,6 @@
 <template>
   <v-snackbar
+    v-if="snackbar.data.value"
     v-model="snackbar.data.value"
     :timeout="snackbar.data.permanent ? 0 : 8000"
     :color="snackbar.data.color"

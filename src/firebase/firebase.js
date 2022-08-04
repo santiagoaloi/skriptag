@@ -5,6 +5,7 @@ import { connectFunctionsEmulator, getFunctions } from 'firebase/functions';
 import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore';
 import { connectAuthEmulator, getAuth, onAuthStateChanged } from 'firebase/auth';
 import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
+import { getPerformance } from 'firebase/performance';
 
 const firebaseConfig = {
   apiKey: process.env.VUE_APP_SKRIPTAG_FIREBASE_API_KEY,
@@ -18,6 +19,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+
 const storage = getStorage(app);
 const functions = getFunctions(app);
 const db = getFirestore(app);
@@ -65,14 +67,9 @@ if (development) {
   window.FIREBASE_APPCHECK_DEBUG_TOKEN = process.env.VUE_APP_SKRIPTAG_FIREBASE_APP_CHECK_DEBUG_TOKEN_FROM_CI;
 }
 
-initializeAppCheck(app, {
-  provider: new ReCaptchaV3Provider(process.env.VUE_APP_SKRIPTAG_FIREBASE_RECAPTCHA_PROVIDER_TOKEN),
-  isTokenAutoRefreshEnabled: true,
-});
-
-// Set the default region for admin SDK functions.
-// The region has to match the CF region.
-// Otherwise CORS errors will happen.
-// functions.region = 'europe-west1';
+// initializeAppCheck(app, {
+//   provider: new ReCaptchaV3Provider(process.env.VUE_APP_SKRIPTAG_FIREBASE_RECAPTCHA_PROVIDER_TOKEN),
+//   isTokenAutoRefreshEnabled: true,
+// });
 
 export { db, storage, auth, functions, getUserState };

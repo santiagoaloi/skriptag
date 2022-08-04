@@ -1,5 +1,5 @@
 <template>
-  <p class="ml-1 mb-1 pt-2">
+  <p class="ml-0 mb-1 pt-2">
     <b> <slot /></b>
   </p>
 </template>

@@ -5,79 +5,68 @@
     :fullscreen="$vuetify.breakpoint.smAndDown || isMaximized || fullscreen"
     :hide-overlay="noOverlay || fullscreen"
     :overlay-opacity="0.9"
-    overlay-color="rgba(30, 30, 39, 0.9)"
+    overlay-color="rgba(30, 30, 39, 0.7)"
     class="d-flex"
     persistent
     no-click-animation
+    attach
+    transition="slide-y-reverse-transition"
     v-on="$listeners"
   >
-    <div>
-      <v-toolbar v-if="!noToolbar" class="pr-3 d-flex flex-column" flat :dense="dense" dark color="#24272c">
-        <template v-if="icon">
-          <v-btn x-small color="white" text fab class="mr-3 pointer-events-none">
-            <v-icon>{{ icon }}</v-icon>
-          </v-btn>
-        </template>
+    <v-toolbar v-if="!noToolbar" class="pr-3 d-flex flex-column" flat :dense="dense" dark color="#24272c">
+      <template v-if="icon">
+        <v-btn x-small color="white" text fab class="mr-3 pointer-events-none">
+          <v-icon>{{ icon }}</v-icon>
+        </v-btn>
+      </template>
 
-        <v-toolbar-title>
-          <h5>
-            {{ title }}
-          </h5>
-        </v-toolbar-title>
+      <v-toolbar-title>
+        <h5>
+          {{ title }}
+        </h5>
+      </v-toolbar-title>
 
-        <div class="flex-grow-1" />
+      <div class="flex-grow-1" />
 
-        <template v-if="closeOnly || !noActions">
-          <v-btn x-small color="white" outlined text fab icon dark @click.stop="close">
-            <v-icon>{{ fullscreen ? '$mdiChevronDown' : '$mdiClose' }}</v-icon>
-          </v-btn>
-        </template>
+      <template v-if="closeOnly || !noActions">
+        <v-btn x-small color="white" outlined text fab icon dark @click.stop="close">
+          <v-icon>{{ fullscreen ? '$mdiChevronDown' : '$mdiClose' }}</v-icon>
+        </v-btn>
+      </template>
 
-        <template v-if="saveOnly">
-          <v-btn v-if="!closeOnly" x-small color="white" outlined text fab :loading="loading" @click.stop="save">
-            <v-icon color="green lighten-2"> $mdiCheck </v-icon>
-          </v-btn>
-        </template>
+      <template v-if="saveOnly">
+        <v-btn v-if="!closeOnly" x-small color="white" outlined text fab :loading="loading" @click.stop="save">
+          <v-icon color="green lighten-2"> $mdiCheck </v-icon>
+        </v-btn>
+      </template>
 
-        <template v-if="showRemove">
-          <v-btn x-small color="white" outlined text fab class="mx-1" icon dark :loading="loading" @click.stop="remove">
-            <v-icon color="#00B985"> $mdiDeleteEmptyOutline </v-icon>
-          </v-btn>
-        </template>
+      <template v-if="showRemove">
+        <v-btn x-small color="white" outlined text fab class="mx-1" icon dark :loading="loading" @click.stop="remove">
+          <v-icon color="#00B985"> $mdiDeleteEmptyOutline </v-icon>
+        </v-btn>
+      </template>
 
-        <template v-if="!noActions && !saveOnly">
-          <v-btn v-if="!closeOnly" x-small color="white" outlined text fab class="mx-1" :loading="loading" @click.stop="save">
-            <v-icon color="green lighten-2"> $mdiCheck </v-icon>
-          </v-btn>
+      <template v-if="!noActions && !saveOnly">
+        <v-btn v-if="!closeOnly" x-small color="white" outlined text fab class="mx-1" :loading="loading" @click.stop="save">
+          <v-icon color="green lighten-2"> $mdiCheck </v-icon>
+        </v-btn>
 
-          <v-btn
-            v-if="!closeOnly && !saveOnly"
-            x-small
-            color="white"
-            outlined
-            text
-            fab
-            icon
-            dark
-            class="ml-2"
-            @click.stop="close"
-          >
-            <v-icon>{{ fullscreen ? '$mdiChevronDown' : '$mdiClose' }}</v-icon>
-          </v-btn>
-        </template>
-      </v-toolbar>
+        <v-btn v-if="!closeOnly && !saveOnly" x-small color="white" outlined text fab icon dark class="ml-2" @click.stop="close">
+          <v-icon>{{ fullscreen ? '$mdiChevronDown' : '$mdiClose' }}</v-icon>
+        </v-btn>
+      </template>
+    </v-toolbar>
 
-      <slot name="top"> </slot>
+    <slot name="top"> </slot>
 
-      <v-card color="#22272e" dark style="overflow: hidden" width="100%" :class="{ 'pa-2': !noGutters }" flat tile>
-        <v-container v-if="!noContainer" :fluid="fluid" :class="{ 'fill-height': filled }">
-          <slot />
-        </v-container>
-        <template v-if="noContainer">
-          <slot />
-        </template>
-      </v-card>
-    </div>
+    <v-card color="#232731" dark style="overflow: hidden" width="100%" :class="{ 'pa-2': !noGutters }" flat tile>
+      <v-container v-if="!noContainer" :fluid="fluid" :class="{ 'fill-height': filled }">
+        <slot />
+      </v-container>
+      <template v-if="noContainer">
+        <slot />
+      </template>
+    </v-card>
   </v-dialog>
 </template>
 
@@ -202,3 +191,9 @@
     },
   };
 </script>
+<style>
+  .v-dialog {
+    transition-delay: 350ms !important;
+    /* transition: 0.2s cubic-bezier(0.25, 0.8, 0.25, 1s) !important; */
+  }
+</style>

@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Vuesax from 'vuesax';
 import { doc, onSnapshot, query } from 'firebase/firestore';
-import { isEmpty } from 'lodash';
+
 import { auth, db } from '@/firebase/firebase';
 import App from './App.vue';
 import router from './router';
@@ -29,6 +29,18 @@ Vue.directive('disabled', {
   bind(el, binding) {
     const { value } = binding;
     if (value) el.style['pointer-events'] = 'none';
+  },
+});
+
+Vue.directive('debounce', {
+  bind(el, binding) {
+    const { ms } = binding.value;
+    console.log(el);
+    el.style.cssText = 'display:none !important';
+    setTimeout(() => {
+      el.style.display = 'unset';
+      el.setAttribute('key', 327843);
+    }, ms);
   },
 });
 
@@ -69,8 +81,13 @@ Vue.directive('animation', {
 
 // Vue will be mounted here.
 let appMounted;
+let userProfile;
+let unSubscriveProfile;
 
-const profileLoaded = store.state.authentication.isProfileLoaded;
+function setProfile() {
+  store.set('authentication/profile', userProfile);
+  store.set('authentication/unSubscriveProfile', unSubscriveProfile);
+}
 
 // instanciate Vue
 function mountVue() {
@@ -82,60 +99,49 @@ function mountVue() {
   }).$mount('#app');
 }
 
-// real-time authentication state.
-// real-time profile snapShots.
-// auto-closing listener on signOut.
+async function loadProfile(authenticatedUser) {
+  return new Promise((resolve) => {
+    // fetch the user profile.
+    const { uid } = authenticatedUser;
+    const docRef = doc(db, 'users', uid);
+    const q = query(docRef);
+
+    // create the listener, calling killListener() will destroy it,
+    unSubscriveProfile = onSnapshot(
+      q,
+
+      (snapshot) => {
+        userProfile = snapshot.data();
+        setProfile();
+        resolve(true);
+      },
+      (error) => {
+        store.dispatch(
+          'snackbar/snackbarError',
+          `We are having trouble loading your account profile, please contact support to resolve this issue.`,
+          { root: true },
+        );
+        store.dispatch('authentication/logout');
+      },
+    );
+  });
+}
+
 auth.onAuthStateChanged(async (authenticatedUser) => {
-  // mounts Vue excluding authentication session data,
-  // since no user is logged.
-  // Stop the function right there.
+  store.set('authentication/user', authenticatedUser);
 
-  if (!appMounted && !authenticatedUser) {
-    mountVue();
-    return;
-  }
-
-  // Instanciate Vue only if the profile object is loaded
-  // and vue isn't instanciated yet.
-  store.watch(
-    (state) => state.authentication.profile,
-    (newProfile) => {
-      if (!isEmpty(newProfile) && !appMounted) {
-        mountVue();
-      }
-    },
-  );
-
-  let userProfile;
-  let unSubscriveProfile;
-
-  // If a persisted session exists.
-  // Set the user and profile state.
-  // Create real-time profile updates through a listener.
   if (authenticatedUser) {
-    // Set active session user state.
-    store.set('authentication/user', authenticatedUser);
+    const profileLoaded = await loadProfile(authenticatedUser);
 
-    if (!profileLoaded) {
-      // fetch the user profile.
-      const { uid } = authenticatedUser;
-      const docRef = doc(db, 'users', uid);
-      const q = query(docRef);
-
-      // create the listener, calling killListener() will destroy it,
-      unSubscriveProfile = onSnapshot(q, (querySnap) => {
-        userProfile = querySnap.data();
-        store.set('authentication/profile', userProfile);
-        store.set('authentication/unSubscriveProfile', unSubscriveProfile);
-      });
+    if (!appMounted && profileLoaded) {
+      mountVue();
+      console.log('mounting Vue');
     }
     return;
   }
 
-  // If no authentixated user is detected.
-  // Kill the profile real-time data listener and
-  // user and profile objects.
-  store.state.authentication.unSubscriveProfile();
-  store.set('authentication/user', {});
-  store.set('authentication/profile', {});
+  if (!appMounted && !authenticatedUser) {
+    mountVue();
+    console.log('mounting Vue');
+  }
 });
