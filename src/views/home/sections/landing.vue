@@ -3,10 +3,10 @@
     no-animation
     col="5"
     no-divider
-    :src="$vuetify.breakpoint.smAndDown ? 'landing2-v.svg' : 'landing2-h.svg'"
+    :src="$vuetify.breakpoint.smAndDown ? 'login2-v.svg' : 'login2-h.svg'"
     v-bind="$attrs"
   >
-    <v-chip color="purple darken-4" dark small>V1.0 Beta-2</v-chip>
+    <v-chip color="#464574" dark small>V1.0 Beta-2</v-chip>
     <skriptag-title large class="mb-4" />
     <article>
       <h2 style="font-size: 70px">Make the best app you've ever made.</h2>
@@ -99,7 +99,7 @@
 <style scoped lang="scss">
   /* Gradient color font styling  */
   article {
-    background: linear-gradient(to right, rgb(203, 211, 219), rgb(196, 174, 227));
+    background: linear-gradient(to right, rgb(203, 211, 219), rgb(109, 118, 161));
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -107,7 +107,7 @@
     line-height: 1.1;
   }
 
-  $terminal-content-background-color: rgba(30, 30, 30, 0.5);
+  $terminal-content-background-color: rgba(9, 8, 14, 0.7);
   $terminal-header-background-color: #f6f6f6;
   $terminal-header-border-color: #b8b8b8;
   $terminal-header-button-close: #fc645f;
@@ -156,8 +156,8 @@
     font-size: calc(#{$terminal-font-size}* 1rem);
     font-family: Consolas, monaco, monospace;
 
-    -webkit-box-shadow: 6px -2px 44px 0px #422b4b;
-    box-shadow: 6px -2px 44px 0px #422b4b;
+    -webkit-box-shadow: 6px -2px 44px 0px #464574;
+    box-shadow: 6px -2px 44px 0px #24212a;
     &__header {
       width: calc(100% - 1px);
       height: 1.5rem;
