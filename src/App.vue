@@ -1,48 +1,37 @@
 <template>
-  <v-fade-transition appear>
+  <keep-alive>
     <router-view />
-  </v-fade-transition>
+  </keep-alive>
 </template>
 
 <script>
-  // import { get, call } from 'vuex-pathify';
-  // import { isEmpty } from 'lodash';
+  import { get, call } from 'vuex-pathify';
 
   export default {
     name: 'App',
     computed: {
-      // ...get('authentication', ['isAccountDisabled', 'profile']),
-    },
-    renderTracked({ key, target, type }) {
-      console.log('renderTracked:', { key, target, type });
-    },
-    renderTriggered({ key, target, type }) {
-      console.log('renderTriggered:', { key, target, type });
+      ...get('authentication', ['isAccountDisabled']),
     },
 
     // The authenticated account profile gets real-time updates.
     // If the disabled flag shows up, that means that auth is revoked.
     // We are reacting to isAccountDisabled Vuex getter and forcing a logout.
-    // watch: {
-    //   isAccountDisabled(disabled) {
-    //     if (disabled) {
-    //       this.logout();
-    //       this.snackbarError('You have been logged out, contact support.');
-    //     }
-    //   },
+    watch: {
+      isAccountDisabled(disabled) {
+        if (disabled) {
+          this.logout();
+        }
+      },
+    },
 
-    //   // If the authenticated account profile is missing
-    //   // force a logout.
-    //   // profile(profile) {
-    //   //   if (isEmpty(profile)) {
-    //   //     this.logout();
-    //   //   }
-    //   // },
+    // mounted() {
+    //   if ('virtualKeyboard' in navigator) {
+    //     navigator.virtualKeyboard.overlaysContent = true;
+    //   }
     // },
-
-    // methods: {
-    //   ...call('snackbar', ['snackbarError']),
-    //   ...call('authentication', ['logout']),
-    // },
+    methods: {
+      ...call('snackbar', ['snackbarError']),
+      ...call('authentication', ['logout']),
+    },
   };
 </script>
