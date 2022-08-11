@@ -24,11 +24,6 @@
       },
     },
 
-    // mounted() {
-    //   if ('virtualKeyboard' in navigator) {
-    //     navigator.virtualKeyboard.overlaysContent = true;
-    //   }
-    // },
     methods: {
       ...call('snackbar', ['snackbarError']),
       ...call('authentication', ['logout']),
