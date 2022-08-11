@@ -97,7 +97,7 @@
 
     mounted() {
       if (this.isLoggedIn || !this.mode) {
-        this.$router.push({ name: 'skriptag-profile' });
+        this.$router.push({ name: 'user-profile' });
       }
       setTimeout(() => {
         if (this.mode === 'verifyEmail') {

@@ -326,7 +326,7 @@
       },
 
       close() {
-        this.$router.push({ name: 'skriptag-profile' });
+        this.$router.push({ name: 'user-profile' });
         window.scrollTo(0, 0);
       },
     },
