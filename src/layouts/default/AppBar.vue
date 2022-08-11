@@ -3,7 +3,7 @@
     style="border-bottom: 1px solid #444c56 !important"
     class="border - bottom"
     height="50"
-    color="#2d333b"
+    color="#22262e"
     absolute
     flat
     dark
