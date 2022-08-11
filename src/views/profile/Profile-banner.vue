@@ -1,21 +1,20 @@
 <template>
   <div>
     <v-expand-transition>
-      <div v-show="profileBanner && media.length >= 2">
+      <div v-show="profileBanner">
         <v-img
           eager
-          :src="profile.coverAvatar"
+          :src="profile?.coverAvatar"
           flat
-          height="230"
+          height="240"
           class="d-flex align-center elevation-0"
-          :class="{ 'default-banner-bg': !profile.coverAvatar || isBannerError }"
+          :class="{ 'default-banner-bg': !profile?.coverAvatar || isBannerError }"
           :transition="null"
           style="color: #ccc"
-          gradient="to top right, rgba(100,115,201,.33), rgba(25,32,72,.7)"
+          gradient="to top right, rgba(0,0,0,.9), rgba(30,30,32,.7)"
           @error="isBannerError = true"
-          @load="media.push('bannerBackground')"
         >
-          <div class="pb-5 pl-10" style="font-size: 12px">
+          <div v-if="!verified" class="pb-5 pl-10" style="font-size: 12px">
             <v-icon small dark>$mdiInformationOutline</v-icon> Some profile settings will not be enabled until you verify your
             email account.
           </div>
@@ -31,24 +30,24 @@
               bottom
               bordered
               color="black"
-              :icon="profile.photoURL ? '$mdiTrashCanOutline' : '$mdiPlus'"
+              :icon="profile?.photoURL ? '$mdiTrashCanOutline' : '$mdiPlus'"
               overlapa
               class="cursor-pointer"
             >
-              <baseAvatarImg v-if="!profile.photoURL" class="hoverAvatar" :height="180" @click="triggerUploadProfilePhoto()" />
-              <v-avatar v-else v-ripple class="elevation-13" size="180">
+              <baseAvatarImg v-if="!profile?.photoURL" class="hoverAvatar" :height="180" @click="triggerUploadProfilePhoto()" />
+              <v-avatar v-else class="elevation-13" size="160">
                 <v-img
                   eager
                   :transition="null"
                   class="hoverAvatar"
-                  :src="profile.photoURL"
+                  :src="profile?.photoURL"
                   flat
                   @click="triggerUploadProfilePhoto()"
                   @load="media.push('profileAvatar')"
                 >
                   <template #placeholder>
                     <v-row class="fill-height ma-0" align="center" justify="center">
-                      <v-icon dark size="40">$mdiCamera</v-icon>
+                      <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
                     </v-row>
                   </template>
                 </v-img>
@@ -67,7 +66,7 @@
                 </vs-tooltip>
 
                 <vs-tooltip shadow color="#ccc">
-                  <div v-if="(profile.roles || []).includes('root')" class="mx-2 pointer-events-none">
+                  <div v-if="(profile?.roles || []).includes('root')" class="mx-2 pointer-events-none">
                     <v-btn color="rgba(10,10,10 , .5)" small fab icon>
                       <v-icon class="white--text"> $mdiLock</v-icon>
                     </v-btn>
@@ -88,7 +87,7 @@
               </div>
 
               <v-fade-transition hide-on-leave>
-                <base-typing-indicator v-if="!profile.name && !profile.lastName && !profile.displayName" />
+                <base-typing-indicator v-if="!profile?.name && !profile?.lastName && !profile?.displayName" />
               </v-fade-transition>
 
               <span
@@ -96,10 +95,10 @@
                 style="font-size: 45px"
                 :style="$vuetify.breakpoint.mdAndDown ? 'max-width: 390px' : 'max-width: 500px'"
               >
-                {{ fullName || profile.displayName }}
+                {{ fullName || profile?.displayName }}
               </span>
               <div class="d-inline-block justify-start pl-1">
-                <small>{{ profile.email }}</small>
+                <small>{{ profile?.email }}</small>
               </div>
             </div>
           </div>
@@ -138,7 +137,7 @@
       ...sync('app', ['profileBanner']),
 
       src() {
-        return this.profile.coverAvatar || `https://media.skriptag.com/img/banner.png`;
+        return this.profile?.coverAvatar;
       },
 
       editableProfile: sync('authentication/profile'),
@@ -157,7 +156,6 @@
       },
 
       uploadProfilePhoto() {
-        const file = this.$refs.avatarInput.files[0];
         const fileSize = this.$refs.avatarInput.files[0].size;
 
         if (fileSize > 2 * 1024 * 1024) {
@@ -165,12 +163,19 @@
           return;
         }
 
+        const file = this.$refs.avatarInput.files[0];
+
+        const metadata = {
+          cacheControl: 'public,max-age=2592000',
+        };
+
         const photoRef = ref(storage, `users/${this.profile.uid}/${file.name}`);
-        const uploadTask = uploadBytesResumable(photoRef, file);
+        const uploadTask = uploadBytesResumable(photoRef, file, metadata);
         uploadTask.on(
           'state_changed',
           (snapshot) => {
             this.progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log(metadata);
           },
           (error) => {
             // console.log(error);
@@ -196,8 +201,17 @@
           return;
         }
 
+        const metadata = {
+          cacheControl: 'public,max-age=2592000',
+        };
+
+        if (!file) {
+          return;
+        }
+
         const photoRef = ref(storage, `users/${this.profile.uid}/${file.name}`);
-        const uploadTask = uploadBytesResumable(photoRef, file);
+        const uploadTask = uploadBytesResumable(photoRef, file, metadata);
+
         uploadTask.on(
           'state_changed',
           (snapshot) => {
@@ -206,6 +220,7 @@
           (error) => {
             console.log(error);
           },
+
           () => {
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
               this.editableProfile.coverAvatar = downloadURL;
