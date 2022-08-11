@@ -1,11 +1,15 @@
 <template>
-  <v-app-bar class="border - bottom" height="50" color="#2d333b" absolute flat dark app>
-    <skriptag-title
-      class="overflow-visible cursor-pointer ml-1"
-      link
-      small
-      @click.native="$router.push({ name: 'skriptag-homepage' })"
-    />
+  <v-app-bar
+    style="border-bottom: 1px solid #444c56 !important"
+    class="border - bottom"
+    height="50"
+    color="#2d333b"
+    absolute
+    flat
+    dark
+    app
+  >
+    <skriptag-title class="overflow-visible cursor-pointer ml-1 shrink" link small @click.native="goHome()" />
 
     <v-spacer></v-spacer>
 
@@ -34,7 +38,7 @@
       <BaseButton @click="logout">
         <v-icon left class="mr-2" small>$mdiLogoutVariant</v-icon>{{ `Logout ${firstAndShortLast || ''}` }}
       </BaseButton>
-      <BaseButton class="ml-3" @click="$router.push({ name: 'skriptag-profile' })">
+      <BaseButton class="ml-3" @click="$router.push({ name: 'user-profile' })">
         <v-icon left class="mr-2" small>$mdiConsole</v-icon> Console
       </BaseButton>
     </template>
@@ -45,6 +49,7 @@
 
 <script>
   import { sync, get, call } from 'vuex-pathify';
+  import { route } from '@/utils/route';
 
   export default {
     name: 'DefaultAppBar',
@@ -69,6 +74,10 @@
 
     methods: {
       ...call('authentication', ['logout']),
+
+      goHome() {
+        route('skriptag-homepage');
+      },
     },
   };
 </script>
