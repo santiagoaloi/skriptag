@@ -1,5 +1,5 @@
 <template>
-  <v-overlay v-model="routeLoader" opacity="1" z-index="100" color="#22272e">
+  <v-overlay v-model="routeLoader" opacity="1" z-index="200" color="#22272e">
     <div class="d-flex flex-column align-center justify-center fill-height">
       <h1 class="py-15">{{ quote() }}</h1>
       <div class="shapes" />
@@ -207,7 +207,7 @@
   .shapes {
     width: 57.6px;
     height: 57.6px;
-    color: #3ec5ae;
+    color: #7366ff;
     display: grid;
   }
 
