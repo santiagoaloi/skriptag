@@ -15,11 +15,9 @@
     </v-col>
     <v-col :md="col" cols="12">
       <v-container class="fill-height">
-        <v-container>
-          <v-responsive class="mx-auto" :width="$vuetify.breakpoint.smAndDown ? '100%' : '80%'">
-            <slot></slot>
-          </v-responsive>
-        </v-container>
+        <v-responsive class="mx-auto px-10">
+          <slot></slot>
+        </v-responsive>
       </v-container>
     </v-col>
   </v-row>
@@ -143,8 +141,4 @@
   .diagonal-divider-right {
     clip-path: polygon(0 0, 100% 0, 100% 100%, 14% 100%);
   }
-
-  /* .decreaseColor {
-    filter: grayscale(0.1) hue-rotate(340deg);
-  } */
 </style>
