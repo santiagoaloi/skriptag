@@ -1,6 +1,14 @@
 <template>
   <div>
-    <v-navigation-drawer v-model="drawer" disable-resize-watcher touchless color="rgba(22, 22, 33, 0.2)" width="245" dark app>
+    <v-navigation-drawer
+      v-model="drawer"
+      mobile-breakpoint="0"
+      disable-resize-watcher
+      color="rgba(22, 22, 33, 0.2)"
+      width="215"
+      dark
+      app
+    >
       <v-divider></v-divider>
 
       <div class="pa-1">
@@ -40,7 +48,7 @@
       :width="drawer ? 0 : 13"
     >
       <v-btn
-        :style="`margin-right:${drawer ? '-30px' : '-20px'}`"
+        :style="`margin-right:${drawer ? '-0px' : '-20px'}`"
         style="transform: rotate(90deg)"
         height="12"
         dark
