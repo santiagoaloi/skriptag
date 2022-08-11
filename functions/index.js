@@ -18,6 +18,8 @@ exports.listAllUsers = functions.https.onCall(async (data, context) => {
   try {
     const all = await admin.auth().listUsers();
 
+    functions.logger.log('All users listed, requested by user uid: ', context.auth.uid);
+
     return {
       ...all.users,
     };
