@@ -26,7 +26,7 @@
     <template v-else>
       <v-list-item
         @click="
-          $router.push({ name: 'skriptag-profile' });
+          $router.push({ name: 'user-profile' });
           mobileMenu = false;
         "
       >
