@@ -4,7 +4,7 @@
 
     <app-drawer v-if="$route.meta.requiresAuth" />
 
-    <v-main>
+    <v-main class="bgs">
       <v-fade-transition :duration="130" mode="out-in">
         <keep-alive>
           <router-view />
