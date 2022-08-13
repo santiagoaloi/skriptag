@@ -7,10 +7,9 @@ import { store } from '@/store';
 const routes = [
   {
     path: '/',
-    components: {
-      default: () => import(/* webpackChunkName: 'default-layout' */ '@/layouts/default'),
-    },
-
+    name: '/',
+    redirect: { name: 'skriptag-homepage' },
+    component: () => import(/* webpackChunkName: 'default-layout' */ '@/layouts/default'),
     children: [...allRoutes],
   },
 ];
@@ -34,10 +33,6 @@ router.beforeEach(async (to, from, next) => {
   const isFromPublicToPrivate = !from.meta.requiresAuth && to.meta.requiresAuth;
   const isFromPrivateToPublic = from.meta.requiresAuth && !to.meta.requiresAuth;
 
-  if (isFromPublicToPrivate || isFromPrivateToPublic) {
-    store.set('loaders/routeLoader', true);
-  }
-
   // If the route requires the user to be authenticated and it is not,
   // route to the login page.
   if (requiresAuth && !isAuth) {
@@ -48,8 +43,12 @@ router.beforeEach(async (to, from, next) => {
   // If the user navigates to the login page and it's already authenticated,
   // route to the profile page instead.
   if (isLoginPageAndAuthenticated) {
-    next({ name: 'skriptag-profile' });
+    next({ name: 'user-profile' });
     return;
+  }
+
+  if (isFromPublicToPrivate || isFromPrivateToPublic) {
+    store.set('loaders/routeLoader', true);
   }
 
   if (isLogoutRoute) {
