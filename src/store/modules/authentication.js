@@ -201,12 +201,12 @@ const actions = {
         if (getters.isLoggedIn && !getters.verified) {
           // reloads user object to reflect emailVerified value as true.
           state.user.reload();
-          router.push('profile');
+          router.push({ name: 'user-profile' });
           return;
         }
 
         if (!getters.isLoggedIn) {
-          router.push('login');
+          router.push({ name: 'skriptag-login' });
           return;
         }
       }
@@ -218,7 +218,7 @@ const actions = {
     } catch ({ ...error }) {
       dispatch('errors/authMessagesSnackbar', error.code, { root: true });
       store.set('loaders/verificationInProgressLoader', false);
-      router.push('login');
+      router.push({ name: 'skriptag-login' });
     }
   },
 
@@ -248,7 +248,7 @@ const actions = {
       await confirmPasswordReset(auth, oobCode, newPassword);
       dispatch('snackbar/snackbarSuccess', 'Account password changed.', { root: true });
 
-      await router.push('login');
+      router.push({ name: 'skriptag-login' });
       store.set('loaders/authLoader', false);
     } catch ({ ...error }) {
       dispatch('errors/authMessagesSnackbar', error.code, { root: true });
@@ -306,7 +306,7 @@ const actions = {
       }
 
       await signInWithEmailAndPassword(auth, email, password);
-      await router.push('profile');
+      router.push({ name: 'user-profile' });
 
       store.set('loaders/authLoader', false);
     } catch ({ ...error }) {
@@ -316,9 +316,17 @@ const actions = {
   },
 
   // Logout and clear user data objects in Vuex.
-  async logout() {
+  logout() {
+    // Singout and route to homepage
+    signOut(auth);
+
+    // Stop listening profile snapshot.
+    store.state.authentication.unSubscriveProfile();
+
+    // Clear user profile settings
+    store.set('authentication/profile', {});
+
     route('/');
-    await signOut(auth);
   },
 
   // Creates a new user account and routes to profile page.
@@ -335,7 +343,6 @@ const actions = {
       await dispatch('addUserToUsersCollection', { user, signupForm });
       await sendEmailVerification(userCredential.user);
 
-      router.push('profile');
       store.set('loaders/signupLoader', false);
     } catch ({ ...error }) {
       dispatch('errors/authMessagesSnackbar', error.code, { root: true });
@@ -439,7 +446,7 @@ const actions = {
         }
       }
 
-      route('/profile');
+      route('user-profile');
 
       store.set('loaders/signInWithGoogle', false);
     } catch ({ ...error }) {
@@ -448,10 +455,9 @@ const actions = {
       if (error.code === 'auth/account-exists-with-different-credential') {
         const currentProvider = error.customData._tokenResponse.verifiedProvider[0];
         dispatch('snackbar/snackbarError', `This account is being used to authenticate with ${currentProvider}`, { root: true });
-        return;
       }
 
-      dispatch('snackbar/snackbarError', `Something went wrong authenticating`, { root: true });
+      // dispatch('snackbar/snackbarError', `Something went wrong authenticating`, { root: true });
     }
   },
 
@@ -478,7 +484,7 @@ const actions = {
         }
       }
 
-      route('/profile');
+      route('user-profile');
 
       store.set('loaders/signInWithGithub', false);
     } catch ({ ...error }) {
@@ -625,7 +631,7 @@ const actions = {
     } catch (error) {}
   },
 
-  async getUsersSnapshot({ getters }) {
+  async getUsersSnapshot({ state, getters }) {
     try {
       const getAllUsers = httpsCallable(functions, 'listAllUsers');
 
@@ -638,7 +644,7 @@ const actions = {
       const colRefUsers = collection(db, 'users');
 
       const users = [];
-      const u = onSnapshot(colRefUsers, { includeMetadataChanges: true }, (snap) => {
+      const unSubscrive = onSnapshot(colRefUsers, { includeMetadataChanges: true }, (snap) => {
         const userMap = new Map(allUsers.map((u) => [u.uid, u]));
 
         snap.docChanges().forEach(({ doc, type }) => {
@@ -647,20 +653,30 @@ const actions = {
           // Merge authUser with User profile and add hover key, used for table row hover buttons.
           const profileCombined = { ...profile, authUser: userMap.get(profile.uid) || {}, hover: false };
 
-          if (type === 'modified') {
-            const index = users.findIndex((user) => user.uid === doc.id);
-            store.set(`authentication/users@${index}`, profileCombined);
+          if (type === 'added') {
+            store.set(`authentication/users@${state.users.length}`, profileCombined);
+            console.log('adding new user to users array: ', profileCombined);
             return;
           }
 
-          if (type === 'added') {
-            users.push(profileCombined);
+          if (type === 'modified') {
+            const index = users.findIndex((user) => user.uid === doc.id);
+            store.set(`authentication/users@${index}`, profileCombined);
+            console.log('updating user in users array:', profileCombined);
+            return;
+          }
+
+          if (type === 'removed') {
+            const remove = users.filter((user) => user.uid !== doc.id);
+            store.set(`authentication/users`, remove);
+            console.log('removing user id from users array: ', doc.id);
           }
         });
       });
 
-      store.set('authentication/users', users);
-      return u;
+      // console.log('adding users :', users);
+      // store.set('authentication/users', users);
+      return unSubscrive;
     } catch ({ ...error }) {
       // console.log(error.code);
     }

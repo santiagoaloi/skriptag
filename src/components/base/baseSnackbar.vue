@@ -1,8 +1,9 @@
 <template>
   <v-snackbar
-    v-model="snackbar.data.value"
-    :timeout="snackbar.data.permanent ? 0 : 8000"
-    :color="snackbar.data.color"
+    v-if="snackbar.value"
+    v-model="snackbar.value"
+    :timeout="snackbar.permanent ? 0 : 8000"
+    :color="snackbar.color"
     transition="slide-y-reverse-transition"
     multi-line
     center
@@ -10,11 +11,11 @@
     max-width="450"
   >
     <div class="d-flex align-center">
-      <v-icon class="mr-4"> {{ snackbar.data.icon }}</v-icon>
-      {{ snackbar.data.text }}
+      <v-icon class="mr-4"> {{ snackbar.icon }}</v-icon>
+      {{ snackbar.text }}
     </div>
     <template #action="{ attrs }">
-      <v-btn dark text fab x-small v-bind="attrs" @click="snackbar.data.value = false">
+      <v-btn dark text fab x-small v-bind="attrs" @click="snackbar.value = false">
         <v-icon>$mdiClose</v-icon>
       </v-btn>
     </template>
@@ -28,7 +29,7 @@
   export default {
     name: 'BaseSnackbar',
     computed: {
-      snackbar: sync('snackbar'),
+      snackbar: sync('snackbar.data'),
     },
   };
 </script>

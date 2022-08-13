@@ -1,52 +1,26 @@
 <template>
-  <base-no-split>
-    <template #left>
-      <v-row class="px-5">
-        <v-col
-          v-for="(card, i) in allCardsFiltered"
-          :key="i"
-          cols="12"
-          sm="6"
-          md="4"
-          :lg="card.responsiveSize"
-          @click="!card.disabled && $router.push(`/profile/${card.route}`)"
-        >
-          <v-card
-            v-animation:shrink="{ longPress: true }"
-            :ripple="{ class: 'rounded-lg, ripple-opacity' }"
-            color="#2d333b"
-            height="100%"
-            class="hoverCard rounded-lg cursor-pointer"
-            dark
-            :disabled="card.disabled"
-            flat
-          >
-            <v-img
-              :height="$vuetify.breakpoint.smAndDown ? 150 : 140"
-              :transition="false"
-              class="rounded-t-lg"
-              :src="card.img"
-              v-bind="imageOptions()"
-              style="filter: grayscale(1)"
-            />
-            <v-container>
-              <div class="pa-3">
-                <p style="font-size: 110%">{{ card.title }}</p>
-                <div style="font-size: 14px" class="mt-n3">{{ card.text }}</div>
-              </div>
-            </v-container>
-          </v-card>
-        </v-col>
-      </v-row>
-    </template>
-  </base-no-split>
+  <v-row>
+    <v-col
+      v-for="(card, i) in allCardsFiltered"
+      :key="i"
+      cols="12"
+      sm="6"
+      md="4"
+      :lg="card.responsiveSize"
+      @click="!card.disabled && $router.push({ name: card.route })"
+    >
+      <profile-cards-card :card="card" />
+    </v-col>
+  </v-row>
 </template>
 
 <script>
   import { get } from 'vuex-pathify';
+  import ProfileCardsCard from './Profile-cards-card.vue';
 
   export default {
-    name: 'ProfileItems',
+    name: 'ProfileSettingsCards',
+    components: { ProfileCardsCard },
 
     computed: {
       ...get('authentication', ['verified', 'profile']),
@@ -62,8 +36,8 @@
           {
             title: 'Profile Details',
             text: 'Edit your profile personal information',
-            img: 'https://media.skriptag.com/img/a1.svg',
-            route: 'profile-edit',
+            img: 'https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/analytics.png',
+            route: 'skriptag-public',
             responsiveSize: 3,
             disabled: false,
             visible: true,
@@ -72,8 +46,8 @@
           {
             title: 'Account settings',
             text: 'Change your authentication settings',
-            img: 'https://media.skriptag.com/img/a2.svg',
-            route: 'account-edit',
+            img: 'https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/auth.png',
+            route: 'skriptag-account',
             responsiveSize: 3,
             disabled: false,
             visible: true,
@@ -82,7 +56,7 @@
           {
             title: 'Billing information',
             text: 'Add or change your payment methods',
-            img: 'https://media.skriptag.com/img/a4.svg',
+            img: 'https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/auth.png',
             route: '',
             responsiveSize: 3,
             disabled: true,
@@ -92,19 +66,19 @@
           {
             title: 'Manage Skriptag',
             text: 'Manage users, roles, and project settings',
-            img: 'https://media.skriptag.com/img/a5.svg',
-            route: 'skriptag-edit',
+            img: 'https://www.gstatic.com/mobilesdk/220421_mobilesdk/app_check_discovery_card@2x.png',
+            route: 'skriptag-manage',
             responsiveSize: 3,
-            disabled: !this.profile.roles?.includes('root') || !this.verified,
-            visible: this.profile.roles?.includes('root'),
+            disabled: !this.profile?.roles?.includes('root') || !this.verified,
+            visible: this.profile?.roles?.includes('root'),
           },
         ];
       },
 
       gradientOptions() {
-        const direction = 'to bottom';
-        const fromColor = 'rgba(56, 61, 87, .3) 40%';
-        const toColor = ' rgba(56, 61, 87,.8) 160%';
+        const direction = 'to top right';
+        const fromColor = 'rgba(10,10,10,.1)';
+        const toColor = 'rgba(10,10,10,.35)';
 
         return `${direction}, ${fromColor}, ${toColor}`;
       },
@@ -139,12 +113,4 @@
     transition-timing-function: ease;
     transition-delay: 0s;
   }
-
-  .ripple-opacity {
-    opacity: 0.1;
-  }
-
-  /* .decreaseColor {
-    filter: grayscale(0.1) hue-rotate(340deg);
-  } */
 </style>

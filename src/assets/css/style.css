@@ -81,7 +81,7 @@
   font-weight: normal;
   src: local('Product Sans Black Italic'), url('ProductSans-BlackItalic.woff') format('woff');
 }
-
+.v-application,
 h1:not(.ignore-font),
 h2:not(.ignore-font),
 h3,
@@ -135,7 +135,6 @@ a {
 }
 .v-application--wrap {
   background: #22272e !important;
-  height: 0vh !important;
 }
 
 .bgs {
@@ -179,6 +178,10 @@ a {
 
 .primary-font-color {
   color: rgb(var(--vs-primary));
+}
+
+.logo-icon-color {
+  color: #7366ff;
 }
 
 html {
@@ -248,6 +251,27 @@ html {
   outline: none;
   box-shadow: inset 0 0 0 20px transparent;
 }
+
+/* .testing:focus {
+  background-color: red;
+}
+.v-input__slot {
+  transition: unset !important;
+} */
+
+/* .v-input.v-text-field {
+  transition: all 0.65s ease !important;
+} */
+
+/* 
+.v-input.v-text-field > .v-input__control > .v-input__slot {
+  transition: all 0.65s ease !important;
+}
+
+.v-input.v-text-field:focus-within > .v-input__control > .v-input__slot {
+  outline: 2px solid #5c77a5 !important;
+  background: #1e2227 !important;
+} */
 
 .vs-input__icon {
   background: rgb(24, 31, 38);

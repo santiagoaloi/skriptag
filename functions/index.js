@@ -4,7 +4,7 @@ const functions = require('firebase-functions');
 admin.initializeApp();
 
 // Appcheck protected / reCAPTCHA authorices only skriptag.com domain.
-exports.listAllUsers = functions.region('us-central1').https.onCall(async (data, context) => {
+exports.listAllUsers = functions.https.onCall(async (data, context) => {
   // If appCheck fails, terminate the funciton.
   if (!context.app) {
     throw new functions.https.HttpsError('failed-precondition', 'The function must be called from an App Check verified app.');
@@ -17,6 +17,8 @@ exports.listAllUsers = functions.region('us-central1').https.onCall(async (data,
 
   try {
     const all = await admin.auth().listUsers();
+
+    functions.logger.log('All users listed, requested by user uid: ', context.auth.uid);
 
     return {
       ...all.users,

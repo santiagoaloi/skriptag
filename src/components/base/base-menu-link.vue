@@ -13,6 +13,10 @@
         type: Object,
         default: () => {},
       },
+      icon: {
+        type: String,
+        default: '',
+      },
     },
 
     methods: {
@@ -22,7 +26,7 @@
           return;
         }
 
-        this.$router.push(this.link.to);
+        this.$router.push({ name: this.link.to });
       },
     },
   };

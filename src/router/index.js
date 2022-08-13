@@ -6,8 +6,10 @@ import { store } from '@/store';
 
 const routes = [
   {
-    path: '',
-    component: () => import(/* webpackChunkName: 'layout-bundle' */ '@/layouts/default'),
+    path: '/',
+    name: '/',
+    redirect: { name: 'skriptag-homepage' },
+    component: () => import(/* webpackChunkName: 'default-layout' */ '@/layouts/default'),
     children: [...allRoutes],
   },
 ];
@@ -25,22 +27,28 @@ router.beforeEach(async (to, from, next) => {
   // wait for firebase init before route guards can be applied.
   // if a user is authenticated , the user object will be returned in isAuth.
   const isAuth = await getUserState();
-  const isLogoutRoute = to.matched.some((record) => record.name === 'logout');
-  const isLoginPageAndAuthenticated = to.matched.some((record) => record.name === 'login' && isAuth);
-  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
-
-  // If the user navigates to the login page and it's already authenticated,
-  // route to the profile page instead.
-  if (isLoginPageAndAuthenticated) {
-    next('/profile');
-    return;
-  }
+  const isLogoutRoute = to.matched.some((n) => n.name === 'logout');
+  const isLoginPageAndAuthenticated = to.matched.some((n) => n.name === 'skriptag-login' && isAuth);
+  const requiresAuth = to.matched.some((m) => m.meta.requiresAuth);
+  const isFromPublicToPrivate = !from.meta.requiresAuth && to.meta.requiresAuth;
+  const isFromPrivateToPublic = from.meta.requiresAuth && !to.meta.requiresAuth;
 
   // If the route requires the user to be authenticated and it is not,
   // route to the login page.
   if (requiresAuth && !isAuth) {
-    next({ name: 'login' });
+    next({ name: 'skriptag-login' });
     return;
+  }
+
+  // If the user navigates to the login page and it's already authenticated,
+  // route to the profile page instead.
+  if (isLoginPageAndAuthenticated) {
+    next({ name: 'user-profile' });
+    return;
+  }
+
+  if (isFromPublicToPrivate || isFromPrivateToPublic) {
+    store.set('loaders/routeLoader', true);
   }
 
   if (isLogoutRoute) {
@@ -49,6 +57,14 @@ router.beforeEach(async (to, from, next) => {
   }
 
   next();
+});
+
+router.afterEach(async () => {
+  if (store.state.loaders.routeLoader) {
+    setTimeout(() => {
+      store.set('loaders/routeLoader', false);
+    }, 1500);
+  }
 });
 
 export default router;

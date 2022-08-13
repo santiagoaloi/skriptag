@@ -1,10 +1,15 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
-import { connectStorageEmulator, getStorage } from 'firebase/storage';
-import { connectFunctionsEmulator, getFunctions } from 'firebase/functions';
-import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore';
-import { connectAuthEmulator, getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getStorage } from 'firebase/storage';
+import { getFunctions } from 'firebase/functions';
+import { getFirestore } from 'firebase/firestore';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
+
+// connectAuthEmulator,
+// connectFirestoreEmulator
+// connectFunctionsEmulatorx
+// connectStorageEmulator
 
 const firebaseConfig = {
   apiKey: process.env.VUE_APP_SKRIPTAG_FIREBASE_API_KEY,
@@ -13,7 +18,6 @@ const firebaseConfig = {
   storageBucket: process.env.VUE_APP_SKRIPTAG_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.VUE_APP_SKRIPTAG_FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.VUE_APP_SKRIPTAG_FIREBASE_APP_ID,
-  measurementId: process.env.VUE_APP_SKRIPTAG_FIREBASE_MEASUREMENT_ID,
 };
 
 // Initialize Firebase
@@ -30,7 +34,7 @@ const getUserState = () =>
 const development = process.env.NODE_ENV === 'development';
 
 // Enable emulators.
-const usingEmulators = true;
+const usingEmulators = false;
 
 const emulate = {
   storage: false,
@@ -69,10 +73,5 @@ initializeAppCheck(app, {
   provider: new ReCaptchaV3Provider(process.env.VUE_APP_SKRIPTAG_FIREBASE_RECAPTCHA_PROVIDER_TOKEN),
   isTokenAutoRefreshEnabled: true,
 });
-
-// Set the default region for admin SDK functions.
-// The region has to match the CF region.
-// Otherwise CORS errors will happen.
-// functions.region = 'europe-west1';
 
 export { db, storage, auth, functions, getUserState };

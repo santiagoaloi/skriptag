@@ -7,7 +7,7 @@
     v-on="$listeners"
   >
     <slot name="text" /> Skriptag
-    <span :class="small ? 'ml-n8' : large ? 'ml-n16' : 'ml-n10'" class="primary-font-color">ˆ </span>
+    <span :class="small ? 'ml-n8' : large ? 'ml-n16' : 'ml-n10'" class="logo-icon-color">ˆ </span>
   </component>
 </template>
 

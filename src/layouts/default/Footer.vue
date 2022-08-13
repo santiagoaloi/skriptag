@@ -4,11 +4,11 @@
       <v-card-actions style="font-size: 13px" class="pa-0 px-5">
         <div style="width: 120px; font-size: 8px">
           <skriptag-title small>
-            <template #text> © 2022 </template>
+            <template #text> © {{ new Date().getFullYear() }} </template>
           </skriptag-title>
         </div>
 
-        <a @click="routeTo('/privacy')">Privacy Statement</a>
+        <a @click="routeTo('skriptag-privacy')">Privacy Statement</a>
         <div class="px-2">·</div>
         <a>Terms of Service</a>
         <div class="px-2">·</div>
@@ -40,7 +40,7 @@
 
     methods: {
       routeTo(route) {
-        this.$router.push(route);
+        this.$router.push({ name: route });
       },
     },
   };

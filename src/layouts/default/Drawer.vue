@@ -1,16 +1,14 @@
 <template>
   <div>
-    <v-navigation-drawer v-if="$vuetify.breakpoint.mdAndUp" v-model="drawer" color="rgba(22, 22, 33, 0.2)" width="245" dark app>
-      <template #prepend>
-        <skriptag-title
-          class="overflow-visible cursor-pointer"
-          style="margin: 6.5px 0 6.5px 18px"
-          link
-          small
-          @click.native="$router.push('/')"
-        />
-      </template>
-
+    <v-navigation-drawer
+      v-model="drawer"
+      mobile-breakpoint="0"
+      disable-resize-watcher
+      color="rgba(22, 22, 33, 0.2)"
+      width="215"
+      dark
+      app
+    >
       <v-divider></v-divider>
 
       <div class="pa-1">
@@ -43,7 +41,6 @@
     </v-navigation-drawer>
 
     <v-sheet
-      v-if="$vuetify.breakpoint.mdAndUp"
       class="d-flex align-end justify-center v-navigation-drawer v-navigation-drawer--fixed border-right"
       height="100vh"
       :style="`margin-left:${drawer ? '235px' : '0px'}`"
@@ -51,7 +48,7 @@
       :width="drawer ? 0 : 13"
     >
       <v-btn
-        :style="`margin-right:${drawer ? '-30px' : '-20px'}`"
+        :style="`margin-right:${drawer ? '-0px' : '-20px'}`"
         style="transform: rotate(90deg)"
         height="12"
         dark

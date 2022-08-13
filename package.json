@@ -2,7 +2,11 @@
   "name": "skriptag",
   "version": "0.1.0",
   "private": true,
-  "author": "Santiago Aloi",
+  "author": {
+    "name": "Santiago Aloi",
+    "email": "santiago.aloi@skriptag.com"
+  },
+  "homepage": "https://skriptag.com",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -15,7 +19,7 @@
     "firebase": "^9.8.2",
     "localforage": "^1.10.0",
     "vee-validate": "3.4.5",
-    "vue": "^2.6.11",
+    "vue": "^2.7.8",
     "vue-burger": "^1.1.0",
     "vue-router": "^3.5.4",
     "vuesax": "^4.0.1-alpha.25",

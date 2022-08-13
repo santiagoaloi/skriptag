@@ -10,7 +10,7 @@
     <v-container>
       <div class="d-flex flex-wrap flex-column">
         <template v-if="!recoveryMode">
-          <skriptag-title class="mb-n3" small>
+          <skriptag-title v-once class="mb-n3" small>
             <template #text> Sign In to </template>
           </skriptag-title>
         </template>
@@ -22,17 +22,19 @@
 
         <v-fade-transition hide-on-leave>
           <div v-if="!recoveryMode && mode !== 'email'" class="transparent" :width="$vuetify.breakpoint.smAndDown ? '100%' : 350">
-            <Base-button :loading="loading" class="my-3" block @click="google()">
+            <Base-button :loading="signInWithGoogle" class="my-3" block @click="google()">
               <v-icon left> $mdiGoogle</v-icon> Sign-in with Google</Base-button
             >
-            <Base-button class="my-3" block @click="github()"> <v-icon left> $mdiGithub</v-icon> Sign-in with Github</Base-button>
+            <Base-button :disabled="signInWithGoogle" class="my-3" block @click="github()">
+              <v-icon left> $mdiGithub</v-icon> Sign-in with Github</Base-button
+            >
 
             <div class="d-flex align-center">
               <v-divider class="grey darken-3" /> <span class="mx-3"> or </span>
               <v-divider class="grey darken-3" />
             </div>
-            <Base-button class="mt-2" block @click="mode = 'email'">
-              <v-icon left> $mdiEmail</v-icon> Sign-in with Email</Base-button
+            <Base-button :disabled="signInWithGoogle" class="mt-2" block @click="mode = 'email'">
+              <v-icon left> $mdiEmail</v-icon> Continue with Email</Base-button
             >
           </div>
         </v-fade-transition>

@@ -64,7 +64,7 @@
             </v-col>
             <v-col v-if="mode === 'resetPassword'" cols="12" lg="10">
               <div class="ml-n1">
-                <Base-button @click="$router.push('login')"> Cancel</Base-button>
+                <Base-button @click="$router.push({ name: 'skriptag-login' })"> Cancel</Base-button>
                 <Base-button type="submit" :loading="loading"> Change password</Base-button>
               </div>
             </v-col>
@@ -97,7 +97,7 @@
 
     mounted() {
       if (this.isLoggedIn || !this.mode) {
-        this.$router.push('profile');
+        this.$router.push({ name: 'user-profile' });
       }
       setTimeout(() => {
         if (this.mode === 'verifyEmail') {

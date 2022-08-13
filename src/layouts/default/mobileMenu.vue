@@ -3,7 +3,7 @@
     <template v-if="!isLoggedIn">
       <v-list-item
         @click="
-          $router.push('login');
+          $router.push({ name: 'skriptag-login' });
           mobileMenu = false;
         "
       >
@@ -14,7 +14,7 @@
         <v-list-item-title>Login</v-list-item-title>
       </v-list-item>
 
-      <v-list-item @click="$router.push('signup'), (mobileMenu = false)">
+      <v-list-item @click="$router.push({ name: 'skriptag-signup' }), (mobileMenu = false)">
         <v-list-item-icon>
           <v-icon>$mdiHome</v-icon>
         </v-list-item-icon>
@@ -26,7 +26,7 @@
     <template v-else>
       <v-list-item
         @click="
-          $router.push('profile');
+          $router.push({ name: 'user-profile' });
           mobileMenu = false;
         "
       >
